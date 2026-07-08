@@ -1,104 +1,15 @@
-// =======================
-// THEME TOGGLE
-// =======================
+// ==========================================
+// DOM ELEMENTS POOL & STATE MGMT
+// ==========================================
 const themeToggle = document.getElementById("themeToggle");
-
-if (themeToggle) {
-    themeToggle.addEventListener("click", () => {
-        document.body.classList.toggle("light-theme");
-        themeToggle.innerHTML = document.body.classList.contains("light-theme")
-            ? '<i class="fa-solid fa-sun"></i>'
-            : '<i class="fa-solid fa-moon"></i>';
-    });
-}
-
-// =======================
-// TOAST POPUPS
-// =======================
-function showToast(message) {
-    const toast = document.getElementById("toast");
-    if (!toast) return;
-    toast.textContent = message;
-    toast.classList.add("show");
-    setTimeout(() => {
-        toast.classList.remove("show");
-    }, 3000);
-}
-
-// =======================
-// ROADMAP SCROLL TRIGGER ANIMATIONS
-// =======================
-const cards = document.querySelectorAll(".road-card");
-
-function animateRoadmap() {
-    cards.forEach((card) => {
-        const rect = card.getBoundingClientRect();
-        if (rect.top < window.innerHeight * 0.75) {
-            card.classList.add("active");
-            card.classList.add("popped");
-        }
-    });
-}
-
-window.addEventListener("scroll", animateRoadmap);
-animateRoadmap();
-
-// =======================
-// FEATURE TRACK REVEAL
-// =======================
-const featureCards = document.querySelectorAll(".feature-card");
-
-function revealCards() {
-    featureCards.forEach(card => {
-        const top = card.getBoundingClientRect().top;
-        if (top < window.innerHeight - 100) {
-            card.classList.add("show");
-        }
-    });
-}
-
-window.addEventListener("scroll", revealCards);
-revealCards();
-
-// =======================
-// FEATURE INTERACTION SELECT
-// =======================
-featureCards.forEach(card => {
-    card.addEventListener("click", () => {
-        featureCards.forEach(c => c.classList.remove("selected"));
-        card.classList.add("selected");
-    });
-});
-
-// =======================
-// ACTIVE LINK ON SCROLL
-// =======================
-const sections = document.querySelectorAll("section");
+const navbar = document.querySelector(".navbar");
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
 const navItems = document.querySelectorAll(".nav-links a");
+const sections = document.querySelectorAll("section");
 
-window.addEventListener("scroll", () => {
-    let current = "";
-    sections.forEach(section => {
-        const top = section.offsetTop - 150;
-        if (window.scrollY >= top) {
-            current = section.getAttribute("id");
-        }
-    });
-
-    navItems.forEach(link => {
-        link.classList.remove("active-link");
-        if (link.getAttribute("href") === "#" + current) {
-            link.classList.add("active-link");
-        }
-    });
-});
-
-// =======================
-// AUTH CONSOLE OVERLAY MANAGER
-// =======================
 const modal = document.getElementById("loginModal");
 const closeModal = document.getElementById("closeModal");
-
 const loginButtons = document.querySelectorAll(".login-btn");
 const signupButtons = document.querySelectorAll(".signup-link");
 
@@ -116,35 +27,141 @@ const passwordInput = document.getElementById("passwordInput");
 const confirmPasswordInput = document.getElementById("confirmPasswordInput");
 const forgotLink = document.getElementById("forgotLink");
 
+const togglePassword = document.getElementById("togglePassword");
+const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+const featureCards = document.querySelectorAll(".feature-card");
+
 let authMode = "signin";
 
-// =======================
-// DATABASE CONTROLS (LOCAL STORAGE)
-// =======================
-function getUsers() {
-    return JSON.parse(localStorage.getItem("skillhubUsers") || "[]");
+// Clean Lightweight Scroll Listener for Nav Updates
+function evaluateNavbarAndLinks() {
+    const scrollPos = window.scrollY;
+
+    // Navbar Scroll Toggle Class
+    if (navbar) {
+        if (scrollPos > 50) navbar.classList.add("scrolled");
+        else navbar.classList.remove("scrolled");
+    }
+
+    // Dynamic Navigation Track Syncing
+    let currentSectionId = "";
+    sections.forEach(section => {
+        const top = section.offsetTop - 180;
+        if (scrollPos >= top) {
+            currentSectionId = section.getAttribute("id");
+        }
+    });
+
+    navItems.forEach(link => {
+        link.classList.remove("active-link");
+        if (currentSectionId && link.getAttribute("href") === "#" + currentSectionId) {
+            link.classList.add("active-link");
+        }
+    });
 }
 
-function saveUsers(users) {
-    localStorage.setItem("skillhubUsers", JSON.stringify(users));
+window.addEventListener("scroll", evaluateNavbarAndLinks, { passive: true });
+document.addEventListener("DOMContentLoaded", evaluateNavbarAndLinks);
+
+// ==========================================
+// MOBILITY NAVIGATION HANDLERS
+// ==========================================
+if (menuBtn && navLinks) {
+    menuBtn.addEventListener("click", () => {
+        navLinks.classList.toggle("active");
+        menuBtn.classList.toggle("fa-bars");
+        menuBtn.classList.toggle("fa-xmark");
+    });
+
+    navItems.forEach(item => {
+        item.addEventListener("click", () => {
+            navLinks.classList.remove("active");
+            menuBtn.classList.add("fa-bars");
+            menuBtn.classList.remove("fa-xmark");
+        });
+    });
 }
 
-// =======================
-// MODE SCHEME PROFILE SETUP
-// =======================
+// ==========================================
+// TOAST NOTIFICATIONS SYSTEM
+// ==========================================
+let toastTimeout;
+function showToast(message) {
+    const toast = document.getElementById("toast");
+    if (!toast) return;
+    
+    clearTimeout(toastTimeout);
+    toast.textContent = message;
+    toast.classList.add("show");
+    
+    toastTimeout = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 3000);
+}
+
+// ==========================================
+// UNIFIED THEME SYNCING ENGINE
+// ==========================================
+function applySynchronizedTheme(isLight) {
+    if (isLight) {
+        document.body.classList.add("light-theme");
+    } else {
+        document.body.classList.remove("light-theme");
+    }
+    
+    const iconMarkup = isLight ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
+    if (themeToggle) themeToggle.innerHTML = iconMarkup;
+}
+
+// Persistent Storage Check
+const storedTheme = localStorage.getItem("skillhubTheme") || "dark";
+applySynchronizedTheme(storedTheme === "light");
+
+if (themeToggle) {
+    themeToggle.addEventListener("click", () => {
+        document.body.classList.toggle("light-theme");
+        const isLightActive = document.body.classList.contains("light-theme");
+        localStorage.setItem("skillhubTheme", isLightActive ? "light" : "dark");
+        applySynchronizedTheme(isLightActive);
+    });
+}
+
+// Interactive Feature Card Selectors
+featureCards.forEach(card => {
+    card.addEventListener("click", () => {
+        featureCards.forEach(c => c.classList.remove("selected"));
+        card.classList.add("selected");
+    });
+});
+
+// ==========================================
+// AUTH VISIBILITY & STATE REFACTORING
+// ==========================================
+function resetPasswordVisibility() {
+    if (passwordInput && togglePassword) {
+        passwordInput.type = "password";
+        togglePassword.classList.add("fa-eye");
+        togglePassword.classList.remove("fa-eye-slash");
+    }
+    if (confirmPasswordInput && toggleConfirmPassword) {
+        confirmPasswordInput.type = "password";
+        toggleConfirmPassword.classList.add("fa-eye");
+        toggleConfirmPassword.classList.remove("fa-eye-slash");
+    }
+}
+
 function setAuthMode(mode) {
     authMode = mode;
     const isSignup = mode === "signup";
 
-    // Matching screenshot design copy blocks perfectly
-    if (authModeText) authModeText.textContent = isSignup ? "Welcome to SkillSwap!" : "Welcome Back!";
-    if (authSubtitleText) authSubtitleText.textContent = isSignup ? "Sign Up" : "Sign In";
+    resetPasswordVisibility();
+
+    if (authModeText) authModeText.textContent = isSignup ? "Welcome to SkillHub!" : "Welcome Back!";
+    if (authSubtitleText) authSubtitleText.textContent = isSignup ? "Create Account" : "Sign In";
     
     const btnText = authSubmit ? authSubmit.querySelector(".btn-text") : null;
     if (btnText) {
         btnText.textContent = isSignup ? "Sign Up" : "Sign In";
-    } else if (authSubmit) {
-        authSubmit.textContent = isSignup ? "Sign Up" : "Sign In";
     }
 
     if (authSwitch) authSwitch.textContent = isSignup ? "Back to Sign In" : "Create Account";
@@ -164,14 +181,14 @@ function setAuthMode(mode) {
     }
 }
 
-// =======================
-// INTERFACE ACTION TOGGLES
-// =======================
+// ==========================================
+// SIMULATED AUTH OVERLAY CONTROLLERS
+// ==========================================
 function openAuthMode(mode) {
     setAuthMode(mode);
     if (authForm) authForm.reset();
     if (modal) modal.classList.add("active");
-    if (emailInput) setTimeout(() => emailInput.focus(), 100);
+    if (emailInput) setTimeout(() => emailInput.focus(), 200);
 }
 
 loginButtons.forEach(btn => {
@@ -189,15 +206,11 @@ signupButtons.forEach(btn => {
 });
 
 if (closeModal) {
-    closeModal.addEventListener("click", () => {
-        modal.classList.remove("active");
-    });
+    closeModal.addEventListener("click", () => modal.classList.remove("active"));
 }
 
 window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-        modal.classList.remove("active");
-    }
+    if (e.target === modal) modal.classList.remove("active");
 });
 
 if (authSwitch) {
@@ -207,115 +220,60 @@ if (authSwitch) {
     });
 }
 
-// =======================
-// FORM DATA VERIFICATION HANDLER
-// =======================
+// ==========================================
+// DIRECT SIMULATED AUTH CONTROLLERS
+// ==========================================
 if (authForm) {
     authForm.addEventListener("submit", (e) => {
         e.preventDefault();
 
-        const email = emailInput.value.trim().toLowerCase();
+        const email = emailInput.value.trim();
         const password = passwordInput.value;
-        const users = getUsers();
-        const existingUser = users.find(u => u.email === email);
 
+        // Simple Front-end Validation Checklist
         if (authMode === "signup") {
             const confirmPassword = confirmPasswordInput.value;
-
             if (password !== confirmPassword) {
-                showToast("Passwords do not match!");
+                showToast("❌ Error: Passwords do not match!");
                 return;
             }
-
-            if (existingUser) {
-                showToast("Account already exists. Please sign in.");
-                setAuthMode("signin");
+            if (password.length < 6) {
+                showToast("❌ Error: Password must be at least 6 characters.");
                 return;
             }
-
-            users.push({
-                name: nameInput.value.trim(),
-                email,
-                password
-            });
-
-            saveUsers(users);
-            showToast("Account created successfully!");
+            showToast("🚀 Account Registered Successfully!");
         } else {
-            if (!existingUser || existingUser.password !== password) {
-                showToast("Invalid email or password");
-                return;
-            }
-            showToast(`Welcome back, ${existingUser.name || email}!`);
+            showToast("✅ Login Successful!");
         }
 
-        localStorage.setItem("skillhubCurrentUser", email);
+        // Clean, instantaneous UI clearance
+        modal.classList.remove("active");
+        authForm.reset();
         
-        const successCheck = document.querySelector(".success-check");
-        if (successCheck) {
-            successCheck.classList.add("active");
-            setTimeout(() => {
-                modal.classList.remove("active");
-                successCheck.classList.remove("active");
-            }, 2000);
-        } else {
-            modal.classList.remove("active");
-        }
+        // Notify user that they are visually logged in
+        document.querySelector(".hero-badge").innerHTML = `<i class="fa-solid fa-circle-user"></i> Simulated Session: Active`;
     });
 }
 
-// =======================
-// MOBILE MENU
-// =======================
-const menuBtn = document.querySelector(".menu-btn");
-const navLinks = document.querySelector(".nav-links");
-
-if (menuBtn && navLinks) {
-    menuBtn.addEventListener("click", () => {
-        navLinks.classList.toggle("active");
-        menuBtn.classList.toggle("fa-bars");
-        menuBtn.classList.toggle("fa-xmark");
-    });
-}
-
-// =======================
-// SHRINK NAVBAR
-// =======================
-const navbar = document.querySelector(".navbar");
-
-if (navbar) {
-    window.addEventListener("scroll", () => {
-        if (window.scrollY > 80) {
-            navbar.classList.add("scrolled");
-        } else {
-            navbar.classList.remove("scrolled");
-        }
-    });
-}
-
-// =======================
-// SHOW / HIDE PASSWORD
-// =======================
-const togglePassword = document.getElementById("togglePassword");
-const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
-
+// ==========================================
+// PASSWORD INPUT REVEAL ENGINE
+// ==========================================
 if (togglePassword && passwordInput) {
     togglePassword.addEventListener("click", () => {
-        const type = passwordInput.type === "password" ? "text" : "password";
-        passwordInput.type = type;
-        togglePassword.classList.toggle("fa-eye");
-        togglePassword.classList.toggle("fa-eye-slash");
+        const isCurrentlyHidden = passwordInput.type === "password";
+        passwordInput.type = isCurrentlyHidden ? "text" : "password";
+        togglePassword.classList.toggle("fa-eye-slash", isCurrentlyHidden);
+        togglePassword.classList.toggle("fa-eye", !isCurrentlyHidden);
     });
 }
 
 if (toggleConfirmPassword && confirmPasswordInput) {
     toggleConfirmPassword.addEventListener("click", () => {
-        const type = confirmPasswordInput.type === "password" ? "text" : "password";
-        confirmPasswordInput.type = type;
-        toggleConfirmPassword.classList.toggle("fa-eye");
-        toggleConfirmPassword.classList.toggle("fa-eye-slash");
+        const isCurrentlyHidden = confirmPasswordInput.type === "password";
+        confirmPasswordInput.type = isCurrentlyHidden ? "text" : "password";
+        toggleConfirmPassword.classList.toggle("fa-eye-slash", isCurrentlyHidden);
+        toggleConfirmPassword.classList.toggle("fa-eye", !isCurrentlyHidden);
     });
 }
 
-// Initialize layout parameters seamlessly
 setAuthMode("signin");
