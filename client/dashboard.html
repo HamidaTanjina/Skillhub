@@ -44,7 +44,7 @@
                 Chat
             </li>
 
-            <li>
+            <li onclick="window.location.href='profile.html'">
                 <i class="fa-solid fa-user"></i>
                 Profile
             </li>
@@ -101,11 +101,9 @@
 
         </section>
 
-        <!-- Dashboard Cards -->
-
+        <!-- Overview Cards -->
         <section class="overview">
 
-            <!-- Active Swaps -->
             <div class="overview-card blue">
 
                 <div>
@@ -120,7 +118,6 @@
 
             </div>
 
-            <!-- Pending Requests -->
             <div class="overview-card orange">
 
                 <div>
@@ -135,7 +132,6 @@
 
             </div>
 
-            <!-- Profile Completion -->
             <div class="overview-card green">
 
                 <div>
@@ -151,89 +147,129 @@
             </div>
 
         </section>
+
+        <!-- Dashboard Grid -->
         <section class="dashboard-grid">
 
-    <!-- Left Card -->
+            <!-- Profile Card -->
+            <div class="profile-card">
 
-    <div class="profile-card">
+                <div class="profile-avatar">
 
-        <div class="profile-icon">
-            <i class="fa-solid fa-circle-user"></i>
-        </div>
+                    <i class="fa-solid fa-circle-user"></i>
 
-        <h2 id="profileName">Loading...</h2>
+                </div>
 
-        <p id="memberSince">
-            Member Since —
-        </p>
+                <h2 id="profileName">Loading...</h2>
 
-        <button class="edit-btn">
-            <i class="fa-solid fa-pen"></i>
-            Edit Profile
-        </button>
+                <p class="profile-email">
 
-    </div>
+                    <i class="fa-solid fa-envelope"></i>
 
-    <!-- Right Card -->
+                    <span id="profileEmail">Loading...</span>
 
-    <div class="skills-card">
+                </p>
 
-        <div class="card-header">
+                <p class="profile-location">
 
-            <h2>My Skills</h2>
+                    <i class="fa-solid fa-location-dot"></i>
 
-            <button class="add-btn">
-                + Add Skills
-            </button>
+                    <span id="profileLocation">Add Location</span>
 
-        </div>
+                </p>
 
-        <div class="skill-section">
+                <div class="profile-bio">
 
-            <h4>I CAN TEACH</h4>
+                    <h4>Bio</h4>
 
-            <div id="teachSkills">
+                    <p id="profileBio">
 
-                <span class="skill-tag">Loading...</span>
+                        Tell everyone about yourself...
 
-            </div>
+                    </p>
 
-        </div>
+                </div>
 
-        <div class="skill-section">
-
-            <h4>I WANT TO LEARN</h4>
-
-            <div id="learnSkills">
-
-                <span class="skill-tag">Loading...</span>
+              <button class="edit-btn" id="editProfileBtn">
+    <i class="fa-solid fa-pen"></i>
+    Edit Profile
+</button>
 
             </div>
 
-        </div>
+            <!-- Skills Card -->
+            <div class="skills-card">
 
-    </div>
+                <div class="card-header">
 
-</section>
-<section class="matches-card">
+                    <h2>My Skills</h2>
 
-    <div class="card-header">
+                    <button class="add-btn">
 
-        <h2>Suggested Matches</h2>
+                        + Add Skills
 
-        <button class="see-btn">
-            See All
-        </button>
+                    </button>
 
-    </div>
+                </div>
 
-    <div id="matchesContainer">
+                <div class="skill-section">
 
-        <p>Loading matches...</p>
+                    <h4>I CAN TEACH</h4>
 
-    </div>
+                    <div id="teachSkills">
 
-</section>
+                        <span class="skill-tag">
+
+                            Loading...
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="skill-section">
+
+                    <h4>I WANT TO LEARN</h4>
+
+                    <div id="learnSkills">
+
+                        <span class="skill-tag">
+
+                            Loading...
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Suggested Matches -->
+        <section class="matches-card">
+
+            <div class="card-header">
+
+                <h2>Suggested Matches</h2>
+
+                <button class="see-btn">
+
+                    See All
+
+                </button>
+
+            </div>
+
+            <div id="matchesContainer">
+
+                <p>Loading matches...</p>
+
+            </div>
+
+        </section>
 
     </main>
 

@@ -1,49 +1,75 @@
 const User = require("../models/User");
 
-exports.getProfile = async(req,res)=>{
+// =========================
+// Get Profile
+// =========================
 
-    try{
+exports.getProfile = async (req, res) => {
 
-        const user=await User.findById(req.user.id).select("-password");
+    try {
+
+        const user = await User.findById(req.user.id).select("-password");
 
         res.json(user);
 
-    }catch(err){
+    } catch (err) {
 
         res.status(500).json({
-            message:err.message
+            message: err.message
         });
 
     }
 
 };
-exports.saveSkills = async (req, res) => {
+
+// =========================
+// Update Profile
+// =========================
+
+exports.updateProfile = async (req, res) => {
 
     try {
 
-        const { teachSkills, learnSkills } = req.body;
+        const {
+
+            name,
+            bio,
+            location,
+            teachSkills,
+            learnSkills
+
+        } = req.body;
 
         const user = await User.findByIdAndUpdate(
 
             req.user.id,
 
             {
+
+                name,
+                bio,
+                location,
                 teachSkills,
                 learnSkills
+
             },
 
             {
+
                 new: true
+
             }
 
-        );
+        ).select("-password");
 
         res.json(user);
 
     } catch (error) {
 
         res.status(500).json({
+
             message: error.message
+
         });
 
     }

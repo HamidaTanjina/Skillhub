@@ -31,7 +31,16 @@ const UserSchema = new mongoose.Schema({
     profilePicture:{
         type:String,
         default:""
-    }
+    },
+    bio:{
+    type:String,
+    default:""
+},
+
+location:{
+    type:String,
+    default:""
+}
 
 });
 

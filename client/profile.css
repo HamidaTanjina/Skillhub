@@ -1,0 +1,140 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Segoe UI",sans-serif;
+}
+
+body{
+
+    background:#0b0f19;
+    color:white;
+    min-height:100vh;
+
+}
+
+.profile-container{
+
+    width:90%;
+    max-width:900px;
+
+    margin:50px auto;
+
+}
+
+
+/* Right Card */
+.profile-form{
+
+    background:#111827;
+
+    border:1px solid #1f2937;
+
+    border-radius:20px;
+
+    padding:40px;
+
+    max-width:900px;
+
+    margin:auto;
+
+}
+.profile-form h2{
+
+    margin-bottom:30px;
+
+    font-size:30px;
+
+}
+
+.profile-form label{
+
+    display:block;
+
+    margin-top:18px;
+
+    margin-bottom:8px;
+
+    color:#cbd5e1;
+
+    font-weight:600;
+
+}
+
+.profile-form input,
+.profile-form textarea{
+
+    width:100%;
+
+    background:#1f2937;
+
+    color:white;
+
+    border:1px solid #374151;
+
+    border-radius:12px;
+
+    padding:14px;
+
+    font-size:15px;
+
+    outline:none;
+
+}
+
+.profile-form textarea{
+
+    resize:none;
+
+}
+
+.profile-form input:focus,
+.profile-form textarea:focus{
+
+    border-color:#3b82f6;
+
+}
+
+#saveProfileBtn{
+
+    margin-top:30px;
+
+    width:100%;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:linear-gradient(135deg,#6366f1,#3b82f6);
+
+    color:white;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#saveProfileBtn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:0 10px 20px rgba(59,130,246,.3);
+
+}
+
+@media(max-width:900px){
+
+    .container{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
