@@ -636,36 +636,17 @@ body{
     color:#60a5fa;
 
 }
+.bio-text{
 
-.profile-bio{
+    color:#cbd5e1;
 
-    margin-top:25px;
-
-    text-align:left;
-
-    padding:20px;
-
-    background:#1f2937;
-
-    border-radius:15px;
-
-}
-
-.profile-bio h4{
-
-    color:#60a5fa;
-
-    margin-bottom:12px;
-
-}
-
-.profile-bio p{
-
-    color:#d1d5db;
+    font-size:16px;
 
     line-height:1.6;
 
-    margin:0;
+    margin:25px 0;
+
+    text-align:center;
 
 }
 .profile-card,
