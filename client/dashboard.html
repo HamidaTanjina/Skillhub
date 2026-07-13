@@ -93,13 +93,13 @@
         </header>
 
         <!-- Welcome -->
-     <section class="welcome">
+        <section class="welcome">
 
-    <h1 id="welcomeTitle">Welcome Back </h1>
+            <h1 id="welcomeTitle">Welcome Back </h1>
 
-    <p>Learn • Teach • Connect with amazing people.</p>
+            <p>Learn • Teach • Connect with amazing people.</p>
 
-</section>
+        </section>
 
         <!-- Overview Cards -->
         <section class="overview">
@@ -114,7 +114,7 @@
 
                 </div>
 
-                <i class="fa-solid fa-people-arrows"></i>
+               <i class="fa-solid fa-paper-plane"></i>
 
             </div>
 
@@ -128,7 +128,7 @@
 
                 </div>
 
-                <i class="fa-solid fa-paper-plane"></i>
+              <i class="fa-solid fa-clock"></i>
 
             </div>
 
@@ -136,13 +136,13 @@
 
                 <div>
 
-                    <h2 id="profileCompletion">0%</h2>
+                    <h2 id="completedSwaps">0</h2>
 
-                    <p>Profile Completion</p>
+                    <p>Completed Swaps</p>
 
                 </div>
 
-                <i class="fa-solid fa-user-check"></i>
+              <i class="fa-solid fa-trophy"></i>
 
             </div>
 
@@ -160,7 +160,18 @@
 
                 </div>
 
-                <h2 id="profileName">Loading...</h2>
+              <h2 id="profileName">Loading...</h2>
+                
+                <!-- Profile Rating block underneath name -->
+                <div class="profile-rating">
+                
+                    <i class="fa-solid fa-star"></i>
+                
+                    <span id="userRating">0.0</span>
+                
+                    <small>(<span id="reviewCount">0</span> Reviews)</small>
+                
+                </div>
 
                 <p class="profile-email">
 
@@ -179,13 +190,13 @@
                 </p>
 
                 <p class="bio-text" id="profileBio">
-    Tell everyone about yourself...
-</p>
+                    Tell everyone about yourself...
+                </p>
 
-              <button class="edit-btn" id="editProfileBtn">
-    <i class="fa-solid fa-pen"></i>
-    Edit Profile
-</button>
+                <button class="edit-btn" id="editProfileBtn">
+                    <i class="fa-solid fa-pen"></i>
+                    Edit Profile
+                </button>
 
             </div>
 
@@ -196,42 +207,80 @@
 
                     <h2>My Skills</h2>
 
-                   <button class="add-btn" id="addSkillsBtn">
-    + Add Skills
-</button>
+                    <button class="add-btn" id="addSkillsBtn">
+                        + Add
+                    </button>
 
                 </div>
 
-                <div class="skill-section">
+                <!-- Grid wrapper for the side-by-side split view layout -->
+                <div class="skills-grid-container">
 
-                    <h4>I CAN TEACH</h4>
+                    <!-- Teach Container -->
+                    <div class="skill-section teach">
 
-                    <div id="teachSkills">
+                        <div class="skill-section-header">
+                            <h4>I CAN TEACH</h4>
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
 
-                        <span class="skill-tag">
+                        <div id="teachSkills" class="skills-list-wrapper">
 
-                            Loading...
+                            <span class="skills-loading-text">
 
-                        </span>
+                                Loading...
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Learn Container -->
+                    <div class="skill-section learn">
+
+                        <div class="skill-section-header">
+                            <h4>I WANT TO LEARN</h4>
+                            <i class="fa-solid fa-lightbulb"></i>
+                        </div>
+
+                        <div id="learnSkills" class="skills-list-wrapper">
+
+                            <span class="skills-loading-text">
+
+                                Loading...
+
+                            </span>
+
+                        </div>
 
                     </div>
 
                 </div>
+                
+                <!-- Profile Completion Area inside Skills Card -->
+                <div class="completion-box">
 
-                <div class="skill-section">
+                    <div class="completion-header">
 
-                    <h4>I WANT TO LEARN</h4>
+                        <span>Profile Completion</span>
 
-                    <div id="learnSkills">
-
-                        <span class="skill-tag">
-
-                            Loading...
-
-                        </span>
+                        <span id="profileCompletion">0%</span>
 
                     </div>
 
+                    <div class="progress">
+
+                        <div class="progress-bar" id="progressBar"></div>
+
+                    </div>
+
+                    <p class="completion-text">
+
+                       Complete your profile to unlock better matches and increase visibility.
+
+                    </p>
+                
                 </div>
 
             </div>
@@ -259,6 +308,23 @@
 
             </div>
 
+        </section>
+        
+        <!-- Recent Activity Section below Suggested Matches -->
+        <section class="activity-card">
+
+            <div class="card-header">
+
+                <h2>Recent Activity</h2>
+
+            </div>
+
+            <div id="activityContainer">
+
+                <p>No recent activity.</p>
+
+            </div>
+            
         </section>
 
     </main>
