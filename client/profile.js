@@ -15,22 +15,13 @@ async function loadProfile() {
 
         const user = await response.json();
 
-
-        // Form
+        // Fill Form
         document.getElementById("editName").value = user.name;
         document.getElementById("editEmail").value = user.email;
         document.getElementById("editLocation").value = user.location || "";
         document.getElementById("editBio").value = user.bio || "";
 
-        document.getElementById("editTeachSkills").value =
-            user.teachSkills.join(", ");
-
-        document.getElementById("editLearnSkills").value =
-            user.learnSkills.join(", ");
-
-    }
-
-    catch(error){
+    } catch (error) {
 
         console.log(error);
 
@@ -48,21 +39,7 @@ document.getElementById("saveProfileBtn").onclick = async () => {
 
         location: document.getElementById("editLocation").value,
 
-        bio: document.getElementById("editBio").value,
-
-        teachSkills: document
-            .getElementById("editTeachSkills")
-            .value
-            .split(",")
-            .map(skill => skill.trim())
-            .filter(skill => skill !== ""),
-
-        learnSkills: document
-            .getElementById("editLearnSkills")
-            .value
-            .split(",")
-            .map(skill => skill.trim())
-            .filter(skill => skill !== "")
+        bio: document.getElementById("editBio").value
 
     };
 
@@ -87,21 +64,19 @@ document.getElementById("saveProfileBtn").onclick = async () => {
             }
         );
 
-        if(response.ok){
+        if (response.ok) {
 
             alert("Profile Updated Successfully!");
 
             window.location.href = "dashboard.html";
 
-        }else{
+        } else {
 
             alert("Failed to update profile.");
 
         }
 
-    }
-
-    catch(error){
+    } catch (error) {
 
         console.log(error);
 

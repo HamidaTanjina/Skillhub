@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Skills | SkillHub</title>
+
+    <link rel="stylesheet" href="add-skills.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+<header class="navbar">
+
+    <div class="logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>SkillHub</span>
+    </div>
+
+    <button class="dashboard-btn"
+        onclick="window.location.href='dashboard.html'">
+
+        <i class="fa-solid fa-arrow-left"></i>
+        Dashboard
+
+    </button>
+
+</header>
+
+<div class="container">
+
+    <!-- ===========================
+         Teach Skills
+    ============================ -->
+
+    <div class="card">
+
+        <div class="title">
+
+            <div class="icon blue">
+
+                <i class="fa-solid fa-chalkboard-user"></i>
+
+            </div>
+
+            <div>
+
+                <h2>Skills I Can Teach</h2>
+
+                <p>Add up to 10 skills you can teach.</p>
+
+            </div>
+
+        </div>
+
+        <label>Browse By Category</label>
+
+        <select id="teachCategory">
+
+            <option value="">Select Category</option>
+
+            <option value="Technology">Technology</option>
+
+            <option value="Design">Design</option>
+
+            <option value="Business">Business</option>
+
+            <option value="Language">Language</option>
+
+            <option value="Cooking">Cooking</option>
+
+        </select>
+
+        <div id="teachSuggestions" class="suggestions"></div>
+
+        <label>Search or Type Skill</label>
+
+        <input
+            type="text"
+            id="teachInput"
+            placeholder="Type skill and press Enter">
+
+        <h3>Added Skills</h3>
+
+        <div id="teachSelected" class="selected-skills"></div>
+
+    </div>
+
+    <!-- ===========================
+         Learn Skills
+    ============================ -->
+
+    <div class="card">
+
+        <div class="title">
+
+            <div class="icon pink">
+
+                <i class="fa-solid fa-lightbulb"></i>
+
+            </div>
+
+            <div>
+
+                <h2>Skills I Want To Learn</h2>
+
+                <p>Add up to 10 skills you want to learn.</p>
+
+            </div>
+
+        </div>
+
+        <label>Browse By Category</label>
+
+        <select id="learnCategory">
+
+            <option value="">Select Category</option>
+
+            <option value="Technology">Technology</option>
+
+            <option value="Design">Design</option>
+
+            <option value="Business">Business</option>
+
+            <option value="Language">Language</option>
+
+            <option value="Cooking">Cooking</option>
+
+        </select>
+
+        <div id="learnSuggestions" class="suggestions"></div>
+
+        <label>Search or Type Skill</label>
+
+        <input
+            type="text"
+            id="learnInput"
+            placeholder="Type skill and press Enter">
+
+        <h3>Added Skills</h3>
+
+        <div id="learnSelected" class="selected-skills"></div>
+
+    </div>
+
+</div>
+
+<div class="save-area">
+
+    <button id="saveSkillsBtn" class="save-btn">
+
+        <i class="fa-solid fa-floppy-disk"></i>
+
+        Save Skills
+
+    </button>
+
+</div>
+
+<script src="add-skills.js"></script>
+
+</body>
+
+</html>

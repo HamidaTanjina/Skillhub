@@ -10,12 +10,18 @@ exports.getProfile = async (req, res) => {
 
         const user = await User.findById(req.user.id).select("-password");
 
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
         res.json(user);
 
-    } catch (err) {
+    } catch (error) {
 
         res.status(500).json({
-            message: err.message
+            message: error.message
         });
 
     }
@@ -34,42 +40,103 @@ exports.updateProfile = async (req, res) => {
 
             name,
             bio,
-            location,
-            teachSkills,
-            learnSkills
+            location
 
         } = req.body;
+
+        const updateData = {};
+
+        if (name !== undefined) {
+            updateData.name = name;
+        }
+
+        if (bio !== undefined) {
+            updateData.bio = bio;
+        }
+
+        if (location !== undefined) {
+            updateData.location = location;
+        }
 
         const user = await User.findByIdAndUpdate(
 
             req.user.id,
 
-            {
-
-                name,
-                bio,
-                location,
-                teachSkills,
-                learnSkills
-
-            },
+            updateData,
 
             {
-
                 new: true
-
             }
 
         ).select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
 
         res.json(user);
 
     } catch (error) {
 
         res.status(500).json({
-
             message: error.message
+        });
 
+    }
+
+};
+
+// =========================
+// Save Skills
+// =========================
+
+exports.saveSkills = async (req, res) => {
+
+    try {
+
+        const {
+
+            teachSkills,
+            learnSkills
+
+        } = req.body;
+
+        const updateData = {};
+
+        if (teachSkills !== undefined) {
+            updateData.teachSkills = teachSkills;
+        }
+
+        if (learnSkills !== undefined) {
+            updateData.learnSkills = learnSkills;
+        }
+
+        const user = await User.findByIdAndUpdate(
+
+            req.user.id,
+
+            updateData,
+
+            {
+                new: true
+            }
+
+        ).select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        res.json(user);
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
         });
 
     }

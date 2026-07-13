@@ -14,6 +14,8 @@ async function loadProfile() {
         );
 
         const user = await response.json();
+        document.getElementById("welcomeTitle").textContent =
+    `Welcome Back  ${user.name} `;
 
         // Top Navbar
         document.getElementById("userName").textContent = user.name;
@@ -51,6 +53,11 @@ async function loadProfile() {
         }
 document.getElementById("editProfileBtn").addEventListener("click", () => {
     window.location.href = "profile.html";
+});
+document.getElementById("addSkillsBtn").addEventListener("click", () => {
+
+    window.location.href = "add-skills.html";
+
 });
         // Learn Skills
         const learnContainer = document.getElementById("learnSkills");
