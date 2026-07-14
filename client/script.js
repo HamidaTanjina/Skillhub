@@ -231,11 +231,11 @@ if (authForm) {
             const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : "";
             
             if (password !== confirmPassword) {
-                showToast("❌ Error: Passwords do not match!");
+                showToast("Error: Passwords do not match!");
                 return;
             }
             if (password.length < 6) {
-                showToast("❌ Error: Password must be at least 6 characters.");
+                showToast("Error: Password must be at least 6 characters.");
                 return;
             }
 
@@ -251,7 +251,7 @@ if (authForm) {
                 const data = await response.json();
 
                 if (response.ok) {
-                    showToast("🚀 Registration successful! Redirecting...");
+                    showToast(" Registration successful! Redirecting...");
                     
                     // Save JWT token if sent during registration, then redirect
                     if (data.token) localStorage.setItem("token", data.token);
@@ -260,12 +260,12 @@ if (authForm) {
                         window.location.href = "dashboard.html";
                     }, 1000);
                 } else {
-                    showToast(`❌ Error: ${data.message || "Registration failed."}`);
+                    showToast(` Error: ${data.message || "Registration failed."}`);
                 }
 
             } catch (error) {
                 console.error("Network Exception:", error);
-                showToast("❌ Connection error. Is your local server running?");
+                showToast(" Connection error. Is your local server running?");
             }
 
         // --- SUBMIT AUTHENTICATION (SIGN IN MODE) ---
@@ -294,12 +294,12 @@ if (authForm) {
                         window.location.href = "dashboard.html";
                     }, 1000);
                 } else {
-                    showToast(`❌ Error: ${data.message || "Invalid credentials."}`);
+                    showToast(`Error: ${data.message || "Invalid credentials."}`);
                 }
 
             } catch (error) {
                 console.error("Network Exception:", error);
-                showToast("❌ Connection error. Is your local server running?");
+                showToast("Connection error. Is your local server running?");
             }
         }
     });
