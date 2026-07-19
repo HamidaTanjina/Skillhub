@@ -183,12 +183,6 @@ function renderUsers(users) {
 
     </div>
 
-    <div class="online">
-
-        ${user.isOnline ? "🟢 Online" : "⚪ Offline"}
-
-    </div>
-
 </div>
 
     </div>

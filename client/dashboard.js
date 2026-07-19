@@ -1,4 +1,9 @@
 const token = localStorage.getItem("token");
+if (!token) {
+
+    window.location.href = "index.html";
+
+}
 
 async function loadProfile() {
 
@@ -164,5 +169,36 @@ document.getElementById("editProfileBtn").addEventListener("click", () => {
 document.getElementById("addSkillsBtn").addEventListener("click", () => {
 
     window.location.href = "add-skills.html";
+
+});
+// =========================
+// Logout
+// =========================
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+
+    try {
+
+        await fetch(
+            "https://skillhub-backend-cths.onrender.com/api/auth/logout",
+            {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+    } catch (error) {
+
+        console.error("Logout Error:", error);
+
+    }
+
+    // Remove token from browser
+    localStorage.removeItem("token");
+
+    // Redirect to login page
+    window.location.href = "index.html";
 
 });

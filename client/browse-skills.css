@@ -291,60 +291,83 @@ body{
    Footer 
 ====================== */ 
  
-.card-footer{ 
-    display:flex; 
-    justify-content:space-between; 
-    align-items:center; 
-    margin-top:25px; 
-} 
+.card-footer{
+
+    margin-top:20px;
+
+    margin-bottom:20px;
+
+}
  
-.rating{ 
-    color:#facc15; 
-    font-size:15px; 
-} 
- 
-.online{ 
-    color:#34d399; 
-    font-size:14px; 
-} 
+.rating{
+
+    color:#FFD54F;
+
+    font-size:18px;
+
+    font-weight:600;
+
+}
+
  
 /* ====================== 
    Buttons 
 ====================== */ 
- 
-.card-buttons{ 
-    display:flex; 
-    gap:12px; 
-    margin-top:22px; 
-} 
- 
-.request-btn{ 
-    flex:1; 
-    border:none; 
-    padding:15px; 
-    border-radius:40px; 
-    background:linear-gradient(135deg,#7c3aed,#38bdf8); 
-    color:white; 
-    cursor:pointer; 
-    font-size:15px; 
-    font-weight:600; 
-    transition:.3s; 
-} 
+
+ .card-buttons{
+
+    display:flex;
+
+    gap:15px;
+
+    margin-top:20px;
+
+}
+.request-btn{
+
+    flex:1;
+
+    height:58px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:linear-gradient(90deg,#7c4dff,#4fc3f7);
+
+    color:white;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+}
  
 .request-btn:hover{ 
     transform:scale(1.03); 
 } 
  
-.favorite-btn{ 
-    width:55px; 
-    border-radius:16px; 
-    border:1px solid #334155; 
-    background:transparent; 
-    color:white; 
-    cursor:pointer; 
-    font-size:18px; 
-} 
- 
+.favorite-btn{
+
+    width:58px;
+
+    height:58px;
+
+    border-radius:18px;
+
+    border:1px solid #2b3550;
+
+    background:transparent;
+
+    color:white;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+}
 .favorite-btn:hover{ 
     border-color:#3b82f6; 
     color:#60a5fa; 
