@@ -23,54 +23,97 @@ body {
    2. Layout Components (Sidebar & Topbar)
    ========================================================================== */
 /* Sidebar - Sized down to match image proportions */
-.sidebar {
-    width: 240px;
-    background: #111827;
-    border-right: 1px solid #1f2937;
-    padding: 24px 20px;
-    flex-shrink: 0;
+.sidebar{
+
+    width:240px;
+
+    background:#111827;
+
+    border-right:1px solid #1f2937;
+
+    padding:30px;
+
 }
 
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 40px;
-    padding-left: 10px;
+.logo{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:12px;
+
+    font-size:28px;
+
+    font-weight:700;
+
+    margin-bottom:60px;
+
 }
 
-.logo i {
-    color: #3b82f6;
+.logo i{
+
+    color:#60a5fa;
+
+    font-size:30px;
+
+}
+.sidebar ul{
+
+    list-style:none;
+
 }
 
-.sidebar ul {
-    list-style: none;
+.sidebar li{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:16px 18px;
+
+    margin-bottom:12px;
+
+    border-radius:16px;
+
+    transition:.3s;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:500;
+
 }
 
-.sidebar li {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    border-radius: 10px;
-    cursor: pointer;
-    margin-bottom: 6px;
-    font-size: 15px;
-    color: #94a3b8;
-    transition: .3s;
+.sidebar li i{
+
+    width:22px;
+
 }
 
-.sidebar li:hover {
-    background: #1f2937;
-    color: white;
+.sidebar li:hover{
+
+    background:#1f2937;
+
+    transform:translateX(5px);
+
 }
 
-.sidebar li.active {
-    background: #1e1b4b;
-    color: #3b82f6;
-    font-weight: 600;
+.sidebar li.active{
+
+    background:linear-gradient(135deg,#8b5cf6,#3b82f6);
+
+}
+.sidebar li a{
+    display:flex;
+    align-items:center;
+    gap:15px;
+    color:white;
+    text-decoration:none;
+    width:100%;
 }
 
 /* Main & Topbar Space Tuning */
@@ -340,7 +383,6 @@ body {
     align-items: center;
     margin-bottom: 14px;
 }
-
 .skill-section h4 {
     font-size: 12px;
     font-weight: 700;
