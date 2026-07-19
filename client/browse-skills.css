@@ -1,0 +1,388 @@
+*{ 
+    margin:0; 
+    padding:0; 
+    box-sizing:border-box; 
+    font-family:"Segoe UI",sans-serif; 
+} 
+ 
+body{ 
+    background:#0b0f19; 
+    color:#fff; 
+} 
+ 
+/* ====================== 
+   Layout 
+====================== */ 
+ 
+.dashboard{ 
+    display:flex; 
+    min-height:100vh; 
+} 
+ 
+/* ====================== 
+   Sidebar 
+====================== */ 
+ 
+.sidebar{ 
+    width:260px; 
+    background:#111827; 
+    border-right:1px solid #1f2937; 
+    padding:30px; 
+} 
+ 
+.logo{ 
+    display:flex; 
+    align-items:center; 
+    gap:12px; 
+    font-size:26px; 
+    font-weight:700; 
+    margin-bottom:60px; 
+} 
+ 
+.logo i{ 
+    color:#60a5fa; 
+} 
+ 
+.sidebar ul{ 
+    list-style:none; 
+} 
+ 
+.sidebar li{ 
+    display:flex; 
+    align-items:center; 
+    gap:15px; 
+    padding:16px 20px; 
+    margin-bottom:10px; 
+    border-radius:14px; 
+    cursor:pointer; 
+    transition:.3s; 
+} 
+ 
+.sidebar li:hover{ 
+    background:#1f2937; 
+} 
+ 
+.sidebar li.active{ 
+    background:linear-gradient(135deg,#7c3aed,#3b82f6); 
+} 
+ 
+/* ====================== 
+   Main 
+====================== */ 
+ 
+.main{ 
+    flex:1; 
+    padding:40px; 
+} 
+ 
+/* ====================== 
+   Header 
+====================== */ 
+ 
+.page-header h1{ 
+    font-size:42px; 
+    margin-bottom:10px; 
+} 
+ 
+.page-header p{ 
+    color:#94a3b8; 
+    font-size:17px; 
+    margin-bottom:35px; 
+} 
+ 
+/* ====================== 
+   Filter Card 
+====================== */ 
+ 
+.filter-card{ 
+    background:#111827; 
+    border:1px solid #1f2937; 
+    border-radius:22px; 
+    padding:30px; 
+    margin-bottom:30px; 
+} 
+ 
+.filter-grid{ 
+    display:grid; 
+    grid-template-columns:2fr 1fr 1fr; 
+    gap:25px; 
+} 
+ 
+.filter-item{ 
+    display:flex; 
+    flex-direction:column; 
+} 
+ 
+.filter-item label{ 
+    margin-bottom:12px; 
+    font-weight:600; 
+    font-size:16px; 
+} 
+ 
+.search-box{ 
+    background:#0f172a; 
+    border:1px solid #334155; 
+    border-radius:14px; 
+    display:flex; 
+    align-items:center; 
+    padding:0 18px; 
+} 
+ 
+.search-box i{ 
+    color:#94a3b8; 
+    font-size:18px; 
+} 
+ 
+.search-box input{ 
+    width:100%; 
+    border:none; 
+    outline:none; 
+    background:none; 
+    color:white; 
+    font-size:16px; 
+    padding:16px; 
+} 
+ 
+.filter-item select{ 
+    height:56px; 
+    background:#0f172a; 
+    color:white; 
+    border:1px solid #334155; 
+    border-radius:14px; 
+    padding:0 16px; 
+    font-size:16px; 
+} 
+ 
+/* ====================== 
+   Result Info 
+====================== */ 
+ 
+.result-info{ 
+    display:flex; 
+    align-items:center; 
+    gap:12px; 
+    margin-bottom:30px; 
+    background:#111827; 
+    border:1px solid #1f2937; 
+    padding:18px 22px; 
+    border-radius:16px; 
+    color:#cbd5e1; 
+} 
+ 
+.result-info i{ 
+    color:#8b5cf6; 
+} 
+ 
+/* ====================== 
+   User Grid 
+====================== */ 
+ 
+.users-grid{ 
+    display:grid; 
+    grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); 
+    gap:25px; 
+} 
+ 
+/* ====================== 
+   Card 
+====================== */ 
+ 
+.user-card{ 
+    background:#111827; 
+    border:1px solid #1f2937; 
+    border-radius:22px; 
+    padding:25px; 
+    transition:.3s; 
+} 
+ 
+.user-card:hover{ 
+    transform:translateY(-6px); 
+    border-color:#3b82f6; 
+    box-shadow:0 15px 35px rgba(59,130,246,.25); 
+} 
+ 
+/* ====================== 
+   Header 
+====================== */ 
+ 
+.user-header{ 
+    display:flex; 
+    justify-content:space-between; 
+    align-items:flex-start; 
+} 
+ 
+.user-info{ 
+    display:flex; 
+    gap:16px; 
+} 
+ 
+.avatar{ 
+    width:70px; 
+    height:70px; 
+    border-radius:50%; 
+    background:linear-gradient(135deg,#7c3aed,#38bdf8); 
+    display:flex; 
+    justify-content:center; 
+    align-items:center; 
+    font-size:28px; 
+    font-weight:bold; 
+} 
+ 
+.user-name{ 
+    font-size:24px; 
+    margin-bottom:6px; 
+} 
+ 
+.location{ 
+    color:#94a3b8; 
+    font-size:15px; 
+} 
+ 
+.badge{ 
+    background:#1f2937; 
+    color:#22c55e; 
+    padding:8px 14px; 
+    border-radius:30px; 
+    font-size:13px; 
+    font-weight:600; 
+} 
+ 
+/* ====================== 
+   Sections 
+====================== */ 
+ 
+.section-title{ 
+    margin-top:25px; 
+    margin-bottom:10px; 
+    color:#818cf8; 
+    font-size:13px; 
+    letter-spacing:1px; 
+} 
+ 
+.skill-list{ 
+    display:flex; 
+    flex-wrap:wrap; 
+    gap:10px; 
+} 
+ 
+.teach-tag, 
+.learn-tag{ 
+    padding:9px 16px; 
+    border-radius:30px; 
+    font-size:14px; 
+    display:flex; 
+    align-items:center; 
+    gap:8px; 
+} 
+ 
+.teach-tag{ 
+    background:rgba(59,130,246,.15); 
+    border:1px solid rgba(59,130,246,.4); 
+    color:#93c5fd; 
+} 
+ 
+.learn-tag{ 
+    background:rgba(236,72,153,.15); 
+    border:1px solid rgba(236,72,153,.4); 
+    color:#f9a8d4; 
+} 
+ 
+/* ====================== 
+   Footer 
+====================== */ 
+ 
+.card-footer{ 
+    display:flex; 
+    justify-content:space-between; 
+    align-items:center; 
+    margin-top:25px; 
+} 
+ 
+.rating{ 
+    color:#facc15; 
+    font-size:15px; 
+} 
+ 
+.online{ 
+    color:#34d399; 
+    font-size:14px; 
+} 
+ 
+/* ====================== 
+   Buttons 
+====================== */ 
+ 
+.card-buttons{ 
+    display:flex; 
+    gap:12px; 
+    margin-top:22px; 
+} 
+ 
+.request-btn{ 
+    flex:1; 
+    border:none; 
+    padding:15px; 
+    border-radius:40px; 
+    background:linear-gradient(135deg,#7c3aed,#38bdf8); 
+    color:white; 
+    cursor:pointer; 
+    font-size:15px; 
+    font-weight:600; 
+    transition:.3s; 
+} 
+ 
+.request-btn:hover{ 
+    transform:scale(1.03); 
+} 
+ 
+.favorite-btn{ 
+    width:55px; 
+    border-radius:16px; 
+    border:1px solid #334155; 
+    background:transparent; 
+    color:white; 
+    cursor:pointer; 
+    font-size:18px; 
+} 
+ 
+.favorite-btn:hover{ 
+    border-color:#3b82f6; 
+    color:#60a5fa; 
+} 
+ 
+/* ====================== 
+   Responsive 
+====================== */ 
+ 
+@media(max-width:1000px){ 
+ 
+    .filter-grid{ 
+        grid-template-columns:1fr; 
+    } 
+ 
+} 
+ 
+@media(max-width:900px){ 
+ 
+    .dashboard{ 
+        flex-direction:column; 
+    } 
+ 
+    .sidebar{ 
+        width:100%; 
+    } 
+ 
+} 
+ 
+@media(max-width:600px){ 
+ 
+    .users-grid{ 
+        grid-template-columns:1fr; 
+    } 
+ 
+    .page-header h1{ 
+        font-size:32px; 
+    } 
+ 
+} 
+ 

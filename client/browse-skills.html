@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Browse Skills | SkillHub</title>
+
+    <link rel="stylesheet"
+        href="browse-skills.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <i class="fa-solid fa-graduation-cap"></i>
+
+            <span>SkillHub</span>
+
+        </div>
+
+        <ul>
+
+            <li onclick="location.href='dashboard.html'">
+
+                <i class="fa-solid fa-house"></i>
+
+                Dashboard
+
+            </li>
+
+            <li class="active">
+
+                <i class="fa-solid fa-book"></i>
+
+                Browse Skills
+
+            </li>
+
+            <li>
+
+                <i class="fa-solid fa-handshake"></i>
+
+                Requests
+
+            </li>
+
+            <li>
+
+                <i class="fa-solid fa-comments"></i>
+
+                Chat
+
+            </li>
+
+            <li onclick="location.href='profile.html'">
+
+                <i class="fa-solid fa-user"></i>
+
+                Profile
+
+            </li>
+
+            <li>
+
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                Logout
+
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main -->
+
+    <main class="main">
+
+        <!-- Top -->
+
+        <header class="page-header">
+
+            <h1>
+
+                Browse Skills
+
+            </h1>
+
+            <p>
+
+                Find talented people and start learning together.
+
+            </p>
+
+        </header>
+
+        <!-- Filter Section -->
+
+        <section class="filter-card">
+
+            <div class="filter-grid">
+
+                <!-- Search -->
+
+                <div class="filter-item">
+
+                    <label>
+
+                        Search Skills
+
+                    </label>
+
+                    <div class="search-box">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="JavaScript, Python, Photoshop...">
+
+                    </div>
+
+                </div>
+
+                <!-- Category -->
+
+                <div class="filter-item">
+
+                    <label>
+
+                        Category
+
+                    </label>
+
+                    <select id="categoryFilter">
+
+                        <option value="All">
+
+                            All Categories
+
+                        </option>
+
+                        <option>
+
+                            Technology
+
+                        </option>
+
+                        <option>
+
+                            Design
+
+                        </option>
+
+                        <option>
+
+                            Business
+
+                        </option>
+
+                        <option>
+
+                            Language
+
+                        </option>
+
+                        <option>
+
+                            Cooking
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- Sort -->
+
+                <div class="filter-item">
+
+                    <label>
+
+                        Sort By
+
+                    </label>
+
+                    <select id="sortFilter">
+
+                        <option>
+
+                            Name
+
+                        </option>
+
+                        <option>
+
+                            Highest Rated
+
+                        </option>
+
+                        <option>
+
+                            Most Skills
+
+                        </option>
+
+                        <option>
+
+                            Newest
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Results -->
+
+        <div class="result-info">
+
+            <i class="fa-solid fa-users"></i>
+
+            <span id="totalUsers">
+
+                0 Users Found
+
+            </span>
+
+        </div>
+
+        <!-- Cards -->
+
+        <section
+            id="usersContainer"
+            class="users-grid">
+
+            <!-- Dynamic Cards -->
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="browse-skills.js"></script>
+
+</body>
+
+</html>
+
