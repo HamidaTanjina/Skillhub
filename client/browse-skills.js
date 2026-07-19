@@ -26,11 +26,9 @@ async function loadUsers() {
 
         renderUsers(filteredUsers);
 
-    }
+    } catch (error) {
 
-    catch (error) {
-
-        console.log(error);
+        console.error(error);
 
     }
 
@@ -54,9 +52,9 @@ function renderUsers(users) {
 
     if (users.length === 0) {
 
-        container.innerHTML =
-
-        `<h2>No users found.</h2>`;
+        container.innerHTML = `
+            <h2>No users found.</h2>
+        `;
 
         return;
 
@@ -68,136 +66,107 @@ function renderUsers(users) {
 
         const teachSkills =
             user.teachSkills.length === 0
-
-            ?
-
-            "<span class='teach-tag'>No Skills</span>"
-
-            :
-
-            user.teachSkills.map(skill =>
-
-                `<span class="teach-tag">
-
-                    <i class="fa-solid fa-code"></i>
-
-                    ${skill}
-
-                </span>`
-
-            ).join("");
+                ? `<span class="teach-tag">No Skills</span>`
+                : user.teachSkills.map(skill => `
+                    <span class="teach-tag">
+                        <i class="fa-solid fa-code"></i>
+                        ${skill}
+                    </span>
+                `).join("");
 
         const learnSkills =
             user.learnSkills.length === 0
+                ? `<span class="learn-tag">No Skills</span>`
+                : user.learnSkills.map(skill => `
+                    <span class="learn-tag">
+                        <i class="fa-solid fa-book-open"></i>
+                        ${skill}
+                    </span>
+                `).join("");
 
-            ?
+        container.innerHTML += `
 
-            "<span class='learn-tag'>No Skills</span>"
-
-            :
-
-            user.learnSkills.map(skill =>
-
-                `<span class="learn-tag">
-
-                    <i class="fa-solid fa-book-open"></i>
-
-                    ${skill}
-
-                </span>`
-
-            ).join("");
-
-        container.innerHTML +=
-
-`
 <div class="user-card">
 
-   <div class="user-header">
+    <div class="user-header">
 
-    <div class="user-info">
+        <div class="user-info">
 
-        <div class="avatar">
+            <div class="avatar">
 
-            ${firstLetter}
+                ${firstLetter}
 
-        </div>
+            </div>
 
-        <div>
+            <div class="user-details">
 
-            <h3 class="user-name">
+                <h3 class="user-name">
 
-                ${user.name}
+                    ${user.name}
 
-            </h3>
+                </h3>
 
-            <p class="location">
+                <p class="location">
 
-                <i class="fa-solid fa-location-dot"></i>
+                    <i class="fa-solid fa-location-dot"></i>
 
-                ${user.location || "Location not added"}
+                    ${user.location || "Location not added"}
 
-            </p>
+                </p>
+
+            </div>
 
         </div>
 
     </div>
 
-    <span class="badge">
+    <div class="section-title">
 
-        ${user.isOnline ? "🟢 Active" : "⚪ Offline"}
-
-    </span>
-
-</div>
-
-<div class="section-title">
-
-    SKILLS THEY TEACH
-
-</div>
-
-<div class="skill-list">
-
-    ${teachSkills}
-
-</div>
-
-<div class="section-title">
-
-    WANTS TO LEARN
-
-</div>
-
-<div class="skill-list">
-
-    ${learnSkills}
-
-</div>
-
-<div class="card-footer">
-
-    <div class="rating">
-
-        ⭐ ${user.rating ?? 0}
+        SKILLS THEY TEACH
 
     </div>
 
-</div>
+    <div class="skill-list">
+
+        ${teachSkills}
+
+    </div>
+
+    <div class="section-title">
+
+        WANTS TO LEARN
+
+    </div>
+
+    <div class="skill-list">
+
+        ${learnSkills}
+
+    </div>
+
+    <div class="card-footer">
+
+        <div class="rating">
+
+            ⭐ ${Number(user.rating || 0).toFixed(1)}
+
+            <span> (${user.totalReviews || 0} reviews)</span>
+
+        </div>
 
     </div>
 
     <div class="card-buttons">
 
-        <button
-            class="request-btn">
+        <button class="request-btn">
+
+            <i class="fa-regular fa-paper-plane"></i>
 
             Send Request
 
         </button>
 
-        <button
-            class="favorite-btn">
+        <button class="favorite-btn">
 
             <i class="fa-regular fa-heart"></i>
 
@@ -220,19 +189,12 @@ function renderUsers(users) {
 // ============================
 
 document.getElementById("searchInput")
-
 .addEventListener("input", filterUsers);
 
-
-
 document.getElementById("categoryFilter")
-
 .addEventListener("change", filterUsers);
 
-
-
 document.getElementById("sortFilter")
-
 .addEventListener("change", filterUsers);
 
 
@@ -245,14 +207,11 @@ function filterUsers() {
 
     const keyword =
         document.getElementById("searchInput")
-
         .value
-
         .toLowerCase();
 
     const category =
         document.getElementById("categoryFilter")
-
         .value;
 
     filteredUsers = allUsers.filter(user => {
@@ -296,15 +255,12 @@ function sortUsers() {
 
     const sort =
         document.getElementById("sortFilter")
-
         .value;
 
     if (sort === "Name") {
 
         filteredUsers.sort((a, b) =>
-
             a.name.localeCompare(b.name)
-
         );
 
     }
@@ -323,7 +279,26 @@ function sortUsers() {
 
     }
 
+    if (sort === "Highest Rated") {
+
+        filteredUsers.sort((a, b) =>
+
+            (b.rating || 0) - (a.rating || 0)
+
+        );
+
+    }
+
+    if (sort === "Newest") {
+
+        filteredUsers.sort((a, b) =>
+
+            new Date(b.createdAt) - new Date(a.createdAt)
+
+        );
+
+    }
+
     renderUsers(filteredUsers);
 
 }
-
