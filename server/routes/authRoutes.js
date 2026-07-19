@@ -4,12 +4,15 @@ const router=express.Router();
 
 const {
 registerUser,
-loginUser
+loginUser,
+  logoutUser
 }=require("../controllers/authController");
+const protect = require("../middleware/authMiddleware");
 
 router.post("/register",registerUser);
 
 router.post("/login",loginUser);
+router.post("/logout", protect, logoutUser);
 
 module.exports=router;
 console.log("Auth Routes Loaded");

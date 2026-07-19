@@ -113,81 +113,83 @@ function renderUsers(users) {
 `
 <div class="user-card">
 
-    <div class="user-header">
+   <div class="user-header">
 
-        <div class="user-info">
+    <div class="user-info">
 
-            <div class="avatar">
+        <div class="avatar">
 
-                ${firstLetter}
-
-            </div>
-
-            <div>
-
-                <h3 class="user-name">
-
-                    ${user.name}
-
-                </h3>
-
-                <p class="location">
-
-                    <i class="fa-solid fa-location-dot"></i>
-
-                    ${user.location || "Location not added"}
-
-                </p>
-
-            </div>
+            ${firstLetter}
 
         </div>
 
-        <span class="badge">
+        <div>
 
-            Active
+            <h3 class="user-name">
 
-        </span>
+                ${user.name}
 
-    </div>
+            </h3>
 
-    <div class="section-title">
+            <p class="location">
 
-        SKILLS THEY TEACH
+                <i class="fa-solid fa-location-dot"></i>
 
-    </div>
+                ${user.location || "Location not added"}
 
-    <div class="skill-list">
-
-        ${teachSkills}
-
-    </div>
-
-    <div class="section-title">
-
-        WANTS TO LEARN
-
-    </div>
-
-    <div class="skill-list">
-
-        ${learnSkills}
-
-    </div>
-
-    <div class="card-footer">
-
-        <div class="rating">
-
-            ⭐ 4.8
+            </p>
 
         </div>
 
-        <div class="online">
+    </div>
 
-            ● Online
+    <span class="badge">
 
-        </div>
+        ${user.isOnline ? "🟢 Active" : "⚪ Offline"}
+
+    </span>
+
+</div>
+
+<div class="section-title">
+
+    SKILLS THEY TEACH
+
+</div>
+
+<div class="skill-list">
+
+    ${teachSkills}
+
+</div>
+
+<div class="section-title">
+
+    WANTS TO LEARN
+
+</div>
+
+<div class="skill-list">
+
+    ${learnSkills}
+
+</div>
+
+<div class="card-footer">
+
+    <div class="rating">
+
+        ⭐ ${user.rating ?? 0}
+
+    </div>
+
+    <div class="online">
+
+        ${user.isOnline ? "🟢 Online" : "⚪ Offline"}
+
+    </div>
+
+</div>
 
     </div>
 

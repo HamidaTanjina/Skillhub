@@ -1,5 +1,3 @@
-const mongoose = require("mongoose");
-
 const UserSchema = new mongoose.Schema({
 
     name:{
@@ -32,16 +30,39 @@ const UserSchema = new mongoose.Schema({
         type:String,
         default:""
     },
+
     bio:{
-    type:String,
-    default:""
-},
+        type:String,
+        default:""
+    },
 
-location:{
-    type:String,
-    default:""
-}
+    location:{
+        type:String,
+        default:""
+    },
 
+    // NEW FIELDS
+
+    isOnline:{
+        type:Boolean,
+        default:false
+    },
+
+    rating:{
+        type:Number,
+        default:0
+    },
+
+    totalReviews:{
+        type:Number,
+        default:0
+    },
+
+    completedSwaps:{
+        type:Number,
+        default:0
+    }
+
+},{
+    timestamps:true
 });
-
-module.exports = mongoose.model("User", UserSchema);

@@ -26,9 +26,16 @@ exports.registerUser = async (req, res) => {
 
         // Create user
         const user = await User.create({
+
             name,
             email,
-            password: hashedPassword
+            password: hashedPassword,
+
+            isOnline: true,
+            rating: 0,
+            totalReviews: 0,
+            completedSwaps: 0
+
         });
 
         // Generate JWT Token
@@ -91,6 +98,10 @@ exports.loginUser = async (req, res) => {
 
         }
 
+        // Update Online Status
+        user.isOnline = true;
+        await user.save();
+
         // Generate JWT Token
         const token = jwt.sign(
             {
@@ -106,6 +117,34 @@ exports.loginUser = async (req, res) => {
         res.json({
             message: "Login Successful",
             token
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+};
+// =======================
+// Logout User
+// =======================
+
+exports.logoutUser = async (req, res) => {
+
+    try {
+
+        await User.findByIdAndUpdate(
+            req.user.id,
+            {
+                isOnline: false
+            }
+        );
+
+        res.json({
+            message: "Logout Successful"
         });
 
     } catch (error) {
