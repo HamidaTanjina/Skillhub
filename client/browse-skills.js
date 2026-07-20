@@ -143,19 +143,17 @@ function renderUsers(users) {
         ${learnSkills}
 
     </div>
+<div class="card-footer">
 
-    <div class="card-footer">
+    <div class="rating">
 
-        <div class="rating">
+        ⭐ ${Number(user.rating || 0).toFixed(1)}
 
-            ⭐ ${Number(user.rating || 0).toFixed(1)}
-
-            <span> (${user.totalReviews || 0} reviews)</span>
-
-        </div>
+        <span> (${user.totalReviews || 0} reviews)</span>
 
     </div>
 
+</div>
     <div class="card-buttons">
 
         <button class="request-btn">
