@@ -2,84 +2,109 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema({
 
-    name:{
-        type:String,
-        required:true
+    name: {
+        type: String,
+        required: true
     },
 
-    email:{
-        type:String,
-        required:true,
-        unique:true
+    email: {
+        type: String,
+        required: true,
+        unique: true
     },
 
-    password:{
-        type:String,
-        required:true
+    password: {
+        type: String,
+        required: true
     },
 
-    teachSkills:{
-        type:[String],
-        default:[]
+    // =========================
+    // Skills
+    // =========================
+
+    teachSkills: {
+        type: [String],
+        default: []
     },
 
-    learnSkills:{
-        type:[String],
-        default:[]
+    learnSkills: {
+        type: [String],
+        default: []
     },
 
-    profilePicture:{
-        type:String,
-        default:""
-    },
+    // =========================
+    // Categories
+    // =========================
 
-    bio:{
-        type:String,
-        default:""
-    },
-
-    location:{
-        type:String,
-        default:""
-    },
-
-    // NEW CATEGORY FIELD
-    category:{
-        type:String,
-        enum:[
+    category: {
+        type: String,
+        enum: [
             "Technology",
             "Design",
             "Business",
             "Language",
             "Cooking"
         ],
-        default:"Technology"
+        default: "Technology"
     },
 
-    // NEW FIELDS
-
-    isOnline:{
-        type:Boolean,
-        default:false
+    learnCategory: {
+        type: String,
+        enum: [
+            "Technology",
+            "Design",
+            "Business",
+            "Language",
+            "Cooking"
+        ],
+        default: "Technology"
     },
 
-    rating:{
-        type:Number,
-        default:0
+    // =========================
+    // Profile
+    // =========================
+
+    profilePicture: {
+        type: String,
+        default: ""
     },
 
-    totalReviews:{
-        type:Number,
-        default:0
+    bio: {
+        type: String,
+        default: ""
     },
 
-    completedSwaps:{
-        type:Number,
-        default:0
+    location: {
+        type: String,
+        default: ""
+    },
+
+    // =========================
+    // Statistics
+    // =========================
+
+    isOnline: {
+        type: Boolean,
+        default: false
+    },
+
+    rating: {
+        type: Number,
+        default: 0
+    },
+
+    totalReviews: {
+        type: Number,
+        default: 0
+    },
+
+    completedSwaps: {
+        type: Number,
+        default: 0
     }
 
-},{
-    timestamps:true
+}, {
+    timestamps: true
 });
 
 module.exports = mongoose.model("User", UserSchema);

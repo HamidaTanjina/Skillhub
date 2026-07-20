@@ -114,7 +114,8 @@ exports.saveSkills = async (req, res) => {
 
             teachSkills,
             learnSkills,
-            category
+            category,
+            learnCategory
 
         } = req.body;
 
@@ -135,6 +136,12 @@ exports.saveSkills = async (req, res) => {
         if (category !== undefined) {
 
             updateData.category = category;
+
+        }
+
+        if (learnCategory !== undefined) {
+
+            updateData.learnCategory = learnCategory;
 
         }
 
@@ -171,7 +178,6 @@ exports.saveSkills = async (req, res) => {
     }
 
 };
-
 // =========================
 // Get All Users
 // =========================
