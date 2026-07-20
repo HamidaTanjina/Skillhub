@@ -16,10 +16,20 @@ async function loadProfile() {
         const user = await response.json();
 
         // Fill Form
-        document.getElementById("editName").value = user.name;
-        document.getElementById("editEmail").value = user.email;
-        document.getElementById("editLocation").value = user.location || "";
-        document.getElementById("editBio").value = user.bio || "";
+
+        document.getElementById("editName").value =
+            user.name;
+
+        document.getElementById("editEmail").value =
+            user.email;
+
+        document.getElementById("editLocation").value =
+            user.location || "";
+
+        document.getElementById("editBio").value =
+            user.bio || "";
+
+ 
 
     } catch (error) {
 
@@ -35,11 +45,16 @@ document.getElementById("saveProfileBtn").onclick = async () => {
 
     const profile = {
 
-        name: document.getElementById("editName").value,
+        name:
+            document.getElementById("editName").value,
 
-        location: document.getElementById("editLocation").value,
+        location:
+            document.getElementById("editLocation").value,
 
-        bio: document.getElementById("editBio").value
+        bio:
+            document.getElementById("editBio").value,
+
+    
 
     };
 

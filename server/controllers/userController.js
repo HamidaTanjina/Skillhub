@@ -11,14 +11,18 @@ exports.getProfile = async (req, res) => {
         const user = await User.findById(req.user.id).select("-password");
 
         if (!user) {
+
             return res.status(404).json({
                 message: "User not found"
             });
+
         }
 
         res.json(user);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         res.status(500).json({
             message: error.message
@@ -47,15 +51,21 @@ exports.updateProfile = async (req, res) => {
         const updateData = {};
 
         if (name !== undefined) {
+
             updateData.name = name;
+
         }
 
         if (bio !== undefined) {
+
             updateData.bio = bio;
+
         }
 
         if (location !== undefined) {
+
             updateData.location = location;
+
         }
 
         const user = await User.findByIdAndUpdate(
@@ -71,14 +81,18 @@ exports.updateProfile = async (req, res) => {
         ).select("-password");
 
         if (!user) {
+
             return res.status(404).json({
                 message: "User not found"
             });
+
         }
 
         res.json(user);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         res.status(500).json({
             message: error.message
@@ -99,18 +113,29 @@ exports.saveSkills = async (req, res) => {
         const {
 
             teachSkills,
-            learnSkills
+            learnSkills,
+            category
 
         } = req.body;
 
         const updateData = {};
 
         if (teachSkills !== undefined) {
+
             updateData.teachSkills = teachSkills;
+
         }
 
         if (learnSkills !== undefined) {
+
             updateData.learnSkills = learnSkills;
+
+        }
+
+        if (category !== undefined) {
+
+            updateData.category = category;
+
         }
 
         const user = await User.findByIdAndUpdate(
@@ -126,14 +151,18 @@ exports.saveSkills = async (req, res) => {
         ).select("-password");
 
         if (!user) {
+
             return res.status(404).json({
                 message: "User not found"
             });
+
         }
 
         res.json(user);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         res.status(500).json({
             message: error.message
@@ -142,6 +171,7 @@ exports.saveSkills = async (req, res) => {
     }
 
 };
+
 // =========================
 // Get All Users
 // =========================
@@ -154,7 +184,9 @@ exports.getAllUsers = async (req, res) => {
 
         res.json(users);
 
-    } catch (error) {
+    }
+
+    catch (error) {
 
         res.status(500).json({
             message: error.message

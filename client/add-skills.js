@@ -20,16 +20,24 @@ const categories = {
     ],
 
     Business: [
-        "Marketing", "Accounting",
-        "Finance", "Entrepreneurship"
+        "Marketing",
+        "Accounting",
+        "Finance",
+        "Entrepreneurship"
     ],
 
     Language: [
-        "English", "Bangla", "Arabic", "Japanese"
+        "English",
+        "Bangla",
+        "Arabic",
+        "Japanese"
     ],
 
     Cooking: [
-        "Cooking", "Baking", "Dessert", "BBQ"
+        "Cooking",
+        "Baking",
+        "Dessert",
+        "BBQ"
     ]
 
 };
@@ -61,9 +69,26 @@ async function loadSkills() {
         const user = await response.json();
 
         teachSkills = user.teachSkills || [];
+
         learnSkills = user.learnSkills || [];
 
+        // Load saved category
+
+        if (user.category) {
+
+            document.getElementById("teachCategory").value =
+                user.category;
+
+            showSkills(
+                user.category,
+                "teachSuggestions",
+                true
+            );
+
+        }
+
         renderTeach();
+
         renderLearn();
 
     }
@@ -82,15 +107,19 @@ loadSkills();
 // Category Change
 // =========================
 
-document.getElementById("teachCategory").addEventListener("change", function () {
+document.getElementById("teachCategory")
 
-    showSkills(this.value, "teachSuggestions", true);
+.addEventListener("change", function () {
 
-});
+    showSkills(
 
-document.getElementById("learnCategory").addEventListener("change", function () {
+        this.value,
 
-    showSkills(this.value, "learnSuggestions", false);
+        "teachSuggestions",
+
+        true
+
+    );
 
 });
 
@@ -100,7 +129,8 @@ document.getElementById("learnCategory").addEventListener("change", function () 
 
 function showSkills(category, containerId, isTeach) {
 
-    const container = document.getElementById(containerId);
+    const container =
+        document.getElementById(containerId);
 
     container.innerHTML = "";
 
@@ -108,7 +138,8 @@ function showSkills(category, containerId, isTeach) {
 
     categories[category].forEach(skill => {
 
-        const btn = document.createElement("button");
+        const btn =
+            document.createElement("button");
 
         btn.className = "skill-btn";
 
@@ -119,10 +150,6 @@ function showSkills(category, containerId, isTeach) {
             if (isTeach) {
 
                 addTeachSkill(skill);
-
-            } else {
-
-                addLearnSkill(skill);
 
             }
 
@@ -142,7 +169,7 @@ function addTeachSkill(skill) {
 
     skill = skill.trim();
 
-    if (skill === "") return;
+    if (!skill) return;
 
     if (teachSkills.includes(skill)) return;
 
@@ -168,7 +195,7 @@ function addLearnSkill(skill) {
 
     skill = skill.trim();
 
-    if (skill === "") return;
+    if (!skill) return;
 
     if (learnSkills.includes(skill)) return;
 
@@ -192,7 +219,8 @@ function addLearnSkill(skill) {
 
 function renderTeach() {
 
-    const container = document.getElementById("teachSelected");
+    const container =
+        document.getElementById("teachSelected");
 
     container.innerHTML = "";
 
@@ -221,7 +249,8 @@ function renderTeach() {
 
 function renderLearn() {
 
-    const container = document.getElementById("learnSelected");
+    const container =
+        document.getElementById("learnSelected");
 
     container.innerHTML = "";
 
@@ -268,7 +297,9 @@ function removeLearn(index) {
 // Custom Teach Skill
 // =========================
 
-document.getElementById("teachInput").addEventListener("keydown", function (e) {
+document.getElementById("teachInput")
+
+.addEventListener("keydown", function (e) {
 
     if (e.key === "Enter") {
 
@@ -286,7 +317,9 @@ document.getElementById("teachInput").addEventListener("keydown", function (e) {
 // Custom Learn Skill
 // =========================
 
-document.getElementById("learnInput").addEventListener("keydown", function (e) {
+document.getElementById("learnInput")
+
+.addEventListener("keydown", function (e) {
 
     if (e.key === "Enter") {
 
@@ -304,9 +337,22 @@ document.getElementById("learnInput").addEventListener("keydown", function (e) {
 // Save Skills
 // =========================
 
-document.getElementById("saveSkillsBtn").addEventListener("click", async () => {
+document.getElementById("saveSkillsBtn")
+
+.addEventListener("click", async () => {
 
     try {
+
+        const category =
+            document.getElementById("teachCategory").value;
+
+        if (!category) {
+
+            alert("Please select a category.");
+
+            return;
+
+        }
 
         const response = await fetch(
 
@@ -326,7 +372,10 @@ document.getElementById("saveSkillsBtn").addEventListener("click", async () => {
 
                 body: JSON.stringify({
 
+                    category,
+
                     teachSkills,
+
                     learnSkills
 
                 })
@@ -345,7 +394,7 @@ document.getElementById("saveSkillsBtn").addEventListener("click", async () => {
 
         window.location.href = "dashboard.html";
 
-    } 
+    }
 
     catch (error) {
 
