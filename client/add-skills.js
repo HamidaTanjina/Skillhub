@@ -51,33 +51,23 @@ async function loadSkills() {
     try {
 
         const response = await fetch(
-
             "https://skillhub-backend-cths.onrender.com/api/user/profile",
-
             {
-
                 headers: {
-
                     Authorization: `Bearer ${token}`
-
                 }
-
             }
-
         );
 
         const user = await response.json();
 
         teachSkills = user.teachSkills || [];
-
         learnSkills = user.learnSkills || [];
 
-        // Load saved category
-
+        // Load Teach Category
         if (user.category) {
 
-            document.getElementById("teachCategory").value =
-                user.category;
+            document.getElementById("teachCategory").value = user.category;
 
             showSkills(
                 user.category,
@@ -87,8 +77,20 @@ async function loadSkills() {
 
         }
 
-        renderTeach();
+        // Load Learn Category
+        if (user.learnCategory) {
 
+            document.getElementById("learnCategory").value = user.learnCategory;
+
+            showSkills(
+                user.learnCategory,
+                "learnSuggestions",
+                false
+            );
+
+        }
+
+        renderTeach();
         renderLearn();
 
     }
@@ -100,9 +102,7 @@ async function loadSkills() {
     }
 
 }
-
 loadSkills();
-
 // =========================
 // Category Change
 // =========================
@@ -123,6 +123,21 @@ document.getElementById("teachCategory")
 
 });
 
+document.getElementById("learnCategory")
+
+.addEventListener("change", function () {
+
+    showSkills(
+
+        this.value,
+
+        "learnSuggestions",
+
+        false
+
+    );
+
+});
 // =========================
 // Show Skills
 // =========================
@@ -153,6 +168,12 @@ function showSkills(category, containerId, isTeach) {
 
             }
 
+            else {
+
+                addLearnSkill(skill);
+
+            }
+
         };
 
         container.appendChild(btn);
@@ -160,7 +181,6 @@ function showSkills(category, containerId, isTeach) {
     });
 
 }
-
 // =========================
 // Add Teach Skill
 // =========================
@@ -336,9 +356,7 @@ document.getElementById("learnInput")
 // =========================
 // Save Skills
 // =========================
-
 document.getElementById("saveSkillsBtn")
-
 .addEventListener("click", async () => {
 
     try {
@@ -346,18 +364,19 @@ document.getElementById("saveSkillsBtn")
         const category =
             document.getElementById("teachCategory").value;
 
-        if (!category) {
+        const learnCategory =
+            document.getElementById("learnCategory").value;
 
-            alert("Please select a category.");
+        if (!category || !learnCategory) {
+
+            alert("Please select both categories.");
 
             return;
 
         }
 
         const response = await fetch(
-
             "https://skillhub-backend-cths.onrender.com/api/user/skills",
-
             {
 
                 method: "PUT",
@@ -373,15 +392,13 @@ document.getElementById("saveSkillsBtn")
                 body: JSON.stringify({
 
                     category,
-
+                    learnCategory,
                     teachSkills,
-
                     learnSkills
 
                 })
 
             }
-
         );
 
         if (!response.ok) {
