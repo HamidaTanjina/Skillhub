@@ -150,20 +150,6 @@ function renderUsers(users) {
 
     <div class="section-title">
 
-        CATEGORY
-
-    </div>
-
-    <div class="skill-list">
-
-        <span class="teach-tag">
-            ${user.category || "Not Selected"}
-        </span>
-
-    </div>
-
-    <div class="section-title">
-
         SKILLS THEY TEACH
 
     </div>
