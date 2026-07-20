@@ -20,15 +20,21 @@ async function loadUsers() {
             }
         );
 
+        if (!response.ok) {
+            throw new Error("Failed to load users");
+        }
+
         allUsers = await response.json();
 
         filteredUsers = [...allUsers];
 
         renderUsers(filteredUsers);
 
-    } catch (error) {
+    }
 
-        console.error(error);
+    catch (error) {
+
+        console.log(error);
 
     }
 
@@ -62,29 +68,30 @@ function renderUsers(users) {
 
         const firstLetter = user.name.charAt(0).toUpperCase();
 
-        const teachSkills = user.teachSkills.length === 0
+        const teachSkills =
+            user.teachSkills.length === 0
 
-            ? `<span class="teach-tag">No Skills</span>`
+                ? `<span class="teach-tag">No Skills</span>`
 
-            : user.teachSkills.map(skill => `
-                <span class="teach-tag">
-                    <i class="fa-solid fa-code"></i>
-                    ${skill}
-                </span>
-            `).join("");
+                : user.teachSkills.map(skill => `
+                    <span class="teach-tag">
+                        <i class="fa-solid fa-code"></i>
+                        ${skill}
+                    </span>
+                `).join("");
 
-        const learnSkills = user.learnSkills.length === 0
+        const learnSkills =
+            user.learnSkills.length === 0
 
-            ? `<span class="learn-tag">No Skills</span>`
+                ? `<span class="learn-tag">No Skills</span>`
 
-            : user.learnSkills.map(skill => `
-                <span class="learn-tag">
-                    <i class="fa-solid fa-book-open"></i>
-                    ${skill}
-                </span>
-            `).join("");
+                : user.learnSkills.map(skill => `
+                    <span class="learn-tag">
+                        <i class="fa-solid fa-book-open"></i>
+                        ${skill}
+                    </span>
+                `).join("");
 
-        // Rating Stars
         const rating = Number(user.rating || 0);
 
         let stars = "";
@@ -95,7 +102,9 @@ function renderUsers(users) {
 
                 stars += "★";
 
-            } else {
+            }
+
+            else {
 
                 stars += "☆";
 
@@ -141,222 +150,15 @@ function renderUsers(users) {
 
     <div class="section-title">
 
-        SKILLS THEY TEACH
+        CATEGORY
 
     </div>
 
     <div class="skill-list">
 
-        ${teachSkills}
-
-    </div>
-
-    <div class="section-title">
-
-        WANTS TO LEARN
-
-    </div>
-
-    <div class="skill-list">
-
-        ${learnSkills}
-
-    </div>
-
-    <div class="card-footer">
-
-        <div class="rating">
-
-            ${stars}
-
-            <span>${rating.toFixed(1)} (${user.totalReviews || 0} reviews)</span>
-
-        </div>
-
-    </div>
-
-    <div class="card-buttons">
-
-        <button class="request-btn">
-
-            <i class="fa-regular fa-paper-plane"></i>
-
-            Send Request
-
-        </button>
-
-        <button class="favorite-btn">
-
-            <i class="fa-regular fa-heart"></i>
-
-        </button>
-
-    </div>
-
-</div>
-
-`;
-
-    });
-
-}
-
-
-// ============================
-// Search & Filter
-// ============================
-
-document.getElementById("searchInput")
-.addEventListener("input", filterUsers);
-
-document.getElementById("categoryFilter")
-.addEventListener("change", filterUsers);
-
-document.getElementById("sortFilter")
-.addEventListener("change", filterUsers);
-
-
-// ============================
-// Filter
-// ============================
-const token = localStorage.getItem("token");
-
-let allUsers = [];
-let filteredUsers = [];
-
-// ============================
-// Load Users
-// ============================
-
-async function loadUsers() {
-
-    try {
-
-        const response = await fetch(
-            "https://skillhub-backend-cths.onrender.com/api/user/all",
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
-        allUsers = await response.json();
-
-        filteredUsers = [...allUsers];
-
-        renderUsers(filteredUsers);
-
-    } catch (error) {
-
-        console.error(error);
-
-    }
-
-}
-
-loadUsers();
-
-
-// ============================
-// Render Users
-// ============================
-
-function renderUsers(users) {
-
-    const container = document.getElementById("usersContainer");
-
-    container.innerHTML = "";
-
-    document.getElementById("totalUsers").textContent =
-        `${users.length} Users Found`;
-
-    if (users.length === 0) {
-
-        container.innerHTML = "<h2>No users found.</h2>";
-
-        return;
-
-    }
-
-    users.forEach(user => {
-
-        const firstLetter = user.name.charAt(0).toUpperCase();
-
-        const teachSkills = user.teachSkills.length === 0
-
-            ? `<span class="teach-tag">No Skills</span>`
-
-            : user.teachSkills.map(skill => `
-                <span class="teach-tag">
-                    <i class="fa-solid fa-code"></i>
-                    ${skill}
-                </span>
-            `).join("");
-
-        const learnSkills = user.learnSkills.length === 0
-
-            ? `<span class="learn-tag">No Skills</span>`
-
-            : user.learnSkills.map(skill => `
-                <span class="learn-tag">
-                    <i class="fa-solid fa-book-open"></i>
-                    ${skill}
-                </span>
-            `).join("");
-
-        // Rating Stars
-        const rating = Number(user.rating || 0);
-
-        let stars = "";
-
-        for (let i = 1; i <= 5; i++) {
-
-            if (i <= Math.round(rating)) {
-
-                stars += "★";
-
-            } else {
-
-                stars += "☆";
-
-            }
-
-        }
-
-        container.innerHTML += `
-
-<div class="user-card">
-
-    <div class="user-header">
-
-        <div class="user-info">
-
-            <div class="avatar">
-
-                ${firstLetter}
-
-            </div>
-
-            <div class="user-details">
-
-                <h3 class="user-name">
-
-                    ${user.name}
-
-                </h3>
-
-                <p class="location">
-
-                    <i class="fa-solid fa-location-dot"></i>
-
-                    ${user.location || "Location not added"}
-
-                </p>
-
-            </div>
-
-        </div>
+        <span class="teach-tag">
+            ${user.category || "Not Selected"}
+        </span>
 
     </div>
 
@@ -390,7 +192,12 @@ function renderUsers(users) {
 
             ${stars}
 
-            <span>${rating.toFixed(1)} (${user.totalReviews || 0} reviews)</span>
+            <span>
+
+                ${rating.toFixed(1)}
+                (${user.totalReviews || 0} reviews)
+
+            </span>
 
         </div>
 
@@ -424,7 +231,7 @@ function renderUsers(users) {
 
 
 // ============================
-// Search & Filter
+// Events
 // ============================
 
 document.getElementById("searchInput")
@@ -434,7 +241,7 @@ document.getElementById("categoryFilter")
 .addEventListener("change", filterUsers);
 
 document.getElementById("sortFilter")
-.addEventListener("change", filterUsers);
+.addEventListener("change", sortUsers);
 
 
 // ============================
@@ -443,13 +250,14 @@ document.getElementById("sortFilter")
 
 function filterUsers() {
 
-    const keyword = document.getElementById("searchInput")
+    const keyword =
+        document.getElementById("searchInput")
         .value
         .toLowerCase();
 
-    const category = document.getElementById("categoryFilter")
-        .value
-        .toLowerCase();
+    const category =
+        document.getElementById("categoryFilter")
+        .value;
 
     filteredUsers = allUsers.filter(user => {
 
@@ -458,26 +266,27 @@ function filterUsers() {
 
         const matchTeach =
             user.teachSkills.some(skill =>
-                skill.toLowerCase().includes(keyword));
+                skill.toLowerCase().includes(keyword)
+            );
 
         const matchLearn =
             user.learnSkills.some(skill =>
-                skill.toLowerCase().includes(keyword));
+                skill.toLowerCase().includes(keyword)
+            );
 
         const searchMatch =
             matchName || matchTeach || matchLearn;
 
-        if (category === "all") {
+        if (category === "All") {
 
             return searchMatch;
 
         }
 
-        const categoryMatch =
-            user.teachSkills.some(skill =>
-                skill.toLowerCase() === category);
-
-        return searchMatch && categoryMatch;
+        return (
+            searchMatch &&
+            user.category === category
+        );
 
     });
 
@@ -493,8 +302,7 @@ function filterUsers() {
 function sortUsers() {
 
     const sort =
-        document.getElementById("sortFilter")
-        .value;
+        document.getElementById("sortFilter").value;
 
     if (sort === "Name") {
 
@@ -504,7 +312,7 @@ function sortUsers() {
 
     }
 
-    if (sort === "Most Skills") {
+    else if (sort === "Most Skills") {
 
         filteredUsers.sort((a, b) =>
 
@@ -518,82 +326,27 @@ function sortUsers() {
 
     }
 
-    if (sort === "Highest Rated") {
+    else if (sort === "Highest Rated") {
 
         filteredUsers.sort((a, b) =>
 
-            (b.rating || 0) -
-
-            (a.rating || 0)
-
-        );
-
-    }
-
-    if (sort === "Newest") {
-
-        filteredUsers.sort((a, b) =>
-
-            new Date(b.createdAt) -
-
-            new Date(a.createdAt)
-
-        );
-
-    }
-
-    renderUsers(filteredUsers);
-
-}
-// ============================
-// Sort
-// ============================
-
-function sortUsers() {
-
-    const sort =
-        document.getElementById("sortFilter")
-        .value;
-
-    if (sort === "Name") {
-
-        filteredUsers.sort((a, b) =>
-            a.name.localeCompare(b.name)
-        );
-
-    }
-
-    if (sort === "Most Skills") {
-
-        filteredUsers.sort((a, b) =>
-
-            (b.teachSkills.length + b.learnSkills.length)
+            (b.rating || 0)
 
             -
 
-            (a.teachSkills.length + a.learnSkills.length)
-
-        );
-
-    }
-
-    if (sort === "Highest Rated") {
-
-        filteredUsers.sort((a, b) =>
-
-            (b.rating || 0) -
-
             (a.rating || 0)
 
         );
 
     }
 
-    if (sort === "Newest") {
+    else if (sort === "Newest") {
 
         filteredUsers.sort((a, b) =>
 
-            new Date(b.createdAt) -
+            new Date(b.createdAt)
+
+            -
 
             new Date(a.createdAt)
 
