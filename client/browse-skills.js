@@ -247,18 +247,18 @@ function filterUsers() {
 
     filteredUsers = allUsers.filter(user => {
 
-        const matchName =
-            user.name.toLowerCase().includes(keyword);
+       const matchName =
+    (user.name || "").toLowerCase().includes(keyword);
 
-        const matchTeach =
-            user.teachSkills.some(skill =>
-                skill.toLowerCase().includes(keyword)
-            );
+const matchTeach =
+    (user.teachSkills || []).some(skill =>
+        skill.toLowerCase().includes(keyword)
+    );
 
-        const matchLearn =
-            user.learnSkills.some(skill =>
-                skill.toLowerCase().includes(keyword)
-            );
+const matchLearn =
+    (user.learnSkills || []).some(skill =>
+        skill.toLowerCase().includes(keyword)
+    );
 
         const searchMatch =
             matchName || matchTeach || matchLearn;
