@@ -52,9 +52,7 @@ function renderUsers(users) {
 
     if (users.length === 0) {
 
-        container.innerHTML = `
-            <h2>No users found.</h2>
-        `;
+        container.innerHTML = "<h2>No users found.</h2>";
 
         return;
 
@@ -64,25 +62,46 @@ function renderUsers(users) {
 
         const firstLetter = user.name.charAt(0).toUpperCase();
 
-        const teachSkills =
-            user.teachSkills.length === 0
-                ? `<span class="teach-tag">No Skills</span>`
-                : user.teachSkills.map(skill => `
-                    <span class="teach-tag">
-                        <i class="fa-solid fa-code"></i>
-                        ${skill}
-                    </span>
-                `).join("");
+        const teachSkills = user.teachSkills.length === 0
 
-        const learnSkills =
-            user.learnSkills.length === 0
-                ? `<span class="learn-tag">No Skills</span>`
-                : user.learnSkills.map(skill => `
-                    <span class="learn-tag">
-                        <i class="fa-solid fa-book-open"></i>
-                        ${skill}
-                    </span>
-                `).join("");
+            ? `<span class="teach-tag">No Skills</span>`
+
+            : user.teachSkills.map(skill => `
+                <span class="teach-tag">
+                    <i class="fa-solid fa-code"></i>
+                    ${skill}
+                </span>
+            `).join("");
+
+        const learnSkills = user.learnSkills.length === 0
+
+            ? `<span class="learn-tag">No Skills</span>`
+
+            : user.learnSkills.map(skill => `
+                <span class="learn-tag">
+                    <i class="fa-solid fa-book-open"></i>
+                    ${skill}
+                </span>
+            `).join("");
+
+        // Rating Stars
+        const rating = Number(user.rating || 0);
+
+        let stars = "";
+
+        for (let i = 1; i <= 5; i++) {
+
+            if (i <= Math.round(rating)) {
+
+                stars += "★";
+
+            } else {
+
+                stars += "☆";
+
+            }
+
+        }
 
         container.innerHTML += `
 
@@ -143,17 +162,19 @@ function renderUsers(users) {
         ${learnSkills}
 
     </div>
-<div class="card-footer">
 
-    <div class="rating">
+    <div class="card-footer">
 
-        ⭐ ${Number(user.rating || 0).toFixed(1)}
+        <div class="rating">
 
-        <span> (${user.totalReviews || 0} reviews)</span>
+            ${stars}
+
+            <span>${rating.toFixed(1)} (${user.totalReviews || 0} reviews)</span>
+
+        </div>
 
     </div>
 
-</div>
     <div class="card-buttons">
 
         <button class="request-btn">
@@ -181,9 +202,8 @@ function renderUsers(users) {
 }
 
 
-
 // ============================
-// Search
+// Search & Filter
 // ============================
 
 document.getElementById("searchInput")
@@ -196,21 +216,19 @@ document.getElementById("sortFilter")
 .addEventListener("change", filterUsers);
 
 
-
 // ============================
 // Filter
 // ============================
 
 function filterUsers() {
 
-    const keyword =
-        document.getElementById("searchInput")
+    const keyword = document.getElementById("searchInput")
         .value
         .toLowerCase();
 
-    const category =
-        document.getElementById("categoryFilter")
-        .value;
+    const category = document.getElementById("categoryFilter")
+        .value
+        .toLowerCase();
 
     filteredUsers = allUsers.filter(user => {
 
@@ -228,21 +246,23 @@ function filterUsers() {
         const searchMatch =
             matchName || matchTeach || matchLearn;
 
-        if (category === "All") {
+        if (category === "all") {
 
             return searchMatch;
 
         }
 
-        return searchMatch &&
-            user.category === category;
+        const categoryMatch =
+            user.teachSkills.some(skill =>
+                skill.toLowerCase() === category);
+
+        return searchMatch && categoryMatch;
 
     });
 
     sortUsers();
 
 }
-
 
 
 // ============================
@@ -281,7 +301,9 @@ function sortUsers() {
 
         filteredUsers.sort((a, b) =>
 
-            (b.rating || 0) - (a.rating || 0)
+            (b.rating || 0) -
+
+            (a.rating || 0)
 
         );
 
@@ -291,7 +313,9 @@ function sortUsers() {
 
         filteredUsers.sort((a, b) =>
 
-            new Date(b.createdAt) - new Date(a.createdAt)
+            new Date(b.createdAt) -
+
+            new Date(a.createdAt)
 
         );
 
