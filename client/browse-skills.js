@@ -266,10 +266,11 @@ async function sendRequest() {
         return;
     }
 
+    // Payload keys matched strictly to backend Mongoose schema expectations
     const payload = {
         receiver: selectedReceiver,
-        teachSkill: teachSkill,
-        learnSkill: learnSkill
+        senderTeachSkill: teachSkill,
+        senderLearnSkill: learnSkill
     };
 
     try {
