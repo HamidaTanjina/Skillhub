@@ -1,7 +1,6 @@
 const token = localStorage.getItem("token");
 const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
 
-// Auth Guard: Redirect unauthenticated users immediately
 if (!token) {
     window.location.href = "index.html";
 }
@@ -11,291 +10,699 @@ let allUsers = [];
 let filteredUsers = [];
 
 document.addEventListener("DOMContentLoaded", () => {
+
     setupEventListeners();
+
     loadUsers();
+
 });
 
+// ============================
+// Setup Event Listeners
+// ============================
+
 function setupEventListeners() {
-    const searchInput = document.getElementById("searchInput");
-    const categoryFilter = document.getElementById("categoryFilter");
-    const sortFilter = document.getElementById("sortFilter");
-    const confirmRequestBtn = document.getElementById("confirmRequestBtn");
 
-    if (searchInput) searchInput.addEventListener("input", filterUsers);
-    if (categoryFilter) categoryFilter.addEventListener("change", filterUsers);
-    if (sortFilter) sortFilter.addEventListener("change", sortUsers);
-    if (confirmRequestBtn) confirmRequestBtn.addEventListener("click", sendRequest);
+    document
+        .getElementById("searchInput")
+        .addEventListener("input", filterUsers);
 
-    window.addEventListener("click", (e) => {
-        const modal = document.getElementById("requestModal");
-        if (e.target === modal) {
-            closeModal();
-        }
-    });
+    document
+        .getElementById("categoryFilter")
+        .addEventListener("change", filterUsers);
+
+    document
+        .getElementById("sortFilter")
+        .addEventListener("change", sortUsers);
+
+    document
+        .getElementById("confirmRequestBtn")
+        .addEventListener("click", sendRequest);
 
     const logoutBtn = document.getElementById("logoutBtn");
+
     if (logoutBtn) {
+
         logoutBtn.addEventListener("click", () => {
+
             localStorage.removeItem("token");
+
             window.location.href = "index.html";
+
         });
+
     }
+
+    window.onclick = function (event) {
+
+        const modal = document.getElementById("requestModal");
+
+        if (event.target === modal) {
+
+            closeModal();
+
+        }
+
+    };
+
 }
 
+// ============================
+// Load Users
+// ============================
+
 async function loadUsers() {
+
     const container = document.getElementById("usersContainer");
-    if (!container) return;
 
     try {
-        const response = await fetch(`${API_BASE_URL}/user/all`, {
-            headers: {
-                Authorization: `Bearer ${token}`
+
+        const response = await fetch(
+
+            `${API_BASE_URL}/user/all`,
+
+            {
+
+                headers: {
+
+                    Authorization: `Bearer ${token}`
+
+                }
+
             }
-        });
+
+        );
 
         if (!response.ok) {
-            throw new Error(`Failed to load users: ${response.statusText}`);
+
+            throw new Error("Failed to load users");
+
         }
 
         allUsers = await response.json();
+
         filteredUsers = [...allUsers];
+
         renderUsers(filteredUsers);
-    } catch (error) {
-        console.error("Error loading users:", error);
-        container.innerHTML = 
-            `<h2 style="color: #ef4444; grid-column: 1/-1; text-align: center;">Unable to load users. Please log in again.</h2>`;
+
     }
+
+    catch (error) {
+
+        console.log(error);
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                <h2>Unable to load users</h2>
+
+                <p>Please refresh the page.</p>
+
+            </div>
+
+        `;
+
+    }
+
 }
+// ============================
+// Render Users
+// ============================
 
 function renderUsers(users) {
+
     const container = document.getElementById("usersContainer");
-    if (!container) return;
 
     container.innerHTML = "";
 
-    const totalUsersEl = document.getElementById("totalUsers");
-    if (totalUsersEl) {
-        totalUsersEl.textContent = `${users.length} Users Found`;
-    }
+    document.getElementById("totalUsers").textContent =
+        `${users.length} Users Found`;
 
     if (users.length === 0) {
-        container.innerHTML = `<h2 style="grid-column: 1/-1; text-align: center;">No users found.</h2>`;
+
+        container.innerHTML = `
+
+            <div class="empty-state">
+
+                <i class="fa-solid fa-users-slash"></i>
+
+                <h2>No Users Found</h2>
+
+                <p>Try another search.</p>
+
+            </div>
+
+        `;
+
         return;
+
     }
 
     users.forEach(user => {
-        const firstLetter = user.name ? user.name.charAt(0).toUpperCase() : "?";
 
-        const teachSkills = (!user.teachSkills || user.teachSkills.length === 0)
-            ? `<span class="teach-tag">No Skills</span>`
-            : user.teachSkills.map(skill => `
-                <span class="teach-tag">
-                    <i class="fa-solid fa-code"></i> ${skill}
-                </span>
-            `).join("");
+        const firstLetter =
+            user.name
+                ? user.name.charAt(0).toUpperCase()
+                : "?";
 
-        const learnSkills = (!user.learnSkills || user.learnSkills.length === 0)
-            ? `<span class="learn-tag">No Skills</span>`
-            : user.learnSkills.map(skill => `
-                <span class="learn-tag">
-                    <i class="fa-solid fa-book-open"></i> ${skill}
-                </span>
-            `).join("");
+        const teachSkills =
+            user.teachSkills && user.teachSkills.length > 0
+                ? user.teachSkills.map(skill => `
+
+                    <span class="teach-tag">
+
+                        <i class="fa-solid fa-code"></i>
+
+                        ${skill}
+
+                    </span>
+
+                `).join("")
+                : `<span class="teach-tag">No Skills</span>`;
+
+        const learnSkills =
+            user.learnSkills && user.learnSkills.length > 0
+                ? user.learnSkills.map(skill => `
+
+                    <span class="learn-tag">
+
+                        <i class="fa-solid fa-book-open"></i>
+
+                        ${skill}
+
+                    </span>
+
+                `).join("")
+                : `<span class="learn-tag">No Skills</span>`;
 
         const rating = Number(user.rating || 0);
+
         let stars = "";
+
         for (let i = 1; i <= 5; i++) {
-            stars += i <= Math.round(rating) ? "★" : "☆";
+
+            stars += i <= Math.round(rating)
+                ? "★"
+                : "☆";
+
         }
 
         container.innerHTML += `
-            <div class="user-card">
-                <div class="user-header">
-                    <div class="user-info">
-                        <div class="avatar">${firstLetter}</div>
-                        <div class="user-details">
-                            <h3 class="user-name">${user.name || "Anonymous User"}</h3>
-                            <p class="location">
-                                <i class="fa-solid fa-location-dot"></i>
-                                ${user.location || "Location not added"}
-                            </p>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="section-title">SKILLS THEY TEACH</div>
-                <div class="skill-list">${teachSkills}</div>
+<div class="user-card">
 
-                <div class="section-title">WANTS TO LEARN</div>
-                <div class="skill-list">${learnSkills}</div>
+    <div class="user-header">
 
-                <div class="card-footer">
-                    <div class="rating">
-                        ${stars}
-                        <span>${rating.toFixed(1)} (${user.totalReviews || 0} reviews)</span>
-                    </div>
-                </div>
+        <div class="user-info">
 
-                <div class="card-buttons">
-                    <button class="request-btn" onclick="openRequestModal('${user._id}')">
-                        <i class="fa-regular fa-paper-plane"></i> Send Request
-                    </button>
-                    <button class="favorite-btn" title="Save Favorite">
-                        <i class="fa-regular fa-heart"></i>
-                    </button>
-                </div>
+            <div class="avatar">
+
+                ${firstLetter}
+
             </div>
-        `;
+
+            <div class="user-details">
+
+                <h3 class="user-name">
+
+                    ${user.name}
+
+                </h3>
+
+                <p class="location">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    ${user.location || "Location not added"}
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="section-title">
+
+        Skills They Teach
+
+    </div>
+
+    <div class="skill-list">
+
+        ${teachSkills}
+
+    </div>
+
+    <div class="section-title">
+
+        Wants To Learn
+
+    </div>
+
+    <div class="skill-list">
+
+        ${learnSkills}
+
+    </div>
+
+    <div class="card-footer">
+
+        <div class="rating">
+
+            ${stars}
+
+            <span>
+
+                ${rating.toFixed(1)}
+                (${user.totalReviews || 0} reviews)
+
+            </span>
+
+        </div>
+
+    </div>
+
+    <div class="card-buttons">
+
+        <button
+            class="request-btn"
+            onclick="openRequestModal('${user._id}')">
+
+            <i class="fa-regular fa-paper-plane"></i>
+
+            Send Request
+
+        </button>
+
+        <button class="favorite-btn">
+
+            <i class="fa-regular fa-heart"></i>
+
+        </button>
+
+    </div>
+
+</div>
+
+`;
+
     });
+
 }
 
-function filterUsers() {
-    const searchInput = document.getElementById("searchInput");
-    const categoryFilter = document.getElementById("categoryFilter");
+// ============================
+// Filter Users
+// ============================
 
-    const keyword = searchInput ? searchInput.value.toLowerCase() : "";
-    const category = categoryFilter ? categoryFilter.value : "All";
+function filterUsers() {
+
+    const keyword =
+        document
+            .getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+    const category =
+        document
+            .getElementById("categoryFilter")
+            .value;
 
     filteredUsers = allUsers.filter(user => {
-        const matchName = (user.name || "").toLowerCase().includes(keyword);
-        const matchTeach = (user.teachSkills || []).some(skill => skill.toLowerCase().includes(keyword));
-        const matchLearn = (user.learnSkills || []).some(skill => skill.toLowerCase().includes(keyword));
 
-        const searchMatch = matchName || matchTeach || matchLearn;
+        const matchName =
+            (user.name || "")
+                .toLowerCase()
+                .includes(keyword);
+
+        const matchTeach =
+            (user.teachSkills || []).some(skill =>
+                skill.toLowerCase().includes(keyword)
+            );
+
+        const matchLearn =
+            (user.learnSkills || []).some(skill =>
+                skill.toLowerCase().includes(keyword)
+            );
+
+        const searchMatch =
+            matchName ||
+            matchTeach ||
+            matchLearn;
 
         if (category === "All") {
+
             return searchMatch;
+
         }
 
-        return searchMatch && user.category === category;
+        return (
+
+            searchMatch &&
+
+            user.category === category
+
+        );
+
     });
 
     sortUsers();
+
 }
 
+// ============================
+// Sort Users
+// ============================
+
 function sortUsers() {
-    const sortFilter = document.getElementById("sortFilter");
-    const sort = sortFilter ? sortFilter.value : "Name";
+
+    const sort =
+        document
+            .getElementById("sortFilter")
+            .value;
 
     if (sort === "Name") {
-        filteredUsers.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-    } else if (sort === "Most Skills") {
-        filteredUsers.sort((a, b) => 
-            ((b.teachSkills?.length || 0) + (b.learnSkills?.length || 0)) -
-            ((a.teachSkills?.length || 0) + (a.learnSkills?.length || 0))
+
+        filteredUsers.sort((a, b) =>
+
+            (a.name || "").localeCompare(b.name || "")
+
         );
-    } else if (sort === "Highest Rated") {
-        filteredUsers.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    } else if (sort === "Newest") {
-        filteredUsers.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+
+    }
+
+    else if (sort === "Highest Rated") {
+
+        filteredUsers.sort((a, b) =>
+
+            (b.rating || 0) -
+
+            (a.rating || 0)
+
+        );
+
+    }
+
+    else if (sort === "Most Skills") {
+
+        filteredUsers.sort((a, b) =>
+
+            ((b.teachSkills?.length || 0) +
+            (b.learnSkills?.length || 0))
+
+            -
+
+            ((a.teachSkills?.length || 0) +
+            (a.learnSkills?.length || 0))
+
+        );
+
+    }
+
+    else if (sort === "Newest") {
+
+        filteredUsers.sort((a, b) =>
+
+            new Date(b.createdAt || 0) -
+
+            new Date(a.createdAt || 0)
+
+        );
+
     }
 
     renderUsers(filteredUsers);
+
 }
+// ============================
+// Open Request Modal
+// ============================
 
-window.openRequestModal = function(receiverId) {
+window.openRequestModal = function (receiverId) {
+
     selectedReceiver = receiverId;
+
     const modal = document.getElementById("requestModal");
-    if (modal) modal.style.display = "flex";
+
+    modal.style.display = "flex";
+
     loadSkillOptions(receiverId);
+
 };
 
-window.closeModal = function() {
-    const modal = document.getElementById("requestModal");
-    if (modal) modal.style.display = "none";
+// ============================
+// Close Request Modal
+// ============================
+
+window.closeModal = function () {
+
+    document.getElementById("requestModal").style.display = "none";
+
     selectedReceiver = "";
+
 };
 
-async function loadSkillOptions(targetUserId) {
-    const teachSelect = document.getElementById("teachSkillSelect");
-    const learnSelect = document.getElementById("learnSkillSelect");
+// ============================
+// Load Skills Into Modal
+// ============================
 
-    if (teachSelect) teachSelect.innerHTML = `<option disabled selected>Loading...</option>`;
-    if (learnSelect) learnSelect.innerHTML = `<option disabled selected>Loading...</option>`;
+async function loadSkillOptions(receiverId) {
+
+    const teachSelect =
+        document.getElementById("teachSkillSelect");
+
+    const learnSelect =
+        document.getElementById("learnSkillSelect");
+
+    teachSelect.innerHTML = "";
+    learnSelect.innerHTML = "";
 
     try {
-        const myProfileRes = await fetch(`${API_BASE_URL}/user/profile`, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
 
-        if (!myProfileRes.ok) {
-            throw new Error("Failed to load user profile skills.");
+        // ============================
+        // Get My Profile
+        // ============================
+
+        const myResponse = await fetch(
+
+            `${API_BASE_URL}/user/profile`,
+
+            {
+
+                headers: {
+
+                    Authorization: `Bearer ${token}`
+
+                }
+
+            }
+
+        );
+
+        if (!myResponse.ok) {
+
+            throw new Error("Failed to load profile.");
+
         }
 
-        const myProfile = await myProfileRes.json();
+        const myProfile = await myResponse.json();
 
-        if (teachSelect) {
-            teachSelect.innerHTML = "";
-            if (myProfile.teachSkills && myProfile.teachSkills.length > 0) {
-                myProfile.teachSkills.forEach(skill => {
-                    teachSelect.innerHTML += `<option value="${skill}">${skill}</option>`;
-                });
-            } else {
-                teachSelect.innerHTML = `<option disabled value="">No teaching skills listed in your profile</option>`;
-            }
+        // ============================
+        // My Teaching Skills
+        // ============================
+
+        if (
+
+            myProfile.teachSkills &&
+
+            myProfile.teachSkills.length > 0
+
+        ) {
+
+            myProfile.teachSkills.forEach(skill => {
+
+                teachSelect.innerHTML += `
+
+                    <option value="${skill}">
+
+                        ${skill}
+
+                    </option>
+
+                `;
+
+            });
+
         }
 
-        const targetUser = allUsers.find(u => u._id === targetUserId);
+        else {
 
-        if (learnSelect) {
-            learnSelect.innerHTML = "";
-            if (targetUser && targetUser.teachSkills && targetUser.teachSkills.length > 0) {
-                targetUser.teachSkills.forEach(skill => {
-                    learnSelect.innerHTML += `<option value="${skill}">${skill}</option>`;
-                });
-            } else {
-                learnSelect.innerHTML = `<option disabled value="">Partner has no teaching skills listed</option>`;
-            }
+            teachSelect.innerHTML = `
+
+                <option value="">
+
+                    No Teaching Skills
+
+                </option>
+
+            `;
+
         }
 
-    } catch (error) {
-        console.error("Error populating modal skills:", error);
+        // ============================
+        // Selected User
+        // ============================
+
+        const receiver = allUsers.find(
+
+            user => user._id === receiverId
+
+        );
+
+        // ============================
+        // Receiver Teaching Skills
+        // ============================
+
+        if (
+
+            receiver &&
+
+            receiver.teachSkills &&
+
+            receiver.teachSkills.length > 0
+
+        ) {
+
+            receiver.teachSkills.forEach(skill => {
+
+                learnSelect.innerHTML += `
+
+                    <option value="${skill}">
+
+                        ${skill}
+
+                    </option>
+
+                `;
+
+            });
+
+        }
+
+        else {
+
+            learnSelect.innerHTML = `
+
+                <option value="">
+
+                    User has no teaching skills
+
+                </option>
+
+            `;
+
+        }
+
     }
+
+    catch (error) {
+
+        console.log(error);
+
+        alert("Unable to load skills.");
+
+    }
+
 }
+// ============================
+// Send Swap Request
+// ============================
 
 async function sendRequest() {
-    const teachSkillEl = document.getElementById("teachSkillSelect");
-    const learnSkillEl = document.getElementById("learnSkillSelect");
 
-    const teachSkill = teachSkillEl ? teachSkillEl.value : "";
-    const learnSkill = learnSkillEl ? learnSkillEl.value : "";
+    const teachSkill =
+        document.getElementById("teachSkillSelect").value;
 
-    if (!selectedReceiver || !teachSkill || !learnSkill) {
-        alert("Please select both a skill to teach and a skill to learn.");
+    const learnSkill =
+        document.getElementById("learnSkillSelect").value;
+
+    if (!selectedReceiver) {
+
+        alert("Please select a user.");
+
         return;
+
     }
 
-    // Matches req.body.receiver, req.body.teachSkill, req.body.learnSkill in controller
-    const payload = {
-        receiver: selectedReceiver,
-        teachSkill: teachSkill,
-        learnSkill: learnSkill
-    };
+    if (!teachSkill || !learnSkill) {
+
+        alert("Please select both skills.");
+
+        return;
+
+    }
 
     try {
-        // Aligned route from /swaps/send to /swap/send
-        const response = await fetch(`${API_BASE_URL}/swaps/send`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`
-            },
-            body: JSON.stringify(payload)
-        });
 
-        const result = await response.json();
+        const response = await fetch(
+
+            `${API_BASE_URL}/swaps/send`,
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json",
+
+                    Authorization: `Bearer ${token}`
+
+                },
+
+                body: JSON.stringify({
+
+                    receiver: selectedReceiver,
+
+                    teachSkill: teachSkill,
+
+                    learnSkill: learnSkill
+
+                })
+
+            }
+
+        );
+
+        const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(result.message || "Failed to send skill swap request");
+
+            alert(data.message || "Failed to send request.");
+
+            return;
+
         }
 
-        alert("Skill swap request sent successfully!");
+        alert("Skill Swap Request Sent Successfully!");
+
         closeModal();
 
-    } catch (error) {
-        console.error("Request Error:", error);
-        alert(error.message || "Failed to send request. Please try again.");
+        // Reload users so UI stays updated
+        loadUsers();
+
     }
+
+    catch (error) {
+
+        console.log(error);
+
+        alert("Unable to send request.");
+
+    }
+
 }
