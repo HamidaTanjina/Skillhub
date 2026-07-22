@@ -126,11 +126,11 @@ window.updateRequestStatus = async function(swapId, action) {
     const act = action.toLowerCase();
 
     if (act === "active" || act === "accept" || act === "accepted") {
-        endpoint = `${API_BASE_URL}/swap/${swapId}/accept`;
+        endpoint = `${API_BASE_URL}/swaps/${swapId}/accept`;
     } else if (act === "reject" || act === "rejected") {
-        endpoint = `${API_BASE_URL}/swap/${swapId}/reject`;
+        endpoint = `${API_BASE_URL}/swaps/${swapId}/reject`;
     } else if (act === "complete" || act === "completed") {
-        endpoint = `${API_BASE_URL}/swap/${swapId}/complete`;
+        endpoint = `${API_BASE_URL}/swaps/${swapId}/complete`;
     }
 
     try {

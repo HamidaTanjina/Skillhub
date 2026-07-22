@@ -276,7 +276,7 @@ async function sendRequest() {
 
     try {
         // Aligned route from /swaps/send to /swap/send
-        const response = await fetch(`${API_BASE_URL}/swap/send`, {
+        const response = await fetch(`${API_BASE_URL}/swaps/send`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
