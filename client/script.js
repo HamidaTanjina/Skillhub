@@ -125,7 +125,6 @@ if (authForm) {
         const email = emailInput ? emailInput.value.trim() : "";
         const password = passwordInput ? passwordInput.value : "";
 
-        const btnText = authSubmit ? authSubmit.querySelector(".btn-text") : null;
         if (authSubmit) authSubmit.disabled = true;
 
         if (authMode === "signup") {

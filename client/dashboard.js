@@ -1,4 +1,5 @@
 const token = localStorage.getItem("token");
+
 if (!token) {
     window.location.href = "index.html";
 }
@@ -8,7 +9,9 @@ const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
 async function loadDashboardData() {
     try {
         const response = await fetch(`${API_BASE_URL}/user/profile`, {
-            headers: { Authorization: `Bearer ${token}` }
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         });
 
         if (!response.ok) {
@@ -22,31 +25,42 @@ async function loadDashboardData() {
 
         const user = await response.json();
 
-        document.getElementById("welcomeTitle").textContent = `Welcome Back ${user.name || ''}`;
-        document.getElementById("userName").textContent = user.name || 'User';
-        document.getElementById("profileName").textContent = user.name || 'User';
-        document.getElementById("profileEmail").textContent = user.email || '';
-        document.getElementById("profileLocation").textContent = user.location || "Add your location";
-        document.getElementById("profileBio").textContent = user.bio || "Tell everyone about yourself.";
+        const welcomeTitle = document.getElementById("welcomeTitle");
+        const userName = document.getElementById("userName");
+        const profileName = document.getElementById("profileName");
+        const profileEmail = document.getElementById("profileEmail");
+        const profileLocation = document.getElementById("profileLocation");
+        const profileBio = document.getElementById("profileBio");
+
+        if (welcomeTitle) welcomeTitle.textContent = `Welcome Back ${user.name || ''}`;
+        if (userName) userName.textContent = user.name || 'User';
+        if (profileName) profileName.textContent = user.name || 'User';
+        if (profileEmail) profileEmail.textContent = user.email || '';
+        if (profileLocation) profileLocation.textContent = user.location || "Add your location";
+        if (profileBio) profileBio.textContent = user.bio || "Tell everyone about yourself...";
 
         const teachContainer = document.getElementById("teachSkills");
-        teachContainer.innerHTML = "";
-        if (!user.teachSkills || user.teachSkills.length === 0) {
-            teachContainer.innerHTML = "<span class='skill-tag'>No Skills Added</span>";
-        } else {
-            user.teachSkills.forEach(skill => {
-                teachContainer.innerHTML += `<span class="skill-tag">${skill}</span>`;
-            });
+        if (teachContainer) {
+            teachContainer.innerHTML = "";
+            if (!user.teachSkills || user.teachSkills.length === 0) {
+                teachContainer.innerHTML = "<span class='skills-loading-text'>No Skills Added</span>";
+            } else {
+                user.teachSkills.forEach(skill => {
+                    teachContainer.innerHTML += `<span class="skill-tag">${skill}</span>`;
+                });
+            }
         }
 
         const learnContainer = document.getElementById("learnSkills");
-        learnContainer.innerHTML = "";
-        if (!user.learnSkills || user.learnSkills.length === 0) {
-            learnContainer.innerHTML = "<span class='skill-tag'>No Skills Added</span>";
-        } else {
-            user.learnSkills.forEach(skill => {
-                learnContainer.innerHTML += `<span class="skill-tag">${skill}</span>`;
-            });
+        if (learnContainer) {
+            learnContainer.innerHTML = "";
+            if (!user.learnSkills || user.learnSkills.length === 0) {
+                learnContainer.innerHTML = "<span class='skills-loading-text'>No Skills Added</span>";
+            } else {
+                user.learnSkills.forEach(skill => {
+                    learnContainer.innerHTML += `<span class="skill-tag">${skill}</span>`;
+                });
+            }
         }
 
         let completion = 0;
@@ -56,22 +70,27 @@ async function loadDashboardData() {
         if (user.bio) completion += 20;
         if (user.teachSkills && user.learnSkills && user.teachSkills.length > 0 && user.learnSkills.length > 0) completion += 20;
 
-        document.getElementById("profileCompletion").textContent = completion + "%";
-        document.getElementById("progressBar").style.width = completion + "%";
+        const compText = document.getElementById("profileCompletion");
+        const progBar = document.getElementById("progressBar");
+        if (compText) compText.textContent = completion + "%";
+        if (progBar) progBar.style.width = completion + "%";
 
-        // Fetch Swaps Summary Metrics
         try {
             const swapRes = await fetch(`${API_BASE_URL}/swaps/my-requests`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (swapRes.ok) {
                 const swaps = await swapRes.json();
-                document.getElementById("activeSwaps").textContent = swaps.filter(s => s.status === "Accepted").length;
-                document.getElementById("pendingRequests").textContent = swaps.filter(s => s.status === "Pending").length;
-                document.getElementById("completedSwaps").textContent = swaps.filter(s => s.status === "Completed").length;
+                const activeEl = document.getElementById("activeSwaps");
+                const pendingEl = document.getElementById("pendingRequests");
+                const completedEl = document.getElementById("completedSwaps");
+
+                if (activeEl) activeEl.textContent = swaps.filter(s => s.status === "Accepted" || s.status === "Active").length;
+                if (pendingEl) pendingEl.textContent = swaps.filter(s => s.status === "Pending").length;
+                if (completedEl) completedEl.textContent = swaps.filter(s => s.status === "Completed").length;
             }
         } catch (e) {
-            console.warn("Metrics unavailable");
+            console.warn("Metrics unavailable:", e);
         }
 
     } catch (error) {
@@ -81,23 +100,32 @@ async function loadDashboardData() {
 
 loadDashboardData();
 
-document.getElementById("editProfileBtn")?.addEventListener("click", () => {
-    window.location.href = "profile.html";
-});
+const editProfileBtn = document.getElementById("editProfileBtn");
+if (editProfileBtn) {
+    editProfileBtn.addEventListener("click", () => {
+        window.location.href = "profile.html";
+    });
+}
 
-document.getElementById("addSkillsBtn")?.addEventListener("click", () => {
-    window.location.href = "add-skills.html";
-});
+const addSkillsBtn = document.getElementById("addSkillsBtn");
+if (addSkillsBtn) {
+    addSkillsBtn.addEventListener("click", () => {
+        window.location.href = "add-skills.html";
+    });
+}
 
-document.getElementById("logoutBtn")?.addEventListener("click", async () => {
-    try {
-        await fetch(`${API_BASE_URL}/auth/logout`, {
-            method: "POST",
-            headers: { Authorization: `Bearer ${token}` }
-        });
-    } catch (error) {
-        console.error("Logout Error:", error);
-    }
-    localStorage.removeItem("token");
-    window.location.href = "index.html";
-});
+const logoutBtn = document.getElementById("logoutBtn");
+if (logoutBtn) {
+    logoutBtn.addEventListener("click", async () => {
+        try {
+            await fetch(`${API_BASE_URL}/auth/logout`, {
+                method: "POST",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+        } catch (error) {
+            console.error("Logout Error:", error);
+        }
+        localStorage.removeItem("token");
+        window.location.href = "index.html";
+    });
+}
