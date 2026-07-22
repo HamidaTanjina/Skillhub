@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchRequests();
 });
 
-// Helper function to decode JWT token payload safely
+// Helper to decode JWT token to get current user ID
 function parseJwt(token) {
     try {
         const base64Url = token.split('.')[1];
@@ -33,25 +33,19 @@ async function fetchRequests() {
     if (container) {
         container.innerHTML = `
             <div class="empty">
-                <h2><i class="fa-solid fa-spinner fa-spin"></i> Connecting to server...</h2>
+                <h2><i class="fa-solid fa-spinner fa-spin"></i> Loading requests...</h2>
             </div>
         `;
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/swap/my-requests`, {
+        const response = await fetch(`${API_BASE_URL}/swaps/my-requests`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
             }
         });
-
-        if (response.status === 401 || response.status === 403) {
-            localStorage.removeItem("token");
-            window.location.href = "index.html";
-            return;
-        }
 
         if (!response.ok) {
             throw new Error(`Server status: ${response.status}`);
@@ -65,14 +59,11 @@ async function fetchRequests() {
             requestsData = data.map((item, index) => {
                 let partner = null;
                 
-                // Identify if current user is the sender or receiver
                 const senderId = item.sender ? (item.sender._id || item.sender) : null;
                 
                 if (currentUserId && senderId && senderId.toString() === currentUserId.toString()) {
-                    // Current user sent the request -> Partner is the Receiver
                     partner = item.receiver;
                 } else {
-                    // Current user received the request -> Partner is the Sender
                     partner = item.sender;
                 }
 
@@ -84,11 +75,9 @@ async function fetchRequests() {
                     ? partner.location 
                     : "Location not specified";
 
-                // Format teaching skill
                 const rawTeach = item.teachSkill || item.senderTeachSkill || "Skill Swap";
                 const teachSkills = Array.isArray(rawTeach) ? rawTeach : [rawTeach];
 
-                // Format learning skill
                 const rawLearn = item.learnSkill || item.senderLearnSkill || "Skill Swap";
                 const learnSkills = Array.isArray(rawLearn) ? rawLearn : [rawLearn];
 
@@ -190,7 +179,6 @@ function renderRequests(filter = "all") {
     filtered.forEach(request => {
         let buttons = "";
         let statusClass = "";
-        let reviewHTML = "";
 
         const reqStatus = request.status.toLowerCase();
 
@@ -216,32 +204,7 @@ function renderRequests(filter = "all") {
             `;
         } else {
             statusClass = reqStatus === "rejected" ? "rejected" : "completed";
-
-            if (reqStatus === "completed") {
-                const ratingStars = "⭐".repeat(request.rating || 5);
-                reviewHTML = `
-                    <div class="section">
-                        <div class="section-title">Rating</div>
-                        <div>${ratingStars}</div>
-                    </div>
-                    <div class="section">
-                        <div class="section-title">Review</div>
-                        <p>${request.review}</p>
-                    </div>
-                `;
-
-                buttons = `
-                    <button class="review-btn">
-                        View Review
-                    </button>
-                `;
-            } else {
-                buttons = `
-                    <button class="reject-btn" style="cursor:default; opacity:0.6;">
-                        Rejected
-                    </button>
-                `;
-            }
+            buttons = `<button class="reject-btn" style="cursor:default; opacity:0.6;">${request.status}</button>`;
         }
 
         const avatar = (request.name || "?").charAt(0).toUpperCase();
@@ -276,8 +239,6 @@ function renderRequests(filter = "all") {
                     <div class="section-title">Wants To Learn</div>
                     <div class="skill-list">${learn}</div>
                 </div>
-
-                ${reviewHTML}
 
                 <div class="status ${statusClass}">
                     ${request.status}
