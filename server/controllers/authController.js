@@ -5,142 +5,124 @@ const jwt = require("jsonwebtoken");
 // =======================
 // Register User
 // =======================
-
 exports.registerUser = async (req, res) => {
-
     try {
+        let { name, email, password } = req.body;
 
-        const { name, email, password } = req.body;
-
-        // Check if user already exists
-        const userExists = await User.findOne({ email });
-
-        if (userExists) {
-            return res.status(400).json({
-                message: "User already exists"
-            });
+        // 1. Explicit Check for Required Inputs
+        if (!name || name.trim() === "") {
+            return res.status(400).json({ message: "Name is required." });
+        }
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and password are required." });
         }
 
-        // Hash password
+        // Normalize inputs
+        name = name.trim();
+        email = email.toLowerCase().trim();
+
+        // 2. Check if user already exists
+        const userExists = await User.findOne({ email });
+        if (userExists) {
+            return res.status(400).json({ message: "User already exists" });
+        }
+
+        // 3. Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create user
+        // 4. Create user
         const user = await User.create({
-
             name,
             email,
             password: hashedPassword,
-
             isOnline: true,
             rating: 0,
             totalReviews: 0,
             completedSwaps: 0
-
         });
 
-        // Generate JWT Token
+        // 5. Generate JWT Token
         const token = jwt.sign(
-            {
-                id: user._id
-            },
-            process.env.JWT_SECRET,
-            {
-                expiresIn: "7d"
-            }
+            { id: user._id },
+            process.env.JWT_SECRET || "fallback_secret",
+            { expiresIn: "7d" }
         );
 
-        // Send response
+        // 6. Send response
         res.status(201).json({
             message: "Registration Successful",
-            token
+            token,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email
+            }
         });
 
     } catch (error) {
-
-        res.status(500).json({
-            message: error.message
-        });
-
+        console.error("Registration Error:", error);
+        res.status(500).json({ message: error.message });
     }
-
 };
-
 
 // =======================
 // Login User
 // =======================
-
 exports.loginUser = async (req, res) => {
-
     try {
-
         const { email, password } = req.body;
 
-        // Find user
-        const user = await User.findOne({ email });
+        if (!email || !password) {
+            return res.status(400).json({ message: "Email and password are required." });
+        }
 
+        // 1. Find user
+        const user = await User.findOne({ email: email.toLowerCase().trim() });
         if (!user) {
-
-            return res.status(400).json({
-                message: "User not found"
-            });
-
+            return res.status(400).json({ message: "User not found" });
         }
 
-        // Compare password
+        // 2. Compare password
         const isMatch = await bcrypt.compare(password, user.password);
-
         if (!isMatch) {
-
-            return res.status(400).json({
-                message: "Wrong password"
-            });
-
+            return res.status(400).json({ message: "Wrong password" });
         }
 
-        // Update Online Status
-        user.isOnline = true;
-        await user.save();
+        // 3. Update Online Status atomically (Prevents whole-document validation crashes)
+        await User.findByIdAndUpdate(user._id, { $set: { isOnline: true } });
 
-        // Generate JWT Token
+        // 4. Generate JWT Token
         const token = jwt.sign(
-            {
-                id: user._id
-            },
-            process.env.JWT_SECRET,
-            {
-                expiresIn: "7d"
-            }
+            { id: user._id },
+            process.env.JWT_SECRET || "fallback_secret",
+            { expiresIn: "7d" }
         );
 
-        // Send response
+        // 5. Send response
         res.json({
             message: "Login Successful",
-            token
+            token,
+            user: {
+                id: user._id,
+                name: user.name || "SkillHub User",
+                email: user.email
+            }
         });
 
     } catch (error) {
-
-        res.status(500).json({
-            message: error.message
-        });
-
+        console.error("Login Error:", error);
+        res.status(500).json({ message: error.message });
     }
-
 };
+
 // =======================
 // Logout User
 // =======================
-
 exports.logoutUser = async (req, res) => {
-
     try {
-
         await User.findByIdAndUpdate(
             req.user.id,
-            {
-                isOnline: false
-            }
+            { $set: { isOnline: false } }
         );
 
         res.json({
@@ -148,11 +130,7 @@ exports.logoutUser = async (req, res) => {
         });
 
     } catch (error) {
-
-        res.status(500).json({
-            message: error.message
-        });
-
+        console.error("Logout Error:", error);
+        res.status(500).json({ message: error.message });
     }
-
 };
