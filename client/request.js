@@ -14,6 +14,20 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchRequests();
 });
 
+// Helper function to decode JWT token payload safely
+function parseJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(c => {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        return null;
+    }
+}
+
 async function fetchRequests() {
     const container = document.getElementById("requestContainer");
     if (container) {
@@ -25,7 +39,7 @@ async function fetchRequests() {
     }
 
     try {
-        const response = await fetch(`${API_BASE_URL}/swaps/my-requests`, {
+        const response = await fetch(`${API_BASE_URL}/swap/my-requests`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -44,27 +58,38 @@ async function fetchRequests() {
         }
 
         const data = await response.json();
+        const decodedToken = parseJwt(token);
+        const currentUserId = decodedToken ? (decodedToken.id || decodedToken._id) : null;
 
         if (Array.isArray(data) && data.length > 0) {
             requestsData = data.map((item, index) => {
-                // Determine partner details dynamically whether current user is Sender or Receiver
                 let partner = null;
-                if (item.receiver && typeof item.receiver === "object" && item.receiver.name) {
+                
+                // Identify if current user is the sender or receiver
+                const senderId = item.sender ? (item.sender._id || item.sender) : null;
+                
+                if (currentUserId && senderId && senderId.toString() === currentUserId.toString()) {
+                    // Current user sent the request -> Partner is the Receiver
                     partner = item.receiver;
-                }
-                if (item.sender && typeof item.sender === "object" && item.sender.name) {
+                } else {
+                    // Current user received the request -> Partner is the Sender
                     partner = item.sender;
                 }
 
-                const partnerName = partner ? partner.name : "SkillHub User";
-                const partnerLocation = partner ? partner.location : "Location not specified";
+                const partnerName = (partner && typeof partner === "object" && partner.name) 
+                    ? partner.name 
+                    : "SkillHub User";
+                    
+                const partnerLocation = (partner && typeof partner === "object" && partner.location) 
+                    ? partner.location 
+                    : "Location not specified";
 
-                // Fallbacks for teachSkill field variations
-                const rawTeach = item.senderTeachSkill || item.teachSkill || (partner?.teachSkills?.[0]) || "Skill Swap";
+                // Format teaching skill
+                const rawTeach = item.teachSkill || item.senderTeachSkill || "Skill Swap";
                 const teachSkills = Array.isArray(rawTeach) ? rawTeach : [rawTeach];
 
-                // Fallbacks for learnSkill field variations
-                const rawLearn = item.senderLearnSkill || item.learnSkill || (partner?.learnSkills?.[0]) || "Skill Swap";
+                // Format learning skill
+                const rawLearn = item.learnSkill || item.senderLearnSkill || "Skill Swap";
                 const learnSkills = Array.isArray(rawLearn) ? rawLearn : [rawLearn];
 
                 return {
@@ -101,11 +126,11 @@ window.updateRequestStatus = async function(swapId, action) {
     const act = action.toLowerCase();
 
     if (act === "active" || act === "accept" || act === "accepted") {
-        endpoint = `${API_BASE_URL}/swaps/${swapId}/accept`;
+        endpoint = `${API_BASE_URL}/swap/${swapId}/accept`;
     } else if (act === "reject" || act === "rejected") {
-        endpoint = `${API_BASE_URL}/swaps/${swapId}/reject`;
+        endpoint = `${API_BASE_URL}/swap/${swapId}/reject`;
     } else if (act === "complete" || act === "completed") {
-        endpoint = `${API_BASE_URL}/swaps/${swapId}/complete`;
+        endpoint = `${API_BASE_URL}/swap/${swapId}/complete`;
     }
 
     try {

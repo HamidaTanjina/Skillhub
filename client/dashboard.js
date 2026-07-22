@@ -78,9 +78,9 @@ async function loadDashboardData() {
         if (compText) compText.textContent = completion + "%";
         if (progBar) progBar.style.width = completion + "%";
 
-        // Fetch Overview Stats & Populate Recent Activity
+        // Fetch Overview Stats & Populate Recent Activity (Updated to match /swap/my-requests route)
         try {
-            const swapRes = await fetch(`${API_BASE_URL}/swaps/my-requests`, {
+            const swapRes = await fetch(`${API_BASE_URL}/swap/my-requests`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             if (swapRes.ok) {

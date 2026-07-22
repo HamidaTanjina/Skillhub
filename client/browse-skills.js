@@ -1,13 +1,14 @@
 const token = localStorage.getItem("token");
 const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
 
+// Auth Guard: Redirect unauthenticated users immediately
+if (!token) {
+    window.location.href = "index.html";
+}
+
 let selectedReceiver = "";
 let allUsers = [];
 let filteredUsers = [];
-
-if (!token) {
-    console.warn("No authentication token found in localStorage.");
-}
 
 document.addEventListener("DOMContentLoaded", () => {
     setupEventListeners();
@@ -266,15 +267,16 @@ async function sendRequest() {
         return;
     }
 
-    // Payload keys matched strictly to backend Mongoose schema expectations
+    // Matches req.body.receiver, req.body.teachSkill, req.body.learnSkill in controller
     const payload = {
         receiver: selectedReceiver,
-        senderTeachSkill: teachSkill,
-        senderLearnSkill: learnSkill
+        teachSkill: teachSkill,
+        learnSkill: learnSkill
     };
 
     try {
-        const response = await fetch(`${API_BASE_URL}/swaps/send`, {
+        // Aligned route from /swaps/send to /swap/send
+        const response = await fetch(`${API_BASE_URL}/swap/send`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
