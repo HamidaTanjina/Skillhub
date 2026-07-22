@@ -33,6 +33,12 @@ async function fetchRequests() {
             }
         });
 
+        if (response.status === 401 || response.status === 403) {
+            localStorage.removeItem("token");
+            window.location.href = "index.html";
+            return;
+        }
+
         if (!response.ok) {
             throw new Error(`Server status: ${response.status}`);
         }
@@ -41,29 +47,30 @@ async function fetchRequests() {
 
         if (Array.isArray(data) && data.length > 0) {
             requestsData = data.map((item, index) => {
-                // Determine partner object safely whether item was sent or received
+                // Determine partner details dynamically whether current user is Sender or Receiver
                 let partner = null;
                 if (item.receiver && typeof item.receiver === "object" && item.receiver.name) {
                     partner = item.receiver;
-                } else if (item.sender && typeof item.sender === "object" && item.sender.name) {
+                }
+                if (item.sender && typeof item.sender === "object" && item.sender.name) {
                     partner = item.sender;
                 }
 
                 const partnerName = partner ? partner.name : "SkillHub User";
                 const partnerLocation = partner ? partner.location : "Location not specified";
 
-                // Handle teach skill key variants from backend (teachSkill / senderTeachSkill)
-                const rawTeach = item.senderTeachSkill || item.teachSkill || (partner?.teachSkills?.[0]);
-                const teachSkills = rawTeach ? (Array.isArray(rawTeach) ? rawTeach : [rawTeach]) : ["N/A"];
+                // Fallbacks for teachSkill field variations
+                const rawTeach = item.senderTeachSkill || item.teachSkill || (partner?.teachSkills?.[0]) || "Skill Swap";
+                const teachSkills = Array.isArray(rawTeach) ? rawTeach : [rawTeach];
 
-                // Handle learn skill key variants from backend (learnSkill / senderLearnSkill)
-                const rawLearn = item.senderLearnSkill || item.learnSkill || (partner?.learnSkills?.[0]);
-                const learnSkills = rawLearn ? (Array.isArray(rawLearn) ? rawLearn : [rawLearn]) : ["N/A"];
+                // Fallbacks for learnSkill field variations
+                const rawLearn = item.senderLearnSkill || item.learnSkill || (partner?.learnSkills?.[0]) || "Skill Swap";
+                const learnSkills = Array.isArray(rawLearn) ? rawLearn : [rawLearn];
 
                 return {
                     id: item._id || item.id || index + 1,
                     name: partnerName,
-                    location: partnerLocation || "Location not specified",
+                    location: partnerLocation,
                     teachSkills: teachSkills,
                     learnSkills: learnSkills,
                     status: capitalize(item.status || "Pending"),
