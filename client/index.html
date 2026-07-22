@@ -4,13 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SkillHub - Skill Exchange Platform</title>
+
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="theme.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="theme.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 <body>
 
     <div id="landingPage">
+
         <header class="navbar">
             <a href="#" class="logo">
                 <i class="fa-solid fa-graduation-cap"></i>
@@ -28,7 +34,7 @@
             </nav>
 
             <div class="nav-right">
-                <button id="themeToggle" class="theme-btn" aria-label="Toggle Theme">
+                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">
                     <i class="fa-solid fa-moon"></i>
                 </button>
                 <a href="#" class="login-btn">Login</a>
@@ -88,7 +94,7 @@
                     <h3>Learn for Free</h3>
                     <p>Exchange knowledge with others and learn valuable skills without paying any fees or subscriptions.</p>
                 </div>
-               <div class="feature-card featured">
+                <div class="feature-card featured">
                     <i class="fa-solid fa-brain"></i>
                     <h3>Teach What You Know</h3>
                     <p>Share your knowledge and expertise while helping others improve their skills.</p>
@@ -98,7 +104,7 @@
                     <h3>Find Learning Partners</h3>
                     <p>Discover people with matching interests and connect with the right partners to achieve your learning goals.</p>
                 </div>
-           <div class="feature-card featured">
+                <div class="feature-card featured">
                     <i class="fa-solid fa-rocket"></i>
                     <h3>Build Confidence & Experience</h3>
                     <p>Practice your skills, gain real-world experience and grow your confidence through collaborative learning.</p>
@@ -107,7 +113,6 @@
         </section>
 
         <section id="how-it-works" class="roadmap-section">
-            <span class="section-tag-mini"></span>
             <h2>How It Works</h2>
             <p class="roadmap-subtitle">Exchange Skills in Three Easy Steps</p>
 
@@ -146,6 +151,7 @@
         </footer>
     </div>
 
+    <!-- Modal -->
     <div id="loginModal" class="modal">
         <div class="modal-box">
             <span id="closeModal" class="close-btn">&times;</span>
@@ -157,20 +163,20 @@
             <form id="authForm">
                 <div class="input-wrapper" id="nameInputWrapper">
                     <i class="fa-solid fa-user field-icon"></i>
-                    <input id="nameInput" type="text" placeholder="Name" aria-label="Name" autocomplete="name">
+                    <input id="nameInput" type="text" placeholder="Name" autocomplete="name">
                 </div>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-envelope field-icon"></i>
-                    <input id="emailInput" type="email" placeholder="Email" aria-label="Email Address" autocomplete="email" required>
+                    <input id="emailInput" type="email" placeholder="Email" autocomplete="email" required>
                 </div>
                 <div class="input-wrapper">
                     <i class="fa-solid fa-lock field-icon"></i>
-                    <input id="passwordInput" type="password" placeholder="Password" aria-label="Password" required>
+                    <input id="passwordInput" type="password" placeholder="Password" required>
                     <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
                 </div>
                 <div class="input-wrapper" id="confirmPasswordWrapper">
                     <i class="fa-solid fa-lock field-icon"></i>
-                    <input id="confirmPasswordInput" type="password" placeholder="Confirm password" aria-label="Confirm Password" autocomplete="new-password">
+                    <input id="confirmPasswordInput" type="password" placeholder="Confirm password" autocomplete="new-password">
                     <i class="fa-solid fa-eye toggle-password" id="toggleConfirmPassword"></i>
                 </div>
                 <a href="#" class="forgot" id="forgotLink">Forgot your password?</a>
@@ -180,11 +186,6 @@
             </form>
             <div class="auth-footer">
                 <button id="authSwitch" class="auth-alt-btn">Create Account</button>
-            </div>
-            <div class="success-check">
-                <i class="fa-solid fa-circle-check"></i>
-                <h3>Simulated Success!</h3>
-                <p id="successMessage">Form valid. Ready for backend hookup...</p>
             </div>
         </div>
     </div>

@@ -5,16 +5,16 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Browse Skills | SkillHub</title>
 
-    <link rel="stylesheet"
-        href="browse-skills.css">
+    <link rel="stylesheet" href="browse-skills.css">
+    <link rel="stylesheet" href="theme.css">
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="theme.js" defer></script>
 
 </head>
 
@@ -52,7 +52,7 @@
 
             </li>
 
-            <li>
+            <li onclick="location.href='request.html'">
 
                 <i class="fa-solid fa-handshake"></i>
 
@@ -60,7 +60,7 @@
 
             </li>
 
-            <li>
+            <li onclick="location.href='chat.html'">
 
                 <i class="fa-solid fa-comments"></i>
 
@@ -76,7 +76,7 @@
 
             </li>
 
-            <li>
+            <li id="logoutBtn">
 
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
 
@@ -130,10 +130,7 @@
 
                         <i class="fa-solid fa-magnifying-glass"></i>
 
-                        <input
-                            type="text"
-                            id="searchInput"
-                            placeholder="JavaScript, Python, Photoshop...">
+                        <input type="text" id="searchInput" placeholder="JavaScript, Python, Photoshop...">
 
                     </div>
 
@@ -251,9 +248,7 @@
 
         <!-- Cards -->
 
-        <section
-            id="usersContainer"
-            class="users-grid">
+        <section id="usersContainer" class="users-grid">
 
             <!-- Dynamic Cards -->
 
@@ -262,9 +257,8 @@
     </main>
 
 </div>
-<!-- ===========================
-     Swap Request Modal
-=========================== -->
+
+<!-- Swap Request Modal -->
 
 <div id="requestModal" class="modal">
 
@@ -311,9 +305,9 @@
     </div>
 
 </div>
+
 <script src="browse-skills.js"></script>
 
 </body>
 
 </html>
-

@@ -1,91 +1,29 @@
 const express = require("express");
-
 const router = express.Router();
-
 const protect = require("../middleware/authMiddleware");
 
 const {
-
     sendRequest,
-
     getMyRequests,
-
     acceptRequest,
-
     rejectRequest,
-
     completeSwap
-
 } = require("../controllers/swapController");
 
-// ===========================
-// Send Request
-// ===========================
+router.post("/send", protect, sendRequest);
 
-router.post(
+// Fixed: Supports both /my and /my-requests endpoints for backwards compatibility
+router.get("/my", protect, getMyRequests);
+router.get("/my-requests", protect, getMyRequests);
 
-    "/send",
+// Fixed: Supports both /:id/accept and /accept/:id URL formats
+router.put("/:id/accept", protect, acceptRequest);
+router.put("/accept/:id", protect, acceptRequest);
 
-    protect,
+router.put("/:id/reject", protect, rejectRequest);
+router.put("/reject/:id", protect, rejectRequest);
 
-    sendRequest
-
-);
-
-// ===========================
-// Get My Requests
-// ===========================
-
-router.get(
-
-    "/my",
-
-    protect,
-
-    getMyRequests
-
-);
-
-// ===========================
-// Accept Request
-// ===========================
-
-router.put(
-
-    "/:id/accept",
-
-    protect,
-
-    acceptRequest
-
-);
-
-// ===========================
-// Reject Request
-// ===========================
-
-router.put(
-
-    "/:id/reject",
-
-    protect,
-
-    rejectRequest
-
-);
-
-// ===========================
-// Complete Swap
-// ===========================
-
-router.put(
-
-    "/:id/complete",
-
-    protect,
-
-    completeSwap
-
-);
+router.put("/:id/complete", protect, completeSwap);
+router.put("/complete/:id", protect, completeSwap);
 
 module.exports = router;

@@ -1,181 +1,167 @@
 <!DOCTYPE html> 
 <html lang="en"> 
- 
+
 <head> 
- 
+
     <meta charset="UTF-8"> 
- 
-    <meta name="viewport" 
-        content="width=device-width, initial-scale=1.0"> 
- 
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
     <title>Requests | SkillHub</title> 
- 
+
     <link rel="stylesheet" href="request.css"> 
- 
-    <link rel="stylesheet" 
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
- 
+    <link rel="stylesheet" href="theme.css"> 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
+
+    <script src="theme.js" defer></script>
+
 </head> 
- 
+
 <body> 
- 
+
 <div class="dashboard"> 
- 
-    <!-- ========================= 
-         Sidebar 
-    ========================== --> 
- 
+
+    <!-- Sidebar --> 
+
     <aside class="sidebar"> 
- 
+
         <div class="logo"> 
- 
+
             <i class="fa-solid fa-graduation-cap"></i> 
- 
+
             <span>SkillHub</span> 
- 
+
         </div> 
- 
+
         <ul> 
- 
+
             <li onclick="location.href='dashboard.html'"> 
- 
+
                 <i class="fa-solid fa-house"></i> 
- 
+
                 Dashboard 
- 
+
             </li> 
- 
+
             <li onclick="location.href='browse-skills.html'"> 
- 
+
                 <i class="fa-solid fa-book"></i> 
- 
+
                 Browse Skills 
- 
+
             </li> 
- 
+
             <li class="active"> 
- 
+
                 <i class="fa-solid fa-handshake"></i> 
- 
+
                 Requests 
- 
+
             </li> 
- 
+
             <li onclick="location.href='chat.html'"> 
- 
+
                 <i class="fa-solid fa-comments"></i> 
- 
+
                 Chat 
- 
+
             </li> 
- 
+
             <li onclick="location.href='profile.html'"> 
- 
+
                 <i class="fa-solid fa-user"></i> 
- 
+
                 Profile 
- 
+
             </li> 
- 
+
             <li id="logoutBtn"> 
- 
+
                 <i class="fa-solid fa-right-from-bracket"></i> 
- 
+
                 Logout 
- 
+
             </li> 
- 
+
         </ul> 
- 
+
     </aside> 
- 
- 
-    <!-- ========================= 
-         Main 
-    ========================== --> 
- 
+
+    <!-- Main --> 
+
     <main class="main"> 
- 
+
         <!-- Header --> 
- 
+
         <div class="page-header"> 
- 
+
             <h1> 
- 
+
                 Skill Exchange Requests 
- 
+
             </h1> 
- 
+
             <p> 
- 
+
                 Track all your skill exchange requests and completed swaps. 
- 
+
             </p> 
- 
+
         </div> 
- 
- 
-        <!-- ========================= 
-             Tabs 
-        ========================== --> 
- 
+
+        <!-- Tabs --> 
+
         <div class="tabs"> 
- 
-            <button class="tab-btn active" 
-                data-tab="all"> 
- 
+
+            <button class="tab-btn active" data-tab="all"> 
+
                 <i class="fa-solid fa-list"></i> 
- 
+
                 All Swaps 
- 
+
             </button> 
- 
-            <button class="tab-btn" 
-                data-tab="pending"> 
- 
+
+            <button class="tab-btn" data-tab="pending"> 
+
                 <i class="fa-solid fa-clock"></i> 
- 
+
                 Pending 
- 
+
             </button> 
- 
-            <button class="tab-btn" 
-                data-tab="active"> 
- 
+
+            <button class="tab-btn" data-tab="active"> 
+
                 <i class="fa-solid fa-rotate"></i> 
- 
+
                 Active 
- 
+
             </button> 
- 
-            <button class="tab-btn" 
-                data-tab="completed"> 
- 
+
+            <button class="tab-btn" data-tab="completed"> 
+
                 <i class="fa-solid fa-circle-check"></i> 
- 
+
                 Completed 
- 
+
             </button> 
- 
+
         </div> 
- 
- 
-        <!-- ========================= 
-             Request List 
-        ========================== --> 
- 
+
+        <!-- Request List --> 
+
         <div id="requestContainer"> 
- 
+
             <!-- Dynamic Cards --> 
- 
+
         </div> 
- 
+
     </main> 
- 
+
 </div> 
- 
+
 <script src="request.js"></script> 
- 
+
 </body> 
- 
-</html> 
+
+</html>

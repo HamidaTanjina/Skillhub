@@ -1,102 +1,48 @@
 const token = localStorage.getItem("token");
+if (!token) window.location.href = "index.html";
+
+const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
 
 async function loadProfile() {
-
     try {
-
-        const response = await fetch(
-            "https://skillhub-backend-cths.onrender.com/api/user/profile",
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
+        const response = await fetch(`${API_BASE_URL}/user/profile`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         const user = await response.json();
 
-        // Fill Form
-
-        document.getElementById("editName").value =
-            user.name;
-
-        document.getElementById("editEmail").value =
-            user.email;
-
-        document.getElementById("editLocation").value =
-            user.location || "";
-
-        document.getElementById("editBio").value =
-            user.bio || "";
-
- 
-
-    } catch (error) {
-
-        console.log(error);
-
+        document.getElementById("editName").value = user.name || "";
+        document.getElementById("editEmail").value = user.email || "";
+        document.getElementById("editLocation").value = user.location || "";
+        document.getElementById("editBio").value = user.bio || "";
+    } catch (e) {
+        console.error(e);
     }
-
 }
 
 loadProfile();
 
 document.getElementById("saveProfileBtn").onclick = async () => {
-
-    const profile = {
-
-        name:
-            document.getElementById("editName").value,
-
-        location:
-            document.getElementById("editLocation").value,
-
-        bio:
-            document.getElementById("editBio").value,
-
-    
-
-    };
+    const name = document.getElementById("editName").value.trim();
+    const location = document.getElementById("editLocation").value.trim();
+    const bio = document.getElementById("editBio").value.trim();
 
     try {
-
-        const response = await fetch(
-            "https://skillhub-backend-cths.onrender.com/api/user/profile",
-            {
-
-                method: "PUT",
-
-                headers: {
-
-                    "Content-Type": "application/json",
-
-                    Authorization: `Bearer ${token}`
-
-                },
-
-                body: JSON.stringify(profile)
-
-            }
-        );
+        const response = await fetch(`${API_BASE_URL}/user/profile`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ name, location, bio })
+        });
 
         if (response.ok) {
-
             alert("Profile Updated Successfully!");
-
             window.location.href = "dashboard.html";
-
         } else {
-
             alert("Failed to update profile.");
-
         }
-
-    } catch (error) {
-
-        console.log(error);
-
-        alert("Something went wrong.");
-
+    } catch (e) {
+        alert("Server error.");
     }
-
 };

@@ -1,0 +1,75 @@
+/* ==========================================
+   UNIFIED SYSTEM THEME VARIABLES
+   ========================================== */
+:root {
+    --bg-primary: #0b0f19;
+    --bg-card: #111827;
+    --bg-input: #1f2937;
+    --bg-inner: #0f172a;
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --border-color: #1f2937;
+    --accent-blue: #3b82f6;
+    --accent-purple: #7c3aed;
+    --modal-bg: rgba(0, 0, 0, 0.75);
+}
+
+body.light-theme {
+    --bg-primary: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-input: #f1f5f9;
+    --bg-inner: #e2e8f0;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --accent-blue: #2563eb;
+    --accent-purple: #6d28d9;
+    --modal-bg: rgba(15, 23, 42, 0.4);
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-main);
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.sidebar, .card, .profile-card, .skills-card, .overview-card, 
+.matches-card, .activity-card, .filter-card, .user-card, 
+.request-card, .modal-content, .profile-form, .result-info {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-main);
+}
+
+p, span, small, label {
+    color: var(--text-muted);
+}
+
+h1, h2, h3, h4, .user-name, .logo {
+    color: var(--text-main);
+}
+
+input, select, textarea {
+    background-color: var(--bg-input) !important;
+    color: var(--text-main) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Common Theme Toggle Button */
+.theme-toggle-btn {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--accent-blue);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    transition: 0.3s ease;
+}
+.theme-toggle-btn:hover {
+    transform: scale(1.08);
+}

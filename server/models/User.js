@@ -5,7 +5,7 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: [true, "Name is required"],
         trim: true,
-        default: "SkillHub Learner" // Fallback prevents validation crashes during partial updates
+        default: "SkillHub Learner"
     },
 
     email: {
@@ -21,9 +21,6 @@ const UserSchema = new mongoose.Schema({
         required: [true, "Password is required"]
     },
 
-    // =========================
-    // Skills
-    // =========================
     teachSkills: {
         type: [String],
         default: []
@@ -34,9 +31,6 @@ const UserSchema = new mongoose.Schema({
         default: []
     },
 
-    // =========================
-    // Categories
-    // =========================
     category: {
         type: String,
         enum: ["Technology", "Design", "Business", "Language", "Cooking"],
@@ -49,9 +43,6 @@ const UserSchema = new mongoose.Schema({
         default: "Technology"
     },
 
-    // =========================
-    // Profile
-    // =========================
     profilePicture: {
         type: String,
         default: ""
@@ -67,9 +58,6 @@ const UserSchema = new mongoose.Schema({
         default: ""
     },
 
-    // =========================
-    // Statistics
-    // =========================
     isOnline: {
         type: Boolean,
         default: false

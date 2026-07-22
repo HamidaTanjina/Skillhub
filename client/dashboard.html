@@ -6,9 +6,11 @@
     <title>SkillHub Dashboard</title>
 
     <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="theme.css">
 
-    <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <script src="theme.js" defer></script>
 </head>
 <body>
 
@@ -29,19 +31,19 @@
                 Dashboard
             </li>
 
-           <li>
-    <a href="browse-skills.html">
-        <i class="fa-solid fa-book"></i>
-        Browse Skills
-    </a>
-</li>
-
             <li>
+                <a href="browse-skills.html">
+                    <i class="fa-solid fa-book"></i>
+                    Browse Skills
+                </a>
+            </li>
+
+            <li onclick="window.location.href='request.html'">
                 <i class="fa-solid fa-handshake"></i>
                 Requests
             </li>
 
-            <li>
+            <li onclick="window.location.href='chat.html'">
                 <i class="fa-solid fa-comments"></i>
                 Chat
             </li>
@@ -51,10 +53,10 @@
                 Profile
             </li>
 
-          <li id="logoutBtn">
-    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-    Logout
-</li>
+            <li id="logoutBtn">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                Logout
+            </li>
 
         </ul>
 
@@ -70,9 +72,7 @@
 
                 <i class="fa-solid fa-magnifying-glass"></i>
 
-                <input
-                    type="text"
-                    placeholder="Search users or skills">
+                <input type="text" placeholder="Search users or skills">
 
             </div>
 
@@ -80,7 +80,7 @@
 
                 <i class="fa-regular fa-bell"></i>
 
-                <i class="fa-solid fa-moon"></i>
+                <i class="fa-solid fa-moon" id="themeToggle" style="cursor: pointer;"></i>
 
                 <div class="profile">
 
@@ -116,7 +116,7 @@
 
                 </div>
 
-               <i class="fa-solid fa-paper-plane"></i>
+                <i class="fa-solid fa-paper-plane"></i>
 
             </div>
 
@@ -130,7 +130,7 @@
 
                 </div>
 
-              <i class="fa-solid fa-clock"></i>
+                <i class="fa-solid fa-clock"></i>
 
             </div>
 
@@ -144,7 +144,7 @@
 
                 </div>
 
-              <i class="fa-solid fa-trophy"></i>
+                <i class="fa-solid fa-trophy"></i>
 
             </div>
 
@@ -162,17 +162,17 @@
 
                 </div>
 
-              <h2 id="profileName">Loading...</h2>
-                
+                <h2 id="profileName">Loading...</h2>
+
                 <!-- Profile Rating block underneath name -->
                 <div class="profile-rating">
-                
+
                     <i class="fa-solid fa-star"></i>
-                
+
                     <span id="userRating">0.0</span>
-                
+
                     <small>(<span id="reviewCount">0</span> Reviews)</small>
-                
+
                 </div>
 
                 <p class="profile-email">
@@ -259,7 +259,7 @@
                     </div>
 
                 </div>
-                
+
                 <!-- Profile Completion Area inside Skills Card -->
                 <div class="completion-box">
 
@@ -279,10 +279,10 @@
 
                     <p class="completion-text">
 
-                       Complete your profile to unlock better matches and increase visibility.
+                        Complete your profile to unlock better matches and increase visibility.
 
                     </p>
-                
+
                 </div>
 
             </div>
@@ -311,7 +311,7 @@
             </div>
 
         </section>
-        
+
         <!-- Recent Activity Section below Suggested Matches -->
         <section class="activity-card">
 
@@ -326,7 +326,7 @@
                 <p>No recent activity.</p>
 
             </div>
-            
+
         </section>
 
     </main>

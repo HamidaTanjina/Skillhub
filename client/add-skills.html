@@ -5,23 +5,22 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Add Skills | SkillHub</title>
 
     <link rel="stylesheet" href="add-skills.css">
+    <link rel="stylesheet" href="theme.css">
 
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script src="theme.js" defer></script>
 
 </head>
 
 <body>
 
-    <!-- ===========================
-         Navbar
-    ============================ -->
+    <!-- Navbar -->
 
     <header class="navbar">
 
@@ -33,9 +32,7 @@
 
         </div>
 
-        <button
-            class="dashboard-btn"
-            onclick="window.location.href='dashboard.html'">
+        <button class="dashboard-btn" onclick="window.location.href='dashboard.html'">
 
             <i class="fa-solid fa-arrow-left"></i>
 
@@ -45,15 +42,11 @@
 
     </header>
 
-    <!-- ===========================
-         Main Container
-    ============================ -->
+    <!-- Main Container -->
 
     <div class="container">
 
-        <!-- ===========================
-             Teach Skills Card
-        ============================ -->
+        <!-- Teach Skills Card -->
 
         <div class="card">
 
@@ -127,9 +120,7 @@
 
             <!-- Suggestions -->
 
-            <div
-                id="teachSuggestions"
-                class="suggestions">
+            <div id="teachSuggestions" class="suggestions">
 
             </div>
 
@@ -141,10 +132,7 @@
 
             </label>
 
-            <input
-                type="text"
-                id="teachInput"
-                placeholder="Type skill and press Enter">
+            <input type="text" id="teachInput" placeholder="Type skill and press Enter">
 
             <!-- Selected -->
 
@@ -154,17 +142,13 @@
 
             </h3>
 
-            <div
-                id="teachSelected"
-                class="selected-skills">
+            <div id="teachSelected" class="selected-skills">
 
             </div>
 
         </div>
 
-        <!-- ===========================
-             Learn Skills Card
-        ============================ -->
+        <!-- Learn Skills Card -->
 
         <div class="card">
 
@@ -238,9 +222,7 @@
 
             <!-- Suggestions -->
 
-            <div
-                id="learnSuggestions"
-                class="suggestions">
+            <div id="learnSuggestions" class="suggestions">
 
             </div>
 
@@ -252,10 +234,7 @@
 
             </label>
 
-            <input
-                type="text"
-                id="learnInput"
-                placeholder="Type skill and press Enter">
+            <input type="text" id="learnInput" placeholder="Type skill and press Enter">
 
             <!-- Selected -->
 
@@ -265,9 +244,7 @@
 
             </h3>
 
-            <div
-                id="learnSelected"
-                class="selected-skills">
+            <div id="learnSelected" class="selected-skills">
 
             </div>
 
@@ -275,15 +252,11 @@
 
     </div>
 
-    <!-- ===========================
-         Save Button
-    ============================ -->
+    <!-- Save Button -->
 
     <div class="save-area">
 
-        <button
-            id="saveSkillsBtn"
-            class="save-btn">
+        <button id="saveSkillsBtn" class="save-btn">
 
             <i class="fa-solid fa-floppy-disk"></i>
 

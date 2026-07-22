@@ -1,424 +1,120 @@
 const token = localStorage.getItem("token");
+if (!token) window.location.href = "index.html";
+
+const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
 
 let teachSkills = [];
 let learnSkills = [];
 
-// =========================
-// Skill Categories
-// =========================
-
 const categories = {
-
-    Technology: [
-        "HTML", "CSS", "JavaScript", "React", "Node.js",
-        "Python", "Java", "C++", "MongoDB", "SQL"
-    ],
-
-    Design: [
-        "Figma", "Photoshop", "Illustrator",
-        "UI Design", "UX Design", "Canva"
-    ],
-
-    Business: [
-        "Marketing",
-        "Accounting",
-        "Finance",
-        "Entrepreneurship"
-    ],
-
-    Language: [
-        "English",
-        "Bangla",
-        "Arabic",
-        "Japanese"
-    ],
-
-    Cooking: [
-        "Cooking",
-        "Baking",
-        "Dessert",
-        "BBQ"
-    ]
-
+    Technology: ["HTML", "CSS", "JavaScript", "React", "Node.js", "Python", "Java", "C++", "MongoDB", "SQL"],
+    Design: ["Figma", "Photoshop", "Illustrator", "UI Design", "UX Design", "Canva"],
+    Business: ["Marketing", "Accounting", "Finance", "Entrepreneurship"],
+    Language: ["English", "Bangla", "Arabic", "Japanese"],
+    Cooking: ["Cooking", "Baking", "Dessert", "BBQ"]
 };
 
-// =========================
-// Load Existing Skills
-// =========================
-
 async function loadSkills() {
-
     try {
-
-        const response = await fetch(
-            "https://skillhub-backend-cths.onrender.com/api/user/profile",
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
-
+        const response = await fetch(`${API_BASE_URL}/user/profile`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
         const user = await response.json();
 
         teachSkills = user.teachSkills || [];
         learnSkills = user.learnSkills || [];
 
-        // Load Teach Category
-        if (user.category) {
-
-            document.getElementById("teachCategory").value = user.category;
-
-            showSkills(
-                user.category,
-                "teachSuggestions",
-                true
-            );
-
-        }
-
-        // Load Learn Category
-        if (user.learnCategory) {
-
-            document.getElementById("learnCategory").value = user.learnCategory;
-
-            showSkills(
-                user.learnCategory,
-                "learnSuggestions",
-                false
-            );
-
-        }
-
         renderTeach();
         renderLearn();
-
+    } catch (e) {
+        console.error(e);
     }
-
-    catch (error) {
-
-        console.log(error);
-
-    }
-
 }
 loadSkills();
-// =========================
-// Category Change
-// =========================
 
-document.getElementById("teachCategory")
-
-.addEventListener("change", function () {
-
-    showSkills(
-
-        this.value,
-
-        "teachSuggestions",
-
-        true
-
-    );
-
+document.getElementById("teachCategory")?.addEventListener("change", function () {
+    showSkills(this.value, "teachSuggestions", true);
 });
 
-document.getElementById("learnCategory")
-
-.addEventListener("change", function () {
-
-    showSkills(
-
-        this.value,
-
-        "learnSuggestions",
-
-        false
-
-    );
-
+document.getElementById("learnCategory")?.addEventListener("change", function () {
+    showSkills(this.value, "learnSuggestions", false);
 });
-// =========================
-// Show Skills
-// =========================
 
 function showSkills(category, containerId, isTeach) {
-
-    const container =
-        document.getElementById(containerId);
-
+    const container = document.getElementById(containerId);
     container.innerHTML = "";
-
     if (!categories[category]) return;
 
     categories[category].forEach(skill => {
-
-        const btn =
-            document.createElement("button");
-
+        const btn = document.createElement("button");
+        btn.type = "button";
         btn.className = "skill-btn";
-
         btn.textContent = skill;
-
-        btn.onclick = () => {
-
-            if (isTeach) {
-
-                addTeachSkill(skill);
-
-            }
-
-            else {
-
-                addLearnSkill(skill);
-
-            }
-
-        };
-
+        btn.onclick = () => isTeach ? addTeachSkill(skill) : addLearnSkill(skill);
         container.appendChild(btn);
-
     });
-
 }
-// =========================
-// Add Teach Skill
-// =========================
 
 function addTeachSkill(skill) {
-
     skill = skill.trim();
-
-    if (!skill) return;
-
-    if (teachSkills.includes(skill)) return;
-
-    if (teachSkills.length >= 10) {
-
-        alert("Maximum 10 teach skills allowed.");
-
-        return;
-
-    }
-
+    if (!skill || teachSkills.includes(skill)) return;
     teachSkills.push(skill);
-
     renderTeach();
-
 }
-
-// =========================
-// Add Learn Skill
-// =========================
 
 function addLearnSkill(skill) {
-
     skill = skill.trim();
-
-    if (!skill) return;
-
-    if (learnSkills.includes(skill)) return;
-
-    if (learnSkills.length >= 10) {
-
-        alert("Maximum 10 learn skills allowed.");
-
-        return;
-
-    }
-
+    if (!skill || learnSkills.includes(skill)) return;
     learnSkills.push(skill);
-
     renderLearn();
-
 }
-
-// =========================
-// Render Teach Skills
-// =========================
 
 function renderTeach() {
-
-    const container =
-        document.getElementById("teachSelected");
-
-    container.innerHTML = "";
-
-    teachSkills.forEach((skill, index) => {
-
-        container.innerHTML += `
-
-        <span class="skill-tag">
-
-            ${skill}
-
-            <i class="fa-solid fa-xmark"
-               onclick="removeTeach(${index})"></i>
-
-        </span>
-
-        `;
-
-    });
-
+    const container = document.getElementById("teachSelected");
+    container.innerHTML = teachSkills.map((s, i) => `
+        <span class="skill-tag">${s} <i class="fa-solid fa-xmark" onclick="removeTeach(${i})"></i></span>
+    `).join("");
 }
-
-// =========================
-// Render Learn Skills
-// =========================
 
 function renderLearn() {
-
-    const container =
-        document.getElementById("learnSelected");
-
-    container.innerHTML = "";
-
-    learnSkills.forEach((skill, index) => {
-
-        container.innerHTML += `
-
-        <span class="skill-tag">
-
-            ${skill}
-
-            <i class="fa-solid fa-xmark"
-               onclick="removeLearn(${index})"></i>
-
-        </span>
-
-        `;
-
-    });
-
+    const container = document.getElementById("learnSelected");
+    container.innerHTML = learnSkills.map((s, i) => `
+        <span class="skill-tag">${s} <i class="fa-solid fa-xmark" onclick="removeLearn(${i})"></i></span>
+    `).join("");
 }
 
-// =========================
-// Remove Skills
-// =========================
+window.removeTeach = function(i) { teachSkills.splice(i, 1); renderTeach(); };
+window.removeLearn = function(i) { learnSkills.splice(i, 1); renderLearn(); };
 
-function removeTeach(index) {
-
-    teachSkills.splice(index, 1);
-
-    renderTeach();
-
-}
-
-function removeLearn(index) {
-
-    learnSkills.splice(index, 1);
-
-    renderLearn();
-
-}
-
-// =========================
-// Custom Teach Skill
-// =========================
-
-document.getElementById("teachInput")
-
-.addEventListener("keydown", function (e) {
-
-    if (e.key === "Enter") {
-
-        e.preventDefault();
-
-        addTeachSkill(this.value);
-
-        this.value = "";
-
-    }
-
+document.getElementById("teachInput")?.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); addTeachSkill(this.value); this.value = ""; }
 });
 
-// =========================
-// Custom Learn Skill
-// =========================
-
-document.getElementById("learnInput")
-
-.addEventListener("keydown", function (e) {
-
-    if (e.key === "Enter") {
-
-        e.preventDefault();
-
-        addLearnSkill(this.value);
-
-        this.value = "";
-
-    }
-
+document.getElementById("learnInput")?.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") { e.preventDefault(); addLearnSkill(this.value); this.value = ""; }
 });
 
-// =========================
-// Save Skills
-// =========================
-document.getElementById("saveSkillsBtn")
-.addEventListener("click", async () => {
+document.getElementById("saveSkillsBtn")?.addEventListener("click", async () => {
+    const category = document.getElementById("teachCategory")?.value || "Technology";
+    const learnCategory = document.getElementById("learnCategory")?.value || "Technology";
 
     try {
+        const response = await fetch(`${API_BASE_URL}/user/skills`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ category, learnCategory, teachSkills, learnSkills })
+        });
 
-        const category =
-            document.getElementById("teachCategory").value;
-
-        const learnCategory =
-            document.getElementById("learnCategory").value;
-
-        if (!category || !learnCategory) {
-
-            alert("Please select both categories.");
-
-            return;
-
+        if (response.ok) {
+            alert("Skills updated successfully!");
+            window.location.href = "dashboard.html";
+        } else {
+            alert("Unable to save skills.");
         }
-
-        const response = await fetch(
-            "https://skillhub-backend-cths.onrender.com/api/user/skills",
-            {
-
-                method: "PUT",
-
-                headers: {
-
-                    "Content-Type": "application/json",
-
-                    Authorization: `Bearer ${token}`
-
-                },
-
-                body: JSON.stringify({
-
-                    category,
-                    learnCategory,
-                    teachSkills,
-                    learnSkills
-
-                })
-
-            }
-        );
-
-        if (!response.ok) {
-
-            throw new Error("Failed to save skills.");
-
-        }
-
-        alert("Skills updated successfully!");
-
-        window.location.href = "dashboard.html";
-
+    } catch (e) {
+        alert("Server error.");
     }
-
-    catch (error) {
-
-        console.log(error);
-
-        alert("Unable to save skills.");
-
-    }
-
 });

@@ -1,344 +1,110 @@
-const requests = [ 
- 
-{ 
-    id:1, 
- 
-    name:"Rakib Hasan", 
- 
-    location:"Sylhet", 
- 
-    teachSkills:["HTML","CSS","JavaScript"], 
- 
-    learnSkills:["React"], 
- 
-    status:"Pending" 
-}, 
- 
-{ 
-    id:2, 
- 
-    name:"Sarah Ahmed", 
- 
-    location:"Dhaka", 
- 
-    teachSkills:["Python","Django"], 
- 
-    learnSkills:["Java"], 
- 
-    status:"Active" 
-}, 
- 
-{ 
-    id:3, 
- 
-    name:"John Smith", 
- 
-    location:"Chattogram", 
- 
-    teachSkills:["Photoshop"], 
- 
-    learnSkills:["Illustrator"], 
- 
-    status:"Completed", 
- 
-    rating:5, 
- 
-    review:"Excellent learning partner. Highly recommended." 
-} 
- 
-]; 
- 
- 
-// =========================== 
-// Load 
-// =========================== 
- 
-renderRequests("all"); 
- 
- 
-// =========================== 
-// Tabs 
-// =========================== 
- 
-document.querySelectorAll(".tab-btn") 
- 
-.forEach(btn=>{ 
- 
-    btn.addEventListener("click",()=>{ 
- 
-        document 
-        .querySelectorAll(".tab-btn") 
-        .forEach(tab=>tab.classList.remove("active")); 
- 
-        btn.classList.add("active"); 
- 
-        renderRequests(btn.dataset.tab); 
- 
-    }); 
- 
-}); 
- 
- 
-// =========================== 
-// Render 
-// =========================== 
- 
-function renderRequests(filter){ 
- 
-    const container = 
-    document.getElementById("requestContainer"); 
- 
-    container.innerHTML=""; 
- 
-    let filtered=requests; 
- 
-    if(filter!=="all"){ 
- 
-        filtered=requests.filter(r=> 
- 
-            r.status.toLowerCase()===filter 
- 
-        ); 
- 
-    } 
- 
-    if(filtered.length===0){ 
- 
-        container.innerHTML=` 
- 
-        <div class="empty"> 
- 
-            <h2> 
- 
-                No Requests Found 
- 
-            </h2> 
- 
-        </div> 
- 
-        `; 
- 
-        return; 
- 
-    } 
- 
-    filtered.forEach(request=>{ 
- 
-        let buttons=""; 
- 
-        let statusClass=""; 
- 
-        let review=""; 
- 
-        if(request.status==="Pending"){ 
- 
-            statusClass="pending"; 
- 
-            buttons=` 
- 
-            <button class="accept-btn"> 
- 
-                Accept 
- 
-            </button> 
- 
-            <button class="reject-btn"> 
- 
-                Reject 
- 
-            </button> 
- 
-            `; 
- 
-        } 
- 
-        else if(request.status==="Active"){ 
- 
-            statusClass="active-status"; 
- 
-            buttons=` 
- 
-            <button class="chat-btn"> 
- 
-                Open Chat 
- 
-            </button> 
- 
-            <button class="complete-btn"> 
- 
-                Complete Swap 
- 
-            </button> 
- 
-            `; 
- 
-        } 
- 
-        else{ 
- 
-            statusClass="completed"; 
- 
-            review=` 
- 
-            <div class="section"> 
- 
-                <div class="section-title"> 
- 
-                    Rating 
- 
-                </div> 
- 
-                
-⭐⭐⭐⭐⭐
- 
- 
-            </div> 
- 
-            <div class="section"> 
- 
-                <div class="section-title"> 
- 
-                    Review 
- 
-                </div> 
- 
-                <p> 
- 
-                    ${request.review} 
- 
-                </p> 
- 
-            </div> 
- 
-            `; 
- 
-            buttons=` 
- 
-            <button class="review-btn"> 
- 
-                View Review 
- 
-            </button> 
- 
-            `; 
- 
-        } 
- 
-        const avatar= 
-        request.name.charAt(0).toUpperCase(); 
- 
-        const teach=request.teachSkills 
- 
-        .map(skill=> 
- 
-            `<span class="skill">${skill}</span>` 
- 
-        ).join(""); 
- 
-        const learn=request.learnSkills 
- 
-        .map(skill=> 
- 
-            `<span class="skill learn">${skill}</span>` 
- 
-        ).join(""); 
- 
-        container.innerHTML+=` 
- 
-<div class="request-card"> 
- 
-    <div class="request-header"> 
- 
-        <div class="avatar"> 
- 
-            ${avatar} 
- 
-        </div> 
- 
-        <div> 
- 
-            <h3> 
- 
-                ${request.name} 
- 
-            </h3> 
- 
-            <p> 
- 
-                <i class="fa-solid fa-location-dot"></i> 
- 
-                ${request.location} 
- 
-            </p> 
- 
-        </div> 
- 
-    </div> 
- 
-    <div class="section"> 
- 
-        <div class="section-title"> 
- 
-            Skills They Teach 
- 
-        </div> 
- 
-        <div class="skill-list"> 
- 
-            ${teach} 
- 
-        </div> 
- 
-    </div> 
- 
-    <div class="section"> 
- 
-        <div class="section-title"> 
- 
-            Wants To Learn 
- 
-        </div> 
- 
-        <div class="skill-list"> 
- 
-            ${learn} 
- 
-        </div> 
- 
-    </div> 
- 
-    ${review} 
- 
-    <div class="status ${statusClass}"> 
- 
-        ${request.status} 
- 
-    </div> 
- 
-    <div class="request-actions"> 
- 
-        ${buttons} 
- 
-    </div> 
- 
-</div> 
- 
-`; 
- 
-    }); 
- 
-} 
- 
- 
-// =========================== 
-// Logout 
-// =========================== 
- 
-const logoutBtn=document.getElementById("logoutBtn"); 
- 
-if(logoutBtn){ 
-logoutBtn.onclick=()=>{ 
-localStorage.removeItem("token"); 
-window.location.href="login.html"; 
-}; 
-} 
+const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
+const token = localStorage.getItem("token");
+
+if (!token) window.location.href = "index.html";
+
+let requestsData = [];
+let currentFilter = "all";
+
+document.addEventListener("DOMContentLoaded", () => {
+    setupTabListeners();
+    fetchRequests();
+
+    document.getElementById("logoutBtn")?.addEventListener("click", () => {
+        localStorage.removeItem("token");
+        window.location.href = "index.html";
+    });
+});
+
+async function fetchRequests() {
+    const container = document.getElementById("requestContainer");
+    try {
+        const response = await fetch(`${API_BASE_URL}/swaps/my-requests`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const data = await response.json();
+        if (Array.isArray(data)) {
+            requestsData = data.map((item, index) => {
+                const partner = item.receiver && typeof item.receiver === "object" ? item.receiver : item.sender;
+                return {
+                    id: item._id || index + 1,
+                    name: partner ? partner.name : "SkillHub User",
+                    location: partner ? partner.location : "Location not specified",
+                    teachSkills: item.teachSkill ? [item.teachSkill] : (partner?.teachSkills || ["N/A"]),
+                    learnSkills: item.learnSkill ? [item.learnSkill] : (partner?.learnSkills || ["N/A"]),
+                    status: item.status || "Pending"
+                };
+            });
+        }
+        renderRequests(currentFilter);
+    } catch (e) {
+        if (container) container.innerHTML = `<p>Error loading requests.</p>`;
+    }
+}
+
+window.updateRequestStatus = async function(swapId, action) {
+    const act = action.toLowerCase();
+    try {
+        await fetch(`${API_BASE_URL}/swaps/${swapId}/${act}`, {
+            method: "PUT",
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        fetchRequests();
+    } catch (e) {
+        alert("Failed to update status");
+    }
+};
+
+function setupTabListeners() {
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            document.querySelectorAll(".tab-btn").forEach(tab => tab.classList.remove("active"));
+            btn.classList.add("active");
+            currentFilter = btn.dataset.tab || "all";
+            renderRequests(currentFilter);
+        });
+    });
+}
+
+function renderRequests(filter = "all") {
+    const container = document.getElementById("requestContainer");
+    if (!container) return;
+    container.innerHTML = "";
+
+    let filtered = requestsData;
+    if (filter !== "all") {
+        filtered = requestsData.filter(r => r.status.toLowerCase() === filter.toLowerCase());
+    }
+
+    if (filtered.length === 0) {
+        container.innerHTML = `<h3>No Requests Found</h3>`;
+        return;
+    }
+
+    filtered.forEach(req => {
+        let buttons = "";
+        const statusLower = req.status.toLowerCase();
+
+        if (statusLower === "pending") {
+            buttons = `
+                <button class="accept-btn" onclick="updateRequestStatus('${req.id}', 'accept')">Accept</button>
+                <button class="reject-btn" onclick="updateRequestStatus('${req.id}', 'reject')">Reject</button>
+            `;
+        } else if (statusLower === "accepted" || statusLower === "active") {
+            buttons = `
+                <button class="chat-btn" onclick="location.href='chat.html'">Chat</button>
+                <button class="complete-btn" onclick="updateRequestStatus('${req.id}', 'complete')">Complete</button>
+            `;
+        }
+
+        container.innerHTML += `
+            <div class="request-card">
+                <h3>${req.name}</h3>
+                <p><i class="fa-solid fa-location-dot"></i> ${req.location}</p>
+                <div class="status ${statusLower}">${req.status}</div>
+                <div class="request-actions" style="margin-top:15px;">${buttons}</div>
+            </div>
+        `;
+    });
+}

@@ -1,236 +1,121 @@
-const Swap = require("../models/Swap");
-
-// ===========================
-// Send Swap Request
-// ===========================
+const SwapRequest = require("../models/SwapRequest");
 
 exports.sendRequest = async (req, res) => {
-
     try {
+        const receiver = req.body.receiver || req.body.receiverId;
+        const teachSkill = req.body.teachSkill || req.body.senderTeachSkill || req.body.offeredSkill;
+        const learnSkill = req.body.learnSkill || req.body.senderLearnSkill || req.body.requestedSkill;
 
-        const {
-            receiver,
-            senderTeachSkill,
-            senderLearnSkill
-        } = req.body;
+        if (!receiver || !teachSkill || !learnSkill) {
+            return res.status(400).json({
+                message: "Missing required fields: receiver, teachSkill, or learnSkill."
+            });
+        }
 
-        const exists = await Swap.findOne({
+        if (receiver.toString() === req.user.id.toString()) {
+            return res.status(400).json({
+                message: "You cannot send a swap request to yourself."
+            });
+        }
 
+        const exists = await SwapRequest.findOne({
             sender: req.user.id,
             receiver,
             status: "Pending"
-
         });
 
         if (exists) {
-
             return res.status(400).json({
-
-                message: "Request already sent."
-
+                message: "Request already sent to this user."
             });
-
         }
 
-        const swap = await Swap.create({
-
+        const swap = await SwapRequest.create({
             sender: req.user.id,
             receiver,
-            senderTeachSkill,
-            senderLearnSkill
-
+            teachSkill,
+            learnSkill,
+            status: "Pending"
         });
 
         res.status(201).json(swap);
 
+    } catch (error) {
+        console.error("Send Request Error:", error);
+        res.status(500).json({ message: error.message });
     }
-
-    catch (error) {
-
-        res.status(500).json({
-
-            message: error.message
-
-        });
-
-    }
-
 };
 
-// ===========================
-// Get My Requests
-// ===========================
-
 exports.getMyRequests = async (req, res) => {
-
     try {
-
-        const swaps = await Swap.find({
-
+        const swaps = await SwapRequest.find({
             $or: [
-
                 { sender: req.user.id },
-
                 { receiver: req.user.id }
-
             ]
-
         })
-
-        .populate("sender", "name")
-
-        .populate("receiver", "name")
-
-        .sort({
-
-            createdAt: -1
-
-        });
+        .populate("sender", "name location teachSkills learnSkills")
+        .populate("receiver", "name location teachSkills learnSkills")
+        .sort({ createdAt: -1 });
 
         res.json(swaps);
 
+    } catch (error) {
+        console.error("Get Requests Error:", error);
+        res.status(500).json({ message: error.message });
     }
-
-    catch (error) {
-
-        res.status(500).json({
-
-            message: error.message
-
-        });
-
-    }
-
 };
 
-// ===========================
-// Accept Request
-// ===========================
-
 exports.acceptRequest = async (req, res) => {
-
     try {
-
-        const swap = await Swap.findById(req.params.id);
+        const swap = await SwapRequest.findById(req.params.id);
 
         if (!swap) {
-
-            return res.status(404).json({
-
-                message: "Request not found"
-
-            });
-
+            return res.status(404).json({ message: "Request not found" });
         }
 
         swap.status = "Accepted";
-
         await swap.save();
 
-        res.json({
+        res.json({ message: "Request accepted." });
 
-            message: "Request accepted."
-
-        });
-
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-
-    catch (error) {
-
-        res.status(500).json({
-
-            message: error.message
-
-        });
-
-    }
-
 };
 
-// ===========================
-// Reject Request
-// ===========================
-
 exports.rejectRequest = async (req, res) => {
-
     try {
-
-        const swap = await Swap.findById(req.params.id);
+        const swap = await SwapRequest.findById(req.params.id);
 
         if (!swap) {
-
-            return res.status(404).json({
-
-                message: "Request not found"
-
-            });
-
+            return res.status(404).json({ message: "Request not found" });
         }
 
         swap.status = "Rejected";
-
         await swap.save();
 
-        res.json({
+        res.json({ message: "Request rejected." });
 
-            message: "Request rejected."
-
-        });
-
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-
-    catch (error) {
-
-        res.status(500).json({
-
-            message: error.message
-
-        });
-
-    }
-
 };
 
-// ===========================
-// Complete Swap
-// ===========================
-
 exports.completeSwap = async (req, res) => {
-
     try {
-
-        const swap = await Swap.findById(req.params.id);
+        const swap = await SwapRequest.findById(req.params.id);
 
         if (!swap) {
-
-            return res.status(404).json({
-
-                message: "Swap not found"
-
-            });
-
+            return res.status(404).json({ message: "Swap not found" });
         }
 
         swap.status = "Completed";
-
         await swap.save();
 
-        res.json({
+        res.json({ message: "Swap completed." });
 
-            message: "Swap completed."
-
-        });
-
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-
-    catch (error) {
-
-        res.status(500).json({
-
-            message: error.message
-
-        });
-
-    }
-
 };
