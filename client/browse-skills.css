@@ -450,3 +450,190 @@ body{
  
 } 
  
+/* ==========================================
+   Request Button States
+========================================== */
+
+.request-btn{
+    flex:1;
+    height:60px;
+    border:none;
+    border-radius:35px;
+    background:linear-gradient(90deg,#7b61ff,#56ccf2);
+    color:#fff;
+    font-size:20px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.request-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 25px rgba(123,97,255,.35);
+}
+
+/* Pending */
+
+.request-btn.pending{
+
+    background:#f59e0b;
+
+    cursor:default;
+
+}
+
+.request-btn.pending:hover{
+
+    transform:none;
+
+    box-shadow:none;
+
+}
+
+/* Accepted / Active */
+
+.request-btn.accepted{
+
+    background:#10b981;
+
+    cursor:default;
+
+}
+
+.request-btn.accepted:hover{
+
+    transform:none;
+
+    box-shadow:none;
+
+}
+
+/* Completed */
+
+.request-btn.completed{
+
+    background:#64748b;
+
+    cursor:default;
+
+}
+
+.request-btn.completed:hover{
+
+    transform:none;
+
+    box-shadow:none;
+
+}
+
+/* Disabled */
+
+.request-btn:disabled{
+
+    opacity:.8;
+
+    cursor:not-allowed;
+
+}
+
+/* ==========================================
+   Favourite Button
+========================================== */
+
+.favorite-btn{
+
+    width:60px;
+
+    height:60px;
+
+    border-radius:18px;
+
+    border:1px solid #364262;
+
+    background:transparent;
+
+    color:white;
+
+    font-size:22px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+.favorite-btn:hover{
+
+    border-color:#7b61ff;
+
+    color:#7b61ff;
+
+}
+
+.favorite-btn.active{
+
+    background:#ef4444;
+
+    border-color:#ef4444;
+
+    color:#fff;
+
+}
+
+/* ==========================================
+   Empty State
+========================================== */
+
+.empty-state{
+
+    width:100%;
+
+    text-align:center;
+
+    padding:80px 20px;
+
+    background:#111827;
+
+    border:1px solid #2b3654;
+
+    border-radius:20px;
+
+}
+
+.empty-state i{
+
+    font-size:70px;
+
+    color:#7b61ff;
+
+    margin-bottom:20px;
+
+}
+
+.empty-state h2{
+
+    margin-bottom:10px;
+
+}
+
+.empty-state p{
+
+    color:#94a3b8;
+
+}
+
+/* ==========================================
+   Loading
+========================================== */
+
+.loading{
+
+    text-align:center;
+
+    padding:60px;
+
+    font-size:22px;
+
+    color:#94a3b8;
+
+}

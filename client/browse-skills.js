@@ -191,13 +191,15 @@ function renderUsers(users) {
 
     <div class="card-buttons">
 
-        <button class="request-btn">
+        <button
+    class="request-btn"
+    onclick="sendRequest('${user._id}')">
 
-            <i class="fa-regular fa-paper-plane"></i>
+    <i class="fa-regular fa-paper-plane"></i>
 
-            Send Request
+    Send Request
 
-        </button>
+</button>
 
         <button class="favorite-btn">
 
@@ -341,5 +343,113 @@ function sortUsers() {
     }
 
     renderUsers(filteredUsers);
+
+}
+// ===================================
+// Send Swap Request
+// ===================================
+
+async function sendRequest(receiverId) {
+
+    try {
+
+        // Prevent sending request to yourself
+
+        const profileResponse = await fetch(
+
+            "https://skillhub-backend-cths.onrender.com/api/user/profile",
+
+            {
+
+                headers: {
+
+                    Authorization: `Bearer ${token}`
+
+                }
+
+            }
+
+        );
+
+        const currentUser = await profileResponse.json();
+
+        if (currentUser._id === receiverId) {
+
+            alert("You cannot send a request to yourself.");
+
+            return;
+
+        }
+
+        // Check sender skills
+
+        if (currentUser.teachSkills.length === 0 ||
+            currentUser.learnSkills.length === 0) {
+
+            alert("Please add your skills first.");
+
+            return;
+
+        }
+
+        // Choose first skills for now
+
+        const senderTeachSkill = currentUser.teachSkills[0];
+
+        const senderLearnSkill = currentUser.learnSkills[0];
+
+        const response = await fetch(
+
+            "https://skillhub-backend-cths.onrender.com/api/swaps/send",
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json",
+
+                    Authorization: `Bearer ${token}`
+
+                },
+
+                body: JSON.stringify({
+
+                    receiver: receiverId,
+
+                    senderTeachSkill,
+
+                    senderLearnSkill
+
+                })
+
+            }
+
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            alert(data.message);
+
+            return;
+
+        }
+
+        alert("Swap request sent successfully!");
+
+        loadUsers();
+
+    }
+
+    catch (error) {
+
+        console.log(error);
+
+        alert("Unable to send request.");
+
+    }
 
 }
