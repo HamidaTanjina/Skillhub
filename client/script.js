@@ -32,6 +32,7 @@ const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
 const featureCards = document.querySelectorAll(".feature-card");
 
 let authMode = "signin";
+const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
 
 // ==========================================
 // SCROLL TRACKING ENGINE
@@ -39,15 +40,11 @@ let authMode = "signin";
 function evaluateNavbarAndLinks() {
     const scrollPos = window.scrollY;
 
-    // Navbar Scroll Toggle Class
     if (navbar) {
         navbar.classList.toggle("scrolled", scrollPos > 50);
     }
 
-    // Dynamic Navigation Track Syncing
     let currentSectionId = "";
-    
-    // Page bottom edge-case detection to ensure the last section activates properly
     const isAtBottom = (window.innerHeight + scrollPos) >= (document.documentElement.scrollHeight - 10);
     
     if (isAtBottom && sections.length > 0) {
@@ -71,7 +68,7 @@ window.addEventListener("scroll", evaluateNavbarAndLinks, { passive: true });
 document.addEventListener("DOMContentLoaded", evaluateNavbarAndLinks);
 
 // ==========================================
-// MOBILITY NAVIGATION HANDLERS
+// MOBILE NAVIGATION HANDLERS
 // ==========================================
 if (menuBtn && navLinks) {
     menuBtn.addEventListener("click", () => {
@@ -104,7 +101,7 @@ function showToast(message) {
     
     toastTimeout = setTimeout(() => {
         toast.classList.remove("show");
-    }, 3000);
+    }, 4000);
 }
 
 // ==========================================
@@ -117,7 +114,6 @@ function applySynchronizedTheme(isLight) {
     }
 }
 
-// Persistent Storage Check
 const storedTheme = localStorage.getItem("skillhubTheme") || "dark";
 applySynchronizedTheme(storedTheme === "light");
 
@@ -129,7 +125,6 @@ if (themeToggle) {
     });
 }
 
-// Interactive Feature Card Selectors
 featureCards.forEach(card => {
     card.addEventListener("click", () => {
         featureCards.forEach(c => c.classList.remove("selected"));
@@ -138,7 +133,7 @@ featureCards.forEach(card => {
 });
 
 // ==========================================
-// AUTH VISIBILITY & STATE REFACTORING
+// AUTH VISIBILITY & STATE CONTROLLERS
 // ==========================================
 function resetPasswordVisibility() {
     if (passwordInput && togglePassword) {
@@ -176,9 +171,6 @@ function setAuthMode(mode) {
     if (forgotLink) forgotLink.style.display = isSignup ? "none" : "block";
 }
 
-// ==========================================
-// SIMULATED AUTH OVERLAY CONTROLLERS
-// ==========================================
 function openAuthMode(mode) {
     setAuthMode(mode);
     if (authForm) authForm.reset();
@@ -216,102 +208,13 @@ if (authSwitch) {
 }
 
 // ==========================================
-// LIVE BACKEND AUTH & FORM CONTROLLERS
-// ==========================================
-if (authForm) {
-    authForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const name = nameInput ? nameInput.value.trim() : "";
-        const email = emailInput ? emailInput.value.trim() : "";
-        const password = passwordInput ? passwordInput.value : "";
-
-        // --- SUBMIT REGISTRATION (SIGN UP MODE) ---
-        if (authMode === "signup") {
-            const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : "";
-            
-            if (password !== confirmPassword) {
-                showToast("Error: Passwords do not match!");
-                return;
-            }
-            if (password.length < 6) {
-                showToast("Error: Password must be at least 6 characters.");
-                return;
-            }
-
-            try {
-                const response = await fetch("https://skillhub-backend-cths.onrender.com/api/auth/register", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ name, email, password })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    showToast(" Registration successful! Redirecting...");
-                    
-                    // Save JWT token if sent during registration, then redirect
-                    if (data.token) localStorage.setItem("token", data.token);
-                    
-                    setTimeout(() => {
-                        window.location.href = "dashboard.html";
-                    }, 1000);
-                } else {
-                    showToast(` Error: ${data.message || "Registration failed."}`);
-                }
-
-            } catch (error) {
-                console.error("Network Exception:", error);
-                showToast(" Connection error. Is your local server running?");
-            }
-
-        // --- SUBMIT AUTHENTICATION (SIGN IN MODE) ---
-        } else {
-            try {
-                const response = await fetch("https://skillhub-backend-cths.onrender.com/api/auth/login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ email, password })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    showToast("✅ Login Successful! Redirecting...");
-                    
-                    // Save the authentication token securely in browser storage
-                    if (data.token) {
-                        localStorage.setItem("token", data.token);
-                    }
-                    
-                    // Brief delay to allow the success toast to be visible before bouncing pages
-                    setTimeout(() => {
-                        window.location.href = "dashboard.html";
-                    }, 1000);
-                } else {
-                    showToast(`Error: ${data.message || "Invalid credentials."}`);
-                }
-
-            } catch (error) {
-                console.error("Network Exception:", error);
-                showToast("Connection error. Is your local server running?");
-            }
-        }
-    });
-}
-
-// ==========================================
 // REUSABLE PASSWORD INPUT REVEAL ENGINE
 // ==========================================
 function setupPasswordToggle(toggleElement, inputElement) {
     if (!toggleElement || !inputElement) return;
     
-    toggleElement.addEventListener("click", () => {
+    toggleElement.addEventListener("click", (e) => {
+        e.preventDefault(); // Prevents accidental form behavior
         const isHidden = inputElement.type === "password";
         inputElement.type = isHidden ? "text" : "password";
         toggleElement.classList.toggle("fa-eye-slash", isHidden);
@@ -322,5 +225,106 @@ function setupPasswordToggle(toggleElement, inputElement) {
 setupPasswordToggle(togglePassword, passwordInput);
 setupPasswordToggle(toggleConfirmPassword, confirmPasswordInput);
 
-// Initialize Default Mode
+// ==========================================
+// LIVE BACKEND AUTH & FORM CONTROLLERS
+// ==========================================
+if (authForm) {
+    authForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const name = nameInput ? nameInput.value.trim() : "";
+        const email = emailInput ? emailInput.value.trim() : "";
+        const password = passwordInput ? passwordInput.value : "";
+
+        const btnText = authSubmit ? authSubmit.querySelector(".btn-text") : null;
+        const originalBtnText = authMode === "signup" ? "Sign Up" : "Sign In";
+
+        const setLoading = (isLoading) => {
+            if (authSubmit) authSubmit.disabled = isLoading;
+            if (btnText) btnText.textContent = isLoading ? "Connecting to server..." : originalBtnText;
+        };
+
+        // --- REGISTER (SIGN UP MODE) ---
+        if (authMode === "signup") {
+            const confirmPassword = confirmPasswordInput ? confirmPasswordInput.value : "";
+            
+            if (password !== confirmPassword) {
+                showToast("⚠️ Passwords do not match!");
+                return;
+            }
+            if (password.length < 6) {
+                showToast("⚠️ Password must be at least 6 characters.");
+                return;
+            }
+
+            try {
+                setLoading(true);
+                const response = await fetch(`${API_BASE_URL}/auth/register`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast("🎉 Registration successful! Redirecting...");
+                    
+                    // Store token securely
+                    const userToken = data.token || (data.user && data.user.token);
+                    if (userToken) localStorage.setItem("token", userToken);
+                    
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1200);
+                } else {
+                    showToast(`❌ ${data.message || "Registration failed."}`);
+                }
+
+            } catch (error) {
+                console.error("Network Exception:", error);
+                showToast("⚡ Server taking too long to wake up. Please wait 15 seconds and try again.");
+            } finally {
+                setLoading(false);
+            }
+
+        // --- AUTHENTICATE (SIGN IN MODE) ---
+        } else {
+            try {
+                setLoading(true);
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showToast("✅ Login Successful! Redirecting...");
+                    
+                    // Extract token from response payload safely
+                    const userToken = data.token || (data.user && data.user.token);
+                    if (userToken) {
+                        localStorage.setItem("token", userToken);
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1200);
+                } else {
+                    showToast(`❌ ${data.message || "Invalid credentials."}`);
+                }
+
+            } catch (error) {
+                console.error("Network Exception:", error);
+                showToast("⚡ Server waking up from cold-start. Please try again in a few seconds.");
+            } finally {
+                setLoading(false);
+            }
+        }
+    });
+}
+
+// Default Mode Setup
 setAuthMode("signin");
