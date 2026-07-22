@@ -41,20 +41,27 @@ async function fetchRequests() {
 
         if (Array.isArray(data) && data.length > 0) {
             requestsData = data.map((item, index) => {
-                const partner = item.receiver && typeof item.receiver === "object" ? item.receiver : item.sender;
+                // Determine partner object safely whether item was sent or received
+                let partner = null;
+                if (item.receiver && typeof item.receiver === "object" && item.receiver.name) {
+                    partner = item.receiver;
+                } else if (item.sender && typeof item.sender === "object" && item.sender.name) {
+                    partner = item.sender;
+                }
+
                 const partnerName = partner ? partner.name : "SkillHub User";
                 const partnerLocation = partner ? partner.location : "Location not specified";
 
-                const teachSkills = item.teachSkill 
-                    ? [item.teachSkill] 
-                    : (partner && partner.teachSkills ? partner.teachSkills : ["N/A"]);
+                // Handle teach skill key variants from backend (teachSkill / senderTeachSkill)
+                const rawTeach = item.senderTeachSkill || item.teachSkill || (partner?.teachSkills?.[0]);
+                const teachSkills = rawTeach ? (Array.isArray(rawTeach) ? rawTeach : [rawTeach]) : ["N/A"];
 
-                const learnSkills = item.learnSkill 
-                    ? [item.learnSkill] 
-                    : (partner && partner.learnSkills ? partner.learnSkills : ["N/A"]);
+                // Handle learn skill key variants from backend (learnSkill / senderLearnSkill)
+                const rawLearn = item.senderLearnSkill || item.learnSkill || (partner?.learnSkills?.[0]);
+                const learnSkills = rawLearn ? (Array.isArray(rawLearn) ? rawLearn : [rawLearn]) : ["N/A"];
 
                 return {
-                    id: item._id || index + 1,
+                    id: item._id || item.id || index + 1,
                     name: partnerName,
                     location: partnerLocation || "Location not specified",
                     teachSkills: teachSkills,
@@ -71,8 +78,14 @@ async function fetchRequests() {
         renderRequests(currentFilter);
 
     } catch (error) {
-        console.warn("Error loading live requests:", error);
-        renderRequests(currentFilter);
+        console.error("Error loading requests:", error);
+        if (container) {
+            container.innerHTML = `
+                <div class="empty">
+                    <h2>Failed to load requests from server.</h2>
+                </div>
+            `;
+        }
     }
 }
 
@@ -105,6 +118,7 @@ window.updateRequestStatus = async function(swapId, action) {
 
     } catch (error) {
         console.error("Update request error:", error);
+        alert("Action failed. Please try again.");
     }
 };
 
