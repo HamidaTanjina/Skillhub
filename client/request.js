@@ -116,12 +116,11 @@ async function fetchRequests() {
 
                 id: item._id,
 
-                partnerName:
-                    partner.name,
+               partnerName:
+    partner?.name || "Unknown User",
 
-                location:
-                    partner.location || "Location not added",
-
+location:
+    partner?.location || "Location not added",
                 teachSkill:
                     item.teachSkill,
 
@@ -386,7 +385,9 @@ function renderRequests(filter = "sent") {
         }
 
         const avatar =
-            request.partnerName.charAt(0).toUpperCase();
+    (request.partnerName || "?")
+        .charAt(0)
+        .toUpperCase();
 
         const requestType =
             request.isSender
@@ -431,57 +432,33 @@ function renderRequests(filter = "sent") {
 
     </div>
 
-    <div class="section">
+   <div class="skills">
 
-        <div class="section-title">
-
-            Skill You Teach
-
-        </div>
-
-        <div class="skill-list">
-
-            <span class="skill">
-
-                ${request.teachSkill}
-
-            </span>
-
-        </div>
-
+    <div class="skill-box">
+        <small>You Teach</small>
+      <span class="skill">
+    ${request.teachSkill || "Not Selected"}
+</span>
     </div>
 
-    <div class="section">
-
-        <div class="section-title">
-
-            Skill You Learn
-
-        </div>
-
-        <div class="skill-list">
-
-            <span class="skill learn">
-
-                ${request.learnSkill}
-
-            </span>
-
-        </div>
-
+    <div class="skill-box">
+        <small>You Learn</small>
+        <span class="skill">${request.learnSkill || "Not Selected"}</span>
     </div>
+
+</div>
+
+<div class="card-footer">
 
     <div class="status ${statusClass}">
-
         ${request.status}
-
     </div>
 
-    <div class="request-actions">
+</div>
 
-        ${buttons}
-
-    </div>
+<div class="request-actions">
+    ${buttons}
+</div>
 
 </div>
 
