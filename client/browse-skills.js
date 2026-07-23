@@ -8,13 +8,11 @@ if (!token) {
 let selectedReceiver = "";
 let allUsers = [];
 let filteredUsers = [];
+let requestStatusMap = {};
 
 document.addEventListener("DOMContentLoaded", () => {
-
     setupEventListeners();
-
     loadUsers();
-
 });
 
 // ============================
@@ -78,19 +76,12 @@ async function loadUsers() {
     try {
 
         const response = await fetch(
-
             `${API_BASE_URL}/user/all`,
-
             {
-
                 headers: {
-
                     Authorization: `Bearer ${token}`
-
                 }
-
             }
-
         );
 
         if (!response.ok) {
@@ -100,6 +91,8 @@ async function loadUsers() {
         }
 
         allUsers = await response.json();
+
+        await loadRequestStatuses();
 
         filteredUsers = [...allUsers];
 
@@ -124,6 +117,66 @@ async function loadUsers() {
             </div>
 
         `;
+
+    }
+
+}
+
+// ============================
+// Load Existing Request Status
+// ============================
+
+async function loadRequestStatuses() {
+
+    requestStatusMap = {};
+
+    try {
+
+        const profileResponse = await fetch(
+            `${API_BASE_URL}/user/profile`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const me = await profileResponse.json();
+
+        const response = await fetch(
+            `${API_BASE_URL}/swaps/sent`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!response.ok) return;
+
+        const swaps = await response.json();
+
+        swaps.forEach(swap => {
+
+            const senderId =
+                swap.sender._id || swap.sender;
+
+            const receiverId =
+                swap.receiver._id || swap.receiver;
+
+            if (senderId === me._id) {
+
+                requestStatusMap[receiverId] = swap.status;
+
+            }
+
+        });
+
+    }
+
+    catch (error) {
+
+        console.log(error);
 
     }
 
@@ -210,6 +263,62 @@ function renderUsers(users) {
 
         }
 
+        // ==========================
+        // Button State
+        // ==========================
+
+        let requestButton = "";
+
+        if (requestStatusMap[user._id] === "Pending") {
+
+            requestButton = `
+
+                <button class="request-btn" disabled>
+
+                    <i class="fa-solid fa-clock"></i>
+
+                    Request Sent
+
+                </button>
+
+            `;
+
+        }
+
+        else if (requestStatusMap[user._id] === "Accepted") {
+
+            requestButton = `
+
+                <button class="request-btn active" disabled>
+
+                    <i class="fa-solid fa-check"></i>
+
+                    Active Swap
+
+                </button>
+
+            `;
+
+        }
+
+        else {
+
+            requestButton = `
+
+                <button
+                    class="request-btn"
+                    onclick="openRequestModal('${user._id}')">
+
+                    <i class="fa-regular fa-paper-plane"></i>
+
+                    Send Request
+
+                </button>
+
+            `;
+
+        }
+
         container.innerHTML += `
 
 <div class="user-card">
@@ -289,15 +398,7 @@ function renderUsers(users) {
 
     <div class="card-buttons">
 
-        <button
-            class="request-btn"
-            onclick="openRequestModal('${user._id}')">
-
-            <i class="fa-regular fa-paper-plane"></i>
-
-            Send Request
-
-        </button>
+        ${requestButton}
 
         <button class="favorite-btn">
 
@@ -314,7 +415,6 @@ function renderUsers(users) {
     });
 
 }
-
 // ============================
 // Filter Users
 // ============================
@@ -388,9 +488,7 @@ function sortUsers() {
     if (sort === "Name") {
 
         filteredUsers.sort((a, b) =>
-
             (a.name || "").localeCompare(b.name || "")
-
         );
 
     }
@@ -398,11 +496,8 @@ function sortUsers() {
     else if (sort === "Highest Rated") {
 
         filteredUsers.sort((a, b) =>
-
             (b.rating || 0) -
-
             (a.rating || 0)
-
         );
 
     }
@@ -428,7 +523,6 @@ function sortUsers() {
         filteredUsers.sort((a, b) =>
 
             new Date(b.createdAt || 0) -
-
             new Date(a.createdAt || 0)
 
         );
@@ -438,6 +532,7 @@ function sortUsers() {
     renderUsers(filteredUsers);
 
 }
+
 // ============================
 // Open Request Modal
 // ============================
@@ -446,16 +541,14 @@ window.openRequestModal = function (receiverId) {
 
     selectedReceiver = receiverId;
 
-    const modal = document.getElementById("requestModal");
-
-    modal.style.display = "flex";
+    document.getElementById("requestModal").style.display = "flex";
 
     loadSkillOptions(receiverId);
 
 };
 
 // ============================
-// Close Request Modal
+// Close Modal
 // ============================
 
 window.closeModal = function () {
@@ -467,7 +560,7 @@ window.closeModal = function () {
 };
 
 // ============================
-// Load Skills Into Modal
+// Load Skill Options
 // ============================
 
 async function loadSkillOptions(receiverId) {
@@ -482,10 +575,6 @@ async function loadSkillOptions(receiverId) {
     learnSelect.innerHTML = "";
 
     try {
-
-        // ============================
-        // Get My Profile
-        // ============================
 
         const myResponse = await fetch(
 
@@ -505,15 +594,11 @@ async function loadSkillOptions(receiverId) {
 
         if (!myResponse.ok) {
 
-            throw new Error("Failed to load profile.");
+            throw new Error("Unable to load profile");
 
         }
 
         const myProfile = await myResponse.json();
-
-        // ============================
-        // My Teaching Skills
-        // ============================
 
         if (
 
@@ -553,19 +638,11 @@ async function loadSkillOptions(receiverId) {
 
         }
 
-        // ============================
-        // Selected User
-        // ============================
-
         const receiver = allUsers.find(
 
             user => user._id === receiverId
 
         );
-
-        // ============================
-        // Receiver Teaching Skills
-        // ============================
 
         if (
 
@@ -668,9 +745,9 @@ async function sendRequest() {
 
                     receiver: selectedReceiver,
 
-                    teachSkill: teachSkill,
+                    teachSkill,
 
-                    learnSkill: learnSkill
+                    learnSkill
 
                 })
 
@@ -692,8 +769,8 @@ async function sendRequest() {
 
         closeModal();
 
-        // Reload users so UI stays updated
-        loadUsers();
+        // Reload users and request status
+        await loadUsers();
 
     }
 
@@ -704,5 +781,23 @@ async function sendRequest() {
         alert("Unable to send request.");
 
     }
+
+}
+
+// ============================
+// Logout
+// ============================
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+
+    logoutBtn.addEventListener("click", () => {
+
+        localStorage.removeItem("token");
+
+        window.location.href = "index.html";
+
+    });
 
 }

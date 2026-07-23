@@ -119,3 +119,75 @@ exports.completeSwap = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+// ==============================
+// Get Request Status
+// ==============================
+
+exports.getRequestStatus = async (req, res) => {
+
+    try {
+
+        const receiverId = req.params.receiverId;
+
+        const swap = await SwapRequest.findOne({
+
+            sender: req.user.id,
+
+            receiver: receiverId,
+
+            status: {
+                $in: ["Pending", "Accepted"]
+            }
+
+        });
+
+        if (!swap) {
+
+            return res.json({
+                status: "NONE"
+            });
+
+        }
+
+        res.json({
+            status: swap.status
+        });
+
+    }
+
+    catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+};
+// ==============================
+// Get All Sent Requests
+// ==============================
+
+exports.getSentRequests = async (req, res) => {
+
+    try {
+
+        const swaps = await SwapRequest.find({
+            sender: req.user.id
+        })
+        .select("receiver status")
+        .populate("receiver", "_id");
+
+        res.json(swaps);
+
+    }
+
+    catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+};
