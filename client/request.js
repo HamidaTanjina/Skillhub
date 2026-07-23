@@ -23,7 +23,7 @@ function parseJwt(token) {
         const base64Url = token.split(".")[1];
         const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
         return JSON.parse(atob(base64));
-    } catch (e) {
+    } catch (error) {
         return null;
     }
 }
@@ -38,7 +38,10 @@ async function fetchRequests() {
 
     container.innerHTML = `
         <div class="empty">
-            <h2>Loading requests...</h2>
+            <h2>
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Loading requests...
+            </h2>
         </div>
     `;
 
@@ -47,6 +50,7 @@ async function fetchRequests() {
         const response = await fetch(
             `${API_BASE_URL}/swaps/my`,
             {
+                method: "GET",
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -56,27 +60,35 @@ async function fetchRequests() {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.message);
+            throw new Error(data.message || "Unable to load requests.");
         }
 
         const currentUser = parseJwt(token);
 
+        const currentUserId = (
+            currentUser.id ||
+            currentUser._id
+        ).toString();
+
         requestsData = data.map(item => {
 
-            const senderId = item.sender._id || item.sender;
+            const senderId = (
+                item.sender._id ||
+                item.sender
+            ).toString();
 
-            const isSender =
-                senderId === currentUser.id;
+            const isSender = senderId === currentUserId;
 
-            const partner =
-                isSender ? item.receiver : item.sender;
+            const partner = isSender
+                ? (item.receiver || {})
+                : (item.sender || {});
 
             return {
 
                 id: item._id,
 
                 partnerName:
-                    partner.name,
+                    partner.name || "Unknown User",
 
                 location:
                     partner.location || "Location not added",
@@ -88,7 +100,10 @@ async function fetchRequests() {
                     item.learnSkill,
 
                 status:
-                    item.status
+                    item.status,
+
+                isSender:
+                    isSender
 
             };
 
@@ -100,7 +115,7 @@ async function fetchRequests() {
 
     catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         container.innerHTML = `
             <div class="empty">
@@ -126,9 +141,7 @@ function renderRequests(filter = "all") {
     if (filter !== "all") {
 
         filtered = requestsData.filter(request =>
-
             request.status.toLowerCase() === filter.toLowerCase()
-
         );
 
     }
@@ -148,94 +161,139 @@ function renderRequests(filter = "all") {
     filtered.forEach(request => {
 
         let buttons = "";
-
         let statusClass = "";
+
+        // ==========================
+        // Pending
+        // ==========================
 
         if (request.status === "Pending") {
 
             statusClass = "pending";
 
-            buttons = `
+            if (request.isSender) {
 
-                <button
-                    class="accept-btn"
-                    onclick="updateRequestStatus('${request.id}','accept')">
+                buttons = `
+                    <button
+                        class="pending-btn"
+                        disabled>
 
-                    Accept
+                        Waiting for Response
 
-                </button>
+                    </button>
+                `;
 
-                <button
-                    class="reject-btn"
-                    onclick="updateRequestStatus('${request.id}','reject')">
+            }
 
-                    Reject
+            else {
 
-                </button>
+                buttons = `
+                    <button
+                        class="accept-btn"
+                        onclick="updateRequestStatus('${request.id}','accept')">
 
-            `;
+                        Accept
+
+                    </button>
+
+                    <button
+                        class="reject-btn"
+                        onclick="updateRequestStatus('${request.id}','reject')">
+
+                        Reject
+
+                    </button>
+                `;
+
+            }
 
         }
+
+        // ==========================
+        // Accepted
+        // ==========================
 
         else if (request.status === "Accepted") {
 
             statusClass = "accepted";
 
-            buttons = `
+            if (request.isSender) {
 
-                <button
-                    class="chat-btn"
-                    onclick="location.href='chat.html'">
+                buttons = `
+                    <button
+                        class="chat-btn"
+                        onclick="location.href='chat.html'">
 
-                    Open Chat
+                        Open Chat
 
-                </button>
+                    </button>
+                `;
 
-                <button
-                    class="complete-btn"
-                    onclick="updateRequestStatus('${request.id}','complete')">
+            }
 
-                    Complete Swap
+            else {
 
-                </button>
+                buttons = `
+                    <button
+                        class="chat-btn"
+                        onclick="location.href='chat.html'">
 
-            `;
+                        Open Chat
+
+                    </button>
+
+                    <button
+                        class="complete-btn"
+                        onclick="updateRequestStatus('${request.id}','complete')">
+
+                        Complete Swap
+
+                    </button>
+                `;
+
+            }
 
         }
+
+        // ==========================
+        // Completed
+        // ==========================
 
         else if (request.status === "Completed") {
 
             statusClass = "completed";
 
             buttons = `
-
                 <button disabled>
 
                     Completed
 
                 </button>
-
             `;
 
         }
+
+        // ==========================
+        // Rejected
+        // ==========================
 
         else {
 
             statusClass = "rejected";
 
             buttons = `
-
                 <button disabled>
 
                     Rejected
 
                 </button>
-
             `;
 
         }
 
-        const avatar = request.partnerName.charAt(0).toUpperCase();
+        const avatar = (request.partnerName || "?")
+            .charAt(0)
+            .toUpperCase();
 
         container.innerHTML += `
 
@@ -328,7 +386,6 @@ function renderRequests(filter = "all") {
     });
 
 }
-
 // ==============================
 // Accept / Reject / Complete
 // ==============================
@@ -359,25 +416,28 @@ async function updateRequestStatus(id, action) {
 
         if (!response.ok) {
 
-            alert(data.message);
+            alert(data.message || "Unable to update request.");
 
             return;
 
         }
 
-        fetchRequests();
+        alert(data.message || "Request updated successfully.");
+
+        await fetchRequests();
 
     }
 
     catch (error) {
 
-        console.log(error);
+        console.error(error);
 
         alert("Something went wrong.");
 
     }
 
 }
+
 // ==============================
 // Tabs
 // ==============================
@@ -405,7 +465,6 @@ function setupTabListeners() {
     });
 
 }
-
 // ==============================
 // Logout
 // ==============================
@@ -417,6 +476,10 @@ function setupLogout() {
     if (!logoutBtn) return;
 
     logoutBtn.addEventListener("click", () => {
+
+        const confirmLogout = confirm("Are you sure you want to logout?");
+
+        if (!confirmLogout) return;
 
         localStorage.removeItem("token");
 
