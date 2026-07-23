@@ -6,7 +6,7 @@ if (!token) {
 }
 
 let requestsData = [];
-let currentFilter = "all";
+let currentFilter = "sent";
 
 document.addEventListener("DOMContentLoaded", () => {
     setupTabListeners();
@@ -19,13 +19,25 @@ document.addEventListener("DOMContentLoaded", () => {
 // ==============================
 
 function parseJwt(token) {
+
     try {
+
         const base64Url = token.split(".")[1];
-        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+
+        const base64 = base64Url
+            .replace(/-/g, "+")
+            .replace(/_/g, "/");
+
         return JSON.parse(atob(base64));
-    } catch (error) {
-        return null;
+
     }
+
+    catch (error) {
+
+        return null;
+
+    }
+
 }
 
 // ==============================
@@ -34,61 +46,78 @@ function parseJwt(token) {
 
 async function fetchRequests() {
 
-    const container = document.getElementById("requestContainer");
+    const container =
+        document.getElementById("requestContainer");
 
     container.innerHTML = `
+
         <div class="empty">
+
             <h2>
+
                 <i class="fa-solid fa-spinner fa-spin"></i>
-                Loading requests...
+
+                Loading Requests...
+
             </h2>
+
         </div>
+
     `;
 
     try {
 
         const response = await fetch(
+
             `${API_BASE_URL}/swaps/my`,
+
             {
-                method: "GET",
+
                 headers: {
+
                     Authorization: `Bearer ${token}`
+
                 }
+
             }
+
         );
 
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.message || "Unable to load requests.");
+
+            throw new Error(data.message);
+
         }
 
-        const currentUser = parseJwt(token);
+        const user = parseJwt(token);
 
-        const currentUserId = (
-            currentUser.id ||
-            currentUser._id
-        ).toString();
+        const currentUserId =
+            (user.id || user._id).toString();
 
         requestsData = data.map(item => {
 
-            const senderId = (
-                item.sender._id ||
-                item.sender
-            ).toString();
+            const senderId =
+                (item.sender._id || item.sender).toString();
 
-            const isSender = senderId === currentUserId;
+            const receiverId =
+                (item.receiver._id || item.receiver).toString();
 
-            const partner = isSender
-                ? (item.receiver || {})
-                : (item.sender || {});
+            const isSender =
+                senderId === currentUserId;
+
+            const partner =
+                isSender
+                    ? item.receiver
+                    : item.sender;
 
             return {
 
                 id: item._id,
 
                 partnerName:
-                    partner.name || "Unknown User",
+                    partner.name,
 
                 location:
                     partner.location || "Location not added",
@@ -103,7 +132,13 @@ async function fetchRequests() {
                     item.status,
 
                 isSender:
-                    isSender
+                    isSender,
+
+                senderId:
+                    senderId,
+
+                receiverId:
+                    receiverId
 
             };
 
@@ -115,12 +150,20 @@ async function fetchRequests() {
 
     catch (error) {
 
-        console.error(error);
+        console.log(error);
 
         container.innerHTML = `
+
             <div class="empty">
-                <h2>Unable to load requests.</h2>
+
+                <h2>
+
+                    Unable to load requests.
+
+                </h2>
+
             </div>
+
         `;
 
     }
@@ -130,18 +173,49 @@ async function fetchRequests() {
 // Render Requests
 // ==============================
 
-function renderRequests(filter = "all") {
+function renderRequests(filter = "sent") {
 
     const container = document.getElementById("requestContainer");
 
     container.innerHTML = "";
 
-    let filtered = requestsData;
+    let filtered = [];
 
-    if (filter !== "all") {
+    // ==========================
+    // Filter Tabs
+    // ==========================
+
+    if (filter === "sent") {
 
         filtered = requestsData.filter(request =>
-            request.status.toLowerCase() === filter.toLowerCase()
+            request.isSender &&
+            (request.status === "Pending" ||
+             request.status === "Accepted")
+        );
+
+    }
+
+    else if (filter === "received") {
+
+        filtered = requestsData.filter(request =>
+            !request.isSender &&
+            request.status === "Pending"
+        );
+
+    }
+
+    else if (filter === "accepted") {
+
+        filtered = requestsData.filter(request =>
+            request.status === "Accepted"
+        );
+
+    }
+
+    else if (filter === "completed") {
+
+        filtered = requestsData.filter(request =>
+            request.status === "Completed"
         );
 
     }
@@ -149,9 +223,15 @@ function renderRequests(filter = "all") {
     if (filtered.length === 0) {
 
         container.innerHTML = `
+
             <div class="empty">
+
+                <i class="fa-solid fa-folder-open"></i>
+
                 <h2>No Requests Found</h2>
+
             </div>
+
         `;
 
         return;
@@ -160,8 +240,8 @@ function renderRequests(filter = "all") {
 
     filtered.forEach(request => {
 
-        let buttons = "";
         let statusClass = "";
+        let buttons = "";
 
         // ==========================
         // Pending
@@ -174,13 +254,17 @@ function renderRequests(filter = "all") {
             if (request.isSender) {
 
                 buttons = `
+
                     <button
                         class="pending-btn"
                         disabled>
 
-                        Waiting for Response
+                        <i class="fa-solid fa-clock"></i>
+
+                        Waiting For Response
 
                     </button>
+
                 `;
 
             }
@@ -188,9 +272,12 @@ function renderRequests(filter = "all") {
             else {
 
                 buttons = `
+
                     <button
                         class="accept-btn"
                         onclick="updateRequestStatus('${request.id}','accept')">
+
+                        <i class="fa-solid fa-check"></i>
 
                         Accept
 
@@ -200,9 +287,12 @@ function renderRequests(filter = "all") {
                         class="reject-btn"
                         onclick="updateRequestStatus('${request.id}','reject')">
 
+                        <i class="fa-solid fa-xmark"></i>
+
                         Reject
 
                     </button>
+
                 `;
 
             }
@@ -217,38 +307,34 @@ function renderRequests(filter = "all") {
 
             statusClass = "accepted";
 
-            if (request.isSender) {
+            buttons = `
 
-                buttons = `
-                    <button
-                        class="chat-btn"
-                        onclick="location.href='chat.html'">
+                <button
+                    class="chat-btn"
+                    onclick="location.href='chat.html'">
 
-                        Open Chat
+                    <i class="fa-solid fa-comments"></i>
 
-                    </button>
-                `;
+                    Open Chat
 
-            }
+                </button>
 
-            else {
+            `;
 
-                buttons = `
-                    <button
-                        class="chat-btn"
-                        onclick="location.href='chat.html'">
+            if (!request.isSender) {
 
-                        Open Chat
-
-                    </button>
+                buttons += `
 
                     <button
                         class="complete-btn"
                         onclick="updateRequestStatus('${request.id}','complete')">
 
+                        <i class="fa-solid fa-circle-check"></i>
+
                         Complete Swap
 
                     </button>
+
                 `;
 
             }
@@ -264,11 +350,15 @@ function renderRequests(filter = "all") {
             statusClass = "completed";
 
             buttons = `
+
                 <button disabled>
+
+                    <i class="fa-solid fa-check-double"></i>
 
                     Completed
 
                 </button>
+
             `;
 
         }
@@ -282,18 +372,26 @@ function renderRequests(filter = "all") {
             statusClass = "rejected";
 
             buttons = `
+
                 <button disabled>
+
+                    <i class="fa-solid fa-ban"></i>
 
                     Rejected
 
                 </button>
+
             `;
 
         }
 
-        const avatar = (request.partnerName || "?")
-            .charAt(0)
-            .toUpperCase();
+        const avatar =
+            request.partnerName.charAt(0).toUpperCase();
+
+        const requestType =
+            request.isSender
+                ? "Sent To"
+                : "Received From";
 
         container.innerHTML += `
 
@@ -308,6 +406,12 @@ function renderRequests(filter = "all") {
         </div>
 
         <div>
+
+            <p class="request-type">
+
+                ${requestType}
+
+            </p>
 
             <h3>
 
@@ -422,7 +526,7 @@ async function updateRequestStatus(id, action) {
 
         }
 
-        alert(data.message || "Request updated successfully.");
+        alert(data.message);
 
         await fetchRequests();
 
@@ -430,7 +534,7 @@ async function updateRequestStatus(id, action) {
 
     catch (error) {
 
-        console.error(error);
+        console.log(error);
 
         alert("Something went wrong.");
 
@@ -439,7 +543,7 @@ async function updateRequestStatus(id, action) {
 }
 
 // ==============================
-// Tabs
+// Tab Navigation
 // ==============================
 
 function setupTabListeners() {
@@ -465,21 +569,21 @@ function setupTabListeners() {
     });
 
 }
+
 // ==============================
 // Logout
 // ==============================
 
 function setupLogout() {
 
-    const logoutBtn = document.getElementById("logoutBtn");
+    const logoutBtn =
+        document.getElementById("logoutBtn");
 
     if (!logoutBtn) return;
 
     logoutBtn.addEventListener("click", () => {
 
-        const confirmLogout = confirm("Are you sure you want to logout?");
-
-        if (!confirmLogout) return;
+        if (!confirm("Logout from SkillHub?")) return;
 
         localStorage.removeItem("token");
 

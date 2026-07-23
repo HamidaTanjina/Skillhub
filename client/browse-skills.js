@@ -125,30 +125,38 @@ async function loadUsers() {
 // ============================
 // Load Existing Request Status
 // ============================
+// ============================
+// Load Existing Request Status
+// ============================
 async function loadRequestStatuses() {
 
     requestStatusMap = {};
 
     try {
 
-        for (const user of allUsers) {
-
-            const response = await fetch(
-                `${API_BASE_URL}/swaps/status/${user._id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
+        const response = await fetch(
+            `${API_BASE_URL}/swaps/sent`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
                 }
-            );
+            }
+        );
 
-            if (!response.ok) continue;
-
-            const data = await response.json();
-
-            requestStatusMap[user._id] = data.status;
-
+        if (!response.ok) {
+            return;
         }
+
+        const swaps = await response.json();
+
+        swaps.forEach(swap => {
+
+            const receiverId =
+                swap.receiver._id || swap.receiver;
+
+            requestStatusMap[receiverId] = swap.status;
+
+        });
 
     }
 
