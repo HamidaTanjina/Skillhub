@@ -6,8 +6,9 @@ if (!token) {
 }
 
 let requestsData = [];
-let currentFilter = "sent";
+const params = new URLSearchParams(window.location.search);
 
+let currentFilter = params.get("tab") || "sent";
 document.addEventListener("DOMContentLoaded", () => {
     setupTabListeners();
     setupLogout();
@@ -432,19 +433,21 @@ function renderRequests(filter = "sent") {
 
     </div>
 
-   <div class="skills">
+   <div class="skill-row">
 
-    <div class="skill-box">
-        <small>You Teach</small>
-      <span class="skill">
-    ${request.teachSkill || "Not Selected"}
-</span>
+    <div class="skill-item">
+        <span class="label">Teach</span>
+        <span class="skill">${request.teachSkill}</span>
     </div>
 
-    <div class="skill-box">
-        <small>You Learn</small>
-        <span class="skill">${request.learnSkill || "Not Selected"}</span>
+    <i class="fa-solid fa-arrow-right-arrow-left swap-icon"></i>
+
+    <div class="skill-item">
+        <span class="label">Learn</span>
+        <span class="skill learn">${request.learnSkill}</span>
     </div>
+
+</div>
 
 </div>
 
@@ -546,7 +549,19 @@ function setupTabListeners() {
     });
 
 }
+document.querySelectorAll(".tab-btn").forEach(btn => {
 
+    if (btn.dataset.tab === currentFilter) {
+
+        document.querySelectorAll(".tab-btn").forEach(b =>
+            b.classList.remove("active")
+        );
+
+        btn.classList.add("active");
+
+    }
+
+});
 // ==============================
 // Logout
 // ==============================

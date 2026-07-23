@@ -6,7 +6,8 @@ if (!token) {
 
 const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
 
-async function loadDashboardData() {
+async function loadDashboardData() 
+{
     try {
         const response = await fetch(`${API_BASE_URL}/user/profile`, {
             headers: {
@@ -107,7 +108,24 @@ async function loadDashboardData() {
         console.error("Dashboard Load Error:", error);
     }
 }
+// =============================
+// Overview Card Navigation
+// =============================
 
+document.querySelector(".overview-card.blue")
+    .addEventListener("click", () => {
+        openRequests("accepted");
+    });
+
+document.querySelector(".overview-card.orange")
+    .addEventListener("click", () => {
+        openRequests("received");
+    });
+
+document.querySelector(".overview-card.green")
+    .addEventListener("click", () => {
+        openRequests("completed");
+    });
 // 1. Populate Suggested Matches
 async function loadSuggestedMatches(currentUser) {
     const container = document.getElementById("matchesContainer");
@@ -213,4 +231,13 @@ if (logoutBtn) {
         localStorage.removeItem("token");
         window.location.href = "index.html";
     });
+}
+// =============================
+// Open Requests Page
+// =============================
+
+function openRequests(tab) {
+
+    window.location.href = `request.html?tab=${tab}`;
+
 }

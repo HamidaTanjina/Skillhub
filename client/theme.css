@@ -1,75 +1,205 @@
 /* ==========================================
-   UNIFIED SYSTEM THEME VARIABLES
-   ========================================== */
-:root {
-    --bg-primary: #0b0f19;
-    --bg-card: #111827;
-    --bg-input: #1f2937;
-    --bg-inner: #0f172a;
-    --text-main: #ffffff;
-    --text-muted: #94a3b8;
-    --border-color: #1f2937;
-    --accent-blue: #3b82f6;
-    --accent-purple: #7c3aed;
-    --modal-bg: rgba(0, 0, 0, 0.75);
+   GLOBAL THEME VARIABLES
+========================================== */
+
+:root{
+
+    --bg-primary:#0b0f19;
+    --bg-card:#111827;
+    --bg-input:#1f2937;
+    --bg-inner:#0f172a;
+
+    --text-main:#ffffff;
+    --text-muted:#94a3b8;
+
+    --border-color:#1f2937;
+
+    --accent-blue:#3b82f6;
+    --accent-purple:#7c3aed;
+
+    --hover-bg:#1f2937;
+
+    --shadow:0 10px 25px rgba(0,0,0,.25);
+
 }
 
-body.light-theme {
-    --bg-primary: #f8fafc;
-    --bg-card: #ffffff;
-    --bg-input: #f1f5f9;
-    --bg-inner: #e2e8f0;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-    --border-color: #e2e8f0;
-    --accent-blue: #2563eb;
-    --accent-purple: #6d28d9;
-    --modal-bg: rgba(15, 23, 42, 0.4);
+/* ==========================================
+   LIGHT MODE
+========================================== */
+
+body.light-theme{
+
+    --bg-primary:#f8fafc;
+    --bg-card:#ffffff;
+    --bg-input:#f1f5f9;
+    --bg-inner:#e2e8f0;
+
+    --text-main:#0f172a;
+    --text-muted:#64748b;
+
+    --border-color:#e2e8f0;
+
+    --accent-blue:#2563eb;
+    --accent-purple:#6d28d9;
+
+    --hover-bg:#f3f4f6;
+
+    --shadow:0 8px 20px rgba(15,23,42,.08);
+
 }
 
-body {
-    background-color: var(--bg-primary);
-    color: var(--text-main);
-    transition: background-color 0.3s ease, color 0.3s ease;
+/* ==========================================
+   GLOBAL BODY
+========================================== */
+
+body{
+
+    background:var(--bg-primary);
+    color:var(--text-main);
+
+    transition:
+    background .3s,
+    color .3s;
+
 }
 
-.sidebar, .card, .profile-card, .skills-card, .overview-card, 
-.matches-card, .activity-card, .filter-card, .user-card, 
-.request-card, .modal-content, .profile-form, .result-info {
-    background-color: var(--bg-card) !important;
-    border-color: var(--border-color) !important;
-    color: var(--text-main);
+/* ==========================================
+   GLOBAL CARDS
+========================================== */
+
+.sidebar,
+.overview-card,
+.profile-card,
+.skills-card,
+.matches-card,
+.activity-card,
+.user-card,
+.request-card,
+.modal-content,
+.filter-card,
+.profile-form,
+.result-info{
+
+    background:var(--bg-card)!important;
+
+    border-color:var(--border-color)!important;
+
+    color:var(--text-main);
+
+    box-shadow:var(--shadow);
+
 }
 
-p, span, small, label {
-    color: var(--text-muted);
+/* ==========================================
+   TEXT
+========================================== */
+
+h1,
+h2,
+h3,
+h4,
+.logo,
+.user-name{
+
+    color:var(--text-main);
+
 }
 
-h1, h2, h3, h4, .user-name, .logo {
-    color: var(--text-main);
+p,
+span,
+small,
+label{
+
+    color:var(--text-muted);
+
 }
 
-input, select, textarea {
-    background-color: var(--bg-input) !important;
-    color: var(--text-main) !important;
-    border-color: var(--border-color) !important;
+/* ==========================================
+   FORM ELEMENTS
+========================================== */
+
+input,
+textarea,
+select{
+
+    background:var(--bg-input)!important;
+
+    color:var(--text-main)!important;
+
+    border:1px solid var(--border-color)!important;
+
 }
 
-/* Common Theme Toggle Button */
-.theme-toggle-btn {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    border: 1px solid var(--border-color);
-    background: var(--bg-card);
-    color: var(--accent-blue);
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    transition: 0.3s ease;
+input::placeholder,
+textarea::placeholder{
+
+    color:var(--text-muted);
+
 }
-.theme-toggle-btn:hover {
-    transform: scale(1.08);
+
+/* ==========================================
+   BUTTONS
+========================================== */
+
+button{
+
+    transition:.25s;
+
+}
+
+button:hover{
+
+    transform:translateY(-2px);
+
+}
+
+/* ==========================================
+   THEME BUTTON
+========================================== */
+
+.theme-toggle-btn{
+
+    width:42px;
+    height:42px;
+
+    border-radius:50%;
+
+    border:1px solid var(--border-color);
+
+    background:var(--bg-card);
+
+    color:var(--accent-blue);
+
+    cursor:pointer;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    transition:.3s;
+
+}
+
+.theme-toggle-btn:hover{
+
+    transform:scale(1.08);
+
+}
+
+/* Dashboard top icon */
+
+#themeToggle{
+
+    color:var(--accent-blue);
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+#themeToggle:hover{
+
+    transform:rotate(20deg);
+
 }

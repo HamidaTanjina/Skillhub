@@ -1,33 +1,97 @@
-// Global Theme Controller
+// ==========================================
+// SkillHub Global Theme Controller
+// ==========================================
+
 (function () {
-    const storedTheme = localStorage.getItem("skillhubTheme") || "dark";
-    if (storedTheme === "light") {
+
+    const STORAGE_KEY = "skillhubTheme";
+
+    // Apply saved theme immediately
+    const savedTheme = localStorage.getItem(STORAGE_KEY);
+
+    if (savedTheme === "light") {
+        document.documentElement.classList.add("light-theme");
         document.body.classList.add("light-theme");
     }
 
+    // ===========================
+    // Toggle Theme
+    // ===========================
+
     window.toggleTheme = function () {
-        const isLight = document.body.classList.toggle("light-theme");
-        localStorage.setItem("skillhubTheme", isLight ? "light" : "dark");
-        updateThemeIcons(isLight);
+
+        document.body.classList.toggle("light-theme");
+        document.documentElement.classList.toggle("light-theme");
+
+        const isLight =
+            document.body.classList.contains("light-theme");
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            isLight ? "light" : "dark"
+        );
+
+        updateIcons(isLight);
+
     };
 
-    function updateThemeIcons(isLight) {
-        const themeBtns = document.querySelectorAll(".theme-toggle-btn, #themeToggle");
-        themeBtns.forEach(btn => {
-            const icon = btn.querySelector("i");
-            if (icon) {
-                icon.className = isLight ? "fa-solid fa-sun" : "fa-solid fa-moon";
-            }
-        });
+    // ===========================
+    // Update Moon / Sun Icons
+    // ===========================
+
+    function updateIcons(isLight) {
+
+        document
+            .querySelectorAll(".theme-toggle-btn,#themeToggle")
+            .forEach(btn => {
+
+                if (btn.tagName === "I") {
+
+                    btn.className =
+                        isLight
+                            ? "fa-solid fa-sun"
+                            : "fa-solid fa-moon";
+
+                }
+
+                else {
+
+                    const icon = btn.querySelector("i");
+
+                    if (icon) {
+
+                        icon.className =
+                            isLight
+                                ? "fa-solid fa-sun"
+                                : "fa-solid fa-moon";
+
+                    }
+
+                }
+
+            });
+
     }
 
+    // ===========================
+    // Page Load
+    // ===========================
+
     document.addEventListener("DOMContentLoaded", () => {
-        const isLight = document.body.classList.contains("light-theme");
-        updateThemeIcons(isLight);
-        
-        const toggleButtons = document.querySelectorAll(".theme-toggle-btn, #themeToggle");
-        toggleButtons.forEach(btn => {
-            btn.addEventListener("click", window.toggleTheme);
-        });
+
+        const isLight =
+            document.body.classList.contains("light-theme");
+
+        updateIcons(isLight);
+
+        document
+            .querySelectorAll(".theme-toggle-btn,#themeToggle")
+            .forEach(btn => {
+
+                btn.addEventListener("click", toggleTheme);
+
+            });
+
     });
+
 })();
