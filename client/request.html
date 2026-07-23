@@ -1,155 +1,180 @@
-<!DOCTYPE html> 
-<html lang="en"> 
+<!DOCTYPE html>
+<html lang="en">
 
-<head> 
+<head>
 
-    <meta charset="UTF-8"> 
+    <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>Requests | SkillHub</title> 
+    <title>SkillHub | Requests</title>
 
-    <link rel="stylesheet" href="request.css"> 
-    <link rel="stylesheet" href="theme.css"> 
+    <link rel="stylesheet" href="request.css">
+    <link rel="stylesheet" href="theme.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"> 
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <script src="theme.js" defer></script>
 
-</head> 
+</head>
 
-<body> 
+<body>
 
-<div class="dashboard"> 
+<div class="dashboard">
 
-    <!-- Sidebar --> 
+    <!-- Sidebar -->
 
-    <aside class="sidebar"> 
+    <aside class="sidebar">
 
-        <div class="logo"> 
+        <div class="logo">
 
-            <i class="fa-solid fa-graduation-cap"></i> 
+            <i class="fa-solid fa-graduation-cap"></i>
 
-            <span>SkillHub</span> 
+            <span>SkillHub</span>
 
-        </div> 
+        </div>
 
-        <ul> 
+        <ul>
 
-            <li onclick="location.href='dashboard.html'"> 
+            <li onclick="location.href='dashboard.html'">
 
-                <i class="fa-solid fa-house"></i> 
+                <i class="fa-solid fa-house"></i>
 
-                Dashboard 
+                Dashboard
 
-            </li> 
+            </li>
 
-            <li onclick="location.href='browse-skills.html'"> 
+            <li onclick="location.href='browse-skills.html'">
 
-                <i class="fa-solid fa-book"></i> 
+                <i class="fa-solid fa-book-open"></i>
 
-                Browse Skills 
+                Browse Skills
 
-            </li> 
+            </li>
 
-            <li class="active"> 
+            <li class="active">
 
-                <i class="fa-solid fa-handshake"></i> 
+                <i class="fa-solid fa-handshake"></i>
 
-                Requests 
+                Requests
 
-            </li> 
+            </li>
 
-            <li onclick="location.href='chat.html'"> 
+            <li onclick="location.href='chat.html'">
 
-                <i class="fa-solid fa-comments"></i> 
+                <i class="fa-solid fa-comments"></i>
 
-                Chat 
+                Chat
 
-            </li> 
+            </li>
 
-            <li onclick="location.href='profile.html'"> 
+            <li onclick="location.href='profile.html'">
 
-                <i class="fa-solid fa-user"></i> 
+                <i class="fa-solid fa-user"></i>
 
-                Profile 
+                Profile
 
-            </li> 
+            </li>
 
-            <li id="logoutBtn"> 
+            <li id="logoutBtn">
 
-                <i class="fa-solid fa-right-from-bracket"></i> 
+                <i class="fa-solid fa-right-from-bracket"></i>
 
-                Logout 
+                Logout
 
-            </li> 
+            </li>
 
-        </ul> 
+        </ul>
 
-    </aside> 
+    </aside>
 
-    <!-- Main --> 
+    <!-- Main -->
 
-    <main class="main"> 
+    <main class="main">
 
-        <!-- Header --> 
+        <!-- Page Header -->
 
-        <div class="page-header"> 
+        <div class="page-header">
 
-            <h1> 
+            <div>
 
-                Skill Exchange Requests 
+                <h1>
 
-            </h1> 
+                    Skill Exchange Requests
 
-            <p> 
+                </h1>
 
-                Track all your skill exchange requests and completed swaps. 
+                <p>
 
-            </p> 
+                    Manage all your skill exchange requests from one place.
 
-        </div> 
+                </p>
 
-        <!-- Tabs --> 
+            </div>
 
-        <div class="tabs"> 
+        </div>
 
-           <button class="tab-btn active" data-tab="sent">
-    <i class="fa-solid fa-paper-plane"></i>
-    Sent
-</button>
+        <!-- Tabs -->
 
-<button class="tab-btn" data-tab="received">
-    <i class="fa-solid fa-inbox"></i>
-    Received
-</button>
+        <div class="tabs">
 
-<button class="tab-btn" data-tab="accepted">
-    <i class="fa-solid fa-handshake"></i>
-    Active Swaps
-</button>
+            <button
+                class="tab-btn active"
+                data-tab="sent">
 
-<button class="tab-btn" data-tab="completed">
-    <i class="fa-solid fa-circle-check"></i>
-    Completed
-</button>
+                <i class="fa-solid fa-paper-plane"></i>
 
-        </div> 
+                Sent
 
-        <!-- Request List --> 
+            </button>
 
-        <div id="requestContainer"> 
+            <button
+                class="tab-btn"
+                data-tab="received">
 
-            <!-- Dynamic Cards --> 
+                <i class="fa-solid fa-inbox"></i>
 
-        </div> 
+                Received
 
-    </main> 
+            </button>
 
-</div> 
+            <button
+                class="tab-btn"
+                data-tab="accepted">
 
-<script src="request.js"></script> 
+                <i class="fa-solid fa-handshake"></i>
 
-</body> 
+                Active Swaps
+
+            </button>
+
+            <button
+                class="tab-btn"
+                data-tab="completed">
+
+                <i class="fa-solid fa-circle-check"></i>
+
+                Completed
+
+            </button>
+
+        </div>
+
+        <!-- Requests -->
+
+        <section
+            id="requestContainer">
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="request.js"></script>
+
+</body>
 
 </html>
