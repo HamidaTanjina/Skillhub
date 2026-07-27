@@ -1,70 +1,152 @@
+
 /* ==========================================
    GLOBAL THEME VARIABLES
 ========================================== */
 
 :root{
 
-    --bg-primary:#0b0f19;
-    --bg-card:#111827;
+    /* Background */
+
+    --bg-primary:
+    radial-gradient(circle at top left,rgba(124,58,237,.20),transparent 35%),
+    radial-gradient(circle at top right,rgba(59,130,246,.18),transparent 30%),
+    radial-gradient(circle at bottom left,rgba(6,182,212,.15),transparent 35%),
+    linear-gradient(135deg,#09090f,#111827,#0f172a);
+
+    --bg-card:rgba(17,24,39,.78);
+
     --bg-input:#1f2937;
-    --bg-inner:#0f172a;
 
     --text-main:#ffffff;
+
     --text-muted:#94a3b8;
 
-    --border-color:#1f2937;
+    --border-color:rgba(255,255,255,.08);
 
     --accent-blue:#3b82f6;
+
     --accent-purple:#7c3aed;
 
-    --hover-bg:#1f2937;
-
-    --shadow:0 10px 25px rgba(0,0,0,.25);
+    --shadow:
+    0 12px 30px rgba(0,0,0,.35);
 
 }
 
 /* ==========================================
-   LIGHT MODE
+   LIGHT THEME
 ========================================== */
 
 body.light-theme{
 
-    --bg-primary:#f8fafc;
-    --bg-card:#ffffff;
+    --bg-primary:
+    radial-gradient(circle at top left,rgba(124,58,237,.08),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(59,130,246,.08),transparent 35%),
+    linear-gradient(135deg,#f8fafc,#eef2ff,#ffffff);
+
+    --bg-card:rgba(255,255,255,.78);
+
     --bg-input:#f1f5f9;
-    --bg-inner:#e2e8f0;
 
     --text-main:#0f172a;
+
     --text-muted:#64748b;
 
     --border-color:#e2e8f0;
 
     --accent-blue:#2563eb;
+
     --accent-purple:#6d28d9;
 
-    --hover-bg:#f3f4f6;
-
-    --shadow:0 8px 20px rgba(15,23,42,.08);
+    --shadow:
+    0 12px 30px rgba(15,23,42,.10);
 
 }
 
 /* ==========================================
-   GLOBAL BODY
+   BODY
 ========================================== */
 
 body{
 
     background:var(--bg-primary);
+
+    background-size:cover;
+
+    background-attachment:fixed;
+
     color:var(--text-main);
 
-    transition:
-    background .3s,
-    color .3s;
+    min-height:100vh;
+
+    transition:.4s;
+
+    overflow-x:hidden;
 
 }
 
 /* ==========================================
-   GLOBAL CARDS
+   Animated Background Glow
+========================================== */
+
+body::before,
+body::after{
+
+    content:"";
+
+    position:fixed;
+
+    width:350px;
+
+    height:350px;
+
+    border-radius:50%;
+
+    filter:blur(120px);
+
+    z-index:-1;
+
+    animation:glowMove 14s ease-in-out infinite;
+
+}
+
+body::before{
+
+    top:-120px;
+
+    left:-120px;
+
+    background:rgba(124,58,237,.35);
+
+}
+
+body::after{
+
+    bottom:-120px;
+
+    right:-120px;
+
+    background:rgba(6,182,212,.30);
+
+}
+
+@keyframes glowMove{
+
+    0%,100%{
+
+        transform:translate(0,0);
+
+    }
+
+    50%{
+
+        transform:translate(50px,-30px);
+
+    }
+
+}
+
+/* ==========================================
+   Glass Cards
 ========================================== */
 
 .sidebar,
@@ -75,31 +157,32 @@ body{
 .activity-card,
 .user-card,
 .request-card,
+.profile-form,
 .modal-content,
 .filter-card,
-.profile-form,
 .result-info{
 
-    background:var(--bg-card)!important;
+    background:var(--bg-card);
 
-    border-color:var(--border-color)!important;
+    backdrop-filter:blur(18px);
 
-    color:var(--text-main);
+    -webkit-backdrop-filter:blur(18px);
+
+    border:1px solid var(--border-color);
 
     box-shadow:var(--shadow);
 
 }
 
 /* ==========================================
-   TEXT
+   Typography
 ========================================== */
 
 h1,
 h2,
 h3,
 h4,
-.logo,
-.user-name{
+.logo{
 
     color:var(--text-main);
 
@@ -115,18 +198,18 @@ label{
 }
 
 /* ==========================================
-   FORM ELEMENTS
+   Inputs
 ========================================== */
 
 input,
 textarea,
 select{
 
-    background:var(--bg-input)!important;
+    background:var(--bg-input);
 
-    color:var(--text-main)!important;
+    border:1px solid var(--border-color);
 
-    border:1px solid var(--border-color)!important;
+    color:var(--text-main);
 
 }
 
@@ -138,68 +221,74 @@ textarea::placeholder{
 }
 
 /* ==========================================
-   BUTTONS
+   Buttons
 ========================================== */
 
 button{
 
-    transition:.25s;
+    background:linear-gradient(
+        135deg,
+        #7c3aed,
+        #6366f1,
+        #06b6d4
+    );
+
+    background-size:250%;
+
+    color:white;
+
+    border:none;
+
+    transition:.35s;
 
 }
 
 button:hover{
 
-    transform:translateY(-2px);
+    background-position:right center;
+
+    transform:translateY(-3px);
+
+    box-shadow:
+    0 12px 30px rgba(124,58,237,.35);
 
 }
 
 /* ==========================================
-   THEME BUTTON
+   Theme Button
 ========================================== */
 
-.theme-toggle-btn{
-
-    width:42px;
-    height:42px;
-
-    border-radius:50%;
-
-    border:1px solid var(--border-color);
-
-    background:var(--bg-card);
-
-    color:var(--accent-blue);
-
-    cursor:pointer;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
-    transition:.3s;
-
-}
-
-.theme-toggle-btn:hover{
-
-    transform:scale(1.08);
-
-}
-
-/* Dashboard top icon */
-
+.theme-toggle-btn,
 #themeToggle{
 
-    color:var(--accent-blue);
-
     cursor:pointer;
 
-    transition:.3s;
+    color:var(--accent-blue);
+
+    transition:.35s;
 
 }
 
+.theme-toggle-btn:hover,
 #themeToggle:hover{
 
     transform:rotate(20deg);
+
+}
+
+/* ==========================================
+   Hover Effect
+========================================== */
+
+.overview-card:hover,
+.profile-card:hover,
+.skills-card:hover,
+.matches-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+    0 15px 35px rgba(124,58,237,.25),
+    0 8px 25px rgba(59,130,246,.20);
 
 }
