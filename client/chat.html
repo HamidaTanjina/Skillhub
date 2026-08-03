@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>SkillHub | Chat</title>
+
+    <link
+        rel="stylesheet"
+        href="css/chat.css">
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="chat-page">
+
+    <!-- ================================================= -->
+    <!-- Header -->
+    <!-- ================================================= -->
+
+    <header class="chat-header">
+
+        <div class="header-left">
+
+            <button
+                class="back-btn"
+                onclick="history.back()">
+
+                <i class="fa-solid fa-arrow-left"></i>
+
+            </button>
+
+            <div class="avatar">
+
+                S
+
+            </div>
+
+            <div>
+
+                <h2 id="chatUser">
+
+                    Sarah Ahmed
+
+                </h2>
+
+                <p>
+
+                    <span class="online-dot"></span>
+
+                    Online
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================================================= -->
+    <!-- Chat Messages -->
+    <!-- ================================================= -->
+
+    <div
+        class="chat-body"
+        id="chatBody">
+
+        <!-- Date -->
+
+        <div class="date-divider">
+
+            <span>
+
+                Today
+
+            </span>
+
+        </div>
+
+
+        <!-- Received -->
+
+        <div class="message received">
+
+            <div class="bubble">
+
+                Hello 👋
+
+                <span>
+
+                    10:20 AM
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Sent -->
+
+        <div class="message sent">
+
+            <div class="bubble">
+
+                Hi! Nice to meet you.
+
+                <span>
+
+                    10:21 AM
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Received -->
+
+        <div class="message received">
+
+            <div class="bubble">
+
+                Are you available tomorrow for our skill exchange?
+
+                <span>
+
+                    10:22 AM
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================================================= -->
+    <!-- Chat Input -->
+    <!-- ================================================= -->
+
+    <div class="chat-input">
+
+        <!-- Emoji -->
+
+        <button
+            class="emoji-btn">
+
+            <i class="fa-regular fa-face-smile"></i>
+
+        </button>
+
+
+        <!-- Attachment -->
+
+        <button
+            class="attach-btn">
+
+            <i class="fa-solid fa-paperclip"></i>
+
+        </button>
+
+
+        <!-- Message -->
+
+        <input
+            type="text"
+            id="messageInput"
+            placeholder="Type your message...">
+
+
+        <!-- Send -->
+
+        <button
+            class="send-btn"
+            id="sendBtn">
+
+            <i class="fa-solid fa-paper-plane"></i>
+
+        </button>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script src="chat.js"></script>
+</body>
+
+</html>

@@ -312,15 +312,16 @@ function renderRequests(filter = "sent") {
 
             buttons = `
 
-                <button
-                    class="chat-btn"
-                    onclick="location.href='chat.html'">
+    <button
+        class="chat-btn"
+        onclick="openChat('${request.id}')">
 
-                    <i class="fa-solid fa-comments"></i>
+        <i class="fa-solid fa-comments"></i>
 
-                    Chat
+        Chat
 
-                </button>
+    </button>
+
 
             `;
 
@@ -672,3 +673,12 @@ function getStatusClass(status) {
 
 }
 
+// ======================================================
+// Open Chat
+// ======================================================
+
+function openChat(swapId) {
+
+    window.location.href = `chat.html?swapId=${swapId}`;
+
+}
