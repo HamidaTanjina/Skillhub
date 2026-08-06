@@ -8,14 +8,22 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>SkillSwap | Chat</title>
+    <title>SkillHub Chat</title>
 
+    <!-- Dashboard CSS -->
     <link rel="stylesheet" href="dashboard.css">
 
+    <!-- Chat CSS -->
     <link rel="stylesheet" href="chat.css">
 
+    <!-- Theme -->
+    <link rel="stylesheet" href="theme.css">
+
+    <!-- Font Awesome -->
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script src="theme.js" defer></script>
 
 </head>
 
@@ -23,81 +31,99 @@
 
 <div class="dashboard">
 
-    <!-- Sidebar -->
+    <!-- ==========================================
+         SIDEBAR (Same as Dashboard)
+    =========================================== -->
+
     <aside class="sidebar">
 
         <div class="logo">
 
             <i class="fa-solid fa-graduation-cap"></i>
 
-            <span>SkillSwap</span>
+            <span>SkillHub</span>
 
         </div>
 
         <ul>
 
-            <li>
-                <a href="dashboard.html">
-                    <i class="fa-solid fa-table-columns"></i>
-                    Dashboard
-                </a>
+            <li onclick="window.location.href='dashboard.html'">
+
+                <i class="fa-solid fa-house"></i>
+
+                Dashboard
+
             </li>
 
             <li>
-                <a href="discover.html">
-                    <i class="fa-solid fa-users"></i>
-                    Discover
+
+                <a href="browse-skills.html">
+
+                    <i class="fa-solid fa-book"></i>
+
+                    Browse Skills
+
                 </a>
+
             </li>
 
-            <li>
-                <a href="requests.html">
-                    <i class="fa-solid fa-handshake"></i>
-                    Requests
-                </a>
+            <li onclick="window.location.href='request.html'">
+
+                <i class="fa-solid fa-handshake"></i>
+
+                Requests
+
             </li>
 
             <li class="active">
+
                 <a href="chat.html">
+
                     <i class="fa-solid fa-comments"></i>
+
                     Chat
+
                 </a>
+
             </li>
 
-            <li>
-                <a href="profile.html">
-                    <i class="fa-solid fa-user"></i>
-                    Profile
-                </a>
+            <li onclick="window.location.href='profile.html'">
+
+                <i class="fa-solid fa-user"></i>
+
+                Profile
+
             </li>
 
-            <li>
-                <a href="settings.html">
-                    <i class="fa-solid fa-gear"></i>
-                    Settings
-                </a>
+            <li id="logoutBtn">
+
+                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+
+                Logout
+
             </li>
 
         </ul>
 
     </aside>
 
-
-    <!-- Main -->
+    <!-- ==========================================
+         MAIN CONTENT
+    =========================================== -->
 
     <main class="main">
 
         <!-- Topbar -->
 
-        <div class="topbar">
+        <header class="topbar">
 
             <div class="search">
 
-                <i class="fa-solid fa-search"></i>
+                <i class="fa-solid fa-magnifying-glass"></i>
 
                 <input
                     type="text"
-                    placeholder="Search..." />
+                    placeholder="Search users or skills">
 
             </div>
 
@@ -105,28 +131,188 @@
 
                 <i class="fa-regular fa-bell"></i>
 
-                <i class="fa-regular fa-envelope"></i>
+                <i class="fa-solid fa-moon"
+                   id="themeToggle"
+                   style="cursor:pointer;"></i>
 
                 <div class="profile">
 
                     <i class="fa-solid fa-circle-user profile-icon"></i>
 
-                    <span>John Doe</span>
+                    <span id="userName">
+
+                        Loading...
+
+                    </span>
 
                 </div>
 
             </div>
 
-        </div>
-
-
-        <!-- Chat UI -->
+        </header>
+                <!-- ==========================================
+             CHAT AREA
+        =========================================== -->
 
         <div class="chat-container">
 
-            <!-- Paste your existing chat sidebar here -->
+            <!-- ===========================
+                 LEFT CHAT SIDEBAR
+            ============================ -->
 
-            <!-- Paste your existing conversation section here -->
+            <aside class="chat-sidebar">
+
+                <div class="sidebar-header">
+
+                    <h2>
+
+                        <i class="fa-solid fa-comments"></i>
+
+                        Chats
+
+                    </h2>
+
+                </div>
+
+                <!-- Search -->
+
+                <div class="search-box">
+
+                    <i class="fa-solid fa-search"></i>
+
+                    <input
+                        type="text"
+                        id="searchChat"
+                        placeholder="Search conversations...">
+
+                </div>
+
+                <!-- Chat List -->
+
+                <div
+                    class="chat-list"
+                    id="chatList">
+
+                    <!-- chat.js loads conversations -->
+
+                </div>
+
+            </aside>
+
+
+            <!-- ===========================
+                 RIGHT CHAT SECTION
+            ============================ -->
+
+            <section class="chat-section">
+
+                <!-- Chat Header -->
+
+                <div class="chat-header">
+
+                    <div class="header-user">
+
+                        <div
+                            class="avatar"
+                            id="chatAvatar">
+
+                            <i class="fa-solid fa-user"></i>
+
+                        </div>
+
+                        <div>
+
+                            <h3 id="chatUser">
+
+                                Select a Chat
+
+                            </h3>
+
+                            <span id="chatStatus">
+
+                                No conversation selected
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Chat Messages -->
+
+                <div
+                    class="chat-body"
+                    id="chatBody">
+
+                    <div class="empty-chat">
+
+                        <i class="fa-solid fa-comments"></i>
+
+                        <h2>
+
+                            Welcome to SkillHub Chat
+
+                        </h2>
+
+                        <p>
+
+                            Select a conversation from the
+                            left sidebar to start messaging.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Chat Input -->
+
+                <div class="chat-input">
+
+                    <button
+                        class="emoji-btn">
+
+                        <i class="fa-regular fa-face-smile"></i>
+
+                    </button>
+
+                    <input
+                        id="messageInput"
+                        type="text"
+                        placeholder="Type your message..."
+                        disabled>
+
+                    <button
+                        class="send-btn"
+                        id="sendBtn"
+                        disabled>
+
+                        <i class="fa-solid fa-paper-plane"></i>
+
+                    </button>
+
+                </div>
+
+            </section>
+
+        </div>
+            </main>
+
+</div>
+
+<!-- ==========================================
+     Socket.IO
+========================================== -->
+
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+<!-- ==========================================
+     Dashboard User Loader
+========================================== -->
 
         </div>
 
@@ -134,8 +320,80 @@
 
 </div>
 
+<!-- Socket.IO -->
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+<!-- Put the user loading script HERE -->
+<script>
+
+const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
+
+const token = localStorage.getItem("token");
+
+if (!token) {
+    window.location.href = "index.html";
+}
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+
+    logoutBtn.onclick = () => {
+
+        localStorage.removeItem("token");
+
+        window.location.href = "index.html";
+
+    };
+
+}
+
+async function loadCurrentUser() {
+
+    try {
+
+        const response = await fetch(
+
+            `${API_BASE_URL}/users/me`,
+
+            {
+
+                headers: {
+
+                    Authorization: `Bearer ${token}`
+
+                }
+
+            }
+
+        );
+
+        if (!response.ok) return;
+
+        const user = await response.json();
+
+        document.getElementById("userName").textContent =
+            user.name ||
+            user.fullName ||
+            user.username ||
+            "User";
+
+    }
+
+    catch (err) {
+
+        console.log(err);
+
+    }
+
+}
+
+document.addEventListener("DOMContentLoaded", loadCurrentUser);
+
+</script>
+
+<!-- Your chat.js MUST be last -->
 <script src="chat.js"></script>
 
 </body>
-
 </html>

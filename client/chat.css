@@ -73,22 +73,17 @@ body{
 /* =============================================================================
    CHAT APP
 =============================================================================*/
-
 .chat-container{
+
+    display:flex;
 
     width:100%;
 
-    height:calc(100vh - 90px);
+    height:calc(100vh - 82px);
 
-    border-radius:20px;
+    border-radius:18px;
 
     overflow:hidden;
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    box-shadow:var(--shadow);
 
 }
 
@@ -107,7 +102,7 @@ body{
     border-right:1px solid var(--border);
 
     display:flex;
-
+flex-shrink: 0;
     flex-direction:column;
 
     box-shadow:var(--shadow);
