@@ -2,7 +2,7 @@ const Message = require("../models/Message");
 const Swap = require("../models/swapRequest");
 // ======================================================
 // Get All Active Chats
-// ======================================================
+// =============================================f=========
 
 exports.getChatList = async (req, res) => {
 
@@ -61,26 +61,18 @@ exports.getChatList = async (req, res) => {
                     createdAt: -1
 
                 });
+return {
+    swapId: swap._id,
+    partner,
 
-                return {
+    lastMessage: lastMessage
+        ? lastMessage.message
+        : "Start chatting now...",
 
-                    swapId: swap._id,
-
-                    partner,
-
-                    lastMessage: lastMessage
-
-                        ? lastMessage.message
-
-                        : "",
-
-                    lastTime: lastMessage
-
-                        ? lastMessage.createdAt
-
-                        : swap.updatedAt
-
-                };
+    lastTime: lastMessage
+        ? lastMessage.createdAt
+        : swap.updatedAt
+};
 
             })
 

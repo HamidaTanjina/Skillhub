@@ -55,7 +55,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     initializeSocket();
 
-    loadChatList();
+const params = new URLSearchParams(window.location.search);
+
+const autoOpenSwap = params.get("swapId");
+
+loadChatList(autoOpenSwap);
 
     messageInput.disabled = true;
     sendBtn.disabled = true;
@@ -288,8 +292,7 @@ function receiveMessage(msg) {
 // ======================================================
 // Load Chat List
 // ======================================================
-
-async function loadChatList() {
+async function loadChatList(autoOpenSwap = null) {
 
     try {
 
@@ -325,13 +328,20 @@ async function loadChatList() {
 
             chatList.innerHTML = `
 
-                <div class="empty-chat-list">
+              <div class="empty-chat">
 
-                    <i class="fa-solid fa-comments"></i>
+    <i class="fa-solid fa-comments"></i>
 
-                    <p>No conversations yet</p>
+    <h2>You're connected!</h2>
 
-                </div>
+    <p>
+
+        Your skill swap has been accepted.
+        Say hello and start learning together.
+
+    </p>
+
+</div>
 
             `;
 
@@ -365,7 +375,7 @@ async function loadChatList() {
 
                     <h4>${chat.partner.name}</h4>
 
-                    <p>${chat.lastMessage || "Start chatting..."}</p>
+                   <p>${chat.lastMessage}</p>
 
                 </div>
 
@@ -402,6 +412,16 @@ async function loadChatList() {
             );
 
             chatList.appendChild(item);
+            if (
+    autoOpenSwap &&
+    String(chat.swapId) === String(autoOpenSwap)
+) {
+
+    item.classList.add("active");
+
+    openChat(chat);
+
+}
 
         });
 
