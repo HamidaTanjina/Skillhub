@@ -676,9 +676,9 @@ function getStatusClass(status) {
 // ======================================================
 // Open Chat
 // ======================================================
-
 function openChat(swapId) {
 
-    window.location.href = `chat.html?swapId=${swapId}`;
+    window.location.href =
+        `chat.html?swapId=${swapId}`;
 
 }

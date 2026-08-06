@@ -68,19 +68,30 @@ exports.getMyRequests = async (req, res) => {
 
 exports.acceptRequest = async (req, res) => {
     try {
+
         const swap = await SwapRequest.findById(req.params.id);
 
         if (!swap) {
-            return res.status(404).json({ message: "Request not found" });
+            return res.status(404).json({
+                message: "Request not found"
+            });
         }
 
         swap.status = "Accepted";
+
         await swap.save();
 
-        res.json({ message: "Request accepted." });
+        res.json({
+            message: "Request accepted.",
+            swapId: swap._id
+        });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+
+        res.status(500).json({
+            message: error.message
+        });
+
     }
 };
 
@@ -103,21 +114,54 @@ exports.rejectRequest = async (req, res) => {
 };
 
 exports.completeSwap = async (req, res) => {
+
     try {
+
         const swap = await SwapRequest.findById(req.params.id);
 
         if (!swap) {
-            return res.status(404).json({ message: "Swap not found" });
+
+            return res.status(404).json({
+                message: "Swap not found"
+            });
+
         }
 
-        swap.status = "Completed";
+        const userId = req.user.id;
+
+        if (swap.sender.toString() === userId) {
+
+            swap.senderCompleted = true;
+
+        } else {
+
+            swap.receiverCompleted = true;
+
+        }
+
+        if (
+            swap.senderCompleted &&
+            swap.receiverCompleted
+        ) {
+
+            swap.status = "Completed";
+
+        }
+
         await swap.save();
 
-        res.json({ message: "Swap completed." });
+        res.json({
+            message: "Completion submitted."
+        });
 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+
+        res.status(500).json({
+            message: error.message
+        });
+
     }
+
 };
 // ==============================
 // Get Request Status
