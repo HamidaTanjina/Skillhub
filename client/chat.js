@@ -25,7 +25,7 @@ if (!swapId) {
 
     alert("Invalid chat.");
 
-    window.location.href = "requests.html";
+    window.location.href = "request.html";
 
 }
 
