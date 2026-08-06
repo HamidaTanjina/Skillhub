@@ -9,7 +9,7 @@
         name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>SkillHub | Chat</title>
+    <title>SkillHub Chat</title>
 
     <link
         rel="stylesheet"
@@ -23,43 +23,111 @@
 
 <body>
 
-<div class="chat-page">
+<div class="chat-container">
 
-    <!-- ================================================= -->
-    <!-- Header -->
-    <!-- ================================================= -->
+    <!-- ===================================== -->
+    <!-- LEFT SIDEBAR -->
+    <!-- ===================================== -->
 
-    <header class="chat-header">
+    <aside class="chat-sidebar">
 
-        <div class="header-left">
+        <div class="sidebar-header">
 
-            <button
-                class="back-btn"
-                onclick="history.back()">
+            <h2>
 
-                <i class="fa-solid fa-arrow-left"></i>
+                <i class="fa-solid fa-comments"></i>
 
-            </button>
+                Chats
 
-            <div class="avatar">
+            </h2>
 
-                S
+        </div>
+
+        <div class="search-box">
+
+            <i class="fa-solid fa-search"></i>
+
+            <input
+                type="text"
+                id="searchChat"
+                placeholder="Search active chats...">
+
+        </div>
+
+        <!-- Chat List -->
+
+        <div
+            class="chat-list"
+            id="chatList">
+
+            <!-- Loaded from chat.js -->
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- ===================================== -->
+    <!-- RIGHT CHAT AREA -->
+    <!-- ===================================== -->
+
+    <section class="chat-section">
+
+        <!-- Header -->
+
+        <div class="chat-header">
+
+            <div class="header-user">
+
+                <div
+                    class="avatar"
+                    id="chatAvatar">
+
+                    ?
+
+                </div>
+
+                <div>
+
+                    <h3 id="chatUser">
+
+                        Select a Chat
+
+                    </h3>
+
+                    <span id="chatStatus">
+
+                        Choose an active skill partner
+
+                    </span>
+
+                </div>
 
             </div>
 
-            <div>
+        </div>
 
-                <h2 id="chatUser">
 
-                    Sarah Ahmed
+        <!-- Messages -->
+
+        <div
+            class="chat-body"
+            id="chatBody">
+
+            <div class="empty-chat">
+
+                <i class="fa-solid fa-comments"></i>
+
+                <h2>
+
+                    SkillHub Chat
 
                 </h2>
 
                 <p>
 
-                    <span class="online-dot"></span>
-
-                    Online
+                    Select an active skill partner from the left to start chatting.
 
                 </p>
 
@@ -67,139 +135,44 @@
 
         </div>
 
-    </header>
 
+        <!-- Input -->
 
-    <!-- ================================================= -->
-    <!-- Chat Messages -->
-    <!-- ================================================= -->
+        <div class="chat-input">
 
-    <div
-        class="chat-body"
-        id="chatBody">
+            <button
+                class="emoji-btn">
 
-        <!-- Date -->
+                <i class="fa-regular fa-face-smile"></i>
 
-        <div class="date-divider">
+            </button>
 
-            <span>
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="Type a message..."
+                autocomplete="off"
+                disabled>
 
-                Today
+            <button
+                id="sendBtn"
+                class="send-btn"
+                disabled>
 
-            </span>
+                <i class="fa-solid fa-paper-plane"></i>
 
-        </div>
-
-
-        <!-- Received -->
-
-        <div class="message received">
-
-            <div class="bubble">
-
-                Hello 👋
-
-                <span>
-
-                    10:20 AM
-
-                </span>
-
-            </div>
+            </button>
 
         </div>
 
-
-        <!-- Sent -->
-
-        <div class="message sent">
-
-            <div class="bubble">
-
-                Hi! Nice to meet you.
-
-                <span>
-
-                    10:21 AM
-
-                </span>
-
-            </div>
-
-        </div>
-
-
-        <!-- Received -->
-
-        <div class="message received">
-
-            <div class="bubble">
-
-                Are you available tomorrow for our skill exchange?
-
-                <span>
-
-                    10:22 AM
-
-                </span>
-
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- ================================================= -->
-    <!-- Chat Input -->
-    <!-- ================================================= -->
-
-    <div class="chat-input">
-
-        <!-- Emoji -->
-
-        <button
-            class="emoji-btn">
-
-            <i class="fa-regular fa-face-smile"></i>
-
-        </button>
-
-
-        <!-- Attachment -->
-
-        <button
-            class="attach-btn">
-
-            <i class="fa-solid fa-paperclip"></i>
-
-        </button>
-
-
-        <!-- Message -->
-
-        <input
-            type="text"
-            id="messageInput"
-            placeholder="Type your message...">
-
-
-        <!-- Send -->
-
-        <button
-            class="send-btn"
-            id="sendBtn">
-
-            <i class="fa-solid fa-paper-plane"></i>
-
-        </button>
-
-    </div>
+    </section>
 
 </div>
 
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
 <script src="chat.js"></script>
+
 </body>
 
 </html>

@@ -7,17 +7,23 @@ const chatController = require("../controllers/chatController");
 const auth = require("../middleware/authMiddleware");
 
 // ======================================================
-// Get All Messages of a Swap
+// Get All Active Chats
 // ======================================================
 
 router.get(
-
-    "/:swapId",
-
+    "/",
     auth,
+    chatController.getChatList
+);
 
+// ======================================================
+// Get Messages of One Chat
+// ======================================================
+
+router.get(
+    "/:swapId",
+    auth,
     chatController.getMessages
-
 );
 
 // ======================================================
@@ -25,13 +31,9 @@ router.get(
 // ======================================================
 
 router.post(
-
     "/:swapId",
-
     auth,
-
     chatController.sendMessage
-
 );
 
 module.exports = router;

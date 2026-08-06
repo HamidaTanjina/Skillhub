@@ -1,6 +1,108 @@
 const Message = require("../models/Message");
 const Swap = require("../models/swapRequest");
+// ======================================================
+// Get All Active Chats
+// ======================================================
 
+exports.getChatList = async (req, res) => {
+
+    try {
+
+        const userId = req.user.id;
+
+        const swaps = await Swap.find({
+
+            $or: [
+
+                { sender: userId },
+
+                { receiver: userId }
+
+            ],
+
+            status: {
+
+                $in: ["Accepted", "Completed"]
+
+            }
+
+        })
+
+        .populate("sender", "name")
+
+        .populate("receiver", "name")
+
+        .sort({
+
+            updatedAt: -1
+
+        });
+
+        const chats = await Promise.all(
+
+            swaps.map(async (swap) => {
+
+                const partner =
+
+                    swap.sender._id.toString() === userId
+
+                        ? swap.receiver
+
+                        : swap.sender;
+
+                const lastMessage = await Message.findOne({
+
+                    swap: swap._id
+
+                })
+
+                .sort({
+
+                    createdAt: -1
+
+                });
+
+                return {
+
+                    swapId: swap._id,
+
+                    partner,
+
+                    lastMessage: lastMessage
+
+                        ? lastMessage.message
+
+                        : "",
+
+                    lastTime: lastMessage
+
+                        ? lastMessage.createdAt
+
+                        : swap.updatedAt
+
+                };
+
+            })
+
+        );
+
+        res.json(chats);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        res.status(500).json({
+
+            message: "Server Error"
+
+        });
+
+    }
+
+};
 // ======================================================
 // Get All Messages
 // ======================================================
