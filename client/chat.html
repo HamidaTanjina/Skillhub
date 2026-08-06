@@ -5,102 +5,113 @@
 
     <meta charset="UTF-8">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>SkillHub Chat</title>
+    <title>SkillSwap | Chat</title>
 
-    <link
-        rel="stylesheet"
-        href="chat.css">
+    <link rel="stylesheet" href="dashboard.css">
 
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="chat.css">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
 
 <body>
 
-<div class="chat-container">
+<div class="dashboard">
 
-    <!-- ===================================== -->
-    <!-- LEFT SIDEBAR -->
-    <!-- ===================================== -->
+    <!-- Sidebar -->
+    <aside class="sidebar">
 
-    <aside class="chat-sidebar">
+        <div class="logo">
 
-        <div class="sidebar-header">
+            <i class="fa-solid fa-graduation-cap"></i>
 
-            <h2>
-
-                <i class="fa-solid fa-comments"></i>
-
-                Chats
-
-            </h2>
+            <span>SkillSwap</span>
 
         </div>
 
-        <div class="search-box">
+        <ul>
 
-            <i class="fa-solid fa-search"></i>
+            <li>
+                <a href="dashboard.html">
+                    <i class="fa-solid fa-table-columns"></i>
+                    Dashboard
+                </a>
+            </li>
 
-            <input
-                type="text"
-                id="searchChat"
-                placeholder="Search active chats...">
+            <li>
+                <a href="discover.html">
+                    <i class="fa-solid fa-users"></i>
+                    Discover
+                </a>
+            </li>
 
-        </div>
+            <li>
+                <a href="requests.html">
+                    <i class="fa-solid fa-handshake"></i>
+                    Requests
+                </a>
+            </li>
 
-        <!-- Chat List -->
+            <li class="active">
+                <a href="chat.html">
+                    <i class="fa-solid fa-comments"></i>
+                    Chat
+                </a>
+            </li>
 
-        <div
-            class="chat-list"
-            id="chatList">
+            <li>
+                <a href="profile.html">
+                    <i class="fa-solid fa-user"></i>
+                    Profile
+                </a>
+            </li>
 
-            <!-- Loaded from chat.js -->
+            <li>
+                <a href="settings.html">
+                    <i class="fa-solid fa-gear"></i>
+                    Settings
+                </a>
+            </li>
 
-        </div>
+        </ul>
 
     </aside>
 
 
+    <!-- Main -->
 
-    <!-- ===================================== -->
-    <!-- RIGHT CHAT AREA -->
-    <!-- ===================================== -->
+    <main class="main">
 
-    <section class="chat-section">
+        <!-- Topbar -->
 
-        <!-- Header -->
+        <div class="topbar">
 
-        <div class="chat-header">
+            <div class="search">
 
-            <div class="header-user">
+                <i class="fa-solid fa-search"></i>
 
-                <div
-                    class="avatar"
-                    id="chatAvatar">
+                <input
+                    type="text"
+                    placeholder="Search..." />
 
-                    ?
+            </div>
 
-                </div>
+            <div class="top-icons">
 
-                <div>
+                <i class="fa-regular fa-bell"></i>
 
-                    <h3 id="chatUser">
+                <i class="fa-regular fa-envelope"></i>
 
-                        Select a Chat
+                <div class="profile">
 
-                    </h3>
+                    <i class="fa-solid fa-circle-user profile-icon"></i>
 
-                    <span id="chatStatus">
-
-                        Choose an active skill partner
-
-                    </span>
+                    <span>John Doe</span>
 
                 </div>
 
@@ -109,67 +120,19 @@
         </div>
 
 
-        <!-- Messages -->
+        <!-- Chat UI -->
 
-        <div
-            class="chat-body"
-            id="chatBody">
+        <div class="chat-container">
 
-            <div class="empty-chat">
+            <!-- Paste your existing chat sidebar here -->
 
-                <i class="fa-solid fa-comments"></i>
-
-                <h2>
-
-                    SkillHub Chat
-
-                </h2>
-
-                <p>
-
-                    Select an active skill partner from the left to start chatting.
-
-                </p>
-
-            </div>
+            <!-- Paste your existing conversation section here -->
 
         </div>
 
-
-        <!-- Input -->
-
-        <div class="chat-input">
-
-            <button
-                class="emoji-btn">
-
-                <i class="fa-regular fa-face-smile"></i>
-
-            </button>
-
-            <input
-                type="text"
-                id="messageInput"
-                placeholder="Type a message..."
-                autocomplete="off"
-                disabled>
-
-            <button
-                id="sendBtn"
-                class="send-btn"
-                disabled>
-
-                <i class="fa-solid fa-paper-plane"></i>
-
-            </button>
-
-        </div>
-
-    </section>
+    </main>
 
 </div>
-
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
 <script src="chat.js"></script>
 
