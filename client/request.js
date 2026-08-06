@@ -532,20 +532,31 @@ async function updateRequestStatus(id, action) {
 
         );
 
-        const data = await response.json();
+       const data = await response.json();
 
-        if (!response.ok) {
+if (!response.ok) {
 
-            alert(data.message || "Unable to update request.");
+    alert(data.message || "Unable to update request.");
 
-            return;
+    return;
 
-        }
+}
 
-        // Refresh request list
-        await fetchRequests();
+await fetchRequests();
 
-        alert(data.message);
+if (
+    action === "complete" &&
+    data.status === "Completed"
+) {
+
+    openReviewModal(id);
+
+}
+else {
+
+    alert(data.message);
+
+}
 
     }
 

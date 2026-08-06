@@ -129,16 +129,26 @@ exports.completeSwap = async (req, res) => {
 
         const userId = req.user.id;
 
+        // Mark current user's completion
         if (swap.sender.toString() === userId) {
 
             swap.senderCompleted = true;
 
-        } else {
+        }
+        else if (swap.receiver.toString() === userId) {
 
             swap.receiverCompleted = true;
 
         }
+        else {
 
+            return res.status(403).json({
+                message: "Unauthorized"
+            });
+
+        }
+
+        // Both users completed
         if (
             swap.senderCompleted &&
             swap.receiverCompleted
@@ -151,13 +161,30 @@ exports.completeSwap = async (req, res) => {
         await swap.save();
 
         res.json({
-            message: "Completion submitted."
+
+            message:
+                swap.status === "Completed"
+                    ? "Swap completed successfully."
+                    : "Waiting for the other user to complete.",
+
+            status: swap.status,
+
+            senderCompleted: swap.senderCompleted,
+
+            receiverCompleted: swap.receiverCompleted
+
         });
 
-    } catch (error) {
+    }
+
+    catch (error) {
+
+        console.error(error);
 
         res.status(500).json({
-            message: error.message
+
+            message: "Server Error"
+
         });
 
     }

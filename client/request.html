@@ -172,7 +172,83 @@
     </main>
 
 </div>
+<!-- ===================================== -->
+<!-- Review Modal -->
+<!-- ===================================== -->
 
+<div id="reviewModal" class="review-modal">
+
+    <div class="review-box">
+
+        <h2>Rate Your Skill Partner</h2>
+
+        <p>How was your learning experience?</p>
+
+        <!-- Star Rating -->
+
+        <div class="star-rating">
+
+            <i class="fa-solid fa-star" data-value="1"></i>
+
+            <i class="fa-solid fa-star" data-value="2"></i>
+
+            <i class="fa-solid fa-star" data-value="3"></i>
+
+            <i class="fa-solid fa-star" data-value="4"></i>
+
+            <i class="fa-solid fa-star" data-value="5"></i>
+
+        </div>
+
+        <!-- Review -->
+
+        <textarea
+
+            id="reviewComment"
+
+            placeholder="Write your review..."
+
+            maxlength="500">
+
+        </textarea>
+
+        <!-- Recommend -->
+
+        <label class="recommend">
+
+            <input
+                type="checkbox"
+                id="recommendUser">
+
+            I would recommend this user
+
+        </label>
+
+        <!-- Buttons -->
+
+        <div class="review-actions">
+
+            <button
+                class="cancel-review"
+                onclick="closeReviewModal()">
+
+                Cancel
+
+            </button>
+
+            <button
+                class="submit-review"
+                onclick="submitReview()">
+
+                Submit Review
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
 <script src="request.js"></script>
 
 </body>
