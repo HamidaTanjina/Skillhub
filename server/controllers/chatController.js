@@ -231,7 +231,7 @@ exports.sendMessage = async (req, res) => {
         // Send message instantly using Socket.IO
         const io = req.app.get("io");
 
-        io.to(swapId).emit("receiveMessage", populatedMessage);
+      io.to(String(swapId)).emit("receiveMessage", populatedMessage);
 
         // Return response
         res.status(201).json(populatedMessage);

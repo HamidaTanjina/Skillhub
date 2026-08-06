@@ -10,10 +10,8 @@
 
     <title>SkillHub Chat</title>
 
-    <!-- Dashboard CSS -->
-    <link rel="stylesheet" href="dashboard.css">
-
-    <!-- Chat CSS -->
+    
+    <!-- Chat Style -->
     <link rel="stylesheet" href="chat.css">
 
     <!-- Theme -->
@@ -31,9 +29,9 @@
 
 <div class="dashboard">
 
-    <!-- ==========================================
-         SIDEBAR (Same as Dashboard)
-    =========================================== -->
+    <!-- ===================================================== -->
+    <!-- LEFT SIDEBAR -->
+    <!-- ===================================================== -->
 
     <aside class="sidebar">
 
@@ -97,7 +95,7 @@
 
             <li id="logoutBtn">
 
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <i class="fa-solid fa-right-from-bracket"></i>
 
                 Logout
 
@@ -107,58 +105,17 @@
 
     </aside>
 
-    <!-- ==========================================
-         MAIN CONTENT
-    =========================================== -->
+    <!-- ===================================================== -->
+    <!-- MAIN CONTENT -->
+    <!-- ===================================================== -->
 
     <main class="main">
 
-        <!-- Topbar -->
-
-        <header class="topbar">
-
-            <div class="search">
-
-                <i class="fa-solid fa-magnifying-glass"></i>
-
-                <input
-                    type="text"
-                    placeholder="Search users or skills">
-
-            </div>
-
-            <div class="top-icons">
-
-                <i class="fa-regular fa-bell"></i>
-
-                <i class="fa-solid fa-moon"
-                   id="themeToggle"
-                   style="cursor:pointer;"></i>
-
-                <div class="profile">
-
-                    <i class="fa-solid fa-circle-user profile-icon"></i>
-
-                    <span id="userName">
-
-                        Loading...
-
-                    </span>
-
-                </div>
-
-            </div>
-
-        </header>
-                <!-- ==========================================
-             CHAT AREA
-        =========================================== -->
-
         <div class="chat-container">
 
-            <!-- ===========================
-                 LEFT CHAT SIDEBAR
-            ============================ -->
+            <!-- =============================================== -->
+            <!-- CHAT SIDEBAR -->
+            <!-- =============================================== -->
 
             <aside class="chat-sidebar">
 
@@ -174,8 +131,6 @@
 
                 </div>
 
-                <!-- Search -->
-
                 <div class="search-box">
 
                     <i class="fa-solid fa-search"></i>
@@ -187,22 +142,18 @@
 
                 </div>
 
-                <!-- Chat List -->
-
                 <div
                     class="chat-list"
                     id="chatList">
 
-                    <!-- chat.js loads conversations -->
+                    <!-- Loaded dynamically -->
 
                 </div>
 
             </aside>
-
-
-            <!-- ===========================
-                 RIGHT CHAT SECTION
-            ============================ -->
+                        <!-- =============================================== -->
+            <!-- RIGHT CHAT -->
+            <!-- =============================================== -->
 
             <section class="chat-section">
 
@@ -220,7 +171,7 @@
 
                         </div>
 
-                        <div>
+                        <div class="header-info">
 
                             <h3 id="chatUser">
 
@@ -230,7 +181,7 @@
 
                             <span id="chatStatus">
 
-                                No conversation selected
+                                Choose a conversation to start chatting
 
                             </span>
 
@@ -240,8 +191,7 @@
 
                 </div>
 
-
-                <!-- Chat Messages -->
+                <!-- Messages -->
 
                 <div
                     class="chat-body"
@@ -259,8 +209,8 @@
 
                         <p>
 
-                            Select a conversation from the
-                            left sidebar to start messaging.
+                            Select a conversation from the left sidebar to start
+                            chatting with your skill partner.
 
                         </p>
 
@@ -268,13 +218,13 @@
 
                 </div>
 
-
-                <!-- Chat Input -->
+                <!-- Message Input -->
 
                 <div class="chat-input">
 
                     <button
-                        class="emoji-btn">
+                        class="emoji-btn"
+                        type="button">
 
                         <i class="fa-regular fa-face-smile"></i>
 
@@ -283,12 +233,13 @@
                     <input
                         id="messageInput"
                         type="text"
-                        placeholder="Type your message..."
+                        placeholder="Type a message..."
                         disabled>
 
                     <button
                         class="send-btn"
                         id="sendBtn"
+                        type="button"
                         disabled>
 
                         <i class="fa-solid fa-paper-plane"></i>
@@ -300,53 +251,27 @@
             </section>
 
         </div>
-            </main>
-
-</div>
-
-<!-- ==========================================
-     Socket.IO
-========================================== -->
-
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-
-<!-- ==========================================
-     Dashboard User Loader
-========================================== -->
-
-        </div>
 
     </main>
 
 </div>
-
 <!-- Socket.IO -->
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
-<!-- Put the user loading script HERE -->
 <script>
 
 const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
-
 const token = localStorage.getItem("token");
 
 if (!token) {
+
     window.location.href = "index.html";
-}
-
-const logoutBtn = document.getElementById("logoutBtn");
-
-if (logoutBtn) {
-
-    logoutBtn.onclick = () => {
-
-        localStorage.removeItem("token");
-
-        window.location.href = "index.html";
-
-    };
 
 }
+
+// ======================================================
+// Load Logged-in User
+// ======================================================
 
 async function loadCurrentUser() {
 
@@ -354,7 +279,7 @@ async function loadCurrentUser() {
 
         const response = await fetch(
 
-            `${API_BASE_URL}/users/me`,
+            `${API_BASE_URL}/user/profile`,
 
             {
 
@@ -368,15 +293,31 @@ async function loadCurrentUser() {
 
         );
 
-        if (!response.ok) return;
+        if (!response.ok) {
+
+            if (response.status === 401) {
+
+                localStorage.removeItem("token");
+
+                window.location.href = "index.html";
+
+                return;
+
+            }
+
+            return;
+
+        }
 
         const user = await response.json();
 
-        document.getElementById("userName").textContent =
-            user.name ||
-            user.fullName ||
-            user.username ||
-            "User";
+        const userName = document.getElementById("userName");
+
+        if (userName) {
+
+            userName.textContent = user.name || "User";
+
+        }
 
     }
 
@@ -388,12 +329,63 @@ async function loadCurrentUser() {
 
 }
 
-document.addEventListener("DOMContentLoaded", loadCurrentUser);
+// ======================================================
+// Logout
+// ======================================================
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+if (logoutBtn) {
+
+    logoutBtn.addEventListener("click", async () => {
+
+        try {
+
+            await fetch(
+
+                `${API_BASE_URL}/auth/logout`,
+
+                {
+
+                    method: "POST",
+
+                    headers: {
+
+                        Authorization: `Bearer ${token}`
+
+                    }
+
+                }
+
+            );
+
+        }
+
+        catch (e) {}
+
+        localStorage.removeItem("token");
+
+        window.location.href = "index.html";
+
+    });
+
+}
+
+// ======================================================
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    loadCurrentUser
+
+);
 
 </script>
 
-<!-- Your chat.js MUST be last -->
+<!-- Chat Script -->
 <script src="chat.js"></script>
 
 </body>
+
 </html>

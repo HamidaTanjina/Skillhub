@@ -91,12 +91,19 @@ io.on("connection", (socket) => {
 
     console.log("User Connected:", socket.id);
 
-    // Join chat room
-    socket.on("joinChat", (swapId) => {
+    socket.on("joinRoom", (swapId) => {
 
         socket.join(swapId);
 
-        console.log(`User joined chat room: ${swapId}`);
+        console.log("Joined Room:", swapId);
+
+    });
+
+    socket.on("leaveRoom", (swapId) => {
+
+        socket.leave(swapId);
+
+        console.log("Left Room:", swapId);
 
     });
 
@@ -107,7 +114,6 @@ io.on("connection", (socket) => {
     });
 
 });
-
 // ===============================
 // Global Error Handler
 // ===============================
