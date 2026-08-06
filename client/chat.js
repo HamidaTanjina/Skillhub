@@ -1,9 +1,10 @@
 // ======================================================
 // SkillHub Chat
 // ======================================================
-const params = new URLSearchParams(window.location.search);
 
+const params = new URLSearchParams(window.location.search);
 const autoSwapId = params.get("swapId");
+
 const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
 const SOCKET_URL = "https://skillhub-backend-cths.onrender.com";
 
@@ -14,17 +15,19 @@ if (!token) {
 }
 
 // ======================================================
-// DOM
+// DOM Elements
 // ======================================================
 
 const chatList = document.getElementById("chatList");
 const chatBody = document.getElementById("chatBody");
+
 const chatUser = document.getElementById("chatUser");
 const chatAvatar = document.getElementById("chatAvatar");
 const chatStatus = document.getElementById("chatStatus");
 
 const messageInput = document.getElementById("messageInput");
 const sendBtn = document.getElementById("sendBtn");
+
 const searchChat = document.getElementById("searchChat");
 
 // ======================================================
@@ -55,23 +58,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         ""
     );
 
-    
     messageInput.disabled = true;
     sendBtn.disabled = true;
 
-   
     initializeSocket();
 
-  
     await loadChatList(autoSwapId);
 
-   
     sendBtn.addEventListener(
         "click",
         sendMessage
     );
 
-    
     messageInput.addEventListener(
         "keydown",
         (e) => {
@@ -79,7 +77,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (e.key === "Enter") {
 
                 e.preventDefault();
-
                 sendMessage();
 
             }
@@ -87,7 +84,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     );
 
-    // Search chats
     if (searchChat) {
 
         searchChat.addEventListener(
@@ -114,13 +110,16 @@ function parseJwt(token) {
 
         return JSON.parse(atob(base64));
 
-    } catch {
+    }
+
+    catch {
 
         return {};
 
     }
 
 }
+
 // ======================================================
 // Socket.IO
 // ======================================================
@@ -142,7 +141,7 @@ function initializeSocket() {
 
     socket.on("connect", () => {
 
-        console.log("✅ Socket Connected:", socket.id);
+        console.log("✅ Connected:", socket.id);
 
         if (currentSwapId) {
 
@@ -159,7 +158,7 @@ function initializeSocket() {
 
     socket.on("disconnect", () => {
 
-        console.log("❌ Socket Disconnected");
+        console.log("Socket disconnected");
 
     });
 
@@ -213,12 +212,14 @@ function joinRoom(roomId) {
 function openChatById(swapId) {
 
     const chat = chatData.find(
-        chat => String(chat.swapId) === String(swapId)
+
+        c => String(c.swapId) === String(swapId)
+
     );
 
     if (!chat) {
 
-        console.log("Chat not found for swap:", swapId);
+        console.log("Chat not found:", swapId);
 
         return;
 
@@ -228,53 +229,6 @@ function openChatById(swapId) {
 
 }
 
-// ======================================================
-// Receive Message
-// ======================================================
-
-function receiveMessage(msg) {
-
-    // Refresh sidebar
-   loadChatList(currentSwapId);
-
-    const swapId =
-
-        typeof msg.swap === "object"
-
-            ? msg.swap._id
-
-            : msg.swap;
-
-    if (
-        String(swapId) !==
-        String(currentSwapId)
-    ) {
-
-        return;
-
-    }
-
-    createMessage(
-
-        msg.message,
-
-        String(msg.sender._id) === currentUserId
-
-            ? "sent"
-
-            : "received",
-
-        formatTime(
-            msg.createdAt
-        ),
-
-        msg._id
-
-    );
-
-    scrollToBottom();
-
-}
 // ======================================================
 // Load Chat List
 // ======================================================
@@ -309,14 +263,13 @@ async function loadChatList(autoOpenId = null) {
 
         }
 
-        // Save chats globally
         chatData = chats;
 
         chatList.innerHTML = "";
 
-        // -----------------------------
-        // No chats
-        // -----------------------------
+        // ---------------------------------
+        // No chats available
+        // ---------------------------------
 
         if (!chats.length) {
 
@@ -329,8 +282,10 @@ async function loadChatList(autoOpenId = null) {
                     <h3>No Active Chats</h3>
 
                     <p>
-                        When one of your swap requests is accepted,
+
+                        When a swap request is accepted,
                         it will automatically appear here.
+
                     </p>
 
                 </div>
@@ -341,9 +296,9 @@ async function loadChatList(autoOpenId = null) {
 
         }
 
-        // -----------------------------
-        // Build chat list
-        // -----------------------------
+        // ---------------------------------
+        // Create Sidebar Items
+        // ---------------------------------
 
         chats.forEach(chat => {
 
@@ -374,7 +329,11 @@ async function loadChatList(autoOpenId = null) {
 
                 <div class="chat-info">
 
-                    <h4>${chat.partner.name}</h4>
+                    <h4>
+
+                        ${chat.partner.name}
+
+                    </h4>
 
                     <p>
 
@@ -396,44 +355,103 @@ async function loadChatList(autoOpenId = null) {
 
             item.addEventListener("click", () => {
 
-                document
-                    .querySelectorAll(".chat-item")
-                    .forEach(i =>
-                        i.classList.remove("active")
-                    );
-
-                item.classList.add("active");
-
                 openChat(chat);
 
             });
 
             chatList.appendChild(item);
 
-            // Automatically open chat from Requests page
-            if (
-    autoOpenId &&
-    String(chat.swapId) === String(autoOpenId)
-) {
-
-    setTimeout(() => {
-
-        openChatById(autoOpenId);
-
-    }, 100);
-
-}
         });
+
+        // ---------------------------------
+        // Automatically open chat
+        // if redirected from requests page
+        // ---------------------------------
+
+        if (autoOpenId) {
+
+            setTimeout(() => {
+
+                openChatById(autoOpenId);
+
+            }, 100);
+
+        }
 
     }
 
     catch (err) {
 
-        console.log(err);
+        console.log("Chat List Error:", err);
 
     }
 
 }
+// ======================================================
+// Open Chat
+// ======================================================
+
+function openChat(chat) {
+
+    currentSwapId = String(chat.swapId);
+
+    chatUser.textContent = chat.partner.name;
+
+    chatAvatar.textContent =
+        chat.partner.name
+            .charAt(0)
+            .toUpperCase();
+
+    chatStatus.textContent =
+        "Active Skill Partner";
+
+    messageInput.disabled = false;
+    sendBtn.disabled = false;
+
+    // Highlight selected chat
+    document
+        .querySelectorAll(".chat-item")
+        .forEach(item => {
+
+            item.classList.remove("active");
+
+            if (
+                item.dataset.swap === currentSwapId
+            ) {
+
+                item.classList.add("active");
+
+            }
+
+        });
+
+    // Clear previous messages
+    chatBody.innerHTML = "";
+
+    // Join socket room
+    joinRoom(currentSwapId);
+
+    // Update URL
+    const url = new URL(window.location);
+
+    url.searchParams.set(
+        "swapId",
+        currentSwapId
+    );
+
+    window.history.replaceState(
+        {},
+        "",
+        url
+    );
+
+    // Load previous messages
+    loadMessages();
+
+    messageInput.focus();
+
+}
+
 // ======================================================
 // Load Messages
 // ======================================================
@@ -501,9 +519,7 @@ async function loadMessages() {
             const senderId = String(
 
                 msg.sender._id ||
-
                 msg.sender.id ||
-
                 msg.sender
 
             );
@@ -513,9 +529,7 @@ async function loadMessages() {
                 msg.message,
 
                 senderId === currentUserId
-
                     ? "sent"
-
                     : "received",
 
                 formatTime(msg.createdAt),
@@ -532,7 +546,10 @@ async function loadMessages() {
 
     catch (err) {
 
-        console.log("Load Messages:", err);
+        console.log(
+            "Load Messages Error:",
+            err
+        );
 
     }
 
@@ -543,139 +560,52 @@ async function loadMessages() {
     }
 
 }
+
 // ======================================================
-// Create Message
+// Receive Message
 // ======================================================
 
-function createMessage(text, type, time, id = "") {
+function receiveMessage(msg) {
 
-    // Prevent duplicate messages
+    // Refresh sidebar only
+    loadChatList();
+
+    const swapId =
+
+        typeof msg.swap === "object"
+
+            ? msg.swap._id
+
+            : msg.swap;
+
     if (
-        id &&
-        document.querySelector(`[data-id="${id}"]`)
+
+        String(swapId) !==
+        String(currentSwapId)
+
     ) {
 
         return;
 
     }
 
-    const empty = document.querySelector(".empty-chat");
+    createMessage(
 
-    if (empty) {
+        msg.message,
 
-        empty.remove();
+        String(msg.sender._id) === currentUserId
 
-    }
+            ? "sent"
 
-    const wrapper = document.createElement("div");
+            : "received",
 
-    wrapper.className = `message ${type}`;
+        formatTime(msg.createdAt),
 
-    if (id) {
+        msg._id
 
-        wrapper.dataset.id = id;
-
-    }
-
-    const bubble = document.createElement("div");
-
-    bubble.className = "bubble";
-
-    const msgText = document.createElement("div");
-
-    msgText.className = "message-text";
-
-    msgText.textContent = text;
-
-    const msgTime = document.createElement("div");
-
-    msgTime.className = "message-time";
-
-    msgTime.textContent = time;
-
-    bubble.appendChild(msgText);
-
-    bubble.appendChild(msgTime);
-
-    wrapper.appendChild(bubble);
-
-    chatBody.appendChild(wrapper);
+    );
 
     scrollToBottom();
-
-}
-// ======================================================
-// Open Chat
-// ======================================================
-
-function openChat(chat) {
-
-    // Don't reload if same chat is already open
-    if (String(currentSwapId) === String(chat.swapId)) {
-
-        return;
-
-    }
-
-    currentSwapId = String(chat.swapId);
-
-    chatUser.textContent = chat.partner.name;
-
-    chatAvatar.textContent =
-        chat.partner.name
-            .charAt(0)
-            .toUpperCase();
-
-    chatStatus.textContent =
-        "Active Skill Partner";
-
-    messageInput.disabled = false;
-
-    sendBtn.disabled = false;
-
-    // Highlight selected chat
-    document
-        .querySelectorAll(".chat-item")
-        .forEach(item => {
-
-            item.classList.remove("active");
-
-            if (
-                String(item.dataset.swap) ===
-                currentSwapId
-            ) {
-
-                item.classList.add("active");
-
-            }
-
-        });
-
-    // Clear previous messages
-    chatBody.innerHTML = "";
-
-    // Join Socket Room
-    joinRoom(currentSwapId);
-
-    // Update URL without refreshing page
-    const url = new URL(window.location);
-
-    url.searchParams.set(
-        "swapId",
-        currentSwapId
-    );
-
-    window.history.replaceState(
-        {},
-        "",
-        url
-    );
-
-    // Load chat history
-    loadMessages();
-
-    // Focus message box
-    messageInput.focus();
 
 }
 // ======================================================
@@ -740,11 +670,12 @@ async function sendMessage() {
 
         }
 
-        // Clear input
+        // Clear textbox
         messageInput.value = "";
 
         // If socket isn't connected,
         // show message immediately.
+
         if (!socket || !socket.connected) {
 
             createMessage(
@@ -761,7 +692,7 @@ async function sendMessage() {
 
         }
 
-        // Refresh sidebar
+        // Refresh chat sidebar
         loadChatList();
 
         messageInput.focus();
@@ -770,7 +701,7 @@ async function sendMessage() {
 
     catch (err) {
 
-        console.error(err);
+        console.error("Send Message Error:", err);
 
         alert("Failed to send message.");
 
@@ -784,6 +715,71 @@ async function sendMessage() {
 
 }
 
+// ======================================================
+// Create Message Bubble
+// ======================================================
+
+function createMessage(text, type, time, id = "") {
+
+    // Prevent duplicate messages
+    if (
+
+        id &&
+        document.querySelector(`[data-id="${id}"]`)
+
+    ) {
+
+        return;
+
+    }
+
+    // Remove empty screen
+
+    const empty = document.querySelector(".empty-chat");
+
+    if (empty) {
+
+        empty.remove();
+
+    }
+
+    const wrapper = document.createElement("div");
+
+    wrapper.className = `message ${type}`;
+
+    if (id) {
+
+        wrapper.dataset.id = id;
+
+    }
+
+    const bubble = document.createElement("div");
+
+    bubble.className = "bubble";
+
+    const messageText = document.createElement("div");
+
+    messageText.className = "message-text";
+
+    messageText.textContent = text;
+
+    const messageTime = document.createElement("div");
+
+    messageTime.className = "message-time";
+
+    messageTime.textContent = time;
+
+    bubble.appendChild(messageText);
+
+    bubble.appendChild(messageTime);
+
+    wrapper.appendChild(bubble);
+
+    chatBody.appendChild(wrapper);
+
+    scrollToBottom();
+
+}
 // ======================================================
 // Search Chats
 // ======================================================
@@ -835,7 +831,13 @@ function formatTime(date) {
 
     let minute = d.getMinutes();
 
-    const ampm = hour >= 12 ? "PM" : "AM";
+    const ampm =
+
+        hour >= 12
+
+            ? "PM"
+
+            : "AM";
 
     hour = hour % 12;
 
@@ -859,11 +861,38 @@ function scrollToBottom() {
 
     requestAnimationFrame(() => {
 
-        chatBody.scrollTop = chatBody.scrollHeight;
+        chatBody.scrollTop =
+
+            chatBody.scrollHeight;
 
     });
 
 }
+
+// ======================================================
+// Clear Chat
+// ======================================================
+
+function clearChat() {
+
+    currentSwapId = "";
+
+    chatBody.innerHTML = "";
+
+    chatUser.textContent = "Select a Conversation";
+
+    chatAvatar.textContent = "?";
+
+    chatStatus.textContent = "";
+
+    messageInput.value = "";
+
+    messageInput.disabled = true;
+
+    sendBtn.disabled = true;
+
+}
+
 // ======================================================
 // Cleanup
 // ======================================================
@@ -874,7 +903,11 @@ window.addEventListener(
 
     () => {
 
-        if (!socket) return;
+        if (!socket) {
+
+            return;
+
+        }
 
         if (currentRoom) {
 

@@ -4,16 +4,15 @@ const messageSchema = new mongoose.Schema(
 
     {
 
-        swap:{
+swap: {
 
-            type:mongoose.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
 
-            ref:"Swap",
+    ref: "SwapRequest",
 
-            required:true
+    required: true
 
-        },
-
+},
         sender:{
 
             type:mongoose.Schema.Types.ObjectId,

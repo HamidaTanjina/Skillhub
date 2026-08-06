@@ -61,6 +61,8 @@ exports.getChatList = async (req, res) => {
                     createdAt: -1
 
                 });
+                console.log("========== CHAT DEBUG ==========");
+
 return {
     swapId: swap._id,
     partner,
@@ -77,7 +79,10 @@ return {
             })
 
         );
-
+console.log("Logged User:", userId);
+console.log("Swaps Found:", swaps.length);
+console.log("Chats:", chats);
+console.log("================================");
         res.json(chats);
 
     }
