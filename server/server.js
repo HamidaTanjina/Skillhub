@@ -75,13 +75,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/swaps", swapRoutes);
 app.use("/api/chat", chatRoutes);
-console.log("Before mounting review routes");
 app.use("/api/reviews", reviewRoutes);
-console.log("After mounting review routes");
-app.use("/api/reviews", reviewRoutes);
-console.log("Before mounting review routes");
-app.use("/api/reviews", reviewRoutes);
-console.log("After mounting review routes");
+
 // ===============================
 // Health Check
 // ===============================

@@ -144,14 +144,13 @@ return res.status(201).json({
     }
 
     catch (error) {
+    console.error(error);
 
-        console.error(error);
-
-        res.status(500).json({
-            message: "Server Error"
-        });
-
-    }
+    res.status(500).json({
+        message: error.message,
+        stack: error.stack
+    });
+}
 
 };
 // ======================================
@@ -180,17 +179,16 @@ exports.getUserReviews = async (req, res) => {
 
     }
 
-    catch (error) {
+   catch (error) {
+    console.error(error);
 
-        console.error(error);
+    res.status(500).json({
+        message: error.message,
+        stack: error.stack
+    });
+}
 
-        res.status(500).json({
-
-            message: "Server Error"
-
-        });
-
-    }
+    
 
 };
 
@@ -215,16 +213,13 @@ exports.getSwapReviews = async (req, res) => {
 
     }
 
-    catch (error) {
+  catch (error) {
+    console.error(error);
 
-        console.error(error);
-
-        res.status(500).json({
-
-            message: "Server Error"
-
-        });
-
-    }
+    res.status(500).json({
+        message: error.message,
+        stack: error.stack
+    });
+}
 
 };
