@@ -19,11 +19,17 @@ const SwapRequestSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    status: {
-        type: String,
-        enum: ["Pending", "Accepted", "Rejected", "Completed"],
-        default: "Pending"
-    },
+  status: {
+    type: String,
+    enum: [
+        "Pending",
+        "Accepted",
+        "Pending Confirmation",
+        "Completed",
+        "Rejected"
+    ],
+    default: "Pending"
+},
     senderCompleted: {
         type: Boolean,
         default: false
