@@ -4,7 +4,7 @@ const reviewSchema = new mongoose.Schema(
 {
     swap: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Swap",
+        ref: "SwapRequest",
         required: true
     },
 
