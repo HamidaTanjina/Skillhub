@@ -711,12 +711,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function submitReview() {
 
+    alert("submitReview called");
+
     if (selectedRating === 0) {
-
         alert("Please select a rating.");
-
         return;
-
     }
 
     const comment = document
