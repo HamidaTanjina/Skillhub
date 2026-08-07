@@ -1,5 +1,5 @@
 const User = require("../models/User");
-
+const Review = require("../models/Review");
 exports.getProfile = async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("-password");
@@ -70,12 +70,79 @@ exports.saveSkills = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
     try {
-        const currentUserId = req.user ? req.user.id : null;
-        const query = currentUserId ? { _id: { $ne: currentUserId } } : {};
 
-        const users = await User.find(query, "-password");
-        res.json(users);
+        const currentUserId = req.user ? req.user.id : null;
+
+        const query = currentUserId
+            ? { _id: { $ne: currentUserId } }
+            : {};
+
+        const users = await User.find(query, "-password").lean();
+
+        // Get rating information for all users
+        const userIds = users.map(user => user._id);
+
+        const reviewStats = await Review.aggregate([
+            {
+                $match: {
+                    reviewFor: { $in: userIds }
+                }
+            },
+            {
+                $group: {
+                    _id: "$reviewFor",
+
+                    averageRating: {
+                        $avg: "$rating"
+                    },
+
+                    totalReviews: {
+                        $sum: 1
+                    }
+                }
+            }
+        ]);
+
+        // Convert stats into easy lookup object
+        const statsMap = {};
+
+        reviewStats.forEach(stat => {
+
+            statsMap[stat._id.toString()] = {
+                rating: Number(stat.averageRating.toFixed(1)),
+                totalReviews: stat.totalReviews
+            };
+
+        });
+
+        // Add rating information to every user
+        const usersWithRatings = users.map(user => {
+
+            const stats =
+                statsMap[user._id.toString()] || {
+                    rating: 0,
+                    totalReviews: 0
+                };
+
+            return {
+                ...user,
+
+                rating: stats.rating,
+
+                totalReviews: stats.totalReviews
+            };
+
+        });
+
+        res.json(usersWithRatings);
+
     } catch (error) {
-        res.status(500).json({ message: error.message });
+
+        console.error("Get All Users Error:", error);
+
+        res.status(500).json({
+            message: error.message
+        });
+
     }
 };

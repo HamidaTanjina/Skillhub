@@ -10,30 +10,56 @@
 
     <title>SkillHub Chat</title>
 
-    
-    <!-- Chat Style -->
+
+    <!-- =====================================================
+         CHAT STYLE
+    ====================================================== -->
+
     <link rel="stylesheet" href="chat.css">
 
-    <!-- Theme -->
+
+    <!-- =====================================================
+         THEME
+    ====================================================== -->
+
     <link rel="stylesheet" href="theme.css">
 
-    <!-- Font Awesome -->
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
     <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+          <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+
+    <!-- =====================================================
+         THEME SCRIPT
+    ====================================================== -->
 
     <script src="theme.js" defer></script>
 
 </head>
 
+
 <body>
+
+
+<!-- =========================================================
+     DASHBOARD LAYOUT
+========================================================= -->
 
 <div class="dashboard">
 
-    <!-- ===================================================== -->
-    <!-- LEFT SIDEBAR -->
-    <!-- ===================================================== -->
+
+    <!-- =====================================================
+         LEFT MAIN SIDEBAR
+    ====================================================== -->
 
     <aside class="sidebar">
+
+        <!-- Logo -->
 
         <div class="logo">
 
@@ -43,15 +69,23 @@
 
         </div>
 
+
+        <!-- Navigation -->
+
         <ul>
+
+            <!-- Dashboard -->
 
             <li onclick="window.location.href='dashboard.html'">
 
                 <i class="fa-solid fa-house"></i>
 
-                Dashboard
+                <span>Dashboard</span>
 
             </li>
+
+
+            <!-- Browse Skills -->
 
             <li>
 
@@ -59,19 +93,25 @@
 
                     <i class="fa-solid fa-book"></i>
 
-                    Browse Skills
+                    <span>Browse Skills</span>
 
                 </a>
 
             </li>
 
+
+            <!-- Requests -->
+
             <li onclick="window.location.href='request.html'">
 
                 <i class="fa-solid fa-handshake"></i>
 
-                Requests
+                <span>Requests</span>
 
             </li>
+
+
+            <!-- Chat -->
 
             <li class="active">
 
@@ -79,25 +119,31 @@
 
                     <i class="fa-solid fa-comments"></i>
 
-                    Chat
+                    <span>Chat</span>
 
                 </a>
 
             </li>
 
+
+            <!-- Profile -->
+
             <li onclick="window.location.href='profile.html'">
 
                 <i class="fa-solid fa-user"></i>
 
-                Profile
+                <span>Profile</span>
 
             </li>
+
+
+            <!-- Logout -->
 
             <li id="logoutBtn">
 
                 <i class="fa-solid fa-right-from-bracket"></i>
 
-                Logout
+                <span>Logout</span>
 
             </li>
 
@@ -105,19 +151,30 @@
 
     </aside>
 
-    <!-- ===================================================== -->
-    <!-- MAIN CONTENT -->
-    <!-- ===================================================== -->
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
 
     <main class="main">
 
+
+        <!-- =================================================
+             CHAT CONTAINER
+        ================================================== -->
+
         <div class="chat-container">
 
-            <!-- =============================================== -->
-            <!-- CHAT SIDEBAR -->
-            <!-- =============================================== -->
+
+            <!-- =================================================
+                 CHAT LIST SIDEBAR
+            ================================================== -->
 
             <aside class="chat-sidebar">
+
+
+                <!-- Sidebar Header -->
 
                 <div class="sidebar-header">
 
@@ -131,6 +188,9 @@
 
                 </div>
 
+
+                <!-- Search -->
+
                 <div class="search-box">
 
                     <i class="fa-solid fa-search"></i>
@@ -138,30 +198,53 @@
                     <input
                         type="text"
                         id="searchChat"
-                        placeholder="Search conversations...">
+                        placeholder="Search conversations..."
+                        autocomplete="off">
 
                 </div>
+
+
+                <!-- Chat List -->
 
                 <div
                     class="chat-list"
                     id="chatList">
 
-                    <!-- Loaded dynamically -->
+                    <!--
+                        Chat conversations will be
+                        loaded dynamically by chat.js
+                    -->
 
                 </div>
 
+
             </aside>
-                        <!-- =============================================== -->
-            <!-- RIGHT CHAT -->
-            <!-- =============================================== -->
+
+
+
+            <!-- =================================================
+                 RIGHT CHAT SECTION
+            ================================================== -->
 
             <section class="chat-section">
 
-                <!-- Chat Header -->
 
-                <div class="chat-header">
+                <!-- =================================================
+                     CHAT HEADER
+
+                     Hidden until user selects a chat.
+                ================================================== -->
+
+                <div
+                    class="chat-header"
+                    id="chatHeader"
+                    style="display: none;">
+
 
                     <div class="header-user">
+
+
+                        <!-- Avatar -->
 
                         <div
                             class="avatar"
@@ -171,7 +254,13 @@
 
                         </div>
 
+
+                        <!-- User Information -->
+
                         <div class="header-info">
+
+
+                            <!-- Partner Name -->
 
                             <h3 id="chatUser">
 
@@ -179,27 +268,58 @@
 
                             </h3>
 
-                            <span id="chatStatus">
 
-                                Choose a conversation to start chatting
+                            <!-- Skill Exchange -->
+
+                            <span
+                                id="chatSkill"
+                                class="chat-skill">
+
+                                Skill Exchange
 
                             </span>
 
+
+                            <!-- Online Status -->
+
+                            <span
+                                id="chatStatus"
+                                class="chat-status">
+
+                                Offline
+
+                            </span>
+
+
                         </div>
+
 
                     </div>
 
+
                 </div>
 
-                <!-- Messages -->
+
+
+                <!-- =================================================
+                     CHAT BODY
+                ================================================== -->
 
                 <div
                     class="chat-body"
                     id="chatBody">
 
+
+                    <!-- =================================================
+                         INITIAL WELCOME SCREEN
+
+                         This disappears when a chat is selected.
+                    ================================================== -->
+
                     <div class="empty-chat">
 
                         <i class="fa-solid fa-comments"></i>
+
 
                         <h2>
 
@@ -207,59 +327,262 @@
 
                         </h2>
 
+
                         <p>
 
-                            Select a conversation from the left sidebar to start
-                            chatting with your skill partner.
+                            Select a conversation from the left
+                            sidebar to start chatting with your
+                            skill partner.
 
                         </p>
 
                     </div>
 
+
                 </div>
 
-                <!-- Message Input -->
 
-                <div class="chat-input">
+
+                <!-- =================================================
+                     EMOJI PICKER
+                ================================================== -->
+
+                <div
+                    class="emoji-picker"
+                    id="emojiPicker"
+                    style="display: none;">
+
+
+                    <button
+                        type="button"
+                        data-emoji="😀">
+                        😀
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="😂">
+                        😂
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="😊">
+                        😊
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="😍">
+                        😍
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="🥰">
+                        🥰
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="😎">
+                        😎
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="👍">
+                        👍
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="👏">
+                        👏
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="🙌">
+                        🙌
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="❤️">
+                        ❤️
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="🔥">
+                        🔥
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="✨">
+                        ✨
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="🎉">
+                        🎉
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="💯">
+                        💯
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="🤝">
+                        🤝
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="💻">
+                        💻
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="📚">
+                        📚
+                    </button>
+
+
+                    <button
+                        type="button"
+                        data-emoji="🎯">
+                        🎯
+                    </button>
+
+
+                </div>
+
+
+
+                <!-- =================================================
+                     MESSAGE INPUT
+                ================================================== -->
+
+                <div
+                    class="chat-input"
+                    id="chatInputArea"
+                    style="display: none;">
+
+
+                    <!-- Emoji Button -->
 
                     <button
                         class="emoji-btn"
-                        type="button">
+                        id="emojiBtn"
+                        type="button"
+                        title="Add emoji">
 
                         <i class="fa-regular fa-face-smile"></i>
 
                     </button>
 
+
+                    <!-- Message Input -->
+
                     <input
                         id="messageInput"
                         type="text"
                         placeholder="Type a message..."
-                        disabled>
+                        autocomplete="off">
+
+
+                    <!-- Send Button -->
 
                     <button
                         class="send-btn"
                         id="sendBtn"
                         type="button"
-                        disabled>
+                        title="Send message">
 
                         <i class="fa-solid fa-paper-plane"></i>
 
                     </button>
 
+
                 </div>
+
 
             </section>
 
+
         </div>
+
 
     </main>
 
+
 </div>
-<!-- Socket.IO -->
+
+
+
+<!-- =========================================================
+     SOCKET.IO
+     
+     IMPORTANT:
+     This must be loaded BEFORE chat.js
+========================================================= -->
+
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
-<!-- Chat Script -->
+
+<!-- =========================================================
+     CHAT SCRIPT
+========================================================= -->
+
 <script src="chat.js"></script>
+
+
+<!-- =========================================================
+     LOGOUT
+========================================================= -->
+
+<script>
+
+    const logoutBtn = document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener("click", () => {
+
+            localStorage.removeItem("token");
+
+            window.location.href = "index.html";
+
+        });
+
+    }
+
+</script>
+
 
 </body>
 

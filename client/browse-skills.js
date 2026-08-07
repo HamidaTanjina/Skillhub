@@ -396,11 +396,6 @@ function renderUsers(users) {
 
     </button>
 
-    <button class="favorite-btn">
-
-        <i class="fa-regular fa-heart"></i>
-
-    </button>
 
 </div>
 

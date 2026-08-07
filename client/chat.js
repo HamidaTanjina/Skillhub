@@ -5,14 +5,18 @@
 const params = new URLSearchParams(window.location.search);
 const autoSwapId = params.get("swapId");
 
-const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
-const SOCKET_URL = "https://skillhub-backend-cths.onrender.com";
+const API_BASE_URL =
+    "https://skillhub-backend-cths.onrender.com/api";
+
+const SOCKET_URL =
+    "https://skillhub-backend-cths.onrender.com";
 
 const token = localStorage.getItem("token");
 
 if (!token) {
     window.location.href = "index.html";
 }
+
 
 // ======================================================
 // DOM Elements
@@ -30,6 +34,10 @@ const sendBtn = document.getElementById("sendBtn");
 
 const searchChat = document.getElementById("searchChat");
 
+const emojiBtn = document.getElementById("emojiBtn");
+const emojiPicker = document.getElementById("emojiPicker");
+
+
 // ======================================================
 // Variables
 // ======================================================
@@ -43,6 +51,7 @@ let currentRoom = "";
 let chatData = [];
 
 let isLoadingMessages = false;
+
 
 // ======================================================
 // Start
@@ -61,14 +70,25 @@ document.addEventListener("DOMContentLoaded", async () => {
     messageInput.disabled = true;
     sendBtn.disabled = true;
 
+    initializeEmojiPicker();
+
     initializeSocket();
 
     await loadChatList(autoSwapId);
+
+    // ---------------------------------------------
+    // Send button
+    // ---------------------------------------------
 
     sendBtn.addEventListener(
         "click",
         sendMessage
     );
+
+
+    // ---------------------------------------------
+    // Enter to send
+    // ---------------------------------------------
 
     messageInput.addEventListener(
         "keydown",
@@ -77,12 +97,18 @@ document.addEventListener("DOMContentLoaded", async () => {
             if (e.key === "Enter") {
 
                 e.preventDefault();
+
                 sendMessage();
 
             }
 
         }
     );
+
+
+    // ---------------------------------------------
+    // Search chats
+    // ---------------------------------------------
 
     if (searchChat) {
 
@@ -94,6 +120,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 });
+
 
 // ======================================================
 // Parse JWT
@@ -120,6 +147,7 @@ function parseJwt(token) {
 
 }
 
+
 // ======================================================
 // Socket.IO
 // ======================================================
@@ -139,9 +167,17 @@ function initializeSocket() {
 
     });
 
+
+    // ---------------------------------------------
+    // Connected
+    // ---------------------------------------------
+
     socket.on("connect", () => {
 
-        console.log("✅ Connected:", socket.id);
+        console.log(
+            "✅ Connected:",
+            socket.id
+        );
 
         if (currentSwapId) {
 
@@ -151,24 +187,45 @@ function initializeSocket() {
 
     });
 
+
+    // ---------------------------------------------
+    // Receive message
+    // ---------------------------------------------
+
     socket.on(
         "receiveMessage",
         receiveMessage
     );
 
+
+    // ---------------------------------------------
+    // Disconnect
+    // ---------------------------------------------
+
     socket.on("disconnect", () => {
 
-        console.log("Socket disconnected");
+        console.log(
+            "Socket disconnected"
+        );
 
     });
 
+
+    // ---------------------------------------------
+    // Connection error
+    // ---------------------------------------------
+
     socket.on("connect_error", (err) => {
 
-        console.log("Socket Error:", err.message);
+        console.log(
+            "Socket Error:",
+            err.message
+        );
 
     });
 
 }
+
 
 // ======================================================
 // Join Room
@@ -180,6 +237,8 @@ function joinRoom(roomId) {
 
     if (!socket.connected) return;
 
+
+    // Leave previous room
     if (
         currentRoom &&
         currentRoom !== roomId
@@ -192,12 +251,15 @@ function joinRoom(roomId) {
 
     }
 
+
     currentRoom = roomId;
+
 
     socket.emit(
         "joinRoom",
         roomId
     );
+
 
     console.log(
         "Joined Room:",
@@ -205,6 +267,8 @@ function joinRoom(roomId) {
     );
 
 }
+
+
 // ======================================================
 // Open Chat By Swap ID
 // ======================================================
@@ -212,22 +276,28 @@ function joinRoom(roomId) {
 function openChatById(swapId) {
 
     const chat = chatData.find(
-
-        c => String(c.swapId) === String(swapId)
-
+        c =>
+            String(c.swapId) ===
+            String(swapId)
     );
+
 
     if (!chat) {
 
-        console.log("Chat not found:", swapId);
+        console.log(
+            "Chat not found:",
+            swapId
+        );
 
         return;
 
     }
 
+
     openChat(chat);
 
 }
+
 
 // ======================================================
 // Load Chat List
@@ -245,7 +315,8 @@ async function loadChatList(autoOpenId = null) {
 
                 headers: {
 
-                    Authorization: `Bearer ${token}`
+                    Authorization:
+                        `Bearer ${token}`
 
                 }
 
@@ -253,7 +324,9 @@ async function loadChatList(autoOpenId = null) {
 
         );
 
+
         const chats = await response.json();
+
 
         if (!response.ok) {
 
@@ -263,13 +336,16 @@ async function loadChatList(autoOpenId = null) {
 
         }
 
+
         chatData = chats;
+
 
         chatList.innerHTML = "";
 
-        // ---------------------------------
-        // No chats available
-        // ---------------------------------
+
+        // ---------------------------------------------
+        // No chats
+        // ---------------------------------------------
 
         if (!chats.length) {
 
@@ -282,10 +358,8 @@ async function loadChatList(autoOpenId = null) {
                     <h3>No Active Chats</h3>
 
                     <p>
-
                         When a swap request is accepted,
                         it will automatically appear here.
-
                     </p>
 
                 </div>
@@ -296,18 +370,26 @@ async function loadChatList(autoOpenId = null) {
 
         }
 
-        // ---------------------------------
-        // Create Sidebar Items
-        // ---------------------------------
+
+        // ---------------------------------------------
+        // Create chat items
+        // ---------------------------------------------
 
         chats.forEach(chat => {
 
-            const item = document.createElement("div");
+            const item =
+                document.createElement("div");
 
-            item.className = "chat-item";
 
-            item.dataset.swap = chat.swapId;
+            item.className =
+                "chat-item";
 
+
+            item.dataset.swap =
+                chat.swapId;
+
+
+            // Keep selected chat highlighted
             if (
                 String(chat.swapId) ===
                 String(currentSwapId)
@@ -317,62 +399,84 @@ async function loadChatList(autoOpenId = null) {
 
             }
 
+
+            const partnerName =
+                chat.partner?.name ||
+                "Unknown User";
+
+
+            const firstLetter =
+                partnerName
+                    .charAt(0)
+                    .toUpperCase();
+
+
             item.innerHTML = `
 
                 <div class="chat-avatar">
 
-                    ${chat.partner.name
-                        .charAt(0)
-                        .toUpperCase()}
+                    ${firstLetter}
 
                 </div>
+
 
                 <div class="chat-info">
 
                     <h4>
-
-                        ${chat.partner.name}
-
+                        ${partnerName}
                     </h4>
 
                     <p>
-
-                        ${chat.lastMessage || "💬 Start chatting now"}
-
+                        ${chat.lastMessage ||
+                        "💬 Start chatting now"}
                     </p>
 
                 </div>
 
+
                 <div class="chat-time">
 
-                    ${chat.lastTime
-                        ? formatTime(chat.lastTime)
-                        : ""}
+                    ${
+                        chat.lastTime
+                            ? formatTime(chat.lastTime)
+                            : ""
+                    }
 
                 </div>
 
             `;
 
-            item.addEventListener("click", () => {
 
-                openChat(chat);
+            // ---------------------------------------------
+            // Open chat
+            // ---------------------------------------------
 
-            });
+            item.addEventListener(
+                "click",
+                () => {
+
+                    openChat(chat);
+
+                }
+            );
+
 
             chatList.appendChild(item);
 
         });
 
-        // ---------------------------------
+
+        // ---------------------------------------------
         // Automatically open chat
-        // if redirected from requests page
-        // ---------------------------------
+        // ---------------------------------------------
 
         if (autoOpenId) {
 
             setTimeout(() => {
 
-                openChatById(autoOpenId);
+                openChatById(
+                    autoOpenId
+                );
 
             }, 100);
 
@@ -382,62 +486,265 @@ async function loadChatList(autoOpenId = null) {
 
     catch (err) {
 
-        console.log("Chat List Error:", err);
+        console.log(
+            "Chat List Error:",
+            err
+        );
 
     }
 
 }
+
+
+// ======================================================
+// Get Skill Exchange
+// ======================================================
+//
+// Supports several possible backend structures:
+//
+// chat.teachSkill
+// chat.learnSkill
+//
+// chat.swap.teachSkill
+// chat.swap.learnSkill
+//
+// chat.swapData.teachSkill
+// chat.swapData.learnSkill
+//
+// chat.skillExchange
+// ======================================================
+
+function getSkillExchange(chat) {
+
+    let teachSkill = "";
+    let learnSkill = "";
+
+
+    // ---------------------------------------------
+    // Direct properties
+    // ---------------------------------------------
+
+    teachSkill =
+        chat.teachSkill ||
+        "";
+
+    learnSkill =
+        chat.learnSkill ||
+        "";
+
+
+    // ---------------------------------------------
+    // Nested swap object
+    // ---------------------------------------------
+
+    if (
+        (!teachSkill || !learnSkill) &&
+        chat.swap &&
+        typeof chat.swap === "object"
+    ) {
+
+        teachSkill =
+            chat.swap.teachSkill ||
+            teachSkill;
+
+        learnSkill =
+            chat.swap.learnSkill ||
+            learnSkill;
+
+    }
+
+
+    // ---------------------------------------------
+    // Nested swapData object
+    // ---------------------------------------------
+
+    if (
+        (!teachSkill || !learnSkill) &&
+        chat.swapData &&
+        typeof chat.swapData === "object"
+    ) {
+
+        teachSkill =
+            chat.swapData.teachSkill ||
+            teachSkill;
+
+        learnSkill =
+            chat.swapData.learnSkill ||
+            learnSkill;
+
+    }
+
+
+    // ---------------------------------------------
+    // Alternative names
+    // ---------------------------------------------
+
+    teachSkill =
+        teachSkill ||
+        chat.mySkill ||
+        chat.offeredSkill ||
+        "";
+
+
+    learnSkill =
+        learnSkill ||
+        chat.partnerSkill ||
+        chat.requestedSkill ||
+        "";
+
+
+    // ---------------------------------------------
+    // Final display
+    // ---------------------------------------------
+
+    if (teachSkill && learnSkill) {
+
+        return `${teachSkill} <-> ${learnSkill}`;
+
+    }
+
+
+    if (teachSkill) {
+
+        return `${teachSkill} <-> Skill`;
+
+    }
+
+
+    if (learnSkill) {
+
+        return `Skill <-> ${learnSkill}`;
+
+    }
+
+
+    return "Skill Exchange";
+
+}
+
+
 // ======================================================
 // Open Chat
 // ======================================================
 
 function openChat(chat) {
 
-    currentSwapId = String(chat.swapId);
+    currentSwapId =
+        String(chat.swapId);
 
-    chatUser.textContent = chat.partner.name;
+
+    // ---------------------------------------------
+    // Partner name
+    // ---------------------------------------------
+
+    const partnerName =
+        chat.partner?.name ||
+        "Unknown User";
+
+
+    chatUser.textContent =
+        partnerName;
+
+
+    // ---------------------------------------------
+    // Avatar
+    // ---------------------------------------------
 
     chatAvatar.textContent =
-        chat.partner.name
+        partnerName
             .charAt(0)
             .toUpperCase();
 
+
+    // ---------------------------------------------
+    // IMPORTANT:
+    // Show exchanged skills instead of
+    // "Active Skill Partner"
+    // ---------------------------------------------
+
     chatStatus.textContent =
-        "Active Skill Partner";
+        getSkillExchange(chat);
+
+
+    // ---------------------------------------------
+    // Enable input
+    // ---------------------------------------------
 
     messageInput.disabled = false;
+
     sendBtn.disabled = false;
 
+
+    // ---------------------------------------------
+    // Remove welcome screen
+    // ---------------------------------------------
+
+    const welcome =
+        chatBody.querySelector(".empty-chat");
+
+    if (welcome) {
+
+        welcome.remove();
+
+    }
+
+
+    // ---------------------------------------------
     // Highlight selected chat
+    // ---------------------------------------------
+
     document
         .querySelectorAll(".chat-item")
         .forEach(item => {
 
-            item.classList.remove("active");
+            item.classList.remove(
+                "active"
+            );
+
 
             if (
-                item.dataset.swap === currentSwapId
+                item.dataset.swap ===
+                currentSwapId
             ) {
 
-                item.classList.add("active");
+                item.classList.add(
+                    "active"
+                );
 
             }
 
         });
 
+
+    // ---------------------------------------------
     // Clear previous messages
+    // ---------------------------------------------
+
     chatBody.innerHTML = "";
 
-    // Join socket room
-    joinRoom(currentSwapId);
 
+    // ---------------------------------------------
+    // Join socket room
+    // ---------------------------------------------
+
+    joinRoom(
+        currentSwapId
+    );
+
+
+    // ---------------------------------------------
     // Update URL
-    const url = new URL(window.location);
+    // ---------------------------------------------
+
+    const url =
+        new URL(window.location);
+
 
     url.searchParams.set(
         "swapId",
         currentSwapId
     );
+
 
     window.history.replaceState(
         {},
@@ -445,12 +752,22 @@ function openChat(chat) {
         url
     );
 
+
+    // ---------------------------------------------
     // Load previous messages
+    // ---------------------------------------------
+
     loadMessages();
+
+
+    // ---------------------------------------------
+    // Focus input
+    // ---------------------------------------------
 
     messageInput.focus();
 
 }
+
 
 // ======================================================
 // Load Messages
@@ -462,7 +779,9 @@ async function loadMessages() {
 
     if (isLoadingMessages) return;
 
+
     isLoadingMessages = true;
+
 
     try {
 
@@ -474,7 +793,8 @@ async function loadMessages() {
 
                 headers: {
 
-                    Authorization: `Bearer ${token}`
+                    Authorization:
+                        `Bearer ${token}`
 
                 }
 
@@ -482,7 +802,10 @@ async function loadMessages() {
 
         );
 
-        const messages = await response.json();
+
+        const messages =
+            await response.json();
+
 
         if (!response.ok) {
 
@@ -492,7 +815,13 @@ async function loadMessages() {
 
         }
 
+
         chatBody.innerHTML = "";
+
+
+        // ---------------------------------------------
+        // No messages
+        // ---------------------------------------------
 
         if (!messages.length) {
 
@@ -504,7 +833,10 @@ async function loadMessages() {
 
                     <h2>No Messages Yet</h2>
 
-                    <p>Start chatting now.</p>
+                    <p>
+                        Start chatting with your
+                        skill partner.
+                    </p>
 
                 </div>
 
@@ -514,15 +846,22 @@ async function loadMessages() {
 
         }
 
+
+        // ---------------------------------------------
+        // Display messages
+        // ---------------------------------------------
+
         messages.forEach(msg => {
 
-            const senderId = String(
+            const senderId =
+                String(
 
-                msg.sender._id ||
-                msg.sender.id ||
-                msg.sender
+                    msg.sender?._id ||
+                    msg.sender?.id ||
+                    msg.sender
 
-            );
+                );
+
 
             createMessage(
 
@@ -532,13 +871,16 @@ async function loadMessages() {
                     ? "sent"
                     : "received",
 
-                formatTime(msg.createdAt),
+                formatTime(
+                    msg.createdAt
+                ),
 
                 msg._id
 
             );
 
         });
+
 
         scrollToBottom();
 
@@ -561,22 +903,32 @@ async function loadMessages() {
 
 }
 
+
 // ======================================================
 // Receive Message
 // ======================================================
 
 function receiveMessage(msg) {
 
-    // Refresh sidebar only
+    // ---------------------------------------------
+    // Refresh sidebar
+    // ---------------------------------------------
+
     loadChatList();
+
 
     const swapId =
 
         typeof msg.swap === "object"
 
-            ? msg.swap._id
+            ? msg.swap?._id
 
             : msg.swap;
+
+
+    // ---------------------------------------------
+    // Ignore messages from another chat
+    // ---------------------------------------------
 
     if (
 
@@ -589,25 +941,47 @@ function receiveMessage(msg) {
 
     }
 
+
+    // ---------------------------------------------
+    // Determine sender
+    // ---------------------------------------------
+
+    const senderId =
+        String(
+
+            msg.sender?._id ||
+            msg.sender?.id ||
+            msg.sender
+
+        );
+
+
+    // ---------------------------------------------
+    // Create message
+    // ---------------------------------------------
+
     createMessage(
 
         msg.message,
 
-        String(msg.sender._id) === currentUserId
-
+        senderId === currentUserId
             ? "sent"
-
             : "received",
 
-        formatTime(msg.createdAt),
+        formatTime(
+            msg.createdAt
+        ),
 
         msg._id
 
     );
 
+
     scrollToBottom();
 
 }
+
+
 // ======================================================
 // Send Message
 // ======================================================
@@ -616,13 +990,18 @@ async function sendMessage() {
 
     if (!currentSwapId) {
 
-        alert("Please select a conversation.");
+        alert(
+            "Please select a conversation."
+        );
 
         return;
 
     }
 
-    const text = messageInput.value.trim();
+
+    const text =
+        messageInput.value.trim();
+
 
     if (!text) {
 
@@ -630,7 +1009,9 @@ async function sendMessage() {
 
     }
 
+
     sendBtn.disabled = true;
+
 
     try {
 
@@ -644,9 +1025,11 @@ async function sendMessage() {
 
                 headers: {
 
-                    "Content-Type": "application/json",
+                    "Content-Type":
+                        "application/json",
 
-                    Authorization: `Bearer ${token}`
+                    Authorization:
+                        `Bearer ${token}`
 
                 },
 
@@ -660,23 +1043,39 @@ async function sendMessage() {
 
         );
 
-        const data = await response.json();
+
+        const data =
+            await response.json();
+
 
         if (!response.ok) {
 
-            alert(data.message || "Unable to send message.");
+            alert(
+                data.message ||
+                "Unable to send message."
+            );
 
             return;
 
         }
 
-        // Clear textbox
+
+        // ---------------------------------------------
+        // Clear input
+        // ---------------------------------------------
+
         messageInput.value = "";
 
-        // If socket isn't connected,
-        // show message immediately.
 
-        if (!socket || !socket.connected) {
+        // ---------------------------------------------
+        // If socket disconnected,
+        // display immediately
+        // ---------------------------------------------
+
+        if (
+            !socket ||
+            !socket.connected
+        ) {
 
             createMessage(
 
@@ -684,7 +1083,9 @@ async function sendMessage() {
 
                 "sent",
 
-                formatTime(data.createdAt),
+                formatTime(
+                    data.createdAt
+                ),
 
                 data._id
 
@@ -692,8 +1093,13 @@ async function sendMessage() {
 
         }
 
-        // Refresh chat sidebar
+
+        // ---------------------------------------------
+        // Refresh sidebar
+        // ---------------------------------------------
+
         loadChatList();
+
 
         messageInput.focus();
 
@@ -701,9 +1107,14 @@ async function sendMessage() {
 
     catch (err) {
 
-        console.error("Send Message Error:", err);
+        console.error(
+            "Send Message Error:",
+            err
+        );
 
-        alert("Failed to send message.");
+        alert(
+            "Failed to send message."
+        );
 
     }
 
@@ -715,17 +1126,28 @@ async function sendMessage() {
 
 }
 
+
 // ======================================================
 // Create Message Bubble
 // ======================================================
 
-function createMessage(text, type, time, id = "") {
+function createMessage(
+    text,
+    type,
+    time,
+    id = ""
+) {
 
+    // ---------------------------------------------
     // Prevent duplicate messages
+    // ---------------------------------------------
+
     if (
 
         id &&
-        document.querySelector(`[data-id="${id}"]`)
+        document.querySelector(
+            `[data-id="${id}"]`
+        )
 
     ) {
 
@@ -733,9 +1155,16 @@ function createMessage(text, type, time, id = "") {
 
     }
 
-    // Remove empty screen
 
-    const empty = document.querySelector(".empty-chat");
+    // ---------------------------------------------
+    // Remove empty screen
+    // ---------------------------------------------
+
+    const empty =
+        document.querySelector(
+            ".empty-chat"
+        );
+
 
     if (empty) {
 
@@ -743,43 +1172,260 @@ function createMessage(text, type, time, id = "") {
 
     }
 
-    const wrapper = document.createElement("div");
 
-    wrapper.className = `message ${type}`;
+    // ---------------------------------------------
+    // Message wrapper
+    // ---------------------------------------------
+
+    const wrapper =
+        document.createElement("div");
+
+
+    wrapper.className =
+        `message ${type}`;
+
 
     if (id) {
 
-        wrapper.dataset.id = id;
+        wrapper.dataset.id =
+            id;
 
     }
 
-    const bubble = document.createElement("div");
 
-    bubble.className = "bubble";
+    // ---------------------------------------------
+    // Bubble
+    // ---------------------------------------------
 
-    const messageText = document.createElement("div");
+    const bubble =
+        document.createElement("div");
 
-    messageText.className = "message-text";
 
-    messageText.textContent = text;
+    bubble.className =
+        "bubble";
 
-    const messageTime = document.createElement("div");
 
-    messageTime.className = "message-time";
+    // ---------------------------------------------
+    // Message text
+    // ---------------------------------------------
 
-    messageTime.textContent = time;
+    const messageText =
+        document.createElement("div");
 
-    bubble.appendChild(messageText);
 
-    bubble.appendChild(messageTime);
+    messageText.className =
+        "message-text";
 
-    wrapper.appendChild(bubble);
 
-    chatBody.appendChild(wrapper);
+    messageText.textContent =
+        text;
+
+
+    // ---------------------------------------------
+    // Message time
+    // ---------------------------------------------
+
+    const messageTime =
+        document.createElement("div");
+
+
+    messageTime.className =
+        "message-time";
+
+
+    messageTime.textContent =
+        time;
+
+
+    // ---------------------------------------------
+    // Build
+    // ---------------------------------------------
+
+    bubble.appendChild(
+        messageText
+    );
+
+    bubble.appendChild(
+        messageTime
+    );
+
+    wrapper.appendChild(
+        bubble
+    );
+
+    chatBody.appendChild(
+        wrapper
+    );
+
 
     scrollToBottom();
 
 }
+
+
+// ======================================================
+// Emoji Picker
+// ======================================================
+
+function initializeEmojiPicker() {
+
+    if (
+        !emojiBtn ||
+        !emojiPicker ||
+        !messageInput
+    ) {
+
+        console.log(
+            "Emoji elements not found."
+        );
+
+        return;
+
+    }
+
+
+    // ---------------------------------------------
+    // Open / close picker
+    // ---------------------------------------------
+
+    emojiBtn.addEventListener(
+        "click",
+        (event) => {
+
+            event.stopPropagation();
+
+            emojiPicker.classList.toggle(
+                "show"
+            );
+
+        }
+    );
+
+
+    // ---------------------------------------------
+    // Emoji buttons
+    // ---------------------------------------------
+
+    const emojiButtons =
+        emojiPicker.querySelectorAll(
+            "button"
+        );
+
+
+    emojiButtons.forEach(button => {
+
+        button.addEventListener(
+            "click",
+            (event) => {
+
+                event.stopPropagation();
+
+
+                const emoji =
+                    button.textContent;
+
+
+                // ---------------------------------
+                // Cursor position
+                // ---------------------------------
+
+                const start =
+                    messageInput.selectionStart ??
+                    messageInput.value.length;
+
+
+                const end =
+                    messageInput.selectionEnd ??
+                    messageInput.value.length;
+
+
+                const text =
+                    messageInput.value;
+
+
+                // ---------------------------------
+                // Insert emoji
+                // ---------------------------------
+
+                messageInput.value =
+                    text.substring(
+                        0,
+                        start
+                    ) +
+
+                    emoji +
+
+                    text.substring(
+                        end
+                    );
+
+
+                // ---------------------------------
+                // Put cursor after emoji
+                // ---------------------------------
+
+                const newPosition =
+                    start +
+                    emoji.length;
+
+
+                messageInput.focus();
+
+
+                messageInput.selectionStart =
+                    newPosition;
+
+
+                messageInput.selectionEnd =
+                    newPosition;
+
+
+                // ---------------------------------
+                // Close picker
+                // ---------------------------------
+
+                emojiPicker.classList.remove(
+                    "show"
+                );
+
+            }
+        );
+
+    });
+
+
+    // ---------------------------------------------
+    // Close when clicking outside
+    // ---------------------------------------------
+
+    document.addEventListener(
+        "click",
+        (event) => {
+
+            if (
+
+                !emojiPicker.contains(
+                    event.target
+                ) &&
+
+                !emojiBtn.contains(
+                    event.target
+                )
+
+            ) {
+
+                emojiPicker.classList.remove(
+                    "show"
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
 // ======================================================
 // Search Chats
 // ======================================================
@@ -788,28 +1434,33 @@ function filterChats() {
 
     if (!searchChat) return;
 
-    const keyword = searchChat.value
-        .trim()
-        .toLowerCase();
 
-    document.querySelectorAll(".chat-item").forEach(item => {
-
-        const name = item
-            .querySelector("h4")
-            .textContent
+    const keyword =
+        searchChat.value
+            .trim()
             .toLowerCase();
 
-        item.style.display =
 
-            name.includes(keyword)
+    document
+        .querySelectorAll(".chat-item")
+        .forEach(item => {
 
-                ? "flex"
+            const name =
+                item
+                    .querySelector("h4")
+                    .textContent
+                    .toLowerCase();
 
-                : "none";
 
-    });
+            item.style.display =
+                name.includes(keyword)
+                    ? "flex"
+                    : "none";
+
+        });
 
 }
+
 
 // ======================================================
 // Format Time
@@ -819,7 +1470,10 @@ function formatTime(date) {
 
     if (!date) return "";
 
-    const d = new Date(date);
+
+    const d =
+        new Date(date);
+
 
     if (isNaN(d.getTime())) {
 
@@ -827,19 +1481,24 @@ function formatTime(date) {
 
     }
 
-    let hour = d.getHours();
 
-    let minute = d.getMinutes();
+    let hour =
+        d.getHours();
+
+
+    let minute =
+        d.getMinutes();
+
 
     const ampm =
-
         hour >= 12
-
             ? "PM"
-
             : "AM";
 
-    hour = hour % 12;
+
+    hour =
+        hour % 12;
+
 
     if (hour === 0) {
 
@@ -847,11 +1506,16 @@ function formatTime(date) {
 
     }
 
-    minute = String(minute).padStart(2, "0");
+
+    minute =
+        String(minute)
+            .padStart(2, "0");
+
 
     return `${hour}:${minute} ${ampm}`;
 
 }
+
 
 // ======================================================
 // Scroll To Bottom
@@ -862,12 +1526,12 @@ function scrollToBottom() {
     requestAnimationFrame(() => {
 
         chatBody.scrollTop =
-
             chatBody.scrollHeight;
 
     });
 
 }
+
 
 // ======================================================
 // Clear Chat
@@ -877,13 +1541,41 @@ function clearChat() {
 
     currentSwapId = "";
 
-    chatBody.innerHTML = "";
+    currentRoom = "";
 
-    chatUser.textContent = "Select a Conversation";
 
-    chatAvatar.textContent = "?";
+    chatBody.innerHTML = `
 
-    chatStatus.textContent = "";
+        <div class="empty-chat">
+
+            <i class="fa-solid fa-comments"></i>
+
+            <h2>
+                Welcome to SkillHub Chat
+            </h2>
+
+            <p>
+                Select a conversation from
+                the left sidebar to start
+                chatting with your skill partner.
+            </p>
+
+        </div>
+
+    `;
+
+
+    chatUser.textContent =
+        "Select a Chat";
+
+
+    chatAvatar.innerHTML =
+        `<i class="fa-solid fa-user"></i>`;
+
+
+    chatStatus.textContent =
+        "Select a conversation";
+
 
     messageInput.value = "";
 
@@ -893,14 +1585,13 @@ function clearChat() {
 
 }
 
+
 // ======================================================
 // Cleanup
 // ======================================================
 
 window.addEventListener(
-
     "beforeunload",
-
     () => {
 
         if (!socket) {
@@ -909,20 +1600,18 @@ window.addEventListener(
 
         }
 
+
         if (currentRoom) {
 
             socket.emit(
-
                 "leaveRoom",
-
                 currentRoom
-
             );
 
         }
 
+
         socket.disconnect();
 
     }
-
 );
