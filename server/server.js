@@ -1,8 +1,8 @@
+console.log("===== REVIEW VERSION LOADED =====");
 const dns = require("dns");
 
 // Force Google DNS to resolve MongoDB SRV strings
 dns.setServers(["8.8.8.8", "8.8.4.4"]);
-
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
@@ -69,12 +69,13 @@ const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
 const swapRoutes = require("./routes/swapRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+const reviewRoutes = require("./routes/reviewRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/swaps", swapRoutes);
 app.use("/api/chat", chatRoutes);
-
+app.use("/api/reviews", reviewRoutes);
 // ===============================
 // Health Check
 // ===============================
