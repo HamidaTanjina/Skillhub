@@ -281,72 +281,67 @@ function renderRequests(filter = "sent") {
         // Pending Confirmation
         // =====================================================
 
-        else if (request.status === "Pending Confirmation") {
+       else if (request.status === "Pending Confirmation") {
 
-            statusClass = "pending";
+    statusClass = "pending";
 
-            buttons = `
-                <button
-                    class="chat-btn"
-                    onclick="openChat('${request.id}')">
+    buttons = `
+        <button
+            class="chat-btn"
+            onclick="openChat('${request.id}')">
 
-                    <i class="fa-solid fa-comments"></i>
-                    Chat
-                </button>
-            `;
+            <i class="fa-solid fa-comments"></i>
+            Chat
 
-            // Sender has already reviewed
-            if (
-                request.isSender &&
-                request.senderCompleted
-            ) {
+        </button>
+    `;
 
-                buttons += `
-                    <button
-                        class="pending-btn"
-                        disabled>
+    // -----------------------------------------
+    // Current user already submitted review
+    // -----------------------------------------
 
-                        <i class="fa-solid fa-clock"></i>
-                        Waiting for partner confirmation
-                    </button>
-                `;
+    const currentUserAlreadyReviewed =
+        request.isSender
+            ? request.senderCompleted
+            : request.receiverCompleted;
 
-            }
+    if (currentUserAlreadyReviewed) {
 
-            // Receiver has already reviewed
-            else if (
-                !request.isSender &&
-                request.receiverCompleted
-            ) {
+        buttons += `
+            <button
+                class="pending-btn"
+                disabled>
 
-                buttons += `
-                    <button
-                        class="pending-btn"
-                        disabled>
+                <i class="fa-solid fa-clock"></i>
 
-                        <i class="fa-solid fa-clock"></i>
-                        Waiting for partner confirmation
-                    </button>
-                `;
+                Waiting for partner confirmation
 
-            }
+            </button>
+        `;
 
-            // Current user has NOT reviewed yet
-            else {
+    }
 
-                buttons += `
-                    <button
-                        class="complete-btn"
-                        onclick="openReview('${request.id}')">
+    // -----------------------------------------
+    // Current user has NOT reviewed yet
+    // -----------------------------------------
 
-                        <i class="fa-solid fa-circle-check"></i>
-                        Complete Swap
-                    </button>
-                `;
+    else {
 
-            }
+        buttons += `
+            <button
+                class="complete-btn"
+                onclick="openReview('${request.id}')">
 
-        }
+                <i class="fa-solid fa-circle-check"></i>
+
+                Complete Swap
+
+            </button>
+        `;
+
+    }
+
+}
 
         // =====================================================
         // Completed
@@ -647,18 +642,17 @@ function openChat(swapId) {
 // ======================================================
 // Review Modal
 // ======================================================
-
 function openReview(swapId) {
 
     currentReviewSwap = swapId;
 
     selectedRating = 0;
 
-    document.querySelectorAll(".star-rating i").forEach(star => {
-
-        star.classList.remove("active");
-
-    });
+    document
+        .querySelectorAll(".star-rating i")
+        .forEach(star => {
+            star.classList.remove("active");
+        });
 
     document.getElementById("reviewComment").value = "";
 
@@ -667,13 +661,6 @@ function openReview(swapId) {
     document.getElementById("reviewModal").style.display = "flex";
 
 }
-
-function closeReviewModal() {
-
-    document.getElementById("reviewModal").style.display = "none";
-
-}
-
 // ======================================================
 // Star Rating
 // ======================================================
@@ -711,9 +698,12 @@ document.addEventListener("DOMContentLoaded", () => {
 // ======================================================
 // Submit Review
 // ======================================================
-
 async function submitReview() {
 
+    if (!currentReviewSwap) {
+        alert("Invalid swap.");
+        return;
+    }
 
     if (selectedRating === 0) {
         alert("Please select a rating.");
@@ -726,73 +716,104 @@ async function submitReview() {
         .trim();
 
     if (!comment) {
-
         alert("Please write your review.");
-
         return;
-
     }
 
     const recommend =
         document.getElementById("recommendUser").checked;
 
+    const submitButton =
+        document.querySelector(".submit-review");
+
     try {
 
+        // Prevent double click
+        submitButton.disabled = true;
+        submitButton.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
         const response = await fetch(
-
             `${API_BASE_URL}/reviews`,
-
             {
-
                 method: "POST",
 
                 headers: {
-
                     "Content-Type": "application/json",
-
-                    Authorization: `Bearer ${token}`
-
+                    "Authorization": `Bearer ${token}`
                 },
 
                 body: JSON.stringify({
-
                     swapId: currentReviewSwap,
-
                     rating: selectedRating,
-
-                    comment,
-
-                    recommend
-
+                    comment: comment,
+                    recommend: recommend
                 })
-
             }
-
         );
 
         const data = await response.json();
 
+        console.log("Review response:", data);
+
         if (!response.ok) {
 
-            alert(data.message);
+            alert(data.message || "Unable to submit review.");
+
+            submitButton.disabled = false;
+            submitButton.innerHTML = "Submit Review";
 
             return;
-
         }
 
-        alert(data.message);
+        // -----------------------------------------
+        // CLOSE MODAL IMMEDIATELY
+        // -----------------------------------------
 
         closeReviewModal();
 
+        // Reset review values
+        currentReviewSwap = "";
+        selectedRating = 0;
+
+        document.getElementById("reviewComment").value = "";
+        document.getElementById("recommendUser").checked = false;
+
+        document.querySelectorAll(".star-rating i")
+            .forEach(star => {
+                star.classList.remove("active");
+            });
+
+        // -----------------------------------------
+        // Refresh request cards
+        // -----------------------------------------
+
         await fetchRequests();
+
+        // -----------------------------------------
+        // Show backend message
+        // -----------------------------------------
+
+        alert(
+            data.message ||
+            "Review submitted successfully."
+        );
 
     }
 
     catch (error) {
 
-        console.error(error);
+        console.error("Review submission error:", error);
 
         alert("Unable to submit review.");
+
+    }
+
+    finally {
+
+        submitButton.disabled = false;
+
+        submitButton.innerHTML = "Submit Review";
 
     }
 
