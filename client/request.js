@@ -1,6 +1,6 @@
 // ======================================================
 // SkillHub Request Management
-// Part 1 - Setup & Fetch Requests
+// Part 1A - Setup & Fetch Requests
 // ======================================================
 
 const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
@@ -11,6 +11,8 @@ if (!token) {
 }
 
 let requestsData = [];
+let currentReviewSwap = "";
+let selectedRating = 0;
 
 const params = new URLSearchParams(window.location.search);
 let currentFilter = params.get("tab") || "sent";
@@ -37,7 +39,7 @@ function parseJwt(token) {
 
         return JSON.parse(atob(base64));
 
-    } catch (error) {
+    } catch {
 
         return null;
 
@@ -54,95 +56,69 @@ async function fetchRequests() {
     const container = document.getElementById("requestContainer");
 
     container.innerHTML = `
-
         <div class="empty">
-
             <i class="fa-solid fa-spinner fa-spin"></i>
-
             <h2>Loading Requests...</h2>
-
         </div>
-
     `;
 
     try {
 
         const response = await fetch(
-
             `${API_BASE_URL}/swaps/my`,
-
             {
-
                 headers: {
-
                     Authorization: `Bearer ${token}`
-
                 }
-
             }
-
         );
 
         const data = await response.json();
 
         if (!response.ok) {
-
             throw new Error(data.message);
-
         }
 
         const user = parseJwt(token);
+        const currentUserId = (user.id || user._id).toString();
 
-        const currentUserId =
-            (user.id || user._id).toString();
+    requestsData = data.map(item => {
 
-        requestsData = data.map(item => {
+    const senderId = (item.sender._id || item.sender).toString();
 
-            const senderId =
-                (item.sender._id || item.sender).toString();
+    const receiverId = (item.receiver._id || item.receiver).toString();
 
-            const receiverId =
-                (item.receiver._id || item.receiver).toString();
+    const isSender = senderId === currentUserId;
 
-            const isSender =
-                senderId === currentUserId;
+    const partner = isSender ? item.receiver : item.sender;
 
-            const partner =
-                isSender
-                    ? item.receiver
-                    : item.sender;
+    return {
 
-            return {
+        id: item._id,
 
-                id: item._id,
+        partnerName: partner?.name || "Unknown User",
 
-                partnerName:
-                    partner?.name || "Unknown User",
+        location: partner?.location || "Location not added",
 
-                location:
-                    partner?.location || "Location not added",
+        teachSkill: item.teachSkill,
 
-                teachSkill:
-                    item.teachSkill,
+        learnSkill: item.learnSkill,
 
-                learnSkill:
-                    item.learnSkill,
+        status: item.status,
 
-                status:
-                    item.status,
+        isSender,
 
-                isSender:
-                    isSender,
+        senderId,
 
-                senderId:
-                    senderId,
+        receiverId,
 
-                receiverId:
-                    receiverId
+        senderCompleted: item.senderCompleted,
 
-            };
+        receiverCompleted: item.receiverCompleted
 
-        });
+    };
+
+});
 
         renderRequests(currentFilter);
 
@@ -153,17 +129,11 @@ async function fetchRequests() {
         console.error(error);
 
         container.innerHTML = `
-
             <div class="empty">
-
                 <i class="fa-solid fa-circle-exclamation"></i>
-
                 <h2>Unable to load requests</h2>
-
                 <p>Please try again later.</p>
-
             </div>
-
         `;
 
     }
@@ -188,8 +158,7 @@ function renderRequests(filter = "sent") {
 
         filtered = requestsData.filter(request =>
             request.isSender &&
-            (request.status === "Pending" ||
-             request.status === "Accepted")
+            request.status === "Pending"
         );
 
     }
@@ -206,7 +175,8 @@ function renderRequests(filter = "sent") {
     else if (filter === "accepted") {
 
         filtered = requestsData.filter(request =>
-            request.status === "Accepted"
+            request.status === "Accepted" ||
+            request.status === "Pending Confirmation"
         );
 
     }
@@ -222,35 +192,24 @@ function renderRequests(filter = "sent") {
     if (filtered.length === 0) {
 
         container.innerHTML = `
-
             <div class="empty">
-
                 <i class="fa-regular fa-folder-open"></i>
-
                 <h2>No Requests Found</h2>
-
                 <p>You don't have any requests in this section yet.</p>
-
             </div>
-
         `;
 
         return;
-
     }
-
-    // -----------------------------
-    // Generate Cards
-    // -----------------------------
 
     filtered.forEach(request => {
 
         let statusClass = "";
         let buttons = "";
 
-        // -----------------------------
+        // =====================================================
         // Pending
-        // -----------------------------
+        // =====================================================
 
         if (request.status === "Pending") {
 
@@ -259,31 +218,21 @@ function renderRequests(filter = "sent") {
             if (request.isSender) {
 
                 buttons = `
-
                     <button class="pending-btn" disabled>
-
                         <i class="fa-solid fa-clock"></i>
-
                         Waiting...
-
                     </button>
-
                 `;
 
-            }
-
-            else {
+            } else {
 
                 buttons = `
-
                     <button
                         class="accept-btn"
                         onclick="updateRequestStatus('${request.id}','accept')">
 
                         <i class="fa-solid fa-check"></i>
-
                         Accept
-
                     </button>
 
                     <button
@@ -291,70 +240,122 @@ function renderRequests(filter = "sent") {
                         onclick="updateRequestStatus('${request.id}','reject')">
 
                         <i class="fa-solid fa-xmark"></i>
-
                         Reject
-
                     </button>
-
                 `;
 
             }
 
         }
 
-        // -----------------------------
+        // =====================================================
         // Accepted
-        // -----------------------------
+        // =====================================================
 
         else if (request.status === "Accepted") {
 
             statusClass = "accepted";
 
             buttons = `
+                <button
+                    class="chat-btn"
+                    onclick="openChat('${request.id}')">
 
-    <button
-        class="chat-btn"
-        onclick="openChat('${request.id}')">
+                    <i class="fa-solid fa-comments"></i>
+                    Chat
+                </button>
 
-        <i class="fa-solid fa-comments"></i>
+                <button
+                    class="complete-btn"
+                    onclick="openReview('${request.id}')">
 
-        Chat
-
-    </button>
-
-
+                    <i class="fa-solid fa-circle-check"></i>
+                    Complete Swap
+                </button>
             `;
 
-            if (!request.isSender) {
+        }
+
+        // =====================================================
+        // Pending Confirmation
+        // =====================================================
+
+        else if (request.status === "Pending Confirmation") {
+
+            statusClass = "pending";
+
+            buttons = `
+                <button
+                    class="chat-btn"
+                    onclick="openChat('${request.id}')">
+
+                    <i class="fa-solid fa-comments"></i>
+                    Chat
+                </button>
+            `;
+
+            // Sender has already reviewed
+            if (
+                request.isSender &&
+                request.senderCompleted
+            ) {
 
                 buttons += `
+                    <button
+                        class="pending-btn"
+                        disabled>
 
+                        <i class="fa-solid fa-clock"></i>
+                        Waiting for partner confirmation
+                    </button>
+                `;
+
+            }
+
+            // Receiver has already reviewed
+            else if (
+                !request.isSender &&
+                request.receiverCompleted
+            ) {
+
+                buttons += `
+                    <button
+                        class="pending-btn"
+                        disabled>
+
+                        <i class="fa-solid fa-clock"></i>
+                        Waiting for partner confirmation
+                    </button>
+                `;
+
+            }
+
+            // Current user has NOT reviewed yet
+            else {
+
+                buttons += `
                     <button
                         class="complete-btn"
-                        onclick="updateRequestStatus('${request.id}','complete')">
+                        onclick="openReview('${request.id}')">
 
                         <i class="fa-solid fa-circle-check"></i>
-
-                        Complete
-
+                        Complete Swap
                     </button>
-
                 `;
 
             }
 
         }
 
-        // -----------------------------
+        // =====================================================
         // Completed
-        // -----------------------------
+        // =====================================================
 
         else if (request.status === "Completed") {
 
             statusClass = "completed";
 
             buttons = `
-
                 <button disabled>
 
                     <i class="fa-solid fa-check-double"></i>
@@ -362,21 +363,19 @@ function renderRequests(filter = "sent") {
                     Swap Completed
 
                 </button>
-
             `;
 
         }
 
-        // -----------------------------
+        // =====================================================
         // Rejected
-        // -----------------------------
+        // =====================================================
 
         else {
 
             statusClass = "rejected";
 
             buttons = `
-
                 <button disabled>
 
                     <i class="fa-solid fa-ban"></i>
@@ -384,15 +383,14 @@ function renderRequests(filter = "sent") {
                     Request Rejected
 
                 </button>
-
             `;
 
         }
 
         const avatar =
             (request.partnerName || "?")
-            .charAt(0)
-            .toUpperCase();
+                .charAt(0)
+                .toUpperCase();
 
         const requestType =
             request.isSender
@@ -408,23 +406,17 @@ function renderRequests(filter = "sent") {
         <div class="user-info">
 
             <div class="avatar">
-
                 ${avatar}
-
             </div>
 
             <div>
 
                 <p class="request-type">
-
                     ${requestType}
-
                 </p>
 
                 <h3>
-
                     ${request.partnerName}
-
                 </h3>
 
                 <p class="location">
@@ -455,11 +447,7 @@ function renderRequests(filter = "sent") {
 
         <div class="skill-item">
 
-            <span class="label">
-
-                Teaching
-
-            </span>
+            <span class="label">Teaching</span>
 
             <span class="skill">
 
@@ -475,11 +463,7 @@ function renderRequests(filter = "sent") {
 
         <div class="skill-item">
 
-            <span class="label">
-
-                Learning
-
-            </span>
+            <span class="label">Learning</span>
 
             <span class="skill learn">
 
@@ -500,7 +484,6 @@ function renderRequests(filter = "sent") {
     </div>
 
 </div>
-
 `;
 
     });
@@ -515,48 +498,25 @@ async function updateRequestStatus(id, action) {
     try {
 
         const response = await fetch(
-
             `${API_BASE_URL}/swaps/${id}/${action}`,
-
             {
-
                 method: "PUT",
-
                 headers: {
-
                     Authorization: `Bearer ${token}`
-
                 }
-
             }
-
         );
 
-       const data = await response.json();
+        const data = await response.json();
 
-if (!response.ok) {
+        if (!response.ok) {
+            alert(data.message || "Unable to update request.");
+            return;
+        }
 
-    alert(data.message || "Unable to update request.");
+        await fetchRequests();
 
-    return;
-
-}
-
-await fetchRequests();
-
-if (
-    action === "complete" &&
-    data.status === "Completed"
-) {
-
-    openReviewModal(id);
-
-}
-else {
-
-    alert(data.message);
-
-}
+        alert(data.message);
 
     }
 
@@ -578,7 +538,6 @@ function setupTabListeners() {
 
     const tabs = document.querySelectorAll(".tab-btn");
 
-    // Set active tab from URL/default
     tabs.forEach(tab => {
 
         if (tab.dataset.tab === currentFilter) {
@@ -597,25 +556,18 @@ function setupTabListeners() {
 
         tab.addEventListener("click", () => {
 
-            // Remove previous active tab
-            tabs.forEach(btn =>
-                btn.classList.remove("active")
-            );
+            tabs.forEach(btn => btn.classList.remove("active"));
 
-            // Activate current tab
             tab.classList.add("active");
 
-            // Save selected filter
             currentFilter = tab.dataset.tab;
 
-            // Update URL without reloading page
             const url = new URL(window.location);
 
             url.searchParams.set("tab", currentFilter);
 
             window.history.replaceState({}, "", url);
 
-            // Render cards
             renderRequests(currentFilter);
 
         });
@@ -623,6 +575,7 @@ function setupTabListeners() {
     });
 
 }
+
 // ======================================================
 // Logout
 // ======================================================
@@ -635,11 +588,7 @@ function setupLogout() {
 
     logoutBtn.addEventListener("click", () => {
 
-        const confirmLogout = confirm(
-            "Are you sure you want to logout?"
-        );
-
-        if (!confirmLogout) return;
+        if (!confirm("Are you sure you want to logout?")) return;
 
         localStorage.removeItem("token");
 
@@ -650,17 +599,15 @@ function setupLogout() {
 }
 
 // ======================================================
-// Optional Helper Functions
+// Helpers
 // ======================================================
 
-// Refresh requests manually if needed
 function refreshRequests() {
 
     fetchRequests();
 
 }
 
-// Get status badge class
 function getStatusClass(status) {
 
     switch (status) {
@@ -687,9 +634,165 @@ function getStatusClass(status) {
 // ======================================================
 // Open Chat
 // ======================================================
+
 function openChat(swapId) {
 
-    window.location.href =
-        `chat.html?swapId=${swapId}`;
+    window.location.href = `chat.html?swapId=${swapId}`;
+
+}
+
+// ======================================================
+// Review Modal
+// ======================================================
+
+function openReview(swapId) {
+
+    currentReviewSwap = swapId;
+
+    selectedRating = 0;
+
+    document.querySelectorAll(".star-rating i").forEach(star => {
+
+        star.classList.remove("active");
+
+    });
+
+    document.getElementById("reviewComment").value = "";
+
+    document.getElementById("recommendUser").checked = false;
+
+    document.getElementById("reviewModal").style.display = "flex";
+
+}
+
+function closeReviewModal() {
+
+    document.getElementById("reviewModal").style.display = "none";
+
+}
+
+// ======================================================
+// Star Rating
+// ======================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const stars = document.querySelectorAll(".star-rating i");
+
+    stars.forEach(star => {
+
+        star.addEventListener("click", () => {
+
+            selectedRating = Number(star.dataset.value);
+
+            stars.forEach(s => {
+
+                if (Number(s.dataset.value) <= selectedRating) {
+
+                    s.classList.add("active");
+
+                } else {
+
+                    s.classList.remove("active");
+
+                }
+
+            });
+
+        });
+
+    });
+
+});
+
+// ======================================================
+// Submit Review
+// ======================================================
+
+async function submitReview() {
+
+    if (selectedRating === 0) {
+
+        alert("Please select a rating.");
+
+        return;
+
+    }
+
+    const comment = document
+        .getElementById("reviewComment")
+        .value
+        .trim();
+
+    if (!comment) {
+
+        alert("Please write your review.");
+
+        return;
+
+    }
+
+    const recommend =
+        document.getElementById("recommendUser").checked;
+
+    try {
+
+        const response = await fetch(
+
+            `${API_BASE_URL}/reviews`,
+
+            {
+
+                method: "POST",
+
+                headers: {
+
+                    "Content-Type": "application/json",
+
+                    Authorization: `Bearer ${token}`
+
+                },
+
+                body: JSON.stringify({
+
+                    swapId: currentReviewSwap,
+
+                    rating: selectedRating,
+
+                    comment,
+
+                    recommend
+
+                })
+
+            }
+
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+
+            alert(data.message);
+
+            return;
+
+        }
+
+        alert(data.message);
+
+        closeReviewModal();
+
+        await fetchRequests();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        alert("Unable to submit review.");
+
+    }
 
 }
