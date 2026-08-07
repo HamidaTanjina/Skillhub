@@ -382,17 +382,25 @@ function renderUsers(users) {
 
     </div>
 
-    <div class="card-buttons">
+ <div class="card-buttons">
 
-        ${requestButton}
+    ${requestButton}
 
-        <button class="favorite-btn">
+    <button
+        class="view-profile-btn"
+        onclick="viewProfile('${user._id}')">
 
-            <i class="fa-regular fa-heart"></i>
+        <i class="fa-solid fa-user"></i>
 
-        </button>
+        View Profile
 
-    </div>
+    </button>
+
+    <button class="favorite-btn">
+
+        <i class="fa-regular fa-heart"></i>
+
+    </button>
 
 </div>
 
@@ -787,3 +795,264 @@ if (logoutBtn) {
     });
 
 }
+// ======================================================
+// VIEW PROFILE
+// ======================================================
+
+async function viewProfile(userId) {
+
+    const user = allUsers.find(
+        user => user._id === userId
+    );
+
+    if (!user) {
+
+        alert("User information not found.");
+
+        return;
+
+    }
+
+    // ==============================
+    // Basic User Information
+    // ==============================
+
+    const name = user.name || "Unknown User";
+
+    document.getElementById("profileName").textContent = name;
+
+    document.getElementById("profileLocation").innerHTML = `
+        <i class="fa-solid fa-location-dot"></i>
+        ${user.location || "Location not added"}
+    `;
+
+    document.getElementById("profileBio").textContent =
+        user.bio || "No bio available.";
+
+    document.getElementById("profileAvatar").textContent =
+        name.charAt(0).toUpperCase();
+
+    // ==============================
+    // Show Modal
+    // ==============================
+
+    document.getElementById("profileModal").style.display = "flex";
+
+    // ==============================
+    // Loading State
+    // ==============================
+
+    document.getElementById("profileReviews").innerHTML = `
+        <p class="no-reviews">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Loading reviews...
+        </p>
+    `;
+
+    // ==============================
+    // Load Reviews
+    // ==============================
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/reviews/user/${userId}`
+        );
+
+        const reviews = await response.json();
+
+        if (!response.ok) {
+
+            throw new Error(
+                reviews.message || "Unable to load reviews"
+            );
+
+        }
+
+        // ==============================
+        // Calculate Rating
+        // ==============================
+
+        let totalRating = 0;
+
+        reviews.forEach(review => {
+
+            totalRating += Number(review.rating || 0);
+
+        });
+
+        const averageRating =
+            reviews.length > 0
+                ? totalRating / reviews.length
+                : 0;
+
+        // ==============================
+        // Display Rating
+        // ==============================
+
+        let stars = "";
+
+        for (let i = 1; i <= 5; i++) {
+
+            stars +=
+                i <= Math.round(averageRating)
+                    ? "★"
+                    : "☆";
+
+        }
+
+        document.getElementById("profileStars").textContent =
+            stars;
+
+        document.getElementById("profileRating").textContent =
+            averageRating.toFixed(1);
+
+        document.getElementById("profileReviewCount").textContent =
+            `(${reviews.length} reviews)`;
+
+        // ==============================
+        // No Reviews
+        // ==============================
+
+        if (reviews.length === 0) {
+
+            document.getElementById("profileReviews").innerHTML = `
+                <div class="no-reviews">
+
+                    <i class="fa-regular fa-star"></i>
+
+                    <p>No reviews yet.</p>
+
+                </div>
+            `;
+
+            return;
+
+        }
+
+        // ==============================
+        // Display Reviews
+        // ==============================
+
+        let reviewsHTML = "";
+
+        reviews.forEach(review => {
+
+            const reviewerName =
+                review.reviewer?.name || "Anonymous";
+
+            let reviewStars = "";
+
+            for (let i = 1; i <= 5; i++) {
+
+                reviewStars +=
+                    i <= Number(review.rating)
+                        ? "★"
+                        : "☆";
+
+            }
+
+            reviewsHTML += `
+
+                <div class="review-item">
+
+                    <div class="review-header">
+
+                        <div>
+
+                            <strong>
+                                ${reviewerName}
+                            </strong>
+
+                            <div class="review-stars">
+
+                                ${reviewStars}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <p class="review-comment">
+
+                        ${review.comment}
+
+                    </p>
+
+                    ${
+                        review.recommend
+                            ? `
+                                <span class="recommended">
+
+                                    <i class="fa-solid fa-thumbs-up"></i>
+
+                                    Recommended
+
+                                </span>
+                              `
+                            : ""
+                    }
+
+                </div>
+
+            `;
+
+        });
+
+        document.getElementById("profileReviews").innerHTML =
+            reviewsHTML;
+
+    }
+
+    catch (error) {
+
+        console.error("Review loading error:", error);
+
+        document.getElementById("profileReviews").innerHTML = `
+
+            <div class="no-reviews">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                <p>
+                    Unable to load reviews.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+// ======================================================
+// CLOSE PROFILE MODAL
+// ======================================================
+
+function closeProfileModal() {
+
+    document.getElementById("profileModal").style.display =
+        "none";
+
+}
+
+
+// ======================================================
+// CLOSE PROFILE MODAL WHEN CLICKING OUTSIDE
+// ======================================================
+
+window.addEventListener("click", function(event) {
+
+    const modal =
+        document.getElementById("profileModal");
+
+    if (event.target === modal) {
+
+        closeProfileModal();
+
+    }
+
+});
