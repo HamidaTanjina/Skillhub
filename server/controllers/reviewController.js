@@ -5,9 +5,7 @@ const Swap = require("../models/swapRequest");
 // Submit Review
 // ======================================
 exports.submitReview = async (req, res) => {
-
     try {
-
         const {
             swapId,
             rating,
@@ -25,21 +23,22 @@ exports.submitReview = async (req, res) => {
             });
         }
 
-      // Review allowed only before completion
-if (swap.status === "Completed") {
-    return res.status(400).json({
-        message: "This swap has already been completed."
-    });
-}
+        // Review not allowed after completion
+        if (swap.status === "Completed") {
+            return res.status(400).json({
+                message: "This swap has already been completed."
+            });
+        }
 
-if (
-    swap.status !== "Accepted" &&
-    swap.status !== "Pending Confirmation"
-) {
-    return res.status(400).json({
-        message: "This swap cannot be reviewed."
-    });
-}
+        // Review allowed only for Accepted or Pending Confirmation
+        if (
+            swap.status !== "Accepted" &&
+            swap.status !== "Pending Confirmation"
+        ) {
+            return res.status(400).json({
+                message: "This swap cannot be reviewed."
+            });
+        }
 
         // User must belong to swap
         if (
@@ -63,7 +62,7 @@ if (
             });
         }
 
-        // Determine partner
+        // Determine review target
         const reviewFor =
             swap.sender.toString() === userId
                 ? swap.receiver
@@ -79,147 +78,88 @@ if (
             recommend
         });
 
-        // ======================================
-        // Sender submitted review
-        // ======================================
-
+        // Update swap fields
         if (swap.sender.toString() === userId) {
-
             swap.senderCompleted = true;
             swap.senderRating = rating;
             swap.senderReview = comment;
-
-        }
-
-        // ======================================
-        // Receiver submitted review
-        // ======================================
-
-        else {
-
+        } else {
             swap.receiverCompleted = true;
             swap.receiverRating = rating;
             swap.receiverReview = comment;
-
         }
 
-        // ======================================
-        // Update Status
-        // ======================================
+        // Update swap status
+        if (swap.senderCompleted && swap.receiverCompleted) {
+            swap.status = "Completed";
+        } else {
+            swap.status = "Pending Confirmation";
+        }
 
-     // Both users reviewed
-if (swap.senderCompleted && swap.receiverCompleted) {
+        // Save swap
+        await swap.save();
 
-    swap.status = "Completed";
+        return res.status(201).json({
+            message:
+                swap.status === "Completed"
+                    ? "Swap completed successfully."
+                    : "Review submitted successfully. Waiting for your partner's review.",
+            status: swap.status,
+            review
+        });
 
-    await swap.save();
+    } catch (error) {
+        console.error(error);
 
-    return res.status(201).json({
-
-        message: "Swap completed successfully.",
-
-        status: "Completed",
-
-        review
-
-    });
-
-}
-
-// First review submitted
-swap.status = "Pending Confirmation";
-
-await swap.save();
-
-return res.status(201).json({
-
-    message: "Review submitted successfully. Waiting for your partner's review.",
-
-    status: "Pending Confirmation",
-
-    review
-
-});
-
+        res.status(500).json({
+            message: error.message,
+            stack: error.stack
+        });
     }
-
-    catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-        message: error.message,
-        stack: error.stack
-    });
-}
-
 };
+
 // ======================================
 // Get Reviews of a User
 // ======================================
-
 exports.getUserReviews = async (req, res) => {
-
     try {
-
         const reviews = await Review.find({
-
             reviewFor: req.params.userId
-
         })
-
-        .populate("reviewer", "name")
-
-        .sort({
-
-            createdAt: -1
-
-        });
+            .populate("reviewer", "name")
+            .sort({ createdAt: -1 });
 
         res.json(reviews);
 
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: error.message,
+            stack: error.stack
+        });
     }
-
-   catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-        message: error.message,
-        stack: error.stack
-    });
-}
-
-    
-
 };
 
 // ======================================
 // Get Reviews of One Swap
 // ======================================
-
 exports.getSwapReviews = async (req, res) => {
-
     try {
-
         const reviews = await Review.find({
-
             swap: req.params.swapId
-
         })
-
-        .populate("reviewer", "name")
-        .populate("reviewFor", "name");
+            .populate("reviewer", "name")
+            .populate("reviewFor", "name");
 
         res.json(reviews);
 
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            message: error.message,
+            stack: error.stack
+        });
     }
-
-  catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-        message: error.message,
-        stack: error.stack
-    });
-}
-
 };
