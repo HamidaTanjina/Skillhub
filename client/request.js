@@ -3,7 +3,8 @@
 // Part 1A - Setup & Fetch Requests
 // ======================================================
 
-const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
+const API_BASE_URL =
+    "https://skillhub-backend-cths.onrender.com/api";
 const token = localStorage.getItem("token");
 
 if (!token) {
@@ -607,7 +608,6 @@ function refreshRequests() {
     fetchRequests();
 
 }
-
 function getStatusClass(status) {
 
     switch (status) {
@@ -617,6 +617,9 @@ function getStatusClass(status) {
 
         case "Accepted":
             return "accepted";
+
+        case "Pending Confirmation":
+            return "pending";
 
         case "Completed":
             return "completed";
@@ -711,7 +714,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function submitReview() {
 
-    alert("submitReview called");
 
     if (selectedRating === 0) {
         alert("Please select a rating.");
