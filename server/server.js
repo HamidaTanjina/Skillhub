@@ -13,6 +13,10 @@ const cors = require("cors");
 // ===============================
 const http = require("http");
 const { Server } = require("socket.io");
+const jwt = require("jsonwebtoken");
+
+const onlineUsers = new Map();
+
 
 // ===============================
 // Load Environment Variables
@@ -93,6 +97,54 @@ io.on("connection", (socket) => {
 
     console.log("User Connected:", socket.id);
 
+    // Get logged-in user from JWT
+    let userId = null;
+
+    try {
+
+        const token = socket.handshake.auth.token;
+
+        const decoded = jwt.verify(
+            token,
+            process.env.JWT_SECRET
+        );
+
+        userId = String(
+            decoded.id ||
+            decoded._id
+        );
+if (!userId || userId === "undefined") {
+    throw new Error("Invalid user ID");
+}
+        socket.userId = userId;
+
+        if (!onlineUsers.has(userId)) {
+            onlineUsers.set(userId, new Set());
+        }
+
+        onlineUsers.get(userId).add(socket.id);
+
+        // Tell everyone this user is online
+        io.emit("userOnline", userId);
+
+    } catch (error) {
+
+        console.log("Socket authentication failed");
+
+        socket.disconnect();
+
+        return;
+    }
+
+
+    // Send current online users to newly connected user
+    socket.emit(
+        "onlineUsers",
+        Array.from(onlineUsers.keys())
+    );
+
+
+    // Join chat room
     socket.on("joinRoom", (swapId) => {
 
         socket.join(swapId);
@@ -101,6 +153,8 @@ io.on("connection", (socket) => {
 
     });
 
+
+    // Leave chat room
     socket.on("leaveRoom", (swapId) => {
 
         socket.leave(swapId);
@@ -109,9 +163,35 @@ io.on("connection", (socket) => {
 
     });
 
+
+    // Disconnect
     socket.on("disconnect", () => {
 
-        console.log("User Disconnected:", socket.id);
+        console.log(
+            "User Disconnected:",
+            socket.id
+        );
+
+        if (userId && onlineUsers.has(userId)) {
+
+            const sockets =
+                onlineUsers.get(userId);
+
+            sockets.delete(socket.id);
+
+            // Only offline if ALL their connections are gone
+            if (sockets.size === 0) {
+
+                onlineUsers.delete(userId);
+
+                io.emit(
+                    "userOffline",
+                    userId
+                );
+
+            }
+
+        }
 
     });
 

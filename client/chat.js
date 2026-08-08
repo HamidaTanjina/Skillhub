@@ -35,6 +35,7 @@ const searchChat = document.getElementById("searchChat");
 
 const emojiBtn = document.getElementById("emojiBtn");
 const emojiPicker = document.getElementById("emojiPicker");
+const chatSkill = document.getElementById("chatSkill");
 
 
 // ======================================================
@@ -50,7 +51,7 @@ let currentRoom = "";
 let chatData = [];
 
 let isLoadingMessages = false;
-
+let onlineUsers = new Set();
 
 // ======================================================
 // Start
@@ -166,7 +167,37 @@ function initializeSocket() {
 
     });
 
+socket.on("onlineUsers", (users) => {
 
+    onlineUsers = new Set(
+        users.map(id => String(id))
+    );
+
+    updateCurrentUserStatus();
+
+});
+
+
+socket.on("userOnline", (userId) => {
+
+    onlineUsers.add(
+        String(userId)
+    );
+
+    updateCurrentUserStatus();
+
+});
+
+
+socket.on("userOffline", (userId) => {
+
+    onlineUsers.delete(
+        String(userId)
+    );
+
+    updateCurrentUserStatus();
+
+});
     // ---------------------------------------------
     // Connected
     // ---------------------------------------------
@@ -224,7 +255,45 @@ function initializeSocket() {
     });
 
 }
+function updateCurrentUserStatus() {
 
+    if (!currentSwapId) return;
+
+    const chat = chatData.find(
+        c =>
+            String(c.swapId) ===
+            String(currentSwapId)
+    );
+
+    if (!chat) return;
+
+    const partnerId =
+        chat.partner?._id ||
+        chat.partner?.id;
+
+    if (!partnerId) {
+
+        chatStatus.textContent = "Offline";
+
+        return;
+
+    }
+
+    const isOnline =
+        onlineUsers.has(
+            String(partnerId)
+        );
+
+    chatStatus.textContent =
+        isOnline
+            ? "Online"
+            : "Offline";
+
+    chatStatus.classList.toggle(
+        "online",
+        isOnline
+    );
+}
 
 // ======================================================
 // Join Room
@@ -480,6 +549,7 @@ async function loadChatList(autoOpenId = null) {
             }, 100);
 
         }
+        updateCurrentUserStatus();
 
     }
 
@@ -662,8 +732,12 @@ function openChat(chat) {
     // "Active Skill Partner"
     // ---------------------------------------------
 
-    chatStatus.textContent =
-        getSkillExchange(chat);
+ const chatSkill = document.getElementById("chatSkill");
+
+chatSkill.textContent =
+    getSkillExchange(chat);
+
+updateCurrentUserStatus();
 
 
     // ---------------------------------------------
