@@ -4,7 +4,6 @@
 
 const params = new URLSearchParams(window.location.search);
 const autoSwapId = params.get("swapId");
-
 const API_BASE_URL =
     "https://skillhub-backend-cths.onrender.com/api";
 
@@ -632,7 +631,8 @@ function openChat(chat) {
     currentSwapId =
         String(chat.swapId);
 
-
+    document.getElementById("chatHeader").style.display = "flex";
+    document.getElementById("chatInputArea").style.display = "flex";
     // ---------------------------------------------
     // Partner name
     // ---------------------------------------------
