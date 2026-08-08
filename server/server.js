@@ -74,12 +74,18 @@ const userRoutes = require("./routes/userRoutes");
 const swapRoutes = require("./routes/swapRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const notificationRoutes =
+    require("./routes/notificationRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/swaps", swapRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/reviews", reviewRoutes);
+app.use(
+    "/api/notifications",
+    notificationRoutes
+);
 
 // ===============================
 // Health Check

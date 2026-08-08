@@ -2153,4 +2153,240 @@ a:focus-visible{
 
 }
 
+/* ======================================
+   Notifications
+====================================== */
 
+.notification-wrapper {
+    position: relative;
+}
+
+.notification-btn {
+    position: relative;
+
+    border: none;
+    background: transparent;
+
+    color: var(--text-main);
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    padding: 6px;
+}
+
+
+/* Notification Badge */
+
+.notification-badge {
+    position: absolute;
+
+    top: -3px;
+    right: -5px;
+
+    min-width: 17px;
+    height: 17px;
+
+    padding: 0 4px;
+
+    border-radius: 50%;
+
+    background: #ef4444;
+
+    color: white;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.notification-badge.hidden {
+    display: none;
+}
+
+
+/* Dropdown */
+
+.notification-dropdown {
+
+    position: absolute;
+
+    top: 42px;
+    right: 0;
+
+    width: 350px;
+
+    background: var(--surface);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 12px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+
+    z-index: 1000;
+
+    display: none;
+
+    overflow: hidden;
+}
+
+.notification-dropdown.show {
+    display: block;
+}
+
+
+/* Header */
+
+.notification-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 15px;
+
+    border-bottom: 1px solid var(--border-color);
+}
+
+.notification-header h3 {
+
+    margin: 0;
+
+    color: var(--text-main);
+
+    font-size: 16px;
+}
+
+.notification-header button {
+
+    border: none;
+
+    background: transparent;
+
+    color: var(--primary);
+
+    font-size: 12px;
+
+    cursor: pointer;
+}
+
+
+/* Notification */
+
+.notification-item {
+
+    display: flex;
+
+    gap: 12px;
+
+    padding: 13px 15px;
+
+    border-bottom: 1px solid var(--border-color);
+
+    cursor: pointer;
+}
+
+.notification-item:hover {
+    background: var(--background);
+}
+
+
+/* Unread */
+
+.notification-item.unread {
+    background: rgba(59, 130, 246, 0.07);
+}
+
+
+/* Icon */
+
+.notification-icon {
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background: var(--primary);
+
+    color: white;
+
+    font-size: 13px;
+}
+
+
+/* Text */
+
+.notification-content {
+    flex: 1;
+}
+
+.notification-message {
+
+    margin: 0;
+
+    color: var(--text-main);
+
+    font-size: 13px;
+
+    line-height: 1.4;
+}
+
+.notification-time {
+
+    display: block;
+
+    margin-top: 4px;
+
+    color: var(--text-muted);
+
+    font-size: 11px;
+}
+
+
+/* Empty */
+
+.notification-empty {
+
+    padding: 30px 15px;
+
+    text-align: center;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+}
+
+
+/* Responsive */
+
+@media (max-width: 600px) {
+
+    .notification-dropdown {
+
+        position: fixed;
+
+        top: 70px;
+        left: 10px;
+        right: 10px;
+
+        width: auto;
+
+    }
+
+}

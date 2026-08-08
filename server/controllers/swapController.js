@@ -1,5 +1,5 @@
 const SwapRequest = require("../models/swapRequest");
-
+const Notification = require("../models/Notification");
 // ======================================
 // Send Swap Request
 // ======================================
@@ -63,7 +63,13 @@ exports.sendRequest = async (req, res) => {
             status: "Pending"
 
         });
-
+await Notification.create({
+    recipient: receiver,
+    sender: req.user.id,
+    type: "swap_request",
+    message: "You received a new skill swap request.",
+    swapId: swap._id
+});
         res.status(201).json(swap);
 
     }
@@ -157,6 +163,13 @@ exports.acceptRequest = async (req, res) => {
         swap.status = "Accepted";
 
         await swap.save();
+        await Notification.create({
+    recipient: swap.sender,
+    sender: req.user.id,
+    type: "swap_accepted",
+    message: "Your skill swap request was accepted.",
+    swapId: swap._id
+});
 
         res.json({
 
@@ -205,6 +218,13 @@ exports.rejectRequest = async (req, res) => {
         swap.status = "Rejected";
 
         await swap.save();
+        await Notification.create({
+    recipient: swap.sender,
+    sender: req.user.id,
+    type: "swap_rejected",
+    message: "Your skill swap request was rejected.",
+    swapId: swap._id
+});
 
         res.json({
 

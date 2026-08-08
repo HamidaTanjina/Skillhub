@@ -201,7 +201,7 @@ function renderRecentActivity(swaps) {
 }
 
 loadDashboardData();
-
+loadNotifications();
 // Navigation Handlers
 const editProfileBtn = document.getElementById("editProfileBtn");
 if (editProfileBtn) {
@@ -239,5 +239,427 @@ if (logoutBtn) {
 function openRequests(tab) {
 
     window.location.href = `request.html?tab=${tab}`;
+
+}
+// ======================================
+// Notifications
+// ======================================
+
+const notificationBtn =
+    document.getElementById("notificationBtn");
+
+const notificationDropdown =
+    document.getElementById("notificationDropdown");
+
+const notificationList =
+    document.getElementById("notificationList");
+
+const notificationBadge =
+    document.getElementById("notificationBadge");
+
+const markAllReadBtn =
+    document.getElementById("markAllReadBtn");
+
+
+// ======================================
+// Load Notifications
+// ======================================
+
+async function loadNotifications() {
+
+    try {
+
+        const response = await fetch(
+            `${API_BASE_URL}/notifications`,
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`
+                }
+            }
+        );
+
+        if (!response.ok) {
+            return;
+        }
+
+        const notifications =
+            await response.json();
+
+        renderNotifications(notifications);
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Notification Load Error:",
+            error
+        );
+
+    }
+
+}
+
+
+// ======================================
+// Render Notifications
+// ======================================
+
+function renderNotifications(notifications) {
+
+    if (!notificationList) {
+        return;
+    }
+
+    if (
+        !Array.isArray(notifications) ||
+        notifications.length === 0
+    ) {
+
+        notificationList.innerHTML = `
+            <div class="notification-empty">
+                No notifications
+            </div>
+        `;
+
+        updateNotificationBadge(0);
+
+        return;
+    }
+
+
+    const unreadCount =
+        notifications.filter(
+            notification =>
+                !notification.isRead
+        ).length;
+
+
+    updateNotificationBadge(
+        unreadCount
+    );
+
+
+    notificationList.innerHTML = "";
+
+
+    notifications.forEach(notification => {
+
+        const item =
+            document.createElement("div");
+
+        item.className =
+            "notification-item";
+
+
+        if (!notification.isRead) {
+
+            item.classList.add("unread");
+
+        }
+
+
+        const icon =
+            getNotificationIcon(
+                notification.type
+            );
+
+
+        const senderName =
+            notification.sender?.name ||
+            "SkillHub User";
+
+
+        item.innerHTML = `
+
+            <div class="notification-icon">
+
+                <i class="${icon}"></i>
+
+            </div>
+
+            <div class="notification-content">
+
+                <p class="notification-message">
+
+                    ${notification.message}
+
+                </p>
+
+                <span class="notification-time">
+
+                    ${formatNotificationTime(
+                        notification.createdAt
+                    )}
+
+                </span>
+
+            </div>
+
+        `;
+
+
+        item.addEventListener(
+            "click",
+            () => {
+
+                markNotificationAsRead(
+                    notification._id
+                );
+
+            }
+        );
+
+
+        notificationList.appendChild(item);
+
+    });
+
+}
+
+
+// ======================================
+// Notification Icon
+// ======================================
+
+function getNotificationIcon(type) {
+
+    switch (type) {
+
+        case "swap_request":
+            return "fa-solid fa-handshake";
+
+        case "swap_accepted":
+            return "fa-solid fa-check";
+
+        case "swap_rejected":
+            return "fa-solid fa-xmark";
+
+        case "new_message":
+            return "fa-solid fa-comment";
+
+        default:
+            return "fa-solid fa-bell";
+
+    }
+
+}
+
+
+// ======================================
+// Notification Badge
+// ======================================
+
+function updateNotificationBadge(count) {
+
+    if (!notificationBadge) {
+        return;
+    }
+
+
+    if (count > 0) {
+
+        notificationBadge.textContent =
+            count > 9 ? "9+" : count;
+
+        notificationBadge.classList.remove(
+            "hidden"
+        );
+
+    }
+
+    else {
+
+        notificationBadge.classList.add(
+            "hidden"
+        );
+
+    }
+
+}
+
+
+// ======================================
+// Mark Notification As Read
+// ======================================
+
+async function markNotificationAsRead(id) {
+
+    try {
+
+        await fetch(
+            `${API_BASE_URL}/notifications/${id}/read`,
+            {
+                method: "PUT",
+
+                headers: {
+                    Authorization:
+                        `Bearer ${token}`
+                }
+            }
+        );
+
+        loadNotifications();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Mark Notification Error:",
+            error
+        );
+
+    }
+
+}
+
+
+// ======================================
+// Mark All As Read
+// ======================================
+
+if (markAllReadBtn) {
+
+    markAllReadBtn.addEventListener(
+        "click",
+        async (event) => {
+
+            event.stopPropagation();
+
+            try {
+
+                await fetch(
+                    `${API_BASE_URL}/notifications/read-all`,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            Authorization:
+                                `Bearer ${token}`
+                        }
+                    }
+                );
+
+                loadNotifications();
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Mark All Read Error:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+}
+
+
+// ======================================
+// Toggle Notification Dropdown
+// ======================================
+
+if (notificationBtn) {
+
+    notificationBtn.addEventListener(
+        "click",
+        (event) => {
+
+            event.stopPropagation();
+
+            notificationDropdown.classList.toggle(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+// ======================================
+// Close Notification Dropdown
+// ======================================
+
+document.addEventListener(
+    "click",
+    (event) => {
+
+        if (
+            notificationDropdown &&
+            notificationBtn &&
+            !notificationDropdown.contains(
+                event.target
+            ) &&
+            !notificationBtn.contains(
+                event.target
+            )
+        ) {
+
+            notificationDropdown.classList.remove(
+                "show"
+            );
+
+        }
+
+    }
+);
+
+
+// ======================================
+// Notification Time
+// ======================================
+
+function formatNotificationTime(date) {
+
+    if (!date) {
+        return "";
+    }
+
+    const notificationDate =
+        new Date(date);
+
+    const now =
+        new Date();
+
+    const difference =
+        Math.floor(
+            (now - notificationDate) /
+            1000
+        );
+
+
+    if (difference < 60) {
+
+        return "Just now";
+
+    }
+
+
+    if (difference < 3600) {
+
+        return `${Math.floor(
+            difference / 60
+        )} min ago`;
+
+    }
+
+
+    if (difference < 86400) {
+
+        return `${Math.floor(
+            difference / 3600
+        )} hr ago`;
+
+    }
+
+
+    return notificationDate.toLocaleDateString();
 
 }
