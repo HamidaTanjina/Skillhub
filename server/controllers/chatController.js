@@ -67,6 +67,9 @@ return {
     swapId: swap._id,
     partner,
 
+    teachSkill: swap.teachSkill,
+    learnSkill: swap.learnSkill,
+
     lastMessage: lastMessage
         ? lastMessage.message
         : "Start chatting now...",

@@ -271,30 +271,21 @@ function updateCurrentUserStatus() {
         chat.partner?._id ||
         chat.partner?.id;
 
-    if (!partnerId) {
-
-        chatStatus.textContent = "Offline";
-
-        return;
-
-    }
-
     const isOnline =
+        partnerId &&
         onlineUsers.has(
             String(partnerId)
         );
 
-    chatStatus.textContent =
-        isOnline
-            ? "Online"
-            : "Offline";
+    // Do NOT show Online/Offline text
+    chatStatus.textContent = "";
 
-    chatStatus.classList.toggle(
+    // Add/remove online class
+    chatAvatar.classList.toggle(
         "online",
-        isOnline
+        Boolean(isOnline)
     );
 }
-
 // ======================================================
 // Join Room
 // ======================================================
@@ -479,14 +470,21 @@ async function loadChatList(autoOpenId = null) {
                     .toUpperCase();
 
 
-            item.innerHTML = `
+            const partnerId =
+    chat.partner?._id ||
+    chat.partner?.id;
 
-                <div class="chat-avatar">
+const isOnline =
+    partnerId &&
+    onlineUsers.has(String(partnerId));
 
-                    ${firstLetter}
+item.innerHTML = `
 
-                </div>
+    <div class="chat-avatar ${isOnline ? "online" : ""}">
 
+        ${firstLetter}
+
+    </div>
 
                 <div class="chat-info">
 
