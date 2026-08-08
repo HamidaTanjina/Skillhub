@@ -662,6 +662,18 @@ function openReview(swapId) {
 
 }
 // ======================================================
+// Close Review Modal
+// ======================================================
+function closeReviewModal() {
+
+    const modal = document.getElementById("reviewModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+}
+// ======================================================
 // Star Rating
 // ======================================================
 
