@@ -76,6 +76,7 @@ const chatRoutes = require("./routes/chatRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
 const notificationRoutes =
     require("./routes/notificationRoutes");
+  const statsRoutes = require("./routes/statsRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/user", userRoutes);
@@ -86,6 +87,7 @@ app.use(
     "/api/notifications",
     notificationRoutes
 );
+app.use("/api/stats", statsRoutes);
 
 // ===============================
 // Health Check
