@@ -1,7 +1,3 @@
-// ======================================================
-// SkillHub Chat
-// ======================================================
-
 const params = new URLSearchParams(window.location.search);
 const autoSwapId = params.get("swapId");
 const API_BASE_URL =
@@ -15,11 +11,6 @@ const token = localStorage.getItem("token");
 if (!token) {
     window.location.href = "index.html";
 }
-
-
-// ======================================================
-// DOM Elements
-// ======================================================
 
 const chatList = document.getElementById("chatList");
 const chatBody = document.getElementById("chatBody");
@@ -35,12 +26,6 @@ const searchChat = document.getElementById("searchChat");
 
 const emojiBtn = document.getElementById("emojiBtn");
 const emojiPicker = document.getElementById("emojiPicker");
-const chatSkill = document.getElementById("chatSkill");
-
-
-// ======================================================
-// Variables
-// ======================================================
 
 let socket = null;
 
@@ -52,11 +37,6 @@ let chatData = [];
 
 let isLoadingMessages = false;
 let onlineUsers = new Set();
-
-
-// ======================================================
-// Start
-// ======================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
 
@@ -77,19 +57,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     await loadChatList(autoSwapId);
 
-    // ---------------------------------------------
-    // Send button
-    // ---------------------------------------------
-
     sendBtn.addEventListener(
         "click",
         sendMessage
     );
-
-
-    // ---------------------------------------------
-    // Enter to send
-    // ---------------------------------------------
 
     messageInput.addEventListener(
         "keydown",
@@ -106,11 +77,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     );
 
-
-    // ---------------------------------------------
-    // Search chats
-    // ---------------------------------------------
-
     if (searchChat) {
 
         searchChat.addEventListener(
@@ -121,11 +87,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
 });
-
-
-// ======================================================
-// Parse JWT
-// ======================================================
 
 function parseJwt(token) {
 
@@ -148,10 +109,75 @@ function parseJwt(token) {
 
 }
 
+function getChatSwapId(chat) {
 
-// ======================================================
-// Socket.IO
-// ======================================================
+    if (!chat) {
+        return "";
+    }
+
+    if (chat.swapId) {
+
+        if (
+            typeof chat.swapId === "object"
+        ) {
+
+            return String(
+                chat.swapId._id ||
+                chat.swapId.id ||
+                ""
+            );
+
+        }
+
+        return String(chat.swapId);
+
+    }
+
+    if (chat.swap) {
+
+        if (
+            typeof chat.swap === "object"
+        ) {
+
+            return String(
+                chat.swap._id ||
+                chat.swap.id ||
+                ""
+            );
+
+        }
+
+        return String(chat.swap);
+
+    }
+
+    if (chat.swapData) {
+
+        if (
+            typeof chat.swapData === "object"
+        ) {
+
+            return String(
+                chat.swapData._id ||
+                chat.swapData.id ||
+                ""
+            );
+
+        }
+
+        return String(chat.swapData);
+
+    }
+
+    if (chat._id) {
+
+        return String(chat._id);
+
+    }
+
+    return "";
+
+}
 
 function initializeSocket() {
 
@@ -168,7 +194,6 @@ function initializeSocket() {
 
     });
 
-
     socket.on("onlineUsers", (users) => {
 
         onlineUsers = new Set(
@@ -180,7 +205,6 @@ function initializeSocket() {
         loadChatList();
 
     });
-
 
     socket.on("userOnline", (userId) => {
 
@@ -194,7 +218,6 @@ function initializeSocket() {
 
     });
 
-
     socket.on("userOffline", (userId) => {
 
         onlineUsers.delete(
@@ -207,15 +230,10 @@ function initializeSocket() {
 
     });
 
-
-    // ---------------------------------------------
-    // Connected
-    // ---------------------------------------------
-
     socket.on("connect", () => {
 
         console.log(
-            "✅ Connected:",
+            "Connected:",
             socket.id
         );
 
@@ -227,20 +245,10 @@ function initializeSocket() {
 
     });
 
-
-    // ---------------------------------------------
-    // Receive message
-    // ---------------------------------------------
-
     socket.on(
         "receiveMessage",
         receiveMessage
     );
-
-
-    // ---------------------------------------------
-    // Disconnect
-    // ---------------------------------------------
 
     socket.on("disconnect", () => {
 
@@ -249,11 +257,6 @@ function initializeSocket() {
         );
 
     });
-
-
-    // ---------------------------------------------
-    // Connection error
-    // ---------------------------------------------
 
     socket.on("connect_error", (err) => {
 
@@ -266,14 +269,13 @@ function initializeSocket() {
 
 }
 
-
 function updateCurrentUserStatus() {
 
     if (!currentSwapId) return;
 
     const chat = chatData.find(
         c =>
-            String(c.swapId) ===
+            getChatSwapId(c) ===
             String(currentSwapId)
     );
 
@@ -289,10 +291,8 @@ function updateCurrentUserStatus() {
             String(partnerId)
         );
 
-    // Do NOT show Online/Offline text
     chatStatus.textContent = "";
 
-    // Add/remove online class
     chatAvatar.classList.toggle(
         "online",
         Boolean(isOnline)
@@ -300,19 +300,12 @@ function updateCurrentUserStatus() {
 
 }
 
-
-// ======================================================
-// Join Room
-// ======================================================
-
 function joinRoom(roomId) {
 
     if (!socket) return;
 
     if (!socket.connected) return;
 
-
-    // Leave previous room
     if (
         currentRoom &&
         currentRoom !== roomId
@@ -325,15 +318,12 @@ function joinRoom(roomId) {
 
     }
 
-
     currentRoom = roomId;
-
 
     socket.emit(
         "joinRoom",
         roomId
     );
-
 
     console.log(
         "Joined Room:",
@@ -342,65 +332,55 @@ function joinRoom(roomId) {
 
 }
 
-
-// ======================================================
-// Open Chat By Swap ID
-// ======================================================
-
 function openChatById(swapId) {
+
+    const targetSwapId =
+        String(swapId || "");
 
     const chat = chatData.find(
         c =>
-            String(c.swapId) ===
-            String(swapId)
+            getChatSwapId(c) ===
+            targetSwapId
     );
-
 
     if (!chat) {
 
         console.log(
             "Chat not found:",
-            swapId
+            targetSwapId
+        );
+
+        console.log(
+            "Available chat swap IDs:",
+            chatData.map(
+                c => getChatSwapId(c)
+            )
         );
 
         return;
 
     }
 
-
     openChat(chat);
 
 }
-
-
-// ======================================================
-// Load Chat List
-// ======================================================
 
 async function loadChatList(autoOpenId = null) {
 
     try {
 
         const response = await fetch(
-
             `${API_BASE_URL}/chat`,
-
             {
-
                 headers: {
-
                     Authorization:
                         `Bearer ${token}`
-
                 }
-
             }
-
         );
 
-
-        const chats = await response.json();
-
+        const chats =
+            await response.json();
 
         if (!response.ok) {
 
@@ -410,18 +390,14 @@ async function loadChatList(autoOpenId = null) {
 
         }
 
-
-        chatData = chats;
-
+        chatData =
+            Array.isArray(chats)
+                ? chats
+                : [];
 
         chatList.innerHTML = "";
 
-
-        // ---------------------------------------------
-        // No chats
-        // ---------------------------------------------
-
-        if (!chats.length) {
+        if (!chatData.length) {
 
             chatList.innerHTML = `
 
@@ -444,28 +420,22 @@ async function loadChatList(autoOpenId = null) {
 
         }
 
-
-        // ---------------------------------------------
-        // Create chat items
-        // ---------------------------------------------
-
-        chats.forEach(chat => {
+        chatData.forEach(chat => {
 
             const item =
                 document.createElement("div");
 
-
             item.className =
                 "chat-item";
 
+            const chatSwapId =
+                getChatSwapId(chat);
 
             item.dataset.swap =
-                chat.swapId;
+                chatSwapId;
 
-
-            // Keep selected chat highlighted
             if (
-                String(chat.swapId) ===
+                String(chatSwapId) ===
                 String(currentSwapId)
             ) {
 
@@ -473,27 +443,24 @@ async function loadChatList(autoOpenId = null) {
 
             }
 
-
             const partnerName =
                 chat.partner?.name ||
                 "Unknown User";
-
 
             const firstLetter =
                 partnerName
                     .charAt(0)
                     .toUpperCase();
 
-
             const partnerId =
                 chat.partner?._id ||
                 chat.partner?.id;
 
-
             const isOnline =
                 partnerId &&
-                onlineUsers.has(String(partnerId));
-
+                onlineUsers.has(
+                    String(partnerId)
+                );
 
             item.innerHTML = `
 
@@ -516,7 +483,6 @@ async function loadChatList(autoOpenId = null) {
 
                 </div>
 
-
                 <div class="chat-time">
 
                     ${
@@ -529,11 +495,6 @@ async function loadChatList(autoOpenId = null) {
 
             `;
 
-
-            // ---------------------------------------------
-            // Open chat
-            // ---------------------------------------------
-
             item.addEventListener(
                 "click",
                 () => {
@@ -543,15 +504,9 @@ async function loadChatList(autoOpenId = null) {
                 }
             );
 
-
             chatList.appendChild(item);
 
         });
-
-
-        // ---------------------------------------------
-        // Automatically open chat
-        // ---------------------------------------------
 
         if (autoOpenId) {
 
@@ -564,7 +519,6 @@ async function loadChatList(autoOpenId = null) {
             }, 100);
 
         }
-
 
         updateCurrentUserStatus();
 
@@ -581,20 +535,10 @@ async function loadChatList(autoOpenId = null) {
 
 }
 
-
-// ======================================================
-// Get Skill Exchange
-// ======================================================
-
 function getSkillExchange(chat) {
 
     let teachSkill = "";
     let learnSkill = "";
-
-
-    // ---------------------------------------------
-    // Direct properties
-    // ---------------------------------------------
 
     teachSkill =
         chat.teachSkill ||
@@ -603,11 +547,6 @@ function getSkillExchange(chat) {
     learnSkill =
         chat.learnSkill ||
         "";
-
-
-    // ---------------------------------------------
-    // Nested swap object
-    // ---------------------------------------------
 
     if (
         (!teachSkill || !learnSkill) &&
@@ -625,11 +564,6 @@ function getSkillExchange(chat) {
 
     }
 
-
-    // ---------------------------------------------
-    // Nested swapData object
-    // ---------------------------------------------
-
     if (
         (!teachSkill || !learnSkill) &&
         chat.swapData &&
@@ -646,17 +580,11 @@ function getSkillExchange(chat) {
 
     }
 
-
-    // ---------------------------------------------
-    // Alternative names
-    // ---------------------------------------------
-
     teachSkill =
         teachSkill ||
         chat.mySkill ||
         chat.offeredSkill ||
         "";
-
 
     learnSkill =
         learnSkill ||
@@ -664,17 +592,11 @@ function getSkillExchange(chat) {
         chat.requestedSkill ||
         "";
 
-
-    // ---------------------------------------------
-    // Final display
-    // ---------------------------------------------
-
     if (teachSkill && learnSkill) {
 
         return `${teachSkill} <-> ${learnSkill}`;
 
     }
-
 
     if (teachSkill) {
 
@@ -682,97 +604,83 @@ function getSkillExchange(chat) {
 
     }
 
-
     if (learnSkill) {
 
         return `Skill <-> ${learnSkill}`;
 
     }
 
-
     return "Skill Exchange";
 
 }
 
-
-// ======================================================
-// Open Chat
-// ======================================================
-
 function openChat(chat) {
 
+    const swapId =
+        getChatSwapId(chat);
+
+    if (!swapId) {
+
+        console.log(
+            "Invalid chat swap:",
+            chat
+        );
+
+        alert(
+            "Unable to open this conversation."
+        );
+
+        return;
+
+    }
+
     currentSwapId =
-        String(chat.swapId);
+        String(swapId);
 
-    document.getElementById("chatHeader").style.display = "flex";
+    document.getElementById(
+        "chatHeader"
+    ).style.display = "flex";
 
-    document.getElementById("chatInputArea").style.display = "flex";
-
-
-    // ---------------------------------------------
-    // Partner name
-    // ---------------------------------------------
+    document.getElementById(
+        "chatInputArea"
+    ).style.display = "flex";
 
     const partnerName =
         chat.partner?.name ||
         "Unknown User";
 
-
     chatUser.textContent =
         partnerName;
-
-
-    // ---------------------------------------------
-    // Avatar
-    // ---------------------------------------------
 
     chatAvatar.textContent =
         partnerName
             .charAt(0)
             .toUpperCase();
 
-
-    // ---------------------------------------------
-    // Skill exchange
-    // ---------------------------------------------
-
     const chatSkill =
-        document.getElementById("chatSkill");
-
+        document.getElementById(
+            "chatSkill"
+        );
 
     chatSkill.textContent =
         getSkillExchange(chat);
 
-
     updateCurrentUserStatus();
-
-
-    // ---------------------------------------------
-    // Enable input
-    // ---------------------------------------------
 
     messageInput.disabled = false;
 
     sendBtn.disabled = false;
 
-
-    // ---------------------------------------------
-    // Remove welcome screen
-    // ---------------------------------------------
-
     const welcome =
-        chatBody.querySelector(".empty-chat");
+        chatBody.querySelector(
+            ".empty-chat"
+        );
 
     if (welcome) {
 
         welcome.remove();
 
     }
-
-
-    // ---------------------------------------------
-    // Highlight selected chat
-    // ---------------------------------------------
 
     document
         .querySelectorAll(".chat-item")
@@ -781,7 +689,6 @@ function openChat(chat) {
             item.classList.remove(
                 "active"
             );
-
 
             if (
                 item.dataset.swap ===
@@ -796,36 +703,19 @@ function openChat(chat) {
 
         });
 
-
-    // ---------------------------------------------
-    // Clear previous messages
-    // ---------------------------------------------
-
     chatBody.innerHTML = "";
-
-
-    // ---------------------------------------------
-    // Join socket room
-    // ---------------------------------------------
 
     joinRoom(
         currentSwapId
     );
 
-
-    // ---------------------------------------------
-    // Update URL
-    // ---------------------------------------------
-
     const url =
         new URL(window.location);
-
 
     url.searchParams.set(
         "swapId",
         currentSwapId
     );
-
 
     window.history.replaceState(
         {},
@@ -833,26 +723,11 @@ function openChat(chat) {
         url
     );
 
-
-    // ---------------------------------------------
-    // Load previous messages
-    // ---------------------------------------------
-
     loadMessages();
-
-
-    // ---------------------------------------------
-    // Focus input
-    // ---------------------------------------------
 
     messageInput.focus();
 
 }
-
-
-// ======================================================
-// Load Messages
-// ======================================================
 
 async function loadMessages() {
 
@@ -860,33 +735,22 @@ async function loadMessages() {
 
     if (isLoadingMessages) return;
 
-
     isLoadingMessages = true;
-
 
     try {
 
         const response = await fetch(
-
             `${API_BASE_URL}/chat/${currentSwapId}`,
-
             {
-
                 headers: {
-
                     Authorization:
                         `Bearer ${token}`
-
                 }
-
             }
-
         );
-
 
         const messages =
             await response.json();
-
 
         if (!response.ok) {
 
@@ -896,13 +760,7 @@ async function loadMessages() {
 
         }
 
-
         chatBody.innerHTML = "";
-
-
-        // ---------------------------------------------
-        // No messages
-        // ---------------------------------------------
 
         if (!messages.length) {
 
@@ -927,41 +785,27 @@ async function loadMessages() {
 
         }
 
-
-        // ---------------------------------------------
-        // Display messages
-        // ---------------------------------------------
-
         messages.forEach(msg => {
 
             const senderId =
                 String(
-
                     msg.sender?._id ||
                     msg.sender?.id ||
                     msg.sender
-
                 );
 
-
             createMessage(
-
                 msg.message,
-
                 senderId === currentUserId
                     ? "sent"
                     : "received",
-
                 formatTime(
                     msg.createdAt
                 ),
-
                 msg._id
-
             );
 
         });
-
 
         scrollToBottom();
 
@@ -984,88 +828,45 @@ async function loadMessages() {
 
 }
 
-
-// ======================================================
-// Receive Message
-// ======================================================
-
 function receiveMessage(msg) {
-
-    // ---------------------------------------------
-    // Refresh sidebar
-    // ---------------------------------------------
 
     loadChatList();
 
-
     const swapId =
-
         typeof msg.swap === "object"
-
             ? msg.swap?._id
-
             : msg.swap;
 
-
-    // ---------------------------------------------
-    // Ignore messages from another chat
-    // ---------------------------------------------
-
     if (
-
         String(swapId) !==
         String(currentSwapId)
-
     ) {
 
         return;
 
     }
 
-
-    // ---------------------------------------------
-    // Determine sender
-    // ---------------------------------------------
-
     const senderId =
         String(
-
             msg.sender?._id ||
             msg.sender?.id ||
             msg.sender
-
         );
 
-
-    // ---------------------------------------------
-    // Create message
-    // ---------------------------------------------
-
     createMessage(
-
         msg.message,
-
         senderId === currentUserId
             ? "sent"
             : "received",
-
         formatTime(
             msg.createdAt
         ),
-
         msg._id
-
     );
-
 
     scrollToBottom();
 
 }
-
-
-// ======================================================
-// Send Message
-// ======================================================
 
 async function sendMessage() {
 
@@ -1079,10 +880,8 @@ async function sendMessage() {
 
     }
 
-
     const text =
         messageInput.value.trim();
-
 
     if (!text) {
 
@@ -1090,44 +889,31 @@ async function sendMessage() {
 
     }
 
-
     sendBtn.disabled = true;
-
 
     try {
 
         const response = await fetch(
-
             `${API_BASE_URL}/chat/${currentSwapId}`,
-
             {
-
                 method: "POST",
 
                 headers: {
-
                     "Content-Type":
                         "application/json",
 
                     Authorization:
                         `Bearer ${token}`
-
                 },
 
                 body: JSON.stringify({
-
                     message: text
-
                 })
-
             }
-
         );
-
 
         const data =
             await response.json();
-
 
         if (!response.ok) {
 
@@ -1140,18 +926,7 @@ async function sendMessage() {
 
         }
 
-
-        // ---------------------------------------------
-        // Clear input
-        // ---------------------------------------------
-
         messageInput.value = "";
-
-
-        // ---------------------------------------------
-        // If socket disconnected,
-        // display immediately
-        // ---------------------------------------------
 
         if (
             !socket ||
@@ -1159,28 +934,17 @@ async function sendMessage() {
         ) {
 
             createMessage(
-
                 data.message,
-
                 "sent",
-
                 formatTime(
                     data.createdAt
                 ),
-
                 data._id
-
             );
 
         }
 
-
-        // ---------------------------------------------
-        // Refresh sidebar
-        // ---------------------------------------------
-
         loadChatList();
-
 
         messageInput.focus();
 
@@ -1207,11 +971,6 @@ async function sendMessage() {
 
 }
 
-
-// ======================================================
-// Create Message Bubble
-// ======================================================
-
 function createMessage(
     text,
     type,
@@ -1219,33 +978,21 @@ function createMessage(
     id = ""
 ) {
 
-    // ---------------------------------------------
-    // Prevent duplicate messages
-    // ---------------------------------------------
-
     if (
-
         id &&
         document.querySelector(
             `[data-id="${id}"]`
         )
-
     ) {
 
         return;
 
     }
 
-
-    // ---------------------------------------------
-    // Remove empty screen
-    // ---------------------------------------------
-
     const empty =
         document.querySelector(
             ".empty-chat"
         );
-
 
     if (empty) {
 
@@ -1253,18 +1000,11 @@ function createMessage(
 
     }
 
-
-    // ---------------------------------------------
-    // Message wrapper
-    // ---------------------------------------------
-
     const wrapper =
         document.createElement("div");
 
-
     wrapper.className =
         `message ${type}`;
-
 
     if (id) {
 
@@ -1273,54 +1013,29 @@ function createMessage(
 
     }
 
-
-    // ---------------------------------------------
-    // Bubble
-    // ---------------------------------------------
-
     const bubble =
         document.createElement("div");
-
 
     bubble.className =
         "bubble";
 
-
-    // ---------------------------------------------
-    // Message text
-    // ---------------------------------------------
-
     const messageText =
         document.createElement("div");
-
 
     messageText.className =
         "message-text";
 
-
     messageText.textContent =
         text;
-
-
-    // ---------------------------------------------
-    // Message time
-    // ---------------------------------------------
 
     const messageTime =
         document.createElement("div");
 
-
     messageTime.className =
         "message-time";
 
-
     messageTime.textContent =
         time;
-
-
-    // ---------------------------------------------
-    // Build
-    // ---------------------------------------------
 
     bubble.appendChild(
         messageText
@@ -1338,15 +1053,9 @@ function createMessage(
         wrapper
     );
 
-
     scrollToBottom();
 
 }
-
-
-// ======================================================
-// Emoji Picker
-// ======================================================
 
 function initializeEmojiPicker() {
 
@@ -1364,11 +1073,6 @@ function initializeEmojiPicker() {
 
     }
 
-
-    // ---------------------------------------------
-    // Open / close picker
-    // ---------------------------------------------
-
     emojiBtn.addEventListener(
         "click",
         (event) => {
@@ -1382,16 +1086,10 @@ function initializeEmojiPicker() {
         }
     );
 
-
-    // ---------------------------------------------
-    // Emoji buttons
-    // ---------------------------------------------
-
     const emojiButtons =
         emojiPicker.querySelectorAll(
             "button"
         );
-
 
     emojiButtons.forEach(button => {
 
@@ -1401,69 +1099,41 @@ function initializeEmojiPicker() {
 
                 event.stopPropagation();
 
-
                 const emoji =
                     button.textContent;
-
-
-                // ---------------------------------
-                // Cursor position
-                // ---------------------------------
 
                 const start =
                     messageInput.selectionStart ??
                     messageInput.value.length;
 
-
                 const end =
                     messageInput.selectionEnd ??
                     messageInput.value.length;
 
-
                 const text =
                     messageInput.value;
-
-
-                // ---------------------------------
-                // Insert emoji
-                // ---------------------------------
 
                 messageInput.value =
                     text.substring(
                         0,
                         start
                     ) +
-
                     emoji +
-
                     text.substring(
                         end
                     );
-
-
-                // ---------------------------------
-                // Put cursor after emoji
-                // ---------------------------------
 
                 const newPosition =
                     start +
                     emoji.length;
 
-
                 messageInput.focus();
-
 
                 messageInput.selectionStart =
                     newPosition;
 
-
                 messageInput.selectionEnd =
                     newPosition;
-
-
-                // ---------------------------------
-                // Close picker
-                // ---------------------------------
 
                 emojiPicker.classList.remove(
                     "show"
@@ -1474,25 +1144,17 @@ function initializeEmojiPicker() {
 
     });
 
-
-    // ---------------------------------------------
-    // Close when clicking outside
-    // ---------------------------------------------
-
     document.addEventListener(
         "click",
         (event) => {
 
             if (
-
                 !emojiPicker.contains(
                     event.target
                 ) &&
-
                 !emojiBtn.contains(
                     event.target
                 )
-
             ) {
 
                 emojiPicker.classList.remove(
@@ -1506,21 +1168,14 @@ function initializeEmojiPicker() {
 
 }
 
-
-// ======================================================
-// Search Chats
-// ======================================================
-
 function filterChats() {
 
     if (!searchChat) return;
-
 
     const keyword =
         searchChat.value
             .trim()
             .toLowerCase();
-
 
     document
         .querySelectorAll(".chat-item")
@@ -1532,7 +1187,6 @@ function filterChats() {
                     .textContent
                     .toLowerCase();
 
-
             item.style.display =
                 name.includes(keyword)
                     ? "flex"
@@ -1542,19 +1196,12 @@ function filterChats() {
 
 }
 
-
-// ======================================================
-// Format Time
-// ======================================================
-
 function formatTime(date) {
 
     if (!date) return "";
 
-
     const d =
         new Date(date);
-
 
     if (isNaN(d.getTime())) {
 
@@ -1562,24 +1209,19 @@ function formatTime(date) {
 
     }
 
-
     let hour =
         d.getHours();
 
-
     let minute =
         d.getMinutes();
-
 
     const ampm =
         hour >= 12
             ? "PM"
             : "AM";
 
-
     hour =
         hour % 12;
-
 
     if (hour === 0) {
 
@@ -1587,20 +1229,13 @@ function formatTime(date) {
 
     }
 
-
     minute =
         String(minute)
             .padStart(2, "0");
 
-
     return `${hour}:${minute} ${ampm}`;
 
 }
-
-
-// ======================================================
-// Scroll To Bottom
-// ======================================================
 
 function scrollToBottom() {
 
@@ -1613,17 +1248,10 @@ function scrollToBottom() {
 
 }
 
-
-// ======================================================
-// Clear Chat
-// ======================================================
-
 function clearChat() {
 
     currentSwapId = "";
-
     currentRoom = "";
-
 
     chatBody.innerHTML = `
 
@@ -1645,21 +1273,18 @@ function clearChat() {
 
     `;
 
-
     chatUser.textContent =
         "Select a Chat";
-
 
     chatAvatar.innerHTML =
         `<i class="fa-solid fa-user"></i>`;
 
-
-    chatAvatar.classList.remove("online");
-
+    chatAvatar.classList.remove(
+        "online"
+    );
 
     chatStatus.textContent =
         "Select a conversation";
-
 
     messageInput.value = "";
 
@@ -1668,11 +1293,6 @@ function clearChat() {
     sendBtn.disabled = true;
 
 }
-
-
-// ======================================================
-// Cleanup
-// ======================================================
 
 window.addEventListener(
     "beforeunload",
@@ -1684,7 +1304,6 @@ window.addEventListener(
 
         }
 
-
         if (currentRoom) {
 
             socket.emit(
@@ -1693,7 +1312,6 @@ window.addEventListener(
             );
 
         }
-
 
         socket.disconnect();
 
