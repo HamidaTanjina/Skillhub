@@ -10,65 +10,24 @@
 
     <title>Browse Skills | SkillHub</title>
 
-
-    <!-- =====================================================
-         SHARED THEME
-    ====================================================== -->
-
     <link rel="stylesheet" href="theme.css">
-
-
-    <!-- =====================================================
-         SHARED SIDEBAR
-    ====================================================== -->
 
     <link rel="stylesheet" href="sidebar.css">
 
-
-    <!-- =====================================================
-         BROWSE SKILLS PAGE CSS
-    ====================================================== -->
-
     <link rel="stylesheet" href="browse-skills.css">
-
-
-    <!-- =====================================================
-         FONT AWESOME
-    ====================================================== -->
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-
-    <!-- =====================================================
-         THEME SCRIPT
-    ====================================================== -->
 
     <script src="theme.js" defer></script>
 
 </head>
 
-
 <body>
-
-
-<!-- =========================================================
-     DASHBOARD LAYOUT
-========================================================= -->
 
 <div class="dashboard">
 
-
-    <!-- =====================================================
-         SIDEBAR
-    ====================================================== -->
-
     <aside class="sidebar">
-
-
-        <!-- =================================================
-             LOGO
-        ================================================== -->
 
         <div class="logo">
 
@@ -80,15 +39,7 @@
 
         </div>
 
-
-        <!-- =================================================
-             NAVIGATION
-        ================================================== -->
-
         <ul>
-
-
-            <!-- Dashboard -->
 
             <li onclick="location.href='dashboard.html'">
 
@@ -100,9 +51,6 @@
 
             </li>
 
-
-            <!-- Browse Skills -->
-
             <li class="active">
 
                 <i class="fa-solid fa-book-open"></i>
@@ -112,9 +60,6 @@
                 </span>
 
             </li>
-
-
-            <!-- Requests -->
 
             <li onclick="location.href='request.html'">
 
@@ -126,9 +71,6 @@
 
             </li>
 
-
-            <!-- Chat -->
-
             <li onclick="location.href='chat.html'">
 
                 <i class="fa-solid fa-comments"></i>
@@ -139,9 +81,6 @@
 
             </li>
 
-
-            <!-- Profile -->
-
             <li onclick="location.href='profile.html'">
 
                 <i class="fa-solid fa-user"></i>
@@ -151,9 +90,6 @@
                 </span>
 
             </li>
-
-
-            <!-- Logout -->
 
             <li id="logoutBtn">
 
@@ -169,25 +105,9 @@
 
     </aside>
 
-
-
-    <!-- =====================================================
-         MAIN CONTENT
-    ====================================================== -->
-
     <main class="main">
 
-
-        <!-- =================================================
-             SHARED TOPBAR
-        ================================================== -->
-
         <header class="topbar">
-
-
-            <!-- =================================================
-                 PAGE TITLE
-            ================================================== -->
 
             <div class="page-title">
 
@@ -201,98 +121,71 @@
 
             </div>
 
-
-
-            <!-- =================================================
-                 TOPBAR ACTIONS
-            ================================================== -->
-
             <div class="topbar-actions">
-
-
-                <!-- =================================================
-                     NOTIFICATIONS + THEME
-                ================================================== -->
 
                 <div class="top-icons">
 
+                    <div class="notification-wrapper">
 
-                    <!-- Notification Wrapper -->
-<div class="top-icons">
+                        <button
+                            class="notification-btn"
+                            id="notificationBtn"
+                            type="button"
+                            title="Notifications">
 
-    <!-- Notification Wrapper -->
-    <div class="notification-wrapper">
+                            <i class="fa-regular fa-bell"></i>
 
-        <button
-            class="notification-btn"
-            id="notificationBtn"
-            type="button"
-            title="Notifications">
+                            <span
+                                id="notificationBadge"
+                                class="notification-badge hidden">
+                                0
+                            </span>
 
-            <i class="fa-regular fa-bell"></i>
+                        </button>
 
-            <span
-                id="notificationBadge"
-                class="notification-badge hidden">
-                0
-            </span>
+                        <div
+                            class="notification-dropdown"
+                            id="notificationDropdown">
 
-        </button>
+                            <div class="notification-header">
 
-        <!-- Notification Dropdown -->
-        <div
-            class="notification-dropdown"
-            id="notificationDropdown">
+                                <h3>
+                                    Notifications
+                                </h3>
 
-            <div class="notification-header">
+                                <button
+                                    id="markAllReadBtn"
+                                    type="button">
 
-                <h3>
-                    Notifications
-                </h3>
+                                    Mark all as read
 
-                <button
-                    id="markAllReadBtn"
-                    type="button">
+                                </button>
 
-                    Mark all as read
+                            </div>
 
-                </button>
+                            <div id="notificationList">
 
-            </div>
+                                <div class="notification-empty">
+                                    No notifications
+                                </div>
 
-            <div id="notificationList">
+                            </div>
 
-                <div class="notification-empty">
-                    No notifications
+                        </div>
+
+                    </div>
+
+                    <i
+                        class="fa-solid fa-moon"
+                        id="themeToggle"
+                        title="Toggle theme">
+                    </i>
+
                 </div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Theme Toggle -->
-    <i
-        class="fa-solid fa-moon"
-        id="themeToggle"
-        title="Toggle theme">
-    </i>
-
-</div>
-
-
-
-                <!-- =================================================
-                     PROFILE
-                ================================================== -->
 
                 <div
                     class="profile"
                     id="profileMenu">
-
-
-                    <!-- Profile Icon -->
 
                     <div class="profile-icon">
 
@@ -300,25 +193,13 @@
 
                     </div>
 
-
-                    <!-- User Name -->
-
                     <span id="userName">
 
                         Loading...
 
                     </span>
 
-
-
-                    <!-- =================================================
-                         PROFILE DROPDOWN
-                    ================================================== -->
-
                     <div class="profile-dropdown">
-
-
-                        <!-- Profile -->
 
                         <div
                             class="profile-dropdown-item"
@@ -331,9 +212,6 @@
                             </span>
 
                         </div>
-
-
-                        <!-- Logout -->
 
                         <div
                             class="profile-dropdown-item logout"
@@ -355,28 +233,15 @@
 
         </header>
 
-
-
-        <!-- =================================================
-             FILTER SECTION
-        ================================================== -->
-
         <section class="filter-card">
 
-
             <div class="filter-grid">
-
-
-                <!-- =================================================
-                     SEARCH
-                ================================================== -->
 
                 <div class="filter-item">
 
                     <label>
                         Search Skills
                     </label>
-
 
                     <div class="search-box">
 
@@ -392,18 +257,11 @@
 
                 </div>
 
-
-
-                <!-- =================================================
-                     CATEGORY
-                ================================================== -->
-
                 <div class="filter-item">
 
                     <label>
                         Category
                     </label>
-
 
                     <select id="categoryFilter">
 
@@ -411,23 +269,23 @@
                             All Categories
                         </option>
 
-                        <option>
+                        <option value="Technology">
                             Technology
                         </option>
 
-                        <option>
+                        <option value="Design">
                             Design
                         </option>
 
-                        <option>
+                        <option value="Business">
                             Business
                         </option>
 
-                        <option>
+                        <option value="Language">
                             Language
                         </option>
 
-                        <option>
+                        <option value="Cooking">
                             Cooking
                         </option>
 
@@ -435,34 +293,27 @@
 
                 </div>
 
-
-
-                <!-- =================================================
-                     SORT
-                ================================================== -->
-
                 <div class="filter-item">
 
                     <label>
                         Sort By
                     </label>
 
-
                     <select id="sortFilter">
 
-                        <option>
+                        <option value="Name">
                             Name
                         </option>
 
-                        <option>
+                        <option value="Highest Rated">
                             Highest Rated
                         </option>
 
-                        <option>
+                        <option value="Most Skills">
                             Most Skills
                         </option>
 
-                        <option>
+                        <option value="Newest">
                             Newest
                         </option>
 
@@ -470,16 +321,9 @@
 
                 </div>
 
-
             </div>
 
         </section>
-
-
-
-        <!-- =================================================
-             RESULT INFORMATION
-        ================================================== -->
 
         <div class="result-info">
 
@@ -491,44 +335,21 @@
 
         </div>
 
-
-
-        <!-- =================================================
-             USERS / SKILL CARDS
-        ================================================== -->
-
         <section
             id="usersContainer"
             class="users-grid">
 
-            <!--
-                Dynamic user cards are generated
-                by browse-skills.js
-            -->
-
         </section>
-
 
     </main>
 
-
 </div>
-
-
-
-<!-- =========================================================
-     SWAP REQUEST MODAL
-========================================================= -->
 
 <div
     id="requestModal"
     class="modal">
 
-
     <div class="modal-content">
-
-
-        <!-- Close -->
 
         <span
             class="close"
@@ -538,41 +359,25 @@
 
         </span>
 
-
-        <!-- Title -->
-
         <h2>
             Send Skill Swap Request
         </h2>
-
-
-        <!-- Teach Skill -->
 
         <label>
             Skill You Will Teach
         </label>
 
-
         <select id="teachSkillSelect">
 
         </select>
-
-
-
-        <!-- Learn Skill -->
 
         <label>
             Skill You Want To Learn
         </label>
 
-
         <select id="learnSkillSelect">
 
         </select>
-
-
-
-        <!-- Confirm -->
 
         <button
             id="confirmRequestBtn"
@@ -582,26 +387,15 @@
 
         </button>
 
-
     </div>
 
 </div>
-
-
-
-<!-- =========================================================
-     VIEW PROFILE MODAL
-========================================================= -->
 
 <div
     id="profileModal"
     class="profile-modal">
 
-
     <div class="profile-modal-content">
-
-
-        <!-- Close -->
 
         <span
             class="profile-close"
@@ -611,16 +405,7 @@
 
         </span>
 
-
-
-        <!-- =================================================
-             PROFILE MODAL HEADER
-        ================================================== -->
-
         <div class="profile-modal-header">
-
-
-            <!-- Avatar -->
 
             <div
                 class="profile-avatar"
@@ -630,10 +415,6 @@
 
             </div>
 
-
-
-            <!-- User Information -->
-
             <div>
 
                 <h2 id="profileName">
@@ -641,7 +422,6 @@
                     User Name
 
                 </h2>
-
 
                 <p id="profileLocation">
 
@@ -655,14 +435,7 @@
 
         </div>
 
-
-
-        <!-- =================================================
-             ABOUT
-        ================================================== -->
-
         <div class="profile-section">
-
 
             <h3>
 
@@ -672,24 +445,15 @@
 
             </h3>
 
-
             <p id="profileBio">
 
                 No bio available.
 
             </p>
 
-
         </div>
 
-
-
-        <!-- =================================================
-             PROFILE RATING
-        ================================================== -->
-
         <div class="profile-rating">
-
 
             <div id="profileStars">
 
@@ -697,13 +461,11 @@
 
             </div>
 
-
             <span id="profileRating">
 
                 0.0
 
             </span>
-
 
             <span id="profileReviewCount">
 
@@ -711,17 +473,9 @@
 
             </span>
 
-
         </div>
 
-
-
-        <!-- =================================================
-             REVIEWS
-        ================================================== -->
-
         <div class="profile-section">
-
 
             <h3>
 
@@ -731,9 +485,7 @@
 
             </h3>
 
-
             <div id="profileReviews">
-
 
                 <p class="no-reviews">
 
@@ -741,33 +493,17 @@
 
                 </p>
 
-
             </div>
 
-
         </div>
-
 
     </div>
 
 </div>
 
-
-
-<!-- =========================================================
-     BROWSE SKILLS JAVASCRIPT
-========================================================= -->
-
 <script src="browse-skills.js"></script>
 
-
-
-<!-- =========================================================
-     SHARED HEADER CONTROLLER
-========================================================= -->
-
 <script src="header.js"></script>
-
 
 </body>
 

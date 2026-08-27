@@ -1,28 +1,13 @@
 "use strict";
 
-
-// ======================================================
-// CONFIGURATION
-// ======================================================
-
 const token = localStorage.getItem("token");
 
 const API_BASE_URL =
     "https://skillhub-backend-cths.onrender.com/api";
 
-
-// ======================================================
-// AUTHENTICATION
-// ======================================================
-
 if (!token) {
     window.location.href = "index.html";
 }
-
-
-// ======================================================
-// PAGE VARIABLES
-// ======================================================
 
 let selectedReceiver = "";
 
@@ -32,14 +17,6 @@ let filteredUsers = [];
 
 let requestStatusMap = {};
 
-
-// ======================================================
-// DASHBOARD USER ID
-// ======================================================
-
-// If the page was opened from Dashboard > Suggested Matches > View,
-// this contains the specific user's ID.
-
 const urlParams =
     new URLSearchParams(
         window.location.search
@@ -47,11 +24,6 @@ const urlParams =
 
 const highlightedUserId =
     urlParams.get("userId");
-
-
-// ======================================================
-// PAGE INITIALIZATION
-// ======================================================
 
 document.addEventListener(
     "DOMContentLoaded",
@@ -64,19 +36,12 @@ document.addEventListener(
     }
 );
 
-
-// ======================================================
-// SETUP PAGE EVENT LISTENERS
-// ======================================================
-
 function setupEventListeners() {
 
-    // ----------------------------------------------
-    // Search
-    // ----------------------------------------------
-
     const searchInput =
-        document.getElementById("searchInput");
+        document.getElementById(
+            "searchInput"
+        );
 
     if (searchInput) {
 
@@ -87,13 +52,10 @@ function setupEventListeners() {
 
     }
 
-
-    // ----------------------------------------------
-    // Category Filter
-    // ----------------------------------------------
-
     const categoryFilter =
-        document.getElementById("categoryFilter");
+        document.getElementById(
+            "categoryFilter"
+        );
 
     if (categoryFilter) {
 
@@ -104,13 +66,10 @@ function setupEventListeners() {
 
     }
 
-
-    // ----------------------------------------------
-    // Sort Filter
-    // ----------------------------------------------
-
     const sortFilter =
-        document.getElementById("sortFilter");
+        document.getElementById(
+            "sortFilter"
+        );
 
     if (sortFilter) {
 
@@ -120,11 +79,6 @@ function setupEventListeners() {
         );
 
     }
-
-
-    // ----------------------------------------------
-    // Confirm Request
-    // ----------------------------------------------
 
     const confirmRequestBtn =
         document.getElementById(
@@ -140,11 +94,6 @@ function setupEventListeners() {
 
     }
 
-
-    // ----------------------------------------------
-    // Request Modal Outside Click
-    // ----------------------------------------------
-
     const requestModal =
         document.getElementById(
             "requestModal"
@@ -157,7 +106,8 @@ function setupEventListeners() {
             event => {
 
                 if (
-                    event.target === requestModal
+                    event.target ===
+                    requestModal
                 ) {
 
                     closeModal();
@@ -171,11 +121,6 @@ function setupEventListeners() {
 
 }
 
-
-// ======================================================
-// LOAD USERS
-// ======================================================
-
 async function loadUsers() {
 
     const container =
@@ -183,11 +128,9 @@ async function loadUsers() {
             "usersContainer"
         );
 
-
     if (!container) {
         return;
     }
-
 
     try {
 
@@ -205,21 +148,17 @@ async function loadUsers() {
                 }
             );
 
-
-        // ------------------------------------------
-        // Authentication expired
-        // ------------------------------------------
-
         if (response.status === 401) {
 
-            localStorage.removeItem("token");
+            localStorage.removeItem(
+                "token"
+            );
 
             window.location.href =
                 "index.html";
 
             return;
         }
-
 
         if (!response.ok) {
 
@@ -229,30 +168,20 @@ async function loadUsers() {
 
         }
 
-
-        allUsers =
+        const users =
             await response.json();
 
-
-        // ------------------------------------------
-        // Load existing request statuses
-        // ------------------------------------------
+        allUsers =
+            Array.isArray(users)
+                ? users
+                : [];
 
         await loadRequestStatuses();
-
 
         filteredUsers =
             [...allUsers];
 
-
-        renderUsers(
-            filteredUsers
-        );
-
-
-        // ==================================================
-        // OPEN SPECIFIC USER CARD FROM DASHBOARD
-        // ==================================================
+        filterUsers();
 
         if (highlightedUserId) {
 
@@ -264,7 +193,6 @@ async function loadUsers() {
                             `user-card-${highlightedUserId}`
                         );
 
-
                     if (userCard) {
 
                         userCard.scrollIntoView({
@@ -272,13 +200,11 @@ async function loadUsers() {
                             block: "center"
                         });
 
-
                         userCard.style.outline =
                             "2px solid #3b82f6";
 
                         userCard.style.outlineOffset =
                             "4px";
-
 
                         setTimeout(
                             () => {
@@ -301,7 +227,6 @@ async function loadUsers() {
 
         }
 
-
     }
 
     catch (error) {
@@ -310,7 +235,6 @@ async function loadUsers() {
             "Load users error:",
             error
         );
-
 
         container.innerHTML = `
 
@@ -330,15 +254,9 @@ async function loadUsers() {
 
 }
 
-
-// ======================================================
-// LOAD EXISTING REQUEST STATUS
-// ======================================================
-
 async function loadRequestStatuses() {
 
     requestStatusMap = {};
-
 
     try {
 
@@ -356,15 +274,16 @@ async function loadRequestStatuses() {
                 }
             );
 
-
         if (!response.ok) {
             return;
         }
 
-
         const swaps =
             await response.json();
 
+        if (!Array.isArray(swaps)) {
+            return;
+        }
 
         swaps.forEach(
             swap => {
@@ -372,7 +291,6 @@ async function loadRequestStatuses() {
                 const receiverId =
                     swap.receiver?._id ||
                     swap.receiver;
-
 
                 if (receiverId) {
 
@@ -398,11 +316,6 @@ async function loadRequestStatuses() {
 
 }
 
-
-// ======================================================
-// RENDER USERS
-// ======================================================
-
 function renderUsers(users) {
 
     const container =
@@ -410,20 +323,16 @@ function renderUsers(users) {
             "usersContainer"
         );
 
-
     if (!container) {
         return;
     }
 
-
     container.innerHTML = "";
-
 
     const totalUsers =
         document.getElementById(
             "totalUsers"
         );
-
 
     if (totalUsers) {
 
@@ -431,11 +340,6 @@ function renderUsers(users) {
             `${users.length} Users Found`;
 
     }
-
-
-    // ----------------------------------------------
-    // No users
-    // ----------------------------------------------
 
     if (users.length === 0) {
 
@@ -456,11 +360,6 @@ function renderUsers(users) {
         return;
     }
 
-
-    // ----------------------------------------------
-    // Render users
-    // ----------------------------------------------
-
     users.forEach(
         user => {
 
@@ -471,13 +370,10 @@ function renderUsers(users) {
                         .toUpperCase()
                     : "?";
 
-
-            // --------------------------------------
-            // Teaching skills
-            // --------------------------------------
-
             const teachSkills =
-                user.teachSkills &&
+                Array.isArray(
+                    user.teachSkills
+                ) &&
                 user.teachSkills.length > 0
 
                     ? user.teachSkills
@@ -488,7 +384,9 @@ function renderUsers(users) {
 
                                     <i class="fa-solid fa-code"></i>
 
-                                    ${escapeHTML(skill)}
+                                    ${escapeHTML(
+                                        getSkillName(skill)
+                                    )}
 
                                 </span>
 
@@ -506,13 +404,10 @@ function renderUsers(users) {
 
                     `;
 
-
-            // --------------------------------------
-            // Learning skills
-            // --------------------------------------
-
             const learnSkills =
-                user.learnSkills &&
+                Array.isArray(
+                    user.learnSkills
+                ) &&
                 user.learnSkills.length > 0
 
                     ? user.learnSkills
@@ -523,7 +418,9 @@ function renderUsers(users) {
 
                                     <i class="fa-solid fa-book-open"></i>
 
-                                    ${escapeHTML(skill)}
+                                    ${escapeHTML(
+                                        getSkillName(skill)
+                                    )}
 
                                 </span>
 
@@ -541,19 +438,12 @@ function renderUsers(users) {
 
                     `;
 
-
-            // --------------------------------------
-            // Rating
-            // --------------------------------------
-
             const rating =
                 Number(
                     user.rating || 0
                 );
 
-
             let stars = "";
-
 
             for (
                 let i = 1;
@@ -568,17 +458,12 @@ function renderUsers(users) {
 
             }
 
-
-            // --------------------------------------
-            // Request button
-            // --------------------------------------
-
             let requestButton = "";
 
-
             if (
-                requestStatusMap[user._id] ===
-                "Pending"
+                requestStatusMap[
+                    user._id
+                ] === "Pending"
             ) {
 
                 requestButton = `
@@ -599,8 +484,9 @@ function renderUsers(users) {
             }
 
             else if (
-                requestStatusMap[user._id] ===
-                "Accepted"
+                requestStatusMap[
+                    user._id
+                ] === "Accepted"
             ) {
 
                 requestButton = `
@@ -626,7 +512,7 @@ function renderUsers(users) {
 
                     <button
                         class="request-btn"
-                        onclick="openRequestModal('${user._id}')"
+                        onclick="openRequestModal('${escapeAttribute(user._id)}')"
                     >
 
                         <i class="fa-regular fa-paper-plane"></i>
@@ -639,16 +525,11 @@ function renderUsers(users) {
 
             }
 
-
-            // --------------------------------------
-            // User card
-            // --------------------------------------
-
             container.innerHTML += `
 
                 <div
                     class="user-card"
-                    id="user-card-${user._id}"
+                    id="user-card-${escapeAttribute(user._id)}"
                 >
 
                     <div class="user-header">
@@ -657,10 +538,11 @@ function renderUsers(users) {
 
                             <div class="avatar">
 
-                                ${firstLetter}
+                                ${escapeHTML(
+                                    firstLetter
+                                )}
 
                             </div>
-
 
                             <div class="user-details">
 
@@ -672,7 +554,6 @@ function renderUsers(users) {
                                     )}
 
                                 </h3>
-
 
                                 <p class="location">
 
@@ -691,13 +572,11 @@ function renderUsers(users) {
 
                     </div>
 
-
                     <div class="section-title">
 
                         Skills They Teach
 
                     </div>
-
 
                     <div class="skill-list">
 
@@ -705,20 +584,17 @@ function renderUsers(users) {
 
                     </div>
 
-
                     <div class="section-title">
 
                         Wants To Learn
 
                     </div>
 
-
                     <div class="skill-list">
 
                         ${learnSkills}
 
                     </div>
-
 
                     <div class="card-footer">
 
@@ -738,15 +614,13 @@ function renderUsers(users) {
 
                     </div>
 
-
                     <div class="card-buttons">
 
                         ${requestButton}
 
-
                         <button
                             class="view-profile-btn"
-                            onclick="viewProfile('${user._id}')"
+                            onclick="viewProfile('${escapeAttribute(user._id)}')"
                         >
 
                             <i class="fa-solid fa-user"></i>
@@ -766,11 +640,6 @@ function renderUsers(users) {
 
 }
 
-
-// ======================================================
-// FILTER USERS
-// ======================================================
-
 function filterUsers() {
 
     const searchInput =
@@ -778,12 +647,10 @@ function filterUsers() {
             "searchInput"
         );
 
-
     const categoryFilter =
         document.getElementById(
             "categoryFilter"
         );
-
 
     const keyword =
         searchInput
@@ -792,75 +659,134 @@ function filterUsers() {
                 .toLowerCase()
             : "";
 
-
-    const category =
+    const selectedCategory =
         categoryFilter
             ? categoryFilter.value
-            : "All";
-
+                .trim()
+                .toLowerCase()
+            : "all";
 
     filteredUsers =
         allUsers.filter(
             user => {
 
-                const matchName =
-                    (user.name || "")
-                        .toLowerCase()
-                        .includes(keyword);
+                const userName =
+                    String(
+                        user.name || ""
+                    ).toLowerCase();
 
+                const teachSkills =
+                    Array.isArray(
+                        user.teachSkills
+                    )
+                        ? user.teachSkills
+                        : [];
+
+                const learnSkills =
+                    Array.isArray(
+                        user.learnSkills
+                    )
+                        ? user.learnSkills
+                        : [];
+
+                const matchName =
+                    userName.includes(
+                        keyword
+                    );
 
                 const matchTeach =
-                    (user.teachSkills || [])
-                        .some(
-                            skill =>
+                    teachSkills.some(
+                        skill =>
+                            getSkillName(
                                 skill
-                                    .toLowerCase()
-                                    .includes(keyword)
-                        );
-
+                            )
+                                .toLowerCase()
+                                .includes(
+                                    keyword
+                                )
+                    );
 
                 const matchLearn =
-                    (user.learnSkills || [])
-                        .some(
-                            skill =>
+                    learnSkills.some(
+                        skill =>
+                            getSkillName(
                                 skill
-                                    .toLowerCase()
-                                    .includes(keyword)
-                        );
-
+                            )
+                                .toLowerCase()
+                                .includes(
+                                    keyword
+                                )
+                    );
 
                 const searchMatch =
+                    keyword === "" ||
                     matchName ||
                     matchTeach ||
                     matchLearn;
 
-
-                if (
-                    category === "All"
-                ) {
-
-                    return searchMatch;
-
-                }
-
+                const categoryMatch =
+                    selectedCategory === "all" ||
+                    userMatchesCategory(
+                        user,
+                        selectedCategory
+                    );
 
                 return (
                     searchMatch &&
-                    user.category === category
+                    categoryMatch
                 );
 
             }
         );
 
-
     sortUsers();
 
 }
 
+function userMatchesCategory(
+    user,
+    selectedCategory
+) {
 
-// ======================================================
-// SORT USERS
-// ======================================================
+    const normalizedSelected =
+        normalizeCategory(
+            selectedCategory
+        );
+
+    const teachingCategory =
+        normalizeCategory(
+            user.category
+        );
+
+    const learningCategory =
+        normalizeCategory(
+            user.learnCategory
+        );
+
+    return (
+        teachingCategory ===
+        normalizedSelected ||
+        learningCategory ===
+        normalizedSelected
+    );
+
+}
+
+function normalizeCategory(
+    category
+) {
+
+    return String(
+        category || ""
+    )
+        .trim()
+        .toLowerCase()
+        .replace(
+            /\s+/g,
+            " "
+        );
+
+}
 
 function sortUsers() {
 
@@ -869,12 +795,10 @@ function sortUsers() {
             "sortFilter"
         );
 
-
     const sort =
         sortFilter
             ? sortFilter.value
-            : "Newest";
-
+            : "Name";
 
     if (
         sort === "Name"
@@ -882,10 +806,13 @@ function sortUsers() {
 
         filteredUsers.sort(
             (a, b) =>
-                (a.name || "")
-                    .localeCompare(
+                String(
+                    a.name || ""
+                ).localeCompare(
+                    String(
                         b.name || ""
                     )
+                )
         );
 
     }
@@ -896,8 +823,12 @@ function sortUsers() {
 
         filteredUsers.sort(
             (a, b) =>
-                (b.rating || 0) -
-                (a.rating || 0)
+                Number(
+                    b.rating || 0
+                ) -
+                Number(
+                    a.rating || 0
+                )
         );
 
     }
@@ -909,17 +840,42 @@ function sortUsers() {
         filteredUsers.sort(
             (a, b) => {
 
-                const bSkills =
-                    (b.teachSkills?.length || 0) +
-                    (b.learnSkills?.length || 0);
+                const bTeach =
+                    Array.isArray(
+                        b.teachSkills
+                    )
+                        ? b.teachSkills.length
+                        : 0;
 
+                const bLearn =
+                    Array.isArray(
+                        b.learnSkills
+                    )
+                        ? b.learnSkills.length
+                        : 0;
 
-                const aSkills =
-                    (a.teachSkills?.length || 0) +
-                    (a.learnSkills?.length || 0);
+                const aTeach =
+                    Array.isArray(
+                        a.teachSkills
+                    )
+                        ? a.teachSkills.length
+                        : 0;
 
+                const aLearn =
+                    Array.isArray(
+                        a.learnSkills
+                    )
+                        ? a.learnSkills.length
+                        : 0;
 
-                return bSkills - aSkills;
+                return (
+                    bTeach +
+                    bLearn
+                ) -
+                (
+                    aTeach +
+                    aLearn
+                );
 
             }
         );
@@ -942,17 +898,11 @@ function sortUsers() {
 
     }
 
-
     renderUsers(
         filteredUsers
     );
 
 }
-
-
-// ======================================================
-// OPEN REQUEST MODAL
-// ======================================================
 
 window.openRequestModal =
     function (receiverId) {
@@ -960,12 +910,10 @@ window.openRequestModal =
         selectedReceiver =
             receiverId;
 
-
         const modal =
             document.getElementById(
                 "requestModal"
             );
-
 
         if (modal) {
 
@@ -974,17 +922,11 @@ window.openRequestModal =
 
         }
 
-
         loadSkillOptions(
             receiverId
         );
 
     };
-
-
-// ======================================================
-// CLOSE REQUEST MODAL
-// ======================================================
 
 window.closeModal =
     function () {
@@ -994,7 +936,6 @@ window.closeModal =
                 "requestModal"
             );
 
-
         if (modal) {
 
             modal.style.display =
@@ -1002,15 +943,9 @@ window.closeModal =
 
         }
 
-
         selectedReceiver = "";
 
     };
-
-
-// ======================================================
-// LOAD SKILL OPTIONS
-// ======================================================
 
 async function loadSkillOptions(
     receiverId
@@ -1021,12 +956,10 @@ async function loadSkillOptions(
             "teachSkillSelect"
         );
 
-
     const learnSelect =
         document.getElementById(
             "learnSkillSelect"
         );
-
 
     if (
         !teachSelect ||
@@ -1037,11 +970,9 @@ async function loadSkillOptions(
 
     }
 
-
     teachSelect.innerHTML = "";
 
     learnSelect.innerHTML = "";
-
 
     const teachPlaceholder =
         document.createElement(
@@ -1057,11 +988,9 @@ async function loadSkillOptions(
 
     teachPlaceholder.selected = true;
 
-
     teachSelect.appendChild(
         teachPlaceholder
     );
-
 
     const learnPlaceholder =
         document.createElement(
@@ -1077,11 +1006,9 @@ async function loadSkillOptions(
 
     learnPlaceholder.selected = true;
 
-
     learnSelect.appendChild(
         learnPlaceholder
     );
-
 
     try {
 
@@ -1099,7 +1026,6 @@ async function loadSkillOptions(
                 }
             );
 
-
         if (!myResponse.ok) {
 
             throw new Error(
@@ -1108,32 +1034,34 @@ async function loadSkillOptions(
 
         }
 
-
         const myProfile =
             await myResponse.json();
 
-
         if (
-            myProfile.teachSkills &&
+            Array.isArray(
+                myProfile.teachSkills
+            ) &&
             myProfile.teachSkills.length > 0
         ) {
 
             myProfile.teachSkills.forEach(
                 skill => {
 
+                    const skillName =
+                        getSkillName(
+                            skill
+                        );
+
                     const option =
                         document.createElement(
                             "option"
                         );
 
-
                     option.value =
-                        skill;
-
+                        skillName;
 
                     option.textContent =
-                        skill;
-
+                        skillName;
 
                     teachSelect.appendChild(
                         option
@@ -1151,36 +1079,38 @@ async function loadSkillOptions(
 
         }
 
-
         const receiver =
             allUsers.find(
                 user =>
                     user._id === receiverId
             );
 
-
         if (
             receiver &&
-            receiver.teachSkills &&
+            Array.isArray(
+                receiver.teachSkills
+            ) &&
             receiver.teachSkills.length > 0
         ) {
 
             receiver.teachSkills.forEach(
                 skill => {
 
+                    const skillName =
+                        getSkillName(
+                            skill
+                        );
+
                     const option =
                         document.createElement(
                             "option"
                         );
 
-
                     option.value =
-                        skill;
-
+                        skillName;
 
                     option.textContent =
-                        skill;
-
+                        skillName;
 
                     learnSelect.appendChild(
                         option
@@ -1198,7 +1128,6 @@ async function loadSkillOptions(
 
         }
 
-
         teachSelect.value = "";
 
         learnSelect.value = "";
@@ -1212,7 +1141,6 @@ async function loadSkillOptions(
             error
         );
 
-
         alert(
             "Unable to load skills."
         );
@@ -1221,11 +1149,6 @@ async function loadSkillOptions(
 
 }
 
-
-// ======================================================
-// SEND SWAP REQUEST
-// ======================================================
-
 async function sendRequest() {
 
     const teachSelect =
@@ -1233,24 +1156,20 @@ async function sendRequest() {
             "teachSkillSelect"
         );
 
-
     const learnSelect =
         document.getElementById(
             "learnSkillSelect"
         );
-
 
     const teachSkill =
         teachSelect
             ? teachSelect.value
             : "";
 
-
     const learnSkill =
         learnSelect
             ? learnSelect.value
             : "";
-
 
     if (!selectedReceiver) {
 
@@ -1259,8 +1178,8 @@ async function sendRequest() {
         );
 
         return;
-    }
 
+    }
 
     if (
         !teachSkill ||
@@ -1272,8 +1191,8 @@ async function sendRequest() {
         );
 
         return;
-    }
 
+    }
 
     try {
 
@@ -1306,10 +1225,8 @@ async function sendRequest() {
                 }
             );
 
-
         const data =
             await response.json();
-
 
         if (!response.ok) {
 
@@ -1319,19 +1236,16 @@ async function sendRequest() {
             );
 
             return;
-        }
 
+        }
 
         alert(
             "Skill Swap Request Sent Successfully!"
         );
 
-
         closeModal();
 
-
         await loadUsers();
-
 
         if (
             typeof window.refreshHeader ===
@@ -1351,7 +1265,6 @@ async function sendRequest() {
             error
         );
 
-
         alert(
             "Unable to send request."
         );
@@ -1359,11 +1272,6 @@ async function sendRequest() {
     }
 
 }
-
-
-// ======================================================
-// VIEW PROFILE
-// ======================================================
 
 window.viewProfile =
     async function (userId) {
@@ -1374,7 +1282,6 @@ window.viewProfile =
                     user._id === userId
             );
 
-
         if (!user) {
 
             alert(
@@ -1382,19 +1289,17 @@ window.viewProfile =
             );
 
             return;
-        }
 
+        }
 
         const name =
             user.name ||
             "Unknown User";
 
-
         const profileName =
             document.getElementById(
                 "profileName"
             );
-
 
         if (profileName) {
 
@@ -1403,12 +1308,10 @@ window.viewProfile =
 
         }
 
-
         const profileLocation =
             document.getElementById(
                 "profileLocation"
             );
-
 
         if (profileLocation) {
 
@@ -1425,12 +1328,10 @@ window.viewProfile =
 
         }
 
-
         const profileBio =
             document.getElementById(
                 "profileBio"
             );
-
 
         if (profileBio) {
 
@@ -1440,12 +1341,10 @@ window.viewProfile =
 
         }
 
-
         const profileAvatar =
             document.getElementById(
                 "profileAvatar"
             );
-
 
         if (profileAvatar) {
 
@@ -1456,12 +1355,10 @@ window.viewProfile =
 
         }
 
-
         const profileModal =
             document.getElementById(
                 "profileModal"
             );
-
 
         if (profileModal) {
 
@@ -1470,12 +1367,10 @@ window.viewProfile =
 
         }
 
-
         const profileReviews =
             document.getElementById(
                 "profileReviews"
             );
-
 
         if (profileReviews) {
 
@@ -1493,7 +1388,6 @@ window.viewProfile =
 
         }
 
-
         try {
 
             const response =
@@ -1501,10 +1395,8 @@ window.viewProfile =
                     `${API_BASE_URL}/reviews/user/${userId}`
                 );
 
-
             const reviews =
                 await response.json();
-
 
             if (!response.ok) {
 
@@ -1515,31 +1407,34 @@ window.viewProfile =
 
             }
 
+            const reviewList =
+                Array.isArray(
+                    reviews
+                )
+                    ? reviews
+                    : [];
 
             let totalRating = 0;
 
-
-            reviews.forEach(
+            reviewList.forEach(
                 review => {
 
                     totalRating +=
                         Number(
-                            review.rating || 0
+                            review.rating ||
+                            0
                         );
 
                 }
             );
 
-
             const averageRating =
-                reviews.length > 0
+                reviewList.length > 0
                     ? totalRating /
-                        reviews.length
+                        reviewList.length
                     : 0;
 
-
             let stars = "";
-
 
             for (
                 let i = 1;
@@ -1557,12 +1452,10 @@ window.viewProfile =
 
             }
 
-
             const profileStars =
                 document.getElementById(
                     "profileStars"
                 );
-
 
             if (profileStars) {
 
@@ -1571,12 +1464,10 @@ window.viewProfile =
 
             }
 
-
             const profileRating =
                 document.getElementById(
                     "profileRating"
                 );
-
 
             if (profileRating) {
 
@@ -1585,23 +1476,20 @@ window.viewProfile =
 
             }
 
-
             const profileReviewCount =
                 document.getElementById(
                     "profileReviewCount"
                 );
 
-
             if (profileReviewCount) {
 
                 profileReviewCount.textContent =
-                    `(${reviews.length} reviews)`;
+                    `(${reviewList.length} reviews)`;
 
             }
 
-
             if (
-                reviews.length === 0
+                reviewList.length === 0
             ) {
 
                 if (profileReviews) {
@@ -1621,22 +1509,19 @@ window.viewProfile =
                 }
 
                 return;
-            }
 
+            }
 
             let reviewsHTML = "";
 
-
-            reviews.forEach(
+            reviewList.forEach(
                 review => {
 
                     const reviewerName =
                         review.reviewer?.name ||
                         "Anonymous";
 
-
                     let reviewStars = "";
-
 
                     for (
                         let i = 1;
@@ -1654,7 +1539,6 @@ window.viewProfile =
 
                     }
 
-
                     reviewsHTML += `
 
                         <div class="review-item">
@@ -1671,7 +1555,6 @@ window.viewProfile =
 
                                     </strong>
 
-
                                     <div class="review-stars">
 
                                         ${reviewStars}
@@ -1682,7 +1565,6 @@ window.viewProfile =
 
                             </div>
 
-
                             <p class="review-comment">
 
                                 ${escapeHTML(
@@ -1692,10 +1574,8 @@ window.viewProfile =
 
                             </p>
 
-
                             ${
                                 review.recommend
-
                                     ? `
 
                                         <span class="recommended">
@@ -1707,9 +1587,7 @@ window.viewProfile =
                                         </span>
 
                                       `
-
                                     : ""
-
                             }
 
                         </div>
@@ -1718,7 +1596,6 @@ window.viewProfile =
 
                 }
             );
-
 
             if (profileReviews) {
 
@@ -1736,7 +1613,6 @@ window.viewProfile =
                 error
             );
 
-
             if (profileReviews) {
 
                 profileReviews.innerHTML = `
@@ -1746,9 +1622,7 @@ window.viewProfile =
                         <i class="fa-solid fa-circle-exclamation"></i>
 
                         <p>
-
                             Unable to load reviews.
-
                         </p>
 
                     </div>
@@ -1761,11 +1635,6 @@ window.viewProfile =
 
     };
 
-
-// ======================================================
-// CLOSE PROFILE MODAL
-// ======================================================
-
 window.closeProfileModal =
     function () {
 
@@ -1773,7 +1642,6 @@ window.closeProfileModal =
             document.getElementById(
                 "profileModal"
             );
-
 
         if (modal) {
 
@@ -1784,11 +1652,6 @@ window.closeProfileModal =
 
     };
 
-
-// ======================================================
-// CLOSE PROFILE MODAL ON OUTSIDE CLICK
-// ======================================================
-
 window.addEventListener(
     "click",
     event => {
@@ -1797,7 +1660,6 @@ window.addEventListener(
             document.getElementById(
                 "profileModal"
             );
-
 
         if (
             modal &&
@@ -1811,23 +1673,91 @@ window.addEventListener(
     }
 );
 
+function getSkillName(
+    skill
+) {
 
-// ======================================================
-// HTML ESCAPING
-// ======================================================
+    if (
+        skill === null ||
+        skill === undefined
+    ) {
 
-function escapeHTML(value) {
+        return "";
+
+    }
+
+    if (
+        typeof skill === "string"
+    ) {
+
+        return skill;
+
+    }
+
+    if (
+        typeof skill === "object"
+    ) {
+
+        return String(
+            skill.name ||
+            skill.title ||
+            skill.skill ||
+            skill.value ||
+            ""
+        );
+
+    }
+
+    return String(
+        skill
+    );
+
+}
+
+function escapeHTML(
+    value
+) {
 
     const div =
         document.createElement(
             "div"
         );
 
-
     div.textContent =
-        String(value);
-
+        String(
+            value
+        );
 
     return div.innerHTML;
+
+}
+
+function escapeAttribute(
+    value
+) {
+
+    return String(
+        value || ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /'/g,
+            "&#39;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        );
 
 }
