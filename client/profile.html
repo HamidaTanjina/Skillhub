@@ -5,54 +5,663 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
-    <title>My Profile | SkillHub</title>
+    <title>SkillHub | My Profile</title>
 
-    <link rel="stylesheet" href="profile.css">
+
+    <!-- =========================================================
+         SHARED THEME
+    ========================================================== -->
+
     <link rel="stylesheet" href="theme.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- =========================================================
+         SHARED SIDEBAR
+    ========================================================== -->
+
+    <link rel="stylesheet" href="sidebar.css">
+
+
+    <!-- =========================================================
+         PROFILE PAGE CSS
+    ========================================================== -->
+
+    <link rel="stylesheet" href="profile.css">
+
+
+    <!-- =========================================================
+         FONT AWESOME
+    ========================================================== -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+    <!-- =========================================================
+         THEME JAVASCRIPT
+    ========================================================== -->
 
     <script src="theme.js" defer></script>
 
 </head>
 
+
 <body>
 
-<div class="profile-container">
+<div class="dashboard">
 
-    <div class="profile-form">
 
-        <h2>Edit Profile</h2>
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
 
-        <label>Name</label>
+    <aside class="sidebar">
 
-        <input type="text" id="editName">
 
-        <label>Email</label>
+        <!-- Logo -->
 
-        <input type="email" id="editEmail" readonly>
+        <div class="logo">
 
-        <label>Location</label>
+            <i class="fa-solid fa-graduation-cap"></i>
 
-        <input type="text" id="editLocation">
+            <span>
+                SkillHub
+            </span>
 
-        <label>Bio</label>
+        </div>
 
-        <textarea id="editBio" rows="4"></textarea>
 
-        <button id="saveProfileBtn">
+        <!-- Navigation -->
 
-            Save Changes
+        <ul>
+
+
+            <!-- Dashboard -->
+
+            <li onclick="location.href='dashboard.html'">
+
+                <i class="fa-solid fa-house"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </li>
+
+
+            <!-- Browse Skills -->
+
+            <li onclick="location.href='browse-skills.html'">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <span>
+                    Browse Skills
+                </span>
+
+            </li>
+
+
+            <!-- Requests -->
+
+            <li onclick="location.href='request.html'">
+
+                <i class="fa-solid fa-handshake"></i>
+
+                <span>
+                    Requests
+                </span>
+
+            </li>
+
+
+            <!-- Chat -->
+
+            <li onclick="location.href='chat.html'">
+
+                <i class="fa-solid fa-comments"></i>
+
+                <span>
+                    Chat
+                </span>
+
+            </li>
+
+
+            <!-- Profile -->
+
+            <li class="active">
+
+                <i class="fa-solid fa-user"></i>
+
+                <span>
+                    Profile
+                </span>
+
+            </li>
+
+
+            <!-- Logout -->
+
+            <li id="logoutBtn">
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>
+                    Logout
+                </span>
+
+            </li>
+
+        </ul>
+
+    </aside>
+
+
+
+    <!-- =========================================================
+         MAIN CONTENT
+    ========================================================== -->
+
+    <main class="main">
+
+
+        <!-- =====================================================
+             SHARED TOPBAR
+        ====================================================== -->
+
+        <header class="topbar">
+
+
+            <!-- Page Title -->
+
+            <div class="page-title">
+
+                <h1>
+                    My Profile
+                </h1>
+
+                <p>
+                    Manage your profile and view your reviews.
+                </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TOPBAR ACTIONS
+            ================================================== -->
+
+            <div class="topbar-actions">
+
+
+                <div class="top-icons">
+
+    <!-- Notification Wrapper -->
+    <div class="notification-wrapper">
+
+        <button
+            class="notification-btn"
+            id="notificationBtn"
+            type="button"
+            title="Notifications">
+
+            <i class="fa-regular fa-bell"></i>
+
+            <span
+                id="notificationBadge"
+                class="notification-badge hidden">
+                0
+            </span>
 
         </button>
 
+        <!-- Notification Dropdown -->
+        <div
+            class="notification-dropdown"
+            id="notificationDropdown">
+
+            <div class="notification-header">
+
+                <h3>
+                    Notifications
+                </h3>
+
+                <button
+                    id="markAllReadBtn"
+                    type="button">
+
+                    Mark all as read
+
+                </button>
+
+            </div>
+
+            <div id="notificationList">
+
+                <div class="notification-empty">
+                    No notifications
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
+
+    <!-- Theme Toggle -->
+    <i
+        class="fa-solid fa-moon"
+        id="themeToggle"
+        title="Toggle theme">
+    </i>
 
 </div>
 
+
+                <!-- =================================================
+                     PROFILE
+                ================================================== -->
+
+                <div
+                    class="profile"
+                    id="profileMenu">
+
+
+                    <!-- Profile Icon -->
+
+                    <div class="profile-icon">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+
+
+                    <!-- User Name -->
+
+                    <span id="userName">
+
+                        Loading...
+
+                    </span>
+
+
+
+                    <!-- =================================================
+                         PROFILE DROPDOWN
+                    ================================================== -->
+
+                    <div class="profile-dropdown">
+
+
+                        <!-- Profile -->
+
+                        <div
+                            class="profile-dropdown-item"
+                            onclick="location.href='profile.html'">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <span>
+                                Profile
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- Logout -->
+
+                        <div
+                            class="profile-dropdown-item logout"
+                            id="topLogoutBtn">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            <span>
+                                Logout
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =====================================================
+             PROFILE CONTENT
+        ====================================================== -->
+
+        <div class="profile-content">
+
+
+
+            <!-- =================================================
+                 PROFILE SUMMARY
+            ================================================== -->
+
+            <section class="profile-summary-card card">
+
+
+                <!-- Left -->
+
+                <div class="profile-summary-left">
+
+
+                    <!-- Avatar -->
+
+                    <div class="profile-avatar">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+
+
+                    <!-- User Information -->
+
+                    <div class="profile-summary-info">
+
+                        <h2 id="profileName">
+
+                            Loading...
+
+                        </h2>
+
+
+
+                        <p id="profileEmail">
+
+                            Loading...
+
+                        </p>
+
+
+
+                        <p class="location-text">
+
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <span id="profileLocation">
+
+                                Add Location
+
+                            </span>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Rating -->
+
+                <div class="rating-summary">
+
+                    <div
+                        class="rating-number"
+                        id="userRating">
+
+                        0.0
+
+                    </div>
+
+
+
+                    <div
+                        class="rating-stars"
+                        id="ratingStars">
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <i class="fa-solid fa-star"></i>
+
+                    </div>
+
+
+
+                    <p>
+
+                        <span id="reviewCount">
+
+                            0
+
+                        </span>
+
+                        Reviews
+
+                    </p>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 EDIT PROFILE
+            ================================================== -->
+
+            <section class="profile-form-card card">
+
+
+                <!-- Section Heading -->
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <h2>
+                            Edit Profile
+                        </h2>
+
+                        <p>
+                            Update your personal information.
+                        </p>
+
+                    </div>
+
+
+
+                    <i class="fa-solid fa-user-pen"></i>
+
+                </div>
+
+
+
+                <!-- Name -->
+
+                <div class="form-group">
+
+                    <label for="editName">
+                        Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editName"
+                        placeholder="Enter your name">
+
+                </div>
+
+
+
+                <!-- Email -->
+
+                <div class="form-group">
+
+                    <label for="editEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="editEmail"
+                        readonly>
+
+                    <small>
+                        Email cannot be changed.
+                    </small>
+
+                </div>
+
+
+
+                <!-- Location -->
+
+                <div class="form-group">
+
+                    <label for="editLocation">
+                        Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="editLocation"
+                        placeholder="e.g. Sylhet, Bangladesh">
+
+                </div>
+
+
+
+                <!-- Bio -->
+
+                <div class="form-group">
+
+                    <label for="editBio">
+                        Bio
+                    </label>
+
+                    <textarea
+                        id="editBio"
+                        rows="5"
+                        maxlength="500"
+                        placeholder="Tell others about yourself..."></textarea>
+
+                </div>
+
+
+
+                <!-- Save Button -->
+
+                <button
+                    type="button"
+                    id="saveProfileBtn"
+                    class="save-btn">
+
+                    <i class="fa-solid fa-floppy-disk"></i>
+
+                    Save Changes
+
+                </button>
+
+            </section>
+
+
+
+            <!-- =================================================
+                 REVIEWS
+            ================================================== -->
+
+            <section class="reviews-card card">
+
+
+                <!-- Heading -->
+
+                <div class="section-heading reviews-heading">
+
+                    <div>
+
+                        <h2>
+                            Reviews
+                        </h2>
+
+                        <p>
+                            Feedback from people you have exchanged skills with.
+                        </p>
+
+                    </div>
+
+
+
+                    <!-- Review Summary -->
+
+                    <div class="review-total">
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <span id="reviewSummary">
+
+                            0.0 · 0 Reviews
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Reviews Container -->
+
+                <div
+                    id="reviewsContainer"
+                    class="reviews-container">
+
+                    <div class="reviews-loading">
+
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+
+                        Loading reviews...
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+        </div>
+
+    </main>
+
+</div>
+
+
+
+<!-- =============================================================
+     PROFILE JAVASCRIPT
+============================================================= -->
+
 <script src="profile.js"></script>
+
+
+<!-- =============================================================
+     SHARED HEADER JAVASCRIPT
+============================================================= -->
+
+<script src="header.js"></script>
+
 
 </body>
 

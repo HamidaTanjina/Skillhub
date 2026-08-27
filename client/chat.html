@@ -14,15 +14,15 @@
     <!-- =====================================================
          CHAT STYLE
     ====================================================== -->
-
-    <link rel="stylesheet" href="chat.css">
-
+<link rel="stylesheet" href="theme.css">
+   <link rel="stylesheet" href="sidebar.css">
+ <link rel="stylesheet" href="chat.css">
 
     <!-- =====================================================
          THEME
     ====================================================== -->
 
-    <link rel="stylesheet" href="theme.css">
+    
 
 
     <!-- =====================================================
@@ -547,39 +547,39 @@
      IMPORTANT:
      This must be loaded BEFORE chat.js
 ========================================================= -->
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-
-
-<!-- =========================================================
-     CHAT SCRIPT
-========================================================= -->
-
-<script src="chat.js"></script>
-
-
-<!-- =========================================================
-     LOGOUT
-========================================================= -->
-
-<script>
-
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    if (logoutBtn) {
-
-        logoutBtn.addEventListener("click", () => {
-
-            localStorage.removeItem("token");
-
-            window.location.href = "index.html";
-
-        });
-
-    }
-
-</script>
-
-
-</body>
-
-</html>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script> 
+ 
+ 
+<!-- ========================================================= 
+     CHAT SCRIPT 
+========================================================= --> 
+ 
+<script src="chat.js"></script> 
+ 
+ 
+<!-- ========================================================= 
+     LOGOUT 
+========================================================= --> 
+ 
+<script> 
+ 
+    const logoutBtn = document.getElementById("logoutBtn"); 
+ 
+    if (logoutBtn) { 
+ 
+        logoutBtn.addEventListener("click", () => { 
+ 
+            localStorage.removeItem("token"); 
+ 
+            window.location.href = "index.html"; 
+ 
+        }); 
+ 
+    } 
+ 
+</script> 
+ 
+ 
+</body> 
+ 
+</html> 

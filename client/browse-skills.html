@@ -5,82 +5,163 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Browse Skills | SkillHub</title>
 
-    <link rel="stylesheet" href="browse-skills.css">
+
+    <!-- =====================================================
+         SHARED THEME
+    ====================================================== -->
+
     <link rel="stylesheet" href="theme.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- =====================================================
+         SHARED SIDEBAR
+    ====================================================== -->
+
+    <link rel="stylesheet" href="sidebar.css">
+
+
+    <!-- =====================================================
+         BROWSE SKILLS PAGE CSS
+    ====================================================== -->
+
+    <link rel="stylesheet" href="browse-skills.css">
+
+
+    <!-- =====================================================
+         FONT AWESOME
+    ====================================================== -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+    <!-- =====================================================
+         THEME SCRIPT
+    ====================================================== -->
 
     <script src="theme.js" defer></script>
 
 </head>
 
+
 <body>
+
+
+<!-- =========================================================
+     DASHBOARD LAYOUT
+========================================================= -->
 
 <div class="dashboard">
 
-    <!-- Sidebar -->
+
+    <!-- =====================================================
+         SIDEBAR
+    ====================================================== -->
 
     <aside class="sidebar">
+
+
+        <!-- =================================================
+             LOGO
+        ================================================== -->
 
         <div class="logo">
 
             <i class="fa-solid fa-graduation-cap"></i>
 
-            <span>SkillHub</span>
+            <span>
+                SkillHub
+            </span>
 
         </div>
 
+
+        <!-- =================================================
+             NAVIGATION
+        ================================================== -->
+
         <ul>
+
+
+            <!-- Dashboard -->
 
             <li onclick="location.href='dashboard.html'">
 
                 <i class="fa-solid fa-house"></i>
 
-                Dashboard
+                <span>
+                    Dashboard
+                </span>
 
             </li>
+
+
+            <!-- Browse Skills -->
 
             <li class="active">
 
-                <i class="fa-solid fa-book"></i>
+                <i class="fa-solid fa-book-open"></i>
 
-                Browse Skills
+                <span>
+                    Browse Skills
+                </span>
 
             </li>
+
+
+            <!-- Requests -->
 
             <li onclick="location.href='request.html'">
 
                 <i class="fa-solid fa-handshake"></i>
 
-                Requests
+                <span>
+                    Requests
+                </span>
 
             </li>
+
+
+            <!-- Chat -->
 
             <li onclick="location.href='chat.html'">
 
                 <i class="fa-solid fa-comments"></i>
 
-                Chat
+                <span>
+                    Chat
+                </span>
 
             </li>
+
+
+            <!-- Profile -->
 
             <li onclick="location.href='profile.html'">
 
                 <i class="fa-solid fa-user"></i>
 
-                Profile
+                <span>
+                    Profile
+                </span>
 
             </li>
 
+
+            <!-- Logout -->
+
             <li id="logoutBtn">
 
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                <i class="fa-solid fa-right-from-bracket"></i>
 
-                Logout
+                <span>
+                    Logout
+                </span>
 
             </li>
 
@@ -88,302 +169,605 @@
 
     </aside>
 
-    <!-- Main -->
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+    ====================================================== -->
 
     <main class="main">
 
-        <!-- Top -->
 
-        <header class="page-header">
+        <!-- =================================================
+             SHARED TOPBAR
+        ================================================== -->
 
-            <h1>
+        <header class="topbar">
 
-                Browse Skills
 
-            </h1>
+            <!-- =================================================
+                 PAGE TITLE
+            ================================================== -->
 
-            <p>
+            <div class="page-title">
 
-                Find talented people and start learning together.
+                <h1>
+                    Browse Skills
+                </h1>
 
-            </p>
+                <p>
+                    Find talented people and start learning together.
+                </p>
 
-        </header>
+            </div>
 
-        <!-- Filter Section -->
 
-        <section class="filter-card">
 
-            <div class="filter-grid">
+            <!-- =================================================
+                 TOPBAR ACTIONS
+            ================================================== -->
 
-                <!-- Search -->
+            <div class="topbar-actions">
 
-                <div class="filter-item">
 
-                    <label>
+                <!-- =================================================
+                     NOTIFICATIONS + THEME
+                ================================================== -->
 
-                        Search Skills
+                <div class="top-icons">
 
-                    </label>
 
-                    <div class="search-box">
+                    <!-- Notification Wrapper -->
+<div class="top-icons">
 
-                        <i class="fa-solid fa-magnifying-glass"></i>
+    <!-- Notification Wrapper -->
+    <div class="notification-wrapper">
 
-                        <input type="text" id="searchInput" placeholder="JavaScript, Python, Photoshop...">
+        <button
+            class="notification-btn"
+            id="notificationBtn"
+            type="button"
+            title="Notifications">
+
+            <i class="fa-regular fa-bell"></i>
+
+            <span
+                id="notificationBadge"
+                class="notification-badge hidden">
+                0
+            </span>
+
+        </button>
+
+        <!-- Notification Dropdown -->
+        <div
+            class="notification-dropdown"
+            id="notificationDropdown">
+
+            <div class="notification-header">
+
+                <h3>
+                    Notifications
+                </h3>
+
+                <button
+                    id="markAllReadBtn"
+                    type="button">
+
+                    Mark all as read
+
+                </button>
+
+            </div>
+
+            <div id="notificationList">
+
+                <div class="notification-empty">
+                    No notifications
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Theme Toggle -->
+    <i
+        class="fa-solid fa-moon"
+        id="themeToggle"
+        title="Toggle theme">
+    </i>
+
+</div>
+
+
+
+                <!-- =================================================
+                     PROFILE
+                ================================================== -->
+
+                <div
+                    class="profile"
+                    id="profileMenu">
+
+
+                    <!-- Profile Icon -->
+
+                    <div class="profile-icon">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+
+                    <!-- User Name -->
+
+                    <span id="userName">
+
+                        Loading...
+
+                    </span>
+
+
+
+                    <!-- =================================================
+                         PROFILE DROPDOWN
+                    ================================================== -->
+
+                    <div class="profile-dropdown">
+
+
+                        <!-- Profile -->
+
+                        <div
+                            class="profile-dropdown-item"
+                            onclick="location.href='profile.html'">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <span>
+                                Profile
+                            </span>
+
+                        </div>
+
+
+                        <!-- Logout -->
+
+                        <div
+                            class="profile-dropdown-item logout"
+                            id="topLogoutBtn">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            <span>
+                                Logout
+                            </span>
+
+                        </div>
 
                     </div>
 
                 </div>
 
-                <!-- Category -->
+            </div>
+
+        </header>
+
+
+
+        <!-- =================================================
+             FILTER SECTION
+        ================================================== -->
+
+        <section class="filter-card">
+
+
+            <div class="filter-grid">
+
+
+                <!-- =================================================
+                     SEARCH
+                ================================================== -->
 
                 <div class="filter-item">
 
                     <label>
-
-                        Category
-
+                        Search Skills
                     </label>
+
+
+                    <div class="search-box">
+
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <input
+                            type="text"
+                            id="searchInput"
+                            placeholder="JavaScript, Python, Photoshop..."
+                            autocomplete="off">
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     CATEGORY
+                ================================================== -->
+
+                <div class="filter-item">
+
+                    <label>
+                        Category
+                    </label>
+
 
                     <select id="categoryFilter">
 
                         <option value="All">
-
                             All Categories
-
                         </option>
 
                         <option>
-
                             Technology
-
                         </option>
 
                         <option>
-
                             Design
-
                         </option>
 
                         <option>
-
                             Business
-
                         </option>
 
                         <option>
-
                             Language
-
                         </option>
 
                         <option>
-
                             Cooking
-
                         </option>
 
                     </select>
 
                 </div>
 
-                <!-- Sort -->
+
+
+                <!-- =================================================
+                     SORT
+                ================================================== -->
 
                 <div class="filter-item">
 
                     <label>
-
                         Sort By
-
                     </label>
+
 
                     <select id="sortFilter">
 
                         <option>
-
                             Name
-
                         </option>
 
                         <option>
-
                             Highest Rated
-
                         </option>
 
                         <option>
-
                             Most Skills
-
                         </option>
 
                         <option>
-
                             Newest
-
                         </option>
 
                     </select>
 
                 </div>
+
 
             </div>
 
         </section>
 
-        <!-- Results -->
+
+
+        <!-- =================================================
+             RESULT INFORMATION
+        ================================================== -->
 
         <div class="result-info">
 
             <i class="fa-solid fa-users"></i>
 
             <span id="totalUsers">
-
                 0 Users Found
-
             </span>
 
         </div>
 
-        <!-- Cards -->
 
-        <section id="usersContainer" class="users-grid">
 
-            <!-- Dynamic Cards -->
+        <!-- =================================================
+             USERS / SKILL CARDS
+        ================================================== -->
+
+        <section
+            id="usersContainer"
+            class="users-grid">
+
+            <!--
+                Dynamic user cards are generated
+                by browse-skills.js
+            -->
 
         </section>
 
+
     </main>
+
 
 </div>
 
-<!-- Swap Request Modal -->
 
-<div id="requestModal" class="modal">
+
+<!-- =========================================================
+     SWAP REQUEST MODAL
+========================================================= -->
+
+<div
+    id="requestModal"
+    class="modal">
+
 
     <div class="modal-content">
 
-        <span class="close" onclick="closeModal()">
+
+        <!-- Close -->
+
+        <span
+            class="close"
+            onclick="closeModal()">
 
             &times;
 
         </span>
 
+
+        <!-- Title -->
+
         <h2>
-
             Send Skill Swap Request
-
         </h2>
 
+
+        <!-- Teach Skill -->
+
         <label>
-
             Skill You Will Teach
-
         </label>
+
 
         <select id="teachSkillSelect">
 
         </select>
 
+
+
+        <!-- Learn Skill -->
+
         <label>
-
             Skill You Want To Learn
-
         </label>
+
 
         <select id="learnSkillSelect">
 
         </select>
 
-        <button id="confirmRequestBtn">
+
+
+        <!-- Confirm -->
+
+        <button
+            id="confirmRequestBtn"
+            type="button">
 
             Send Request
 
         </button>
 
+
     </div>
 
 </div>
-<!-- ============================= -->
-<!-- View Profile Modal -->
-<!-- ============================= -->
 
-<div id="profileModal" class="profile-modal">
+
+
+<!-- =========================================================
+     VIEW PROFILE MODAL
+========================================================= -->
+
+<div
+    id="profileModal"
+    class="profile-modal">
+
 
     <div class="profile-modal-content">
 
-        <span class="profile-close" onclick="closeProfileModal()">
+
+        <!-- Close -->
+
+        <span
+            class="profile-close"
+            onclick="closeProfileModal()">
+
             &times;
+
         </span>
+
+
+
+        <!-- =================================================
+             PROFILE MODAL HEADER
+        ================================================== -->
 
         <div class="profile-modal-header">
 
-            <div class="profile-avatar" id="profileAvatar">
+
+            <!-- Avatar -->
+
+            <div
+                class="profile-avatar"
+                id="profileAvatar">
+
                 ?
+
             </div>
 
+
+
+            <!-- User Information -->
+
             <div>
-                <h2 id="profileName">User Name</h2>
+
+                <h2 id="profileName">
+
+                    User Name
+
+                </h2>
+
 
                 <p id="profileLocation">
+
                     <i class="fa-solid fa-location-dot"></i>
+
                     Location not added
+
                 </p>
+
             </div>
 
         </div>
+
+
+
+        <!-- =================================================
+             ABOUT
+        ================================================== -->
 
         <div class="profile-section">
 
+
             <h3>
+
                 <i class="fa-solid fa-user"></i>
+
                 About
+
             </h3>
 
+
             <p id="profileBio">
+
                 No bio available.
+
             </p>
 
+
         </div>
+
+
+
+        <!-- =================================================
+             PROFILE RATING
+        ================================================== -->
 
         <div class="profile-rating">
 
+
             <div id="profileStars">
+
                 ☆☆☆☆☆
+
             </div>
 
+
             <span id="profileRating">
+
                 0.0
+
             </span>
+
 
             <span id="profileReviewCount">
+
                 (0 reviews)
+
             </span>
 
+
         </div>
+
+
+
+        <!-- =================================================
+             REVIEWS
+        ================================================== -->
 
         <div class="profile-section">
 
+
             <h3>
+
                 <i class="fa-solid fa-star"></i>
+
                 Reviews
+
             </h3>
+
 
             <div id="profileReviews">
 
+
                 <p class="no-reviews">
+
                     No reviews yet.
+
                 </p>
+
 
             </div>
 
+
         </div>
+
 
     </div>
 
 </div>
+
+
+
+<!-- =========================================================
+     BROWSE SKILLS JAVASCRIPT
+========================================================= -->
+
 <script src="browse-skills.js"></script>
+
+
+
+<!-- =========================================================
+     SHARED HEADER CONTROLLER
+========================================================= -->
+
+<script src="header.js"></script>
+
 
 </body>
 

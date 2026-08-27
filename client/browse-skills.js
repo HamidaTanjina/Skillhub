@@ -1,108 +1,254 @@
+
+
+"use strict";
+
+
+// ======================================================
+// CONFIGURATION
+// ======================================================
+
 const token = localStorage.getItem("token");
-const API_BASE_URL = "https://skillhub-backend-cths.onrender.com/api";
+
+const API_BASE_URL =
+    "https://skillhub-backend-cths.onrender.com/api";
+
+
+// ======================================================
+// AUTHENTICATION
+// ======================================================
+
+// header.js already performs authentication.
+// This fallback keeps this page safe if header.js
+// is accidentally not loaded.
 
 if (!token) {
     window.location.href = "index.html";
 }
 
+
+// ======================================================
+// PAGE VARIABLES
+// ======================================================
+
 let selectedReceiver = "";
+
 let allUsers = [];
+
 let filteredUsers = [];
+
 let requestStatusMap = {};
 
-document.addEventListener("DOMContentLoaded", () => {
-    setupEventListeners();
-    loadUsers();
-});
 
-// ============================
-// Setup Event Listeners
-// ============================
+// ======================================================
+// PAGE INITIALIZATION
+// ======================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        setupEventListeners();
+
+        loadUsers();
+
+    }
+);
+
+
+// ======================================================
+// SETUP PAGE EVENT LISTENERS
+// ======================================================
 
 function setupEventListeners() {
 
-    document
-        .getElementById("searchInput")
-        .addEventListener("input", filterUsers);
+    // ----------------------------------------------
+    // Search
+    // ----------------------------------------------
 
-    document
-        .getElementById("categoryFilter")
-        .addEventListener("change", filterUsers);
+    const searchInput =
+        document.getElementById("searchInput");
 
-    document
-        .getElementById("sortFilter")
-        .addEventListener("change", sortUsers);
+    if (searchInput) {
 
-    document
-        .getElementById("confirmRequestBtn")
-        .addEventListener("click", sendRequest);
-
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    if (logoutBtn) {
-
-        logoutBtn.addEventListener("click", () => {
-
-            localStorage.removeItem("token");
-
-            window.location.href = "index.html";
-
-        });
+        searchInput.addEventListener(
+            "input",
+            filterUsers
+        );
 
     }
 
-    window.onclick = function (event) {
 
-        const modal = document.getElementById("requestModal");
+    // ----------------------------------------------
+    // Category Filter
+    // ----------------------------------------------
 
-        if (event.target === modal) {
+    const categoryFilter =
+        document.getElementById("categoryFilter");
 
-            closeModal();
+    if (categoryFilter) {
 
-        }
+        categoryFilter.addEventListener(
+            "change",
+            filterUsers
+        );
 
-    };
+    }
 
-}
 
-// ============================
-// Load Users
-// ============================
+    // ----------------------------------------------
+    // Sort Filter
+    // ----------------------------------------------
 
-async function loadUsers() {
+    const sortFilter =
+        document.getElementById("sortFilter");
 
-    const container = document.getElementById("usersContainer");
+    if (sortFilter) {
 
-    try {
+        sortFilter.addEventListener(
+            "change",
+            sortUsers
+        );
 
-        const response = await fetch(
-            `${API_BASE_URL}/user/all`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
+    }
+
+
+    // ----------------------------------------------
+    // Confirm Request
+    // ----------------------------------------------
+
+    const confirmRequestBtn =
+        document.getElementById(
+            "confirmRequestBtn"
+        );
+
+    if (confirmRequestBtn) {
+
+        confirmRequestBtn.addEventListener(
+            "click",
+            sendRequest
+        );
+
+    }
+
+
+    // ----------------------------------------------
+    // Request Modal Outside Click
+    // ----------------------------------------------
+
+    const requestModal =
+        document.getElementById(
+            "requestModal"
+        );
+
+    if (requestModal) {
+
+        requestModal.addEventListener(
+            "click",
+            event => {
+
+                if (
+                    event.target === requestModal
+                ) {
+
+                    closeModal();
+
                 }
+
             }
         );
 
+    }
+
+}
+
+
+// ======================================================
+// LOAD USERS
+// ======================================================
+
+async function loadUsers() {
+
+    const container =
+        document.getElementById(
+            "usersContainer"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/user/all`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+
+                }
+            );
+
+
+        // ------------------------------------------
+        // Authentication expired
+        // ------------------------------------------
+
+        if (response.status === 401) {
+
+            localStorage.removeItem("token");
+
+            window.location.href =
+                "index.html";
+
+            return;
+        }
+
+
         if (!response.ok) {
 
-            throw new Error("Failed to load users");
+            throw new Error(
+                "Failed to load users"
+            );
 
         }
 
-        allUsers = await response.json();
+
+        allUsers =
+            await response.json();
+
+
+        // ------------------------------------------
+        // Load existing request statuses
+        // ------------------------------------------
 
         await loadRequestStatuses();
 
-        filteredUsers = [...allUsers];
 
-        renderUsers(filteredUsers);
+        filteredUsers =
+            [...allUsers];
+
+
+        renderUsers(
+            filteredUsers
+        );
+
 
     }
 
     catch (error) {
 
-        console.log(error);
+        console.error(
+            "Load users error:",
+            error
+        );
+
 
         container.innerHTML = `
 
@@ -122,63 +268,112 @@ async function loadUsers() {
 
 }
 
-// ============================
-// Load Existing Request Status
-// ============================
-// ============================
-// Load Existing Request Status
-// ============================
+
+// ======================================================
+// LOAD EXISTING REQUEST STATUS
+// ======================================================
+
 async function loadRequestStatuses() {
 
     requestStatusMap = {};
 
+
     try {
 
-        const response = await fetch(
-            `${API_BASE_URL}/swaps/sent`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
+        const response =
+            await fetch(
+                `${API_BASE_URL}/swaps/sent`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+
                 }
-            }
-        );
+            );
+
 
         if (!response.ok) {
             return;
         }
 
-        const swaps = await response.json();
 
-        swaps.forEach(swap => {
+        const swaps =
+            await response.json();
 
-            const receiverId =
-                swap.receiver._id || swap.receiver;
 
-            requestStatusMap[receiverId] = swap.status;
+        swaps.forEach(
+            swap => {
 
-        });
+                const receiverId =
+                    swap.receiver?._id ||
+                    swap.receiver;
+
+
+                if (receiverId) {
+
+                    requestStatusMap[
+                        receiverId
+                    ] = swap.status;
+
+                }
+
+            }
+        );
 
     }
 
     catch (error) {
 
-        console.log(error);
+        console.error(
+            "Request status loading error:",
+            error
+        );
 
     }
 
 }
-// ============================
-// Render Users
-// ============================
+
+
+// ======================================================
+// RENDER USERS
+// ======================================================
 
 function renderUsers(users) {
 
-    const container = document.getElementById("usersContainer");
+    const container =
+        document.getElementById(
+            "usersContainer"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
 
     container.innerHTML = "";
 
-    document.getElementById("totalUsers").textContent =
-        `${users.length} Users Found`;
+
+    const totalUsers =
+        document.getElementById(
+            "totalUsers"
+        );
+
+
+    if (totalUsers) {
+
+        totalUsers.textContent =
+            `${users.length} Users Found`;
+
+    }
+
+
+    // ----------------------------------------------
+    // No users
+    // ----------------------------------------------
 
     if (users.length === 0) {
 
@@ -197,419 +392,658 @@ function renderUsers(users) {
         `;
 
         return;
-
     }
 
-    users.forEach(user => {
 
-        const firstLetter =
-            user.name
-                ? user.name.charAt(0).toUpperCase()
-                : "?";
+    // ----------------------------------------------
+    // Render users
+    // ----------------------------------------------
 
-        const teachSkills =
-            user.teachSkills && user.teachSkills.length > 0
-                ? user.teachSkills.map(skill => `
+    users.forEach(
+        user => {
 
-                    <span class="teach-tag">
+            const firstLetter =
+                user.name
+                    ? user.name
+                        .charAt(0)
+                        .toUpperCase()
+                    : "?";
 
-                        <i class="fa-solid fa-code"></i>
 
-                        ${skill}
+            // --------------------------------------
+            // Teaching skills
+            // --------------------------------------
 
-                    </span>
+            const teachSkills =
+                user.teachSkills &&
+                user.teachSkills.length > 0
 
-                `).join("")
-                : `<span class="teach-tag">No Skills</span>`;
+                    ? user.teachSkills
+                        .map(
+                            skill => `
 
-        const learnSkills =
-            user.learnSkills && user.learnSkills.length > 0
-                ? user.learnSkills.map(skill => `
+                                <span class="teach-tag">
 
-                    <span class="learn-tag">
+                                    <i class="fa-solid fa-code"></i>
 
-                        <i class="fa-solid fa-book-open"></i>
+                                    ${escapeHTML(skill)}
 
-                        ${skill}
+                                </span>
 
-                    </span>
+                            `
+                        )
+                        .join("")
 
-                `).join("")
-                : `<span class="learn-tag">No Skills</span>`;
+                    : `
 
-        const rating = Number(user.rating || 0);
+                        <span class="teach-tag">
 
-        let stars = "";
+                            No Skills
 
-        for (let i = 1; i <= 5; i++) {
+                        </span>
 
-            stars += i <= Math.round(rating)
-                ? "★"
-                : "☆";
+                    `;
 
-        }
 
-        // ==========================
-        // Button State
-        // ==========================
+            // --------------------------------------
+            // Learning skills
+            // --------------------------------------
 
-        let requestButton = "";
+            const learnSkills =
+                user.learnSkills &&
+                user.learnSkills.length > 0
 
-        if (requestStatusMap[user._id] === "Pending") {
+                    ? user.learnSkills
+                        .map(
+                            skill => `
 
-            requestButton = `
+                                <span class="learn-tag">
 
-                <button class="request-btn" disabled>
+                                    <i class="fa-solid fa-book-open"></i>
 
-                    <i class="fa-solid fa-clock"></i>
+                                    ${escapeHTML(skill)}
 
-                    Request Sent
+                                </span>
 
-                </button>
+                            `
+                        )
+                        .join("")
+
+                    : `
+
+                        <span class="learn-tag">
+
+                            No Skills
+
+                        </span>
+
+                    `;
+
+
+            // --------------------------------------
+            // Rating
+            // --------------------------------------
+
+            const rating =
+                Number(
+                    user.rating || 0
+                );
+
+
+            let stars = "";
+
+
+            for (
+                let i = 1;
+                i <= 5;
+                i++
+            ) {
+
+                stars +=
+                    i <= Math.round(rating)
+                        ? "★"
+                        : "☆";
+
+            }
+
+
+            // --------------------------------------
+            // Request button
+            // --------------------------------------
+
+            let requestButton = "";
+
+
+            if (
+                requestStatusMap[user._id] ===
+                "Pending"
+            ) {
+
+                requestButton = `
+
+                    <button
+                        class="request-btn"
+                        disabled
+                    >
+
+                        <i class="fa-solid fa-clock"></i>
+
+                        Request Sent
+
+                    </button>
+
+                `;
+
+            }
+
+            else if (
+                requestStatusMap[user._id] ===
+                "Accepted"
+            ) {
+
+                requestButton = `
+
+                    <button
+                        class="request-btn active"
+                        disabled
+                    >
+
+                        <i class="fa-solid fa-check"></i>
+
+                        Active Swap
+
+                    </button>
+
+                `;
+
+            }
+
+            else {
+
+                requestButton = `
+
+                    <button
+                        class="request-btn"
+                        onclick="openRequestModal('${user._id}')"
+                    >
+
+                        <i class="fa-regular fa-paper-plane"></i>
+
+                        Send Request
+
+                    </button>
+
+                `;
+
+            }
+
+
+            // --------------------------------------
+            // User card
+            // --------------------------------------
+
+            container.innerHTML += `
+
+                <div class="user-card">
+
+                    <div class="user-header">
+
+                        <div class="user-info">
+
+                            <div class="avatar">
+
+                                ${firstLetter}
+
+                            </div>
+
+
+                            <div class="user-details">
+
+                                <h3 class="user-name">
+
+                                    ${escapeHTML(
+                                        user.name ||
+                                        "Unknown User"
+                                    )}
+
+                                </h3>
+
+
+                                <p class="location">
+
+                                    <i class="fa-solid fa-location-dot"></i>
+
+                                    ${escapeHTML(
+                                        user.location ||
+                                        "Location not added"
+                                    )}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="section-title">
+
+                        Skills They Teach
+
+                    </div>
+
+
+                    <div class="skill-list">
+
+                        ${teachSkills}
+
+                    </div>
+
+
+                    <div class="section-title">
+
+                        Wants To Learn
+
+                    </div>
+
+
+                    <div class="skill-list">
+
+                        ${learnSkills}
+
+                    </div>
+
+
+                    <div class="card-footer">
+
+                        <div class="rating">
+
+                            ${stars}
+
+                            <span>
+
+                                ${rating.toFixed(1)}
+
+                                (${user.totalReviews || 0} reviews)
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-buttons">
+
+                        ${requestButton}
+
+
+                        <button
+                            class="view-profile-btn"
+                            onclick="viewProfile('${user._id}')"
+                        >
+
+                            <i class="fa-solid fa-user"></i>
+
+                            View Profile
+
+                        </button>
+
+                    </div>
+
+                </div>
 
             `;
 
         }
-
-        else if (requestStatusMap[user._id] === "Accepted") {
-
-            requestButton = `
-
-                <button class="request-btn active" disabled>
-
-                    <i class="fa-solid fa-check"></i>
-
-                    Active Swap
-
-                </button>
-
-            `;
-
-        }
-
-        else {
-
-            requestButton = `
-
-                <button
-                    class="request-btn"
-                    onclick="openRequestModal('${user._id}')">
-
-                    <i class="fa-regular fa-paper-plane"></i>
-
-                    Send Request
-
-                </button>
-
-            `;
-
-        }
-
-        container.innerHTML += `
-
-<div class="user-card">
-
-    <div class="user-header">
-
-        <div class="user-info">
-
-            <div class="avatar">
-
-                ${firstLetter}
-
-            </div>
-
-            <div class="user-details">
-
-                <h3 class="user-name">
-
-                    ${user.name}
-
-                </h3>
-
-                <p class="location">
-
-                    <i class="fa-solid fa-location-dot"></i>
-
-                    ${user.location || "Location not added"}
-
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="section-title">
-
-        Skills They Teach
-
-    </div>
-
-    <div class="skill-list">
-
-        ${teachSkills}
-
-    </div>
-
-    <div class="section-title">
-
-        Wants To Learn
-
-    </div>
-
-    <div class="skill-list">
-
-        ${learnSkills}
-
-    </div>
-
-    <div class="card-footer">
-
-        <div class="rating">
-
-            ${stars}
-
-            <span>
-
-                ${rating.toFixed(1)}
-                (${user.totalReviews || 0} reviews)
-
-            </span>
-
-        </div>
-
-    </div>
-
- <div class="card-buttons">
-
-    ${requestButton}
-
-    <button
-        class="view-profile-btn"
-        onclick="viewProfile('${user._id}')">
-
-        <i class="fa-solid fa-user"></i>
-
-        View Profile
-
-    </button>
-
-
-</div>
-
-`;
-
-    });
+    );
 
 }
-// ============================
-// Filter Users
-// ============================
+
+
+// ======================================================
+// FILTER USERS
+// ======================================================
 
 function filterUsers() {
 
-    const keyword =
-        document
-            .getElementById("searchInput")
-            .value
-            .toLowerCase();
-
-    const category =
-        document
-            .getElementById("categoryFilter")
-            .value;
-
-    filteredUsers = allUsers.filter(user => {
-
-        const matchName =
-            (user.name || "")
-                .toLowerCase()
-                .includes(keyword);
-
-        const matchTeach =
-            (user.teachSkills || []).some(skill =>
-                skill.toLowerCase().includes(keyword)
-            );
-
-        const matchLearn =
-            (user.learnSkills || []).some(skill =>
-                skill.toLowerCase().includes(keyword)
-            );
-
-        const searchMatch =
-            matchName ||
-            matchTeach ||
-            matchLearn;
-
-        if (category === "All") {
-
-            return searchMatch;
-
-        }
-
-        return (
-
-            searchMatch &&
-
-            user.category === category
-
+    const searchInput =
+        document.getElementById(
+            "searchInput"
         );
 
-    });
+
+    const categoryFilter =
+        document.getElementById(
+            "categoryFilter"
+        );
+
+
+    const keyword =
+        searchInput
+            ? searchInput.value
+                .trim()
+                .toLowerCase()
+            : "";
+
+
+    const category =
+        categoryFilter
+            ? categoryFilter.value
+            : "All";
+
+
+    filteredUsers =
+        allUsers.filter(
+            user => {
+
+                const matchName =
+                    (user.name || "")
+                        .toLowerCase()
+                        .includes(keyword);
+
+
+                const matchTeach =
+                    (user.teachSkills || [])
+                        .some(
+                            skill =>
+                                skill
+                                    .toLowerCase()
+                                    .includes(keyword)
+                        );
+
+
+                const matchLearn =
+                    (user.learnSkills || [])
+                        .some(
+                            skill =>
+                                skill
+                                    .toLowerCase()
+                                    .includes(keyword)
+                        );
+
+
+                const searchMatch =
+                    matchName ||
+                    matchTeach ||
+                    matchLearn;
+
+
+                if (
+                    category === "All"
+                ) {
+
+                    return searchMatch;
+
+                }
+
+
+                return (
+                    searchMatch &&
+                    user.category === category
+                );
+
+            }
+        );
+
 
     sortUsers();
 
 }
 
-// ============================
-// Sort Users
-// ============================
+
+// ======================================================
+// SORT USERS
+// ======================================================
 
 function sortUsers() {
 
+    const sortFilter =
+        document.getElementById(
+            "sortFilter"
+        );
+
+
     const sort =
-        document
-            .getElementById("sortFilter")
-            .value;
+        sortFilter
+            ? sortFilter.value
+            : "Newest";
 
-    if (sort === "Name") {
 
-        filteredUsers.sort((a, b) =>
-            (a.name || "").localeCompare(b.name || "")
+    if (
+        sort === "Name"
+    ) {
+
+        filteredUsers.sort(
+            (a, b) =>
+                (a.name || "")
+                    .localeCompare(
+                        b.name || ""
+                    )
         );
 
     }
 
-    else if (sort === "Highest Rated") {
+    else if (
+        sort === "Highest Rated"
+    ) {
 
-        filteredUsers.sort((a, b) =>
-            (b.rating || 0) -
-            (a.rating || 0)
+        filteredUsers.sort(
+            (a, b) =>
+                (b.rating || 0) -
+                (a.rating || 0)
         );
 
     }
 
-    else if (sort === "Most Skills") {
+    else if (
+        sort === "Most Skills"
+    ) {
 
-        filteredUsers.sort((a, b) =>
+        filteredUsers.sort(
+            (a, b) => {
 
-            ((b.teachSkills?.length || 0) +
-            (b.learnSkills?.length || 0))
+                const bSkills =
+                    (b.teachSkills?.length || 0) +
+                    (b.learnSkills?.length || 0);
 
-            -
 
-            ((a.teachSkills?.length || 0) +
-            (a.learnSkills?.length || 0))
+                const aSkills =
+                    (a.teachSkills?.length || 0) +
+                    (a.learnSkills?.length || 0);
 
+
+                return bSkills - aSkills;
+
+            }
         );
 
     }
 
-    else if (sort === "Newest") {
+    else if (
+        sort === "Newest"
+    ) {
 
-        filteredUsers.sort((a, b) =>
-
-            new Date(b.createdAt || 0) -
-            new Date(a.createdAt || 0)
-
+        filteredUsers.sort(
+            (a, b) =>
+                new Date(
+                    b.createdAt || 0
+                ) -
+                new Date(
+                    a.createdAt || 0
+                )
         );
 
     }
 
-    renderUsers(filteredUsers);
+
+    renderUsers(
+        filteredUsers
+    );
 
 }
 
-// ============================
-// Open Request Modal
-// ============================
 
-window.openRequestModal = function (receiverId) {
+// ======================================================
+// OPEN REQUEST MODAL
+// ======================================================
 
-    selectedReceiver = receiverId;
+window.openRequestModal =
+    function (receiverId) {
 
-    document.getElementById("requestModal").style.display = "flex";
+        selectedReceiver =
+            receiverId;
 
-    loadSkillOptions(receiverId);
 
-};
+        const modal =
+            document.getElementById(
+                "requestModal"
+            );
 
-// ============================
-// Close Modal
-// ============================
 
-window.closeModal = function () {
+        if (modal) {
 
-    document.getElementById("requestModal").style.display = "none";
-
-    selectedReceiver = "";
-
-};
-
-// ============================
-// Load Skill Options
-// ============================
-
-async function loadSkillOptions(receiverId) {
-
-    const teachSelect =
-        document.getElementById("teachSkillSelect");
-
-    const learnSelect =
-        document.getElementById("learnSkillSelect");
-
-    teachSelect.innerHTML = "";
-    learnSelect.innerHTML = "";
-
-    try {
-
-        const myResponse = await fetch(
-
-            `${API_BASE_URL}/user/profile`,
-
-            {
-
-                headers: {
-
-                    Authorization: `Bearer ${token}`
-
-                }
-
-            }
-
-        );
-
-        if (!myResponse.ok) {
-
-            throw new Error("Unable to load profile");
+            modal.style.display =
+                "flex";
 
         }
 
-        const myProfile = await myResponse.json();
+
+        loadSkillOptions(
+            receiverId
+        );
+
+    };
+
+
+// ======================================================
+// CLOSE REQUEST MODAL
+// ======================================================
+
+window.closeModal =
+    function () {
+
+        const modal =
+            document.getElementById(
+                "requestModal"
+            );
+
+
+        if (modal) {
+
+            modal.style.display =
+                "none";
+
+        }
+
+
+        selectedReceiver = "";
+
+    };
+
+
+// ======================================================
+// LOAD SKILL OPTIONS
+// ======================================================
+
+async function loadSkillOptions(
+    receiverId
+) {
+
+    const teachSelect =
+        document.getElementById(
+            "teachSkillSelect"
+        );
+
+
+    const learnSelect =
+        document.getElementById(
+            "learnSkillSelect"
+        );
+
+
+    if (
+        !teachSelect ||
+        !learnSelect
+    ) {
+
+        return;
+
+    }
+
+
+    teachSelect.innerHTML = "";
+
+    learnSelect.innerHTML = "";
+
+
+    try {
+
+        // ------------------------------------------
+        // Load current user's profile
+        // ------------------------------------------
+
+        const myResponse =
+            await fetch(
+                `${API_BASE_URL}/user/profile`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
+
+                }
+            );
+
+
+        if (!myResponse.ok) {
+
+            throw new Error(
+                "Unable to load profile"
+            );
+
+        }
+
+
+        const myProfile =
+            await myResponse.json();
+
+
+        // ------------------------------------------
+        // My teaching skills
+        // ------------------------------------------
 
         if (
-
             myProfile.teachSkills &&
-
             myProfile.teachSkills.length > 0
-
         ) {
 
-            myProfile.teachSkills.forEach(skill => {
+            myProfile.teachSkills.forEach(
+                skill => {
 
-                teachSelect.innerHTML += `
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
 
-                    <option value="${skill}">
 
-                        ${skill}
+                    option.value =
+                        skill;
 
-                    </option>
 
-                `;
+                    option.textContent =
+                        skill;
 
-            });
+
+                    teachSelect.appendChild(
+                        option
+                    );
+
+                }
+            );
 
         }
 
@@ -627,35 +1061,51 @@ async function loadSkillOptions(receiverId) {
 
         }
 
-        const receiver = allUsers.find(
 
-            user => user._id === receiverId
+        // ------------------------------------------
+        // Receiver
+        // ------------------------------------------
 
-        );
+        const receiver =
+            allUsers.find(
+                user =>
+                    user._id === receiverId
+            );
+
+
+        // ------------------------------------------
+        // Receiver teaching skills
+        // ------------------------------------------
 
         if (
-
             receiver &&
-
             receiver.teachSkills &&
-
             receiver.teachSkills.length > 0
-
         ) {
 
-            receiver.teachSkills.forEach(skill => {
+            receiver.teachSkills.forEach(
+                skill => {
 
-                learnSelect.innerHTML += `
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
 
-                    <option value="${skill}">
 
-                        ${skill}
+                    option.value =
+                        skill;
 
-                    </option>
 
-                `;
+                    option.textContent =
+                        skill;
 
-            });
+
+                    learnSelect.appendChild(
+                        option
+                    );
+
+                }
+            );
 
         }
 
@@ -677,377 +1127,675 @@ async function loadSkillOptions(receiverId) {
 
     catch (error) {
 
-        console.log(error);
+        console.error(
+            "Skill loading error:",
+            error
+        );
 
-        alert("Unable to load skills.");
+
+        alert(
+            "Unable to load skills."
+        );
 
     }
 
 }
-// ============================
-// Send Swap Request
-// ============================
+
+
+// ======================================================
+// SEND SWAP REQUEST
+// ======================================================
 
 async function sendRequest() {
 
+    const teachSelect =
+        document.getElementById(
+            "teachSkillSelect"
+        );
+
+
+    const learnSelect =
+        document.getElementById(
+            "learnSkillSelect"
+        );
+
+
     const teachSkill =
-        document.getElementById("teachSkillSelect").value;
+        teachSelect
+            ? teachSelect.value
+            : "";
+
 
     const learnSkill =
-        document.getElementById("learnSkillSelect").value;
+        learnSelect
+            ? learnSelect.value
+            : "";
+
+
+    // ----------------------------------------------
+    // Validate receiver
+    // ----------------------------------------------
 
     if (!selectedReceiver) {
 
-        alert("Please select a user.");
+        alert(
+            "Please select a user."
+        );
 
         return;
-
     }
 
-    if (!teachSkill || !learnSkill) {
 
-        alert("Please select both skills.");
+    // ----------------------------------------------
+    // Validate skills
+    // ----------------------------------------------
+
+    if (
+        !teachSkill ||
+        !learnSkill
+    ) {
+
+        alert(
+            "Please select both skills."
+        );
 
         return;
-
     }
+
 
     try {
 
-        const response = await fetch(
+        const response =
+            await fetch(
+                `${API_BASE_URL}/swaps/send`,
+                {
+                    method: "POST",
 
-            `${API_BASE_URL}/swaps/send`,
+                    headers: {
+                        "Content-Type":
+                            "application/json",
 
-            {
+                        Authorization:
+                            `Bearer ${token}`
+                    },
 
-                method: "POST",
+                    body:
+                        JSON.stringify({
+                            receiver:
+                                selectedReceiver,
 
-                headers: {
+                            teachSkill:
+                                teachSkill,
 
-                    "Content-Type": "application/json",
+                            learnSkill:
+                                learnSkill
+                        })
 
-                    Authorization: `Bearer ${token}`
+                }
+            );
 
-                },
 
-                body: JSON.stringify({
+        const data =
+            await response.json();
 
-                    receiver: selectedReceiver,
-
-                    teachSkill,
-
-                    learnSkill
-
-                })
-
-            }
-
-        );
-
-        const data = await response.json();
 
         if (!response.ok) {
 
-            alert(data.message || "Failed to send request.");
+            alert(
+                data.message ||
+                "Failed to send request."
+            );
 
             return;
-
         }
 
-        alert("Skill Swap Request Sent Successfully!");
+
+        alert(
+            "Skill Swap Request Sent Successfully!"
+        );
+
 
         closeModal();
 
-        // Reload users and request status
+
+        // ------------------------------------------
+        // Refresh users/request status
+        // ------------------------------------------
+
         await loadUsers();
+
+
+        // ------------------------------------------
+        // Refresh shared header
+        // ------------------------------------------
+
+        if (
+            typeof window.refreshHeader ===
+            "function"
+        ) {
+
+            await window.refreshHeader();
+
+        }
 
     }
 
     catch (error) {
 
-        console.log(error);
+        console.error(
+            "Send request error:",
+            error
+        );
 
-        alert("Unable to send request.");
+
+        alert(
+            "Unable to send request."
+        );
 
     }
 
 }
 
-// ============================
-// Logout
-// ============================
 
-const logoutBtn = document.getElementById("logoutBtn");
-
-if (logoutBtn) {
-
-    logoutBtn.addEventListener("click", () => {
-
-        localStorage.removeItem("token");
-
-        window.location.href = "index.html";
-
-    });
-
-}
 // ======================================================
 // VIEW PROFILE
 // ======================================================
 
-async function viewProfile(userId) {
+window.viewProfile =
+    async function (userId) {
 
-    const user = allUsers.find(
-        user => user._id === userId
-    );
-
-    if (!user) {
-
-        alert("User information not found.");
-
-        return;
-
-    }
-
-    // ==============================
-    // Basic User Information
-    // ==============================
-
-    const name = user.name || "Unknown User";
-
-    document.getElementById("profileName").textContent = name;
-
-    document.getElementById("profileLocation").innerHTML = `
-        <i class="fa-solid fa-location-dot"></i>
-        ${user.location || "Location not added"}
-    `;
-
-    document.getElementById("profileBio").textContent =
-        user.bio || "No bio available.";
-
-    document.getElementById("profileAvatar").textContent =
-        name.charAt(0).toUpperCase();
-
-    // ==============================
-    // Show Modal
-    // ==============================
-
-    document.getElementById("profileModal").style.display = "flex";
-
-    // ==============================
-    // Loading State
-    // ==============================
-
-    document.getElementById("profileReviews").innerHTML = `
-        <p class="no-reviews">
-            <i class="fa-solid fa-spinner fa-spin"></i>
-            Loading reviews...
-        </p>
-    `;
-
-    // ==============================
-    // Load Reviews
-    // ==============================
-
-    try {
-
-        const response = await fetch(
-            `${API_BASE_URL}/reviews/user/${userId}`
-        );
-
-        const reviews = await response.json();
-
-        if (!response.ok) {
-
-            throw new Error(
-                reviews.message || "Unable to load reviews"
+        const user =
+            allUsers.find(
+                user =>
+                    user._id === userId
             );
 
-        }
 
-        // ==============================
-        // Calculate Rating
-        // ==============================
+        if (!user) {
 
-        let totalRating = 0;
-
-        reviews.forEach(review => {
-
-            totalRating += Number(review.rating || 0);
-
-        });
-
-        const averageRating =
-            reviews.length > 0
-                ? totalRating / reviews.length
-                : 0;
-
-        // ==============================
-        // Display Rating
-        // ==============================
-
-        let stars = "";
-
-        for (let i = 1; i <= 5; i++) {
-
-            stars +=
-                i <= Math.round(averageRating)
-                    ? "★"
-                    : "☆";
-
-        }
-
-        document.getElementById("profileStars").textContent =
-            stars;
-
-        document.getElementById("profileRating").textContent =
-            averageRating.toFixed(1);
-
-        document.getElementById("profileReviewCount").textContent =
-            `(${reviews.length} reviews)`;
-
-        // ==============================
-        // No Reviews
-        // ==============================
-
-        if (reviews.length === 0) {
-
-            document.getElementById("profileReviews").innerHTML = `
-                <div class="no-reviews">
-
-                    <i class="fa-regular fa-star"></i>
-
-                    <p>No reviews yet.</p>
-
-                </div>
-            `;
+            alert(
+                "User information not found."
+            );
 
             return;
+        }
+
+
+        // ------------------------------------------
+        // Basic user information
+        // ------------------------------------------
+
+        const name =
+            user.name ||
+            "Unknown User";
+
+
+        const profileName =
+            document.getElementById(
+                "profileName"
+            );
+
+
+        if (profileName) {
+
+            profileName.textContent =
+                name;
 
         }
 
-        // ==============================
-        // Display Reviews
-        // ==============================
 
-        let reviewsHTML = "";
+        const profileLocation =
+            document.getElementById(
+                "profileLocation"
+            );
 
-        reviews.forEach(review => {
 
-            const reviewerName =
-                review.reviewer?.name || "Anonymous";
+        if (profileLocation) {
 
-            let reviewStars = "";
+            profileLocation.innerHTML = `
 
-            for (let i = 1; i <= 5; i++) {
+                <i class="fa-solid fa-location-dot"></i>
 
-                reviewStars +=
-                    i <= Number(review.rating)
+                ${escapeHTML(
+                    user.location ||
+                    "Location not added"
+                )}
+
+            `;
+
+        }
+
+
+        const profileBio =
+            document.getElementById(
+                "profileBio"
+            );
+
+
+        if (profileBio) {
+
+            profileBio.textContent =
+                user.bio ||
+                "No bio available.";
+
+        }
+
+
+        const profileAvatar =
+            document.getElementById(
+                "profileAvatar"
+            );
+
+
+        if (profileAvatar) {
+
+            profileAvatar.textContent =
+                name
+                    .charAt(0)
+                    .toUpperCase();
+
+        }
+
+
+        // ------------------------------------------
+        // Show modal
+        // ------------------------------------------
+
+        const profileModal =
+            document.getElementById(
+                "profileModal"
+            );
+
+
+        if (profileModal) {
+
+            profileModal.style.display =
+                "flex";
+
+        }
+
+
+        // ------------------------------------------
+        // Loading state
+        // ------------------------------------------
+
+        const profileReviews =
+            document.getElementById(
+                "profileReviews"
+            );
+
+
+        if (profileReviews) {
+
+            profileReviews.innerHTML = `
+
+                <p class="no-reviews">
+
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+
+                    Loading reviews...
+
+                </p>
+
+            `;
+
+        }
+
+
+        // ------------------------------------------
+        // Load reviews
+        // ------------------------------------------
+
+        try {
+
+            const response =
+                await fetch(
+                    `${API_BASE_URL}/reviews/user/${userId}`
+                );
+
+
+            const reviews =
+                await response.json();
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    reviews.message ||
+                    "Unable to load reviews"
+                );
+
+            }
+
+
+            // --------------------------------------
+            // Calculate rating
+            // --------------------------------------
+
+            let totalRating = 0;
+
+
+            reviews.forEach(
+                review => {
+
+                    totalRating +=
+                        Number(
+                            review.rating || 0
+                        );
+
+                }
+            );
+
+
+            const averageRating =
+                reviews.length > 0
+                    ? totalRating /
+                        reviews.length
+                    : 0;
+
+
+            // --------------------------------------
+            // Display rating
+            // --------------------------------------
+
+            let stars = "";
+
+
+            for (
+                let i = 1;
+                i <= 5;
+                i++
+            ) {
+
+                stars +=
+                    i <=
+                    Math.round(
+                        averageRating
+                    )
                         ? "★"
                         : "☆";
 
             }
 
-            reviewsHTML += `
 
-                <div class="review-item">
+            const profileStars =
+                document.getElementById(
+                    "profileStars"
+                );
 
-                    <div class="review-header">
 
-                        <div>
+            if (profileStars) {
 
-                            <strong>
-                                ${reviewerName}
-                            </strong>
+                profileStars.textContent =
+                    stars;
 
-                            <div class="review-stars">
+            }
 
-                                ${reviewStars}
 
-                            </div>
+            const profileRating =
+                document.getElementById(
+                    "profileRating"
+                );
+
+
+            if (profileRating) {
+
+                profileRating.textContent =
+                    averageRating.toFixed(1);
+
+            }
+
+
+            const profileReviewCount =
+                document.getElementById(
+                    "profileReviewCount"
+                );
+
+
+            if (profileReviewCount) {
+
+                profileReviewCount.textContent =
+                    `(${reviews.length} reviews)`;
+
+            }
+
+
+            // --------------------------------------
+            // No reviews
+            // --------------------------------------
+
+            if (
+                reviews.length === 0
+            ) {
+
+                if (profileReviews) {
+
+                    profileReviews.innerHTML = `
+
+                        <div class="no-reviews">
+
+                            <i class="fa-regular fa-star"></i>
+
+                            <p>No reviews yet.</p>
 
                         </div>
 
-                    </div>
+                    `;
 
-                    <p class="review-comment">
+                }
 
-                        ${review.comment}
+                return;
+            }
 
-                    </p>
 
-                    ${
-                        review.recommend
-                            ? `
-                                <span class="recommended">
+            // --------------------------------------
+            // Display reviews
+            // --------------------------------------
 
-                                    <i class="fa-solid fa-thumbs-up"></i>
+            let reviewsHTML = "";
 
-                                    Recommended
 
-                                </span>
-                              `
-                            : ""
+            reviews.forEach(
+                review => {
+
+                    const reviewerName =
+                        review.reviewer?.name ||
+                        "Anonymous";
+
+
+                    let reviewStars = "";
+
+
+                    for (
+                        let i = 1;
+                        i <= 5;
+                        i++
+                    ) {
+
+                        reviewStars +=
+                            i <=
+                            Number(
+                                review.rating
+                            )
+                                ? "★"
+                                : "☆";
+
                     }
 
-                </div>
 
-            `;
+                    reviewsHTML += `
 
-        });
+                        <div class="review-item">
 
-        document.getElementById("profileReviews").innerHTML =
-            reviewsHTML;
+                            <div class="review-header">
 
-    }
+                                <div>
 
-    catch (error) {
+                                    <strong>
 
-        console.error("Review loading error:", error);
+                                        ${escapeHTML(
+                                            reviewerName
+                                        )}
 
-        document.getElementById("profileReviews").innerHTML = `
+                                    </strong>
 
-            <div class="no-reviews">
 
-                <i class="fa-solid fa-circle-exclamation"></i>
+                                    <div class="review-stars">
 
-                <p>
-                    Unable to load reviews.
-                </p>
+                                        ${reviewStars}
 
-            </div>
+                                    </div>
 
-        `;
+                                </div>
 
-    }
+                            </div>
 
-}
+
+                            <p class="review-comment">
+
+                                ${escapeHTML(
+                                    review.comment ||
+                                    ""
+                                )}
+
+                            </p>
+
+
+                            ${
+                                review.recommend
+
+                                    ? `
+
+                                        <span class="recommended">
+
+                                            <i class="fa-solid fa-thumbs-up"></i>
+
+                                            Recommended
+
+                                        </span>
+
+                                      `
+
+                                    : ""
+
+                            }
+
+                        </div>
+
+                    `;
+
+                }
+            );
+
+
+            if (profileReviews) {
+
+                profileReviews.innerHTML =
+                    reviewsHTML;
+
+            }
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Review loading error:",
+                error
+            );
+
+
+            if (profileReviews) {
+
+                profileReviews.innerHTML = `
+
+                    <div class="no-reviews">
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                        <p>
+
+                            Unable to load reviews.
+
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+    };
 
 
 // ======================================================
 // CLOSE PROFILE MODAL
 // ======================================================
 
-function closeProfileModal() {
+window.closeProfileModal =
+    function () {
 
-    document.getElementById("profileModal").style.display =
-        "none";
+        const modal =
+            document.getElementById(
+                "profileModal"
+            );
 
-}
+
+        if (modal) {
+
+            modal.style.display =
+                "none";
+
+        }
+
+    };
 
 
 // ======================================================
-// CLOSE PROFILE MODAL WHEN CLICKING OUTSIDE
+// CLOSE PROFILE MODAL ON OUTSIDE CLICK
 // ======================================================
 
-window.addEventListener("click", function(event) {
+window.addEventListener(
+    "click",
+    event => {
 
-    const modal =
-        document.getElementById("profileModal");
+        const modal =
+            document.getElementById(
+                "profileModal"
+            );
 
-    if (event.target === modal) {
 
-        closeProfileModal();
+        if (
+            modal &&
+            event.target === modal
+        ) {
+
+            closeProfileModal();
+
+        }
 
     }
+);
 
-});
+
+// ======================================================
+// HTML ESCAPING
+// ======================================================
+
+function escapeHTML(value) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        String(value);
+
+
+    return div.innerHTML;
+
+}

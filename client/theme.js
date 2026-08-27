@@ -6,92 +6,120 @@
 
     const STORAGE_KEY = "skillhubTheme";
 
-    // Apply saved theme immediately
-    const savedTheme = localStorage.getItem(STORAGE_KEY);
 
-    if (savedTheme === "light") {
-        document.documentElement.classList.add("light-theme");
-        document.body.classList.add("light-theme");
+    // ==========================================
+    // APPLY SAVED THEME
+    // ==========================================
+
+    function applyTheme(theme) {
+
+        const isLight = theme === "light";
+
+        document.body.classList.toggle(
+            "light-theme",
+            isLight
+        );
+
+        updateIcons(isLight);
     }
 
-    // ===========================
-    // Toggle Theme
-    // ===========================
+
+    // ==========================================
+    // UPDATE MOON / SUN ICONS
+    // ==========================================
+
+    function updateIcons(isLight) {
+
+        document
+            .querySelectorAll(
+                ".theme-toggle-btn, #themeToggle"
+            )
+            .forEach(button => {
+
+                // Direct <i> icon
+                if (button.tagName === "I") {
+
+                    button.className = isLight
+                        ? "fa-solid fa-sun"
+                        : "fa-solid fa-moon";
+
+                }
+
+                // Button containing <i>
+                else {
+
+                    const icon =
+                        button.querySelector("i");
+
+                    if (icon) {
+
+                        icon.className = isLight
+                            ? "fa-solid fa-sun"
+                            : "fa-solid fa-moon";
+                    }
+                }
+
+            });
+    }
+
+
+    // ==========================================
+    // TOGGLE THEME
+    // ==========================================
 
     window.toggleTheme = function () {
 
-        document.body.classList.toggle("light-theme");
-        document.documentElement.classList.toggle("light-theme");
-
         const isLight =
-            document.body.classList.contains("light-theme");
+            !document.body.classList.contains(
+                "light-theme"
+            );
+
+        applyTheme(
+            isLight ? "light" : "dark"
+        );
 
         localStorage.setItem(
             STORAGE_KEY,
             isLight ? "light" : "dark"
         );
-
-        updateIcons(isLight);
-
     };
 
-    // ===========================
-    // Update Moon / Sun Icons
-    // ===========================
 
-    function updateIcons(isLight) {
+    // ==========================================
+    // PAGE LOAD
+    // ==========================================
 
-        document
-            .querySelectorAll(".theme-toggle-btn,#themeToggle")
-            .forEach(btn => {
+    const savedTheme =
+        localStorage.getItem(STORAGE_KEY);
 
-                if (btn.tagName === "I") {
 
-                    btn.className =
-                        isLight
-                            ? "fa-solid fa-sun"
-                            : "fa-solid fa-moon";
+    document.addEventListener(
+        "DOMContentLoaded",
+        () => {
 
-                }
+            // Default = dark
+            applyTheme(
+                savedTheme === "light"
+                    ? "light"
+                    : "dark"
+            );
 
-                else {
 
-                    const icon = btn.querySelector("i");
+            // Add click events
+            document
+                .querySelectorAll(
+                    ".theme-toggle-btn, #themeToggle"
+                )
+                .forEach(button => {
 
-                    if (icon) {
+                    button.addEventListener(
+                        "click",
+                        window.toggleTheme
+                    );
 
-                        icon.className =
-                            isLight
-                                ? "fa-solid fa-sun"
-                                : "fa-solid fa-moon";
+                });
 
-                    }
-
-                }
-
-            });
-
-    }
-
-    // ===========================
-    // Page Load
-    // ===========================
-
-    document.addEventListener("DOMContentLoaded", () => {
-
-        const isLight =
-            document.body.classList.contains("light-theme");
-
-        updateIcons(isLight);
-
-        document
-            .querySelectorAll(".theme-toggle-btn,#themeToggle")
-            .forEach(btn => {
-
-                btn.addEventListener("click", toggleTheme);
-
-            });
-
-    });
+        }
+    );
 
 })();

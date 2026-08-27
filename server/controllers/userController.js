@@ -2,18 +2,82 @@ const User = require("../models/User");
 const Review = require("../models/Review");
 exports.getProfile = async (req, res) => {
     try {
-        const user = await User.findById(req.user.id).select("-password");
+
+        const user = await User.findById(req.user.id)
+            .select("-password")
+            .lean();
 
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({
+                message: "User not found"
+            });
         }
 
-        res.json(user);
+
+        // ==========================================
+        // GET USER RATING + REVIEW COUNT
+        // ==========================================
+
+        const reviewStats = await Review.aggregate([
+            {
+                $match: {
+                    reviewFor: user._id
+                }
+            },
+
+            {
+                $group: {
+                    _id: "$reviewFor",
+
+                    averageRating: {
+                        $avg: "$rating"
+                    },
+
+                    totalReviews: {
+                        $sum: 1
+                    }
+                }
+            }
+        ]);
+
+
+        const stats = reviewStats[0] || {
+            averageRating: 0,
+            totalReviews: 0
+        };
+
+
+        // ==========================================
+        // RETURN USER + RATING INFORMATION
+        // ==========================================
+
+        res.json({
+
+            ...user,
+
+            rating: Number(
+                stats.averageRating.toFixed(1)
+            ),
+
+            totalReviews:
+                stats.totalReviews
+
+        });
+
+
     } catch (error) {
-        res.status(500).json({ message: error.message });
+
+        console.error(
+            "Get Profile Error:",
+            error
+        );
+
+        res.status(500).json({
+            message: error.message
+        });
+
     }
 };
-
 exports.updateProfile = async (req, res) => {
     try {
         const { name, bio, location } = req.body;

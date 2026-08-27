@@ -1,121 +1,360 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillHub Dashboard</title>
 
-    <link rel="stylesheet" href="dashboard.css">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SkillHub | Dashboard</title>
+
+
+    <!-- =========================================================
+         SHARED THEME
+         DO NOT MODIFY theme.css
+         ========================================================= -->
+
     <link rel="stylesheet" href="theme.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
+    <!-- =========================================================
+         SHARED SIDEBAR
+         ========================================================= -->
+
+    <link rel="stylesheet" href="sidebar.css">
+
+
+    <!-- =========================================================
+         DASHBOARD PAGE CSS
+         ========================================================= -->
+
+    <link rel="stylesheet" href="dashboard.css">
+
+
+    <!-- =========================================================
+         FONT AWESOME
+         ========================================================= -->
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+    <!-- =========================================================
+         THEME JAVASCRIPT
+         ========================================================= -->
+
     <script src="theme.js" defer></script>
+
 </head>
+
+
 <body>
 
 <div class="dashboard">
 
-    <!-- Sidebar -->
+
+    <!-- =========================================================
+         SIDEBAR
+         ========================================================= -->
+
     <aside class="sidebar">
 
+
+        <!-- Logo -->
+
         <div class="logo">
+
             <i class="fa-solid fa-graduation-cap"></i>
-            <span>SkillHub</span>
+
+            <span>
+                SkillHub
+            </span>
+
         </div>
+
+
+        <!-- Navigation -->
 
         <ul>
 
+
+            <!-- Dashboard -->
+
             <li class="active">
+
                 <i class="fa-solid fa-house"></i>
-                Dashboard
+
+                <span>
+                    Dashboard
+                </span>
+
             </li>
 
-            <li>
-                <a href="browse-skills.html">
-                    <i class="fa-solid fa-book"></i>
+
+            <!-- Browse Skills -->
+
+            <li onclick="location.href='browse-skills.html'">
+
+                <i class="fa-solid fa-book-open"></i>
+
+                <span>
                     Browse Skills
-                </a>
+                </span>
+
             </li>
 
-            <li onclick="window.location.href='request.html'">
+
+            <!-- Requests -->
+
+            <li onclick="location.href='request.html'">
+
                 <i class="fa-solid fa-handshake"></i>
-                Requests
+
+                <span>
+                    Requests
+                </span>
+
             </li>
 
-            <li onclick="window.location.href='chat.html'">
+
+            <!-- Chat -->
+
+            <li onclick="location.href='chat.html'">
+
                 <i class="fa-solid fa-comments"></i>
-                Chat
+
+                <span>
+                    Chat
+                </span>
+
             </li>
 
-            <li onclick="window.location.href='profile.html'">
+
+            <!-- Profile -->
+
+            <li onclick="location.href='profile.html'">
+
                 <i class="fa-solid fa-user"></i>
-                Profile
+
+                <span>
+                    Profile
+                </span>
+
             </li>
+
+
+            <!-- Logout -->
 
             <li id="logoutBtn">
-                <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                Logout
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>
+                    Logout
+                </span>
+
             </li>
 
         </ul>
 
     </aside>
 
-    <!-- Main Content -->
+
+
+    <!-- =========================================================
+         MAIN CONTENT
+         ========================================================= -->
+
     <main class="main">
 
-        <!-- Topbar -->
+
+        <!-- =====================================================
+             TOPBAR
+             ===================================================== -->
+
         <header class="topbar">
 
-            <div class="search">
 
-                <i class="fa-solid fa-magnifying-glass"></i>
+            <!-- =================================================
+                 PAGE TITLE / WELCOME
+                 ================================================= -->
 
-                <input type="text" placeholder="Search users or skills">
+            <div class="page-title">
+
+                <h1 id="welcomeTopbar">
+                    Welcome Back
+                </h1>
+
+                <p>
+                    Learn, teach, and connect with amazing people.
+                </p>
 
             </div>
 
-            <div class="top-icons">
 
-                <div class="notification-wrapper">
 
-    <button class="notification-btn" id="notificationBtn">
-        <i class="fa-regular fa-bell"></i>
-        <span id="notificationBadge" class="notification-badge hidden">0</span>
-    </button>
+            <!-- =================================================
+                 TOPBAR ACTIONS
+                 ================================================= -->
 
-    <div class="notification-dropdown" id="notificationDropdown">
+            <div class="topbar-actions">
 
-        <div class="notification-header">
 
-            <h3>Notifications</h3>
+                <!-- =================================================
+                     NOTIFICATIONS + THEME
+                     ================================================= -->
 
-            <button id="markAllReadBtn">
-                Mark all as read
-            </button>
+                <div class="top-icons">
 
-        </div>
 
-        <div id="notificationList">
+                    <!-- Notification Wrapper -->
 
-            <div class="notification-empty">
-                No notifications
-            </div>
+                    <div class="notification-wrapper">
 
-        </div>
 
-    </div>
+                        <!-- Notification Button -->
 
-</div>
+                        <button
+                            class="notification-btn"
+                            id="notificationBtn"
+                            type="button"
+                            title="Notifications">
 
-                <i class="fa-solid fa-moon" id="themeToggle" style="cursor: pointer;"></i>
+                            <i class="fa-regular fa-bell"></i>
 
-                <div class="profile">
+                            <span
+                                id="notificationBadge"
+                                class="notification-badge hidden">
 
-                    <i class="fa-solid fa-circle-user profile-icon"></i>
+                                0
 
-                    <span id="userName">Loading...</span>
+                            </span>
+
+                        </button>
+
+
+
+                        <!-- Notification Dropdown -->
+
+                        <div
+                            class="notification-dropdown"
+                            id="notificationDropdown">
+
+
+                            <!-- Header -->
+
+                            <div class="notification-header">
+
+                                <h3>
+                                    Notifications
+                                </h3>
+
+                                <button
+                                    id="markAllReadBtn"
+                                    type="button">
+
+                                    Mark all as read
+
+                                </button>
+
+                            </div>
+
+
+                            <!-- Notification List -->
+
+                            <div id="notificationList">
+
+                                <div class="notification-empty">
+
+                                    No notifications
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- Theme Toggle -->
+
+                    <i
+                        class="fa-solid fa-moon"
+                        id="themeToggle"
+                        title="Toggle theme">
+                    </i>
+
+                </div>
+
+
+
+                <!-- =================================================
+                     PROFILE
+                     ================================================= -->
+
+                <div
+                    class="profile"
+                    id="profileMenu">
+
+
+                    <!-- Profile Icon -->
+
+                    <div class="profile-icon">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+
+                    <!-- User Name -->
+
+                    <span id="userName">
+                        Loading...
+                    </span>
+
+
+
+                    <!-- =================================================
+                         PROFILE DROPDOWN
+                         ================================================= -->
+
+                    <div class="profile-dropdown">
+
+
+                        <!-- Profile -->
+
+                        <div
+                            class="profile-dropdown-item"
+                            onclick="location.href='profile.html'">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <span>
+                                Profile
+                            </span>
+
+                        </div>
+
+
+                        <!-- Logout -->
+
+                        <div
+                            class="profile-dropdown-item logout"
+                            id="topLogoutBtn">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            <span>
+                                Logout
+                            </span>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
@@ -123,39 +362,50 @@
 
         </header>
 
-        <!-- Welcome -->
-        <section class="welcome">
 
-            <h1 id="welcomeTitle">Welcome Back </h1>
 
-            <p>Learn • Teach • Connect with amazing people.</p>
+        <!-- =========================================================
+             OVERVIEW CARDS
+             ========================================================= -->
 
-        </section>
-
-        <!-- Overview Cards -->
         <section class="overview">
+
+
+            <!-- Active Swaps -->
 
             <div class="overview-card blue">
 
                 <div>
 
-                    <h2 id="activeSwaps">0</h2>
+                    <h2 id="activeSwaps">
+                        0
+                    </h2>
 
-                    <p>Active Swaps</p>
+                    <p>
+                        Active Swaps
+                    </p>
 
                 </div>
 
-                <i class="fa-solid fa-paper-plane"></i>
+                <i class="fa-solid fa-handshake"></i>
 
             </div>
+
+
+
+            <!-- Pending Requests -->
 
             <div class="overview-card orange">
 
                 <div>
 
-                    <h2 id="pendingRequests">0</h2>
+                    <h2 id="pendingRequests">
+                        0
+                    </h2>
 
-                    <p>Pending Requests</p>
+                    <p>
+                        Pending Requests
+                    </p>
 
                 </div>
 
@@ -163,13 +413,21 @@
 
             </div>
 
+
+
+            <!-- Completed Swaps -->
+
             <div class="overview-card green">
 
                 <div>
 
-                    <h2 id="completedSwaps">0</h2>
+                    <h2 id="completedSwaps">
+                        0
+                    </h2>
 
-                    <p>Completed Swaps</p>
+                    <p>
+                        Completed Swaps
+                    </p>
 
                 </div>
 
@@ -179,11 +437,23 @@
 
         </section>
 
-        <!-- Dashboard Grid -->
+
+
+        <!-- =========================================================
+             DASHBOARD GRID
+             ========================================================= -->
+
         <section class="dashboard-grid">
 
-            <!-- Profile Card -->
+
+            <!-- =====================================================
+                 PROFILE CARD
+                 ===================================================== -->
+
             <div class="profile-card">
+
+
+                <!-- Avatar -->
 
                 <div class="profile-avatar">
 
@@ -191,71 +461,182 @@
 
                 </div>
 
-                <h2 id="profileName">Loading...</h2>
 
-                <!-- Profile Rating block underneath name -->
+                <!-- Name -->
+
+                <h2 id="profileName">
+                    Loading...
+                </h2>
+
+
+
+                <!-- =================================================
+                     PROFILE RATING
+                     ================================================= -->
+
                 <div class="profile-rating">
 
-                    <i class="fa-solid fa-star"></i>
 
-                    <span id="userRating">0.0</span>
+                    <!-- Stars -->
 
-                    <small>(<span id="reviewCount">0</span> Reviews)</small>
+                    <div
+                        class="rating-stars"
+                        id="ratingStars">
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <i class="fa-solid fa-star"></i>
+
+                        <i class="fa-solid fa-star"></i>
+
+                    </div>
+
+
+                    <!-- Rating -->
+
+                    <span id="userRating">
+                        0.0
+                    </span>
+
+
+                    <!-- Reviews -->
+
+                    <small>
+
+                        (
+                        <span id="reviewCount">
+                            0
+                        </span>
+                        Reviews
+                        )
+
+                    </small>
 
                 </div>
+
+
+
+                <!-- Email -->
 
                 <p class="profile-email">
 
                     <i class="fa-solid fa-envelope"></i>
 
-                    <span id="profileEmail">Loading...</span>
+                    <span id="profileEmail">
+                        Loading...
+                    </span>
 
                 </p>
+
+
+
+                <!-- Location -->
 
                 <p class="profile-location">
 
                     <i class="fa-solid fa-location-dot"></i>
 
-                    <span id="profileLocation">Add Location</span>
+                    <span id="profileLocation">
+                        Add Location
+                    </span>
 
                 </p>
 
-                <p class="bio-text" id="profileBio">
+
+
+                <!-- Bio -->
+
+                <p
+                    class="bio-text"
+                    id="profileBio">
+
                     Tell everyone about yourself...
+
                 </p>
 
-                <button class="edit-btn" id="editProfileBtn">
+
+
+                <!-- Edit Profile -->
+
+                <button
+                    class="edit-btn"
+                    id="editProfileBtn"
+                    type="button">
+
                     <i class="fa-solid fa-pen"></i>
+
                     Edit Profile
+
                 </button>
 
             </div>
 
-            <!-- Skills Card -->
+
+
+            <!-- =====================================================
+                 SKILLS CARD
+                 ===================================================== -->
+
             <div class="skills-card">
+
+
+                <!-- Card Header -->
 
                 <div class="card-header">
 
-                    <h2>My Skills</h2>
+                    <h2>
+                        My Skills
+                    </h2>
 
-                    <button class="add-btn" id="addSkillsBtn">
+                    <button
+                        class="add-btn"
+                        id="addSkillsBtn"
+                        type="button">
+
                         + Add
+
                     </button>
 
                 </div>
 
-                <!-- Grid wrapper for the side-by-side split view layout -->
+
+
+                <!-- =================================================
+                     SKILLS GRID
+                     ================================================= -->
+
                 <div class="skills-grid-container">
 
-                    <!-- Teach Container -->
+
+                    <!-- =================================================
+                         TEACH SKILLS
+                         ================================================= -->
+
                     <div class="skill-section teach">
 
+
+                        <!-- Header -->
+
                         <div class="skill-section-header">
-                            <h4>I CAN TEACH</h4>
+
+                            <h4>
+                                I CAN TEACH
+                            </h4>
+
                             <i class="fa-solid fa-graduation-cap"></i>
+
                         </div>
 
-                        <div id="teachSkills" class="skills-list-wrapper">
+
+                        <!-- Skills -->
+
+                        <div
+                            id="teachSkills"
+                            class="skills-list-wrapper">
 
                             <span class="skills-loading-text">
 
@@ -267,15 +648,33 @@
 
                     </div>
 
-                    <!-- Learn Container -->
+
+
+                    <!-- =================================================
+                         LEARN SKILLS
+                         ================================================= -->
+
                     <div class="skill-section learn">
 
+
+                        <!-- Header -->
+
                         <div class="skill-section-header">
-                            <h4>I WANT TO LEARN</h4>
+
+                            <h4>
+                                I WANT TO LEARN
+                            </h4>
+
                             <i class="fa-solid fa-lightbulb"></i>
+
                         </div>
 
-                        <div id="learnSkills" class="skills-list-wrapper">
+
+                        <!-- Skills -->
+
+                        <div
+                            id="learnSkills"
+                            class="skills-list-wrapper">
 
                             <span class="skills-loading-text">
 
@@ -289,26 +688,50 @@
 
                 </div>
 
-                <!-- Profile Completion Area inside Skills Card -->
+
+
+                <!-- =================================================
+                     PROFILE COMPLETION
+                     ================================================= -->
+
                 <div class="completion-box">
+
+
+                    <!-- Completion Header -->
 
                     <div class="completion-header">
 
-                        <span>Profile Completion</span>
+                        <span>
+                            Profile Completion
+                        </span>
 
-                        <span id="profileCompletion">0%</span>
+                        <span id="profileCompletion">
+                            0%
+                        </span>
 
                     </div>
+
+
+
+                    <!-- Progress -->
 
                     <div class="progress">
 
-                        <div class="progress-bar" id="progressBar"></div>
+                        <div
+                            class="progress-bar"
+                            id="progressBar">
+                        </div>
 
                     </div>
 
+
+
+                    <!-- Description -->
+
                     <p class="completion-text">
 
-                        Complete your profile to unlock better matches and increase visibility.
+                        Complete your profile to unlock better matches
+                        and increase visibility.
 
                     </p>
 
@@ -318,14 +741,27 @@
 
         </section>
 
-        <!-- Suggested Matches -->
+
+
+        <!-- =========================================================
+             SUGGESTED MATCHES
+             ========================================================= -->
+
         <section class="matches-card">
+
+
+            <!-- Header -->
 
             <div class="card-header">
 
-                <h2>Suggested Matches</h2>
+                <h2>
+                    Suggested Matches
+                </h2>
 
-                <button class="see-btn">
+
+                <button
+                    class="see-btn"
+                    type="button">
 
                     See All
 
@@ -333,35 +769,67 @@
 
             </div>
 
+
+
+            <!-- Dynamic Matches -->
+
             <div id="matchesContainer">
 
-                <p>Loading matches...</p>
+                <p>
+                    Loading matches...
+                </p>
 
             </div>
 
         </section>
 
-        <!-- Recent Activity Section below Suggested Matches -->
+
+
+        <!-- =========================================================
+             RECENT ACTIVITY
+             ========================================================= -->
+
         <section class="activity-card">
+
+
+            <!-- Header -->
 
             <div class="card-header">
 
-                <h2>Recent Activity</h2>
+                <h2>
+                    Recent Activity
+                </h2>
 
             </div>
 
+
+
+            <!-- Dynamic Activity -->
+
             <div id="activityContainer">
 
-                <p>No recent activity.</p>
+                <p>
+                    No recent activity.
+                </p>
 
             </div>
 
         </section>
+
 
     </main>
 
 </div>
 
+
+
+<!-- =============================================================
+     DASHBOARD JAVASCRIPT
+     ============================================================= -->
+<script src="header.js"></script>
 <script src="dashboard.js"></script>
 
+
 </body>
+
+</html>

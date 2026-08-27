@@ -1,0 +1,418 @@
+/* ==========================================================================
+   SIDEBAR & DASHBOARD LAYOUT
+   Uses shared variables from theme.css
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. DASHBOARD LAYOUT
+   ========================================================================== */
+
+.dashboard {
+    display: flex;
+    min-height: 100vh;
+    width: 100%;
+}
+
+
+/* ==========================================================================
+   2. SIDEBAR
+   ========================================================================== */
+
+.sidebar {
+    width: 255px;
+    min-width: 255px;
+
+    padding: 30px 22px;
+
+    position: sticky;
+    top: 0;
+
+    height: 100vh;
+
+    background: var(--bg-card);
+
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border-right: 1px solid var(--border-color);
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, .30);
+
+    transition:
+        background-color .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+
+/* ==========================================================================
+   3. SIDEBAR LOGO
+   Scoped to sidebar so it does NOT affect landing-page .logo
+   ========================================================================== */
+
+.sidebar .logo {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 55px;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    color: var(--text-main);
+
+    text-decoration: none;
+}
+
+.sidebar .logo i {
+    font-size: 30px;
+    color: var(--accent-blue);
+}
+
+
+/* ==========================================================================
+   4. SIDEBAR NAVIGATION
+   ========================================================================== */
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 15px 18px;
+
+    margin-bottom: 12px;
+
+    border-radius: 16px;
+
+    cursor: pointer;
+
+    color: var(--text-muted);
+
+    transition:
+        background-color .3s ease,
+        color .3s ease,
+        transform .3s ease,
+        box-shadow .3s ease;
+}
+
+
+/* ==========================================================================
+   5. SIDEBAR ICONS
+   ========================================================================== */
+
+.sidebar li i {
+    width: 22px;
+
+    min-width: 22px;
+
+    text-align: center;
+
+    font-size: 17px;
+}
+
+
+/* ==========================================================================
+   6. SIDEBAR LINKS
+   ========================================================================== */
+
+.sidebar li a {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    text-decoration: none;
+
+    color: inherit;
+}
+
+
+/* ==========================================================================
+   7. SIDEBAR HOVER
+   ========================================================================== */
+
+.sidebar li:hover {
+    background: var(--hover-bg);
+
+    color: var(--text-main);
+
+    transform: translateX(6px);
+}
+
+
+/* ==========================================================================
+   8. ACTIVE SIDEBAR ITEM
+   ========================================================================== */
+
+.sidebar li.active {
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent-purple),
+            #6366f1,
+            var(--accent-blue)
+        );
+
+    background-size: 220%;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 12px 30px rgba(124, 58, 237, .30);
+}
+
+.sidebar li.active a {
+    color: #ffffff;
+}
+
+
+/* ==========================================================================
+   9. MAIN CONTENT
+   ========================================================================== */
+
+.main {
+    flex: 1;
+
+    width: calc(100% - 255px);
+
+    max-width: calc(100vw - 255px);
+
+    min-width: 0;
+
+    padding: 40px;
+
+    background: transparent;
+
+    color: var(--text-main);
+
+    transition:
+        background-color .3s ease,
+        color .3s ease;
+}
+
+
+/* ==========================================================================
+   10. MAIN CONTENT SCROLLING
+   ========================================================================== */
+
+.main {
+    overflow-x: hidden;
+}
+
+
+/* ==========================================================================
+   11. SIDEBAR LINKS - FOCUS ACCESSIBILITY
+   ========================================================================== */
+
+.sidebar li a:focus-visible {
+    outline: 3px solid var(--primary);
+
+    outline-offset: 3px;
+
+    border-radius: 10px;
+}
+
+
+/* ==========================================================================
+   12. RESPONSIVE - TABLET
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+
+    .sidebar {
+        width: 230px;
+        min-width: 230px;
+
+        padding: 25px 18px;
+    }
+
+    .main {
+        width: calc(100% - 230px);
+
+        max-width: calc(100vw - 230px);
+
+        padding: 30px;
+    }
+
+    .sidebar .logo {
+        font-size: 25px;
+    }
+
+    .sidebar .logo i {
+        font-size: 27px;
+    }
+
+    .sidebar li {
+        padding: 14px 15px;
+    }
+}
+
+
+/* ==========================================================================
+   13. RESPONSIVE - SMALL TABLET
+   ========================================================================== */
+
+@media (max-width: 900px) {
+
+    .dashboard {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        min-width: 100%;
+
+        height: auto;
+
+        position: relative;
+        top: auto;
+
+        padding: 22px;
+
+        border-right: none;
+
+        border-bottom: 1px solid var(--border-color);
+
+        box-shadow:
+            0 10px 30px rgba(0, 0, 0, .20);
+    }
+
+    .sidebar .logo {
+        margin-bottom: 25px;
+    }
+
+    .sidebar ul {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 10px;
+    }
+
+    .sidebar li {
+        margin-bottom: 0;
+
+        flex: 0 0 auto;
+    }
+
+    .main {
+        width: 100%;
+
+        max-width: 100%;
+
+        padding: 30px;
+    }
+}
+
+
+/* ==========================================================================
+   14. RESPONSIVE - MOBILE
+   ========================================================================== */
+
+@media (max-width: 600px) {
+
+    .sidebar {
+        padding: 18px;
+    }
+
+    .sidebar .logo {
+        font-size: 24px;
+
+        margin-bottom: 20px;
+    }
+
+    .sidebar .logo i {
+        font-size: 25px;
+    }
+
+    .sidebar ul {
+        display: grid;
+
+        grid-template-columns: repeat(2, 1fr);
+
+        gap: 8px;
+    }
+
+    .sidebar li {
+        width: 100%;
+
+        padding: 13px 12px;
+
+        margin: 0;
+
+        border-radius: 12px;
+
+        font-size: 14px;
+    }
+
+    .sidebar li a {
+        gap: 10px;
+    }
+
+    .sidebar li i {
+        font-size: 15px;
+    }
+
+    .main {
+        padding: 22px;
+    }
+}
+
+
+/* ==========================================================================
+   15. EXTRA SMALL MOBILE
+   ========================================================================== */
+
+@media (max-width: 420px) {
+
+    .sidebar {
+        padding: 15px;
+    }
+
+    .sidebar .logo {
+        font-size: 22px;
+    }
+
+    .sidebar .logo i {
+        font-size: 23px;
+    }
+
+    .sidebar ul {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar li {
+        padding: 12px 14px;
+    }
+
+    .main {
+        padding: 16px;
+    }
+}
+
+
+/* ==========================================================================
+   16. REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .sidebar,
+    .sidebar li,
+    .sidebar li a {
+        transition: none;
+    }
+}

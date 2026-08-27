@@ -1,2392 +1,2318 @@
-/* =============================================================================
-   SKILLSWAP DASHBOARD CSS
-   PART 1 - FOUNDATION
-   ============================================================================= */
-
-/* =============================================================================
-   CSS VARIABLES
-   ============================================================================= */
-
-:root{
-
-    /* Colors */
-
-    --bg:#0b0f19;
-    --surface:#111827;
-    --surface-light:#0f172a;
-    --border:#1f2937;
-    --border-light:#334155;
-
-    --primary:#3b82f6;
-    --primary-light:#60a5fa;
-    --secondary:#6366f1;
-
-    --success:#10b981;
-    --warning:#f59e0b;
-    --danger:#ef4444;
-    --pink:#ec4899;
-
-    --text:#ffffff;
-    --text-secondary:#cbd5e1;
-    --text-muted:#94a3b8;
-
-    /* Radius */
-
-    --radius-sm:10px;
-    --radius:16px;
-    --radius-lg:20px;
-
-    /* Shadows */
-
-    --shadow-sm:
-        0 4px 12px rgba(0,0,0,.15);
-
-    --shadow:
-        0 10px 24px rgba(0,0,0,.22);
-
-    --shadow-lg:
-        0 18px 36px rgba(37,99,235,.15);
-
-    /* Animation */
-
-    --transition:.3s ease;
-
-    /* Sidebar */
-
-    --sidebar-width:250px;
-
-}
 
 
-/* =============================================================================
-   RESET
-   ============================================================================= */
+/* ==========================================================================
+   1. REUSABLE DASHBOARD CARD
+   ========================================================================== */
 
-*{
+.card {
 
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
+    background: var(--bg-card);
 
-}
+    border: 1px solid var(--border-color);
 
-html{
-
-    scroll-behavior:smooth;
-
-}
-
-body{
-
-    font-family:
-        "Inter",
-        "Segoe UI",
-        system-ui,
-        sans-serif;
-
-    background:var(--bg);
-
-    color:var(--text);
-
-    overflow-x:hidden;
-
-    line-height:1.6;
-
-}
-
-
-/* =============================================================================
-   GLOBAL
-   ============================================================================= */
-
-img{
-
-    max-width:100%;
-    display:block;
-
-}
-
-button{
-
-    font:inherit;
-
-}
-
-input{
-
-    font:inherit;
-
-}
-
-a{
-
-    text-decoration:none;
-
-    color:inherit;
-
-}
-
-ul{
-
-    list-style:none;
-
-}
-
-
-/* =============================================================================
-   ACCESSIBILITY
-   ============================================================================= */
-
-button:focus-visible,
-input:focus-visible,
-a:focus-visible{
-
-    outline:3px solid var(--primary);
-
-    outline-offset:3px;
-
-}
-
-
-/* =============================================================================
-   REUSABLE CARD
-   ============================================================================= */
-
-.card{
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    border-radius:18px;
+    border-radius: 18px;
 
     transition:
-        transform var(--transition),
-        border-color var(--transition),
-        box-shadow var(--transition);
-
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        background-color 0.3s ease;
 }
 
-.card:hover{
+.card:hover {
 
-    transform:translateY(-4px);
+    transform: translateY(-4px);
 
-    border-color:var(--primary);
-
-    box-shadow:var(--shadow-lg);
-
-}
-
-
-/* =============================================================================
-   REUSABLE BUTTON
-   ============================================================================= */
-
-.btn{
-
-    display:inline-flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:8px;
-
-    border:none;
-
-    cursor:pointer;
-
-    padding:12px 22px;
-
-    border-radius:12px;
-
-    background:linear-gradient(
-        135deg,
-        var(--secondary),
-        var(--primary)
-    );
-
-    color:white;
-
-    font-size:15px;
-
-    font-weight:600;
-
-    transition:
-        transform var(--transition),
-        box-shadow var(--transition);
-
-}
-
-.btn:hover{
-
-    transform:translateY(-2px);
+    border-color: var(--accent-blue);
 
     box-shadow:
-        0 12px 25px rgba(59,130,246,.28);
-
+        0 20px 45px rgba(0, 0, 0, 0.18),
+        0 8px 20px rgba(59, 130, 246, 0.10);
 }
 
 
-/* =============================================================================
-   LAYOUT
-   ============================================================================= */
+/* ==========================================================================
+   2. DASHBOARD BUTTON
+   ========================================================================== */
 
-.dashboard{
+.btn {
 
-    display:flex;
+    display: inline-flex;
 
-    min-height:100vh;
+    justify-content: center;
 
-}
+    align-items: center;
 
+    gap: 8px;
 
-/* =============================================================================
-   SIDEBAR
-   ============================================================================= */
+    border: none;
 
-.sidebar{
+    cursor: pointer;
 
-    width:var(--sidebar-width);
+    padding: 12px 22px;
 
-    position:sticky;
+    border-radius: 12px;
 
-    top:0;
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent-purple),
+            var(--accent-blue)
+        );
 
-    height:100vh;
+    color: #ffffff;
 
-    background:rgba(17,24,39,.90);
+    font-size: 15px;
 
-    backdrop-filter:blur(18px);
-
-    border-right:1px solid var(--border);
-
-    padding:30px 22px;
-
-}
-
-
-/* =============================================================================
-   LOGO
-   ============================================================================= */
-
-.logo{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    margin-bottom:55px;
-
-    font-size:28px;
-
-    font-weight:700;
-
-}
-
-.logo i{
-
-    color:var(--primary-light);
-
-    font-size:30px;
-
-}
-
-
-/* =============================================================================
-   SIDEBAR MENU
-   ============================================================================= */
-
-.sidebar ul{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:8px;
-
-}
-
-.sidebar li{
-
-    display:flex;
-
-    align-items:center;
-
-    border-radius:14px;
-
-    transition:all .3s ease;
-
-}
-
-.sidebar li a{
-
-    width:100%;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:14px;
-
-    padding:15px 18px;
-
-    color:var(--text-secondary);
-
-    font-size:15px;
-
-    font-weight:500;
-
-}
-
-.sidebar li i{
-
-    width:22px;
-
-    text-align:center;
-
-}
-
-.sidebar li:hover{
-
-    background:var(--border);
-
-    transform:translateX(4px);
-
-}
-
-.sidebar li:hover a{
-
-    color:white;
-
-}
-
-.sidebar li.active{
-
-    background:linear-gradient(
-        135deg,
-        var(--secondary),
-        var(--primary)
-    );
-
-}
-
-.sidebar li.active a{
-
-    color:white;
-
-}
-
-
-/* =============================================================================
-   MAIN CONTENT
-   ============================================================================= */
-
-.main{
-
-    flex:1;
-
-    padding:36px;
-
-    max-width:calc(100vw - var(--sidebar-width));
-
-}
-
-
-/* =============================================================================
-   TOPBAR
-   ============================================================================= */
-
-.topbar{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:40px;
-
-}
-
-
-/* =============================================================================
-   SEARCH
-   ============================================================================= */
-
-.search{
-
-    width:430px;
-
-    height:50px;
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    padding:0 18px;
-
-    border-radius:14px;
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    transition:var(--transition);
-
-}
-
-.search:hover{
-
-    border-color:var(--primary);
-
-}
-
-.search:focus-within{
-
-    border-color:var(--primary);
-
-    box-shadow:0 0 0 3px rgba(59,130,246,.15);
-
-}
-
-.search i{
-
-    color:var(--text-muted);
-
-}
-
-.search input{
-
-    flex:1;
-
-    background:transparent;
-
-    border:none;
-
-    outline:none;
-
-    color:var(--text);
-
-}
-
-.search input::placeholder{
-
-    color:var(--text-muted);
-
-}
-
-
-/* =============================================================================
-   TOPBAR ICONS
-   ============================================================================= */
-
-.top-icons{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:22px;
-
-}
-
-.top-icons>i{
-
-    font-size:20px;
-
-    color:var(--text-muted);
-
-    cursor:pointer;
-
-    transition:var(--transition);
-
-}
-
-.top-icons>i:hover{
-
-    color:white;
-
-    transform:scale(1.1);
-
-}
-
-
-/* =============================================================================
-   PROFILE
-   ============================================================================= */
-
-.profile{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    cursor:pointer;
-
-}
-
-.profile-icon{
-
-    font-size:40px;
-
-    color:var(--primary);
-
-}
-
-.profile span{
-
-    font-size:15px;
-
-    font-weight:600;
-
-}
-
-
-/* =============================================================================
-   WELCOME
-   ============================================================================= */
-
-.welcome{
-
-    margin-bottom:32px;
-
-}
-
-.welcome h1{
-
-    font-size:clamp(2rem,2vw,2.4rem);
-
-    margin-bottom:8px;
-
-}
-
-.welcome p{
-
-    color:var(--text-muted);
-
-    max-width:700px;
-
-}
-/* =============================================================================
-   PART 2 - OVERVIEW, PROFILE & SKILLS
-   ============================================================================= */
-
-
-/* =============================================================================
-   OVERVIEW SECTION
-   ============================================================================= */
-
-.overview{
-
-    display:grid;
-
-    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-
-    gap:22px;
-
-    margin-bottom:34px;
-
-}
-
-.overview-card{
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    border-radius:var(--radius-lg);
-
-    padding:26px;
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
+    font-weight: 600;
 
     transition:
-        transform var(--transition),
-        border-color var(--transition),
-        box-shadow var(--transition);
-
-    cursor:pointer;
-
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
 }
 
-.overview-card:hover{
+.btn:hover {
 
-    transform:translateY(-6px);
+    transform: translateY(-2px);
 
-    border-color:var(--primary);
-
-    box-shadow:var(--shadow-lg);
-
+    box-shadow:
+        0 12px 25px rgba(59, 130, 246, 0.28);
 }
 
-.overview-card h2{
+.btn:active {
 
-    font-size:36px;
-
-    font-weight:700;
-
-    margin-bottom:6px;
-
+    transform: translateY(0);
 }
 
-.overview-card p{
+.btn:disabled {
 
-    color:var(--text-muted);
+    opacity: 0.6;
 
-    font-size:14px;
+    cursor: not-allowed;
 
-}
+    transform: none;
 
-.overview-card i{
-
-    width:64px;
-
-    height:64px;
-
-    border-radius:18px;
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    color:white;
-
-    font-size:26px;
-
-    transition:transform .3s ease;
-
-}
-
-.overview-card:hover i{
-
-    transform:rotate(8deg) scale(1.08);
-
-}
-
-.blue i{
-
-    background:linear-gradient(
-        135deg,
-        #2563eb,
-        #60a5fa
-    );
-
-}
-
-.orange i{
-
-    background:linear-gradient(
-        135deg,
-        #f59e0b,
-        #fb923c
-    );
-
-}
-
-.green i{
-
-    background:linear-gradient(
-        135deg,
-        #10b981,
-        #34d399
-    );
-
+    box-shadow: none;
 }
 
 
-/* =============================================================================
-   DASHBOARD GRID
-   ============================================================================= */
+/* ==========================================================================
+   3. WELCOME SECTION
+   ========================================================================== */
 
-.dashboard-grid{
+.welcome {
 
-    display:grid;
+    margin-bottom: 32px;
+}
 
-    grid-template-columns:340px 1fr;
+.welcome h1 {
 
-    gap:24px;
+    font-size:
+        clamp(2rem, 2vw, 2.4rem);
 
+    margin-bottom: 8px;
+
+    color:
+        var(--text-main);
+
+    font-weight: 700;
+
+    line-height: 1.2;
+}
+
+.welcome p {
+
+    max-width: 700px;
+
+    color:
+        var(--text-muted);
+
+    font-size: 15px;
+
+    line-height: 1.7;
 }
 
 
-/* =============================================================================
-   PROFILE CARD
-   ============================================================================= */
+/* ==========================================================================
+   4. OVERVIEW SECTION
+   ========================================================================== */
 
-.profile-card{
+.overview {
 
-    background:var(--surface);
+    display: grid;
 
-    border:1px solid var(--border);
+    grid-template-columns:
+        repeat(auto-fit, minmax(260px, 1fr));
 
-    border-radius:var(--radius-lg);
+    gap: 22px;
 
-    padding:34px;
-
-    text-align:center;
-
-}
-
-.profile-avatar{
-
-    width:120px;
-
-    height:120px;
-
-    margin:0 auto 20px;
-
-    border-radius:50%;
-
-    background:linear-gradient(
-        135deg,
-        var(--secondary),
-        var(--primary)
-    );
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    box-shadow:0 15px 35px rgba(59,130,246,.25);
-
-}
-
-.profile-avatar i{
-
-    font-size:62px;
-
-    color:white;
-
-}
-
-.profile-card h2{
-
-    font-size:26px;
-
-    margin-bottom:16px;
-
-}
-
-.profile-rating{
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    gap:6px;
-
-    margin-bottom:24px;
-
-}
-
-.profile-rating i{
-
-    color:#fbbf24;
-
-}
-
-.profile-rating span{
-
-    font-weight:700;
-
-}
-
-.profile-rating small{
-
-    color:var(--text-muted);
-
+    margin-bottom: 34px;
 }
 
 
-/* =============================================================================
-   PROFILE INFO
-   ============================================================================= */
+/* ==========================================================================
+   5. OVERVIEW CARD
+   ========================================================================== */
+
+.overview-card {
+
+    background:
+        var(--bg-card);
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius:
+        18px;
+
+    padding:
+        26px;
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap:
+        20px;
+
+    cursor:
+        pointer;
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        background-color 0.3s ease;
+}
+
+.overview-card:hover {
+
+    transform:
+        translateY(-6px);
+
+    border-color:
+        var(--accent-blue);
+
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.18),
+        0 8px 20px rgba(59, 130, 246, 0.10);
+}
+
+.overview-card h2 {
+
+    font-size:
+        36px;
+
+    font-weight:
+        700;
+
+    margin-bottom:
+        6px;
+
+    color:
+        var(--text-main);
+}
+
+.overview-card p {
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        14px;
+}
+
+.overview-card i {
+
+    width:
+        64px;
+
+    height:
+        64px;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    border-radius:
+        18px;
+
+    color:
+        #ffffff;
+
+    font-size:
+        26px;
+
+    flex-shrink:
+        0;
+
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+}
+
+.overview-card:hover i {
+
+    transform:
+        rotate(8deg) scale(1.08);
+
+    filter:
+        brightness(1.08);
+}
+
+
+/* ==========================================================================
+   6. OVERVIEW CARD COLORS
+   ========================================================================== */
+
+.blue i {
+
+    background:
+        linear-gradient(
+            135deg,
+            #2563eb,
+            #60a5fa
+        );
+}
+
+.orange i {
+
+    background:
+        linear-gradient(
+            135deg,
+            #f59e0b,
+            #fb923c
+        );
+}
+
+.green i {
+
+    background:
+        linear-gradient(
+            135deg,
+            #10b981,
+            #34d399
+        );
+}
+
+
+/* ==========================================================================
+   7. DASHBOARD GRID
+   ========================================================================== */
+
+.dashboard-grid {
+
+    display:
+        grid;
+
+    grid-template-columns:
+        340px minmax(0, 1fr);
+
+    gap:
+        24px;
+
+    align-items:
+        start;
+}
+
+
+/* ==========================================================================
+   8. PROFILE CARD
+   ========================================================================== */
+
+.profile-card {
+
+    background:
+        var(--bg-card);
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius:
+        18px;
+
+    padding:
+        34px;
+
+    text-align:
+        center;
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease,
+        background-color 0.3s ease;
+}
+
+.profile-card:hover {
+
+    border-color:
+        rgba(59, 130, 246, 0.55);
+
+    box-shadow:
+        0 20px 45px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ==========================================================================
+   9. PROFILE AVATAR
+   ========================================================================== */
+
+.profile-avatar {
+
+    width:
+        120px;
+
+    height:
+        120px;
+
+    margin:
+        0 auto 20px;
+
+    border-radius:
+        50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent-purple),
+            var(--accent-blue)
+        );
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    box-shadow:
+        0 15px 35px rgba(59, 130, 246, 0.25);
+
+    position:
+        relative;
+}
+
+.profile-avatar::after {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        -4px;
+
+    border-radius:
+        50%;
+
+    border:
+        1px solid rgba(96, 165, 250, 0.25);
+
+    pointer-events:
+        none;
+}
+
+.profile-avatar i {
+
+    font-size:
+        62px;
+
+    color:
+        #ffffff;
+}
+
+
+/* ==========================================================================
+   10. PROFILE CARD TITLE
+   ========================================================================== */
+
+.profile-card h2 {
+
+    font-size:
+        26px;
+
+    margin-bottom:
+        16px;
+
+    color:
+        var(--text-main);
+}
+
+
+/* ==========================================================================
+   11. PROFILE RATING
+   ========================================================================== */
+
+.profile-rating {
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    margin-bottom:
+        24px;
+}
+
+.profile-rating i {
+
+    color:
+        #fbbf24;
+}
+
+.profile-rating span {
+
+    font-weight:
+        700;
+
+    color:
+        var(--text-main);
+}
+
+.profile-rating small {
+
+    color:
+        var(--text-muted);
+}
+
+
+/* ==========================================================================
+   12. PROFILE INFORMATION
+   ========================================================================== */
 
 .profile-email,
-.profile-location{
+.profile-location {
 
-    display:flex;
+    display:
+        flex;
 
-    justify-content:center;
+    justify-content:
+        center;
 
-    align-items:center;
+    align-items:
+        center;
 
-    gap:8px;
+    gap:
+        8px;
 
-    margin-bottom:12px;
+    margin-bottom:
+        12px;
 
-    color:var(--text-secondary);
+    color:
+        var(--text-muted);
 
-    font-size:14px;
-
+    font-size:
+        14px;
 }
 
 .profile-email i,
-.profile-location i{
+.profile-location i {
 
-    color:var(--primary-light);
-
+    color:
+        var(--accent-blue);
 }
 
-.bio-text{
+.bio-text {
 
-    margin:24px 0;
+    margin:
+        24px 0;
 
-    color:var(--text-muted);
+    color:
+        var(--text-muted);
 
-    line-height:1.8;
+    line-height:
+        1.8;
 
-    font-size:14px;
-
-}
-
-
-/* =============================================================================
-   EDIT BUTTON
-   ============================================================================= */
-
-.edit-btn{
-
-    width:100%;
-
-    margin-top:10px;
-
+    font-size:
+        14px;
 }
 
 
-/* =============================================================================
-   CARD HEADER
-   ============================================================================= */
+/* ==========================================================================
+   13. EDIT BUTTON
+   ========================================================================== */
 
-.card-header{
+.edit-btn {
 
-    display:flex;
+    width:
+        100%;
 
-    justify-content:space-between;
+    margin-top:
+        10px;
 
-    align-items:center;
+    display:
+        inline-flex;
 
-    margin-bottom:24px;
+    justify-content:
+        center;
 
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    border:
+        none;
+
+    cursor:
+        pointer;
+
+    padding:
+        12px 22px;
+
+    border-radius:
+        12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent-purple),
+            var(--accent-blue)
+        );
+
+    color:
+        #ffffff;
+
+    font-size:
+        15px;
+
+    font-weight:
+        600;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
-.card-header h2{
+.edit-btn:hover {
 
-    font-size:22px;
+    transform:
+        translateY(-2px);
 
-    font-weight:700;
+    box-shadow:
+        0 12px 25px rgba(59, 130, 246, 0.28);
+}
 
+.edit-btn:active {
+
+    transform:
+        translateY(0);
 }
 
 
-/* =============================================================================
-   SKILLS CARD
-   ============================================================================= */
+/* ==========================================================================
+   14. CARD HEADER
+   ========================================================================== */
 
-.skills-card{
+.card-header {
 
-    background:var(--surface);
+    display:
+        flex;
 
-    border:1px solid var(--border);
+    justify-content:
+        space-between;
 
-    border-radius:var(--radius-lg);
+    align-items:
+        center;
 
-    padding:32px;
+    gap:
+        16px;
 
+    margin-bottom:
+        24px;
+}
+
+.card-header h2 {
+
+    font-size:
+        22px;
+
+    font-weight:
+        700;
+
+    color:
+        var(--text-main);
 }
 
 
-/* =============================================================================
-   SKILLS GRID
-   ============================================================================= */
+/* ==========================================================================
+   15. SKILLS CARD
+   ========================================================================== */
 
-.skills-grid-container{
+.skills-card {
 
-    display:grid;
+    background:
+        var(--bg-card);
 
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    border:
+        1px solid var(--border-color);
 
-    gap:20px;
+    border-radius:
+        18px;
 
-    margin-bottom:30px;
-
+    padding:
+        32px;
 }
 
 
-/* =============================================================================
-   SKILL SECTION
-   ============================================================================= */
+/* ==========================================================================
+   16. SKILLS GRID
+   ========================================================================== */
 
-.skill-section{
+.skills-grid-container {
 
-    background:var(--surface-light);
+    display:
+        grid;
 
-    border:1px solid var(--border-light);
+    grid-template-columns:
+        repeat(auto-fit, minmax(250px, 1fr));
 
-    border-radius:16px;
+    gap:
+        20px;
 
-    padding:20px;
-
-    transition:all .3s ease;
-
+    margin-bottom:
+        30px;
 }
 
-.skill-section:hover{
 
-    border-color:var(--primary);
+/* ==========================================================================
+   17. SKILL SECTION
+   ========================================================================== */
 
+.skill-section {
+
+    background:
+        var(--bg-inner);
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius:
+        16px;
+
+    padding:
+        20px;
+
+    transition:
+        border-color 0.3s ease,
+        background-color 0.3s ease;
 }
 
-.skill-section-header{
+.skill-section:hover {
 
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:18px;
-
+    border-color:
+        var(--accent-blue);
 }
 
-.skill-section h4{
+.skill-section-header {
 
-    font-size:13px;
+    display:
+        flex;
 
-    text-transform:uppercase;
+    justify-content:
+        space-between;
 
-    letter-spacing:1px;
+    align-items:
+        center;
 
+    margin-bottom:
+        18px;
+}
+
+.skill-section h4 {
+
+    font-size:
+        13px;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        1px;
+
+    color:
+        var(--text-main);
 }
 
 .skill-section.teach h4,
-.skill-section.teach i{
+.skill-section.teach i {
 
-    color:var(--secondary);
-
+    color:
+        var(--accent-purple);
 }
 
 .skill-section.learn h4,
-.skill-section.learn i{
+.skill-section.learn i {
 
-    color:var(--pink);
-
+    color:
+        #ec4899;
 }
 
 
-/* =============================================================================
-   SKILL TAGS
-   ============================================================================= */
+/* ==========================================================================
+   18. SKILL TAGS
+   ========================================================================== */
 
-.skills-list-wrapper{
+.skills-list-wrapper {
 
-    display:flex;
+    display:
+        flex;
 
-    flex-wrap:wrap;
+    flex-wrap:
+        wrap;
 
-    gap:10px;
-
+    gap:
+        10px;
 }
 
-.skill-tag{
+.skill-tag {
 
-    padding:8px 15px;
+    display:
+        inline-flex;
 
-    border-radius:999px;
+    align-items:
+        center;
 
-    background:#1e293b;
+    padding:
+        8px 15px;
 
-    color:white;
-
-    font-size:13px;
-
-    transition:all .3s ease;
-
-    cursor:pointer;
-
-}
-
-.skill-tag:hover{
-
-    background:var(--primary);
-
-    transform:translateY(-2px);
-
-}
-
-.skills-loading-text{
-
-    color:var(--text-muted);
-
-    font-size:14px;
-
-}
-
-
-/* =============================================================================
-   ADD BUTTON
-   ============================================================================= */
-
-.add-btn{
-
-    padding:11px 18px;
-
-}
-
-
-/* =============================================================================
-   PROFILE COMPLETION
-   ============================================================================= */
-
-.completion-box{
-
-    margin-top:28px;
-
-    padding-top:24px;
-
-    border-top:1px solid var(--border);
-
-}
-
-.completion-header{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    margin-bottom:12px;
-
-    font-size:14px;
-
-    font-weight:600;
-
-}
-
-.progress{
-
-    width:100%;
-
-    height:10px;
-
-    border-radius:999px;
-
-    overflow:hidden;
-
-    background:#1f2937;
-
-}
-
-.progress-bar{
-
-    width:0%;
-
-    height:100%;
-
-    background:linear-gradient(
-        90deg,
-        var(--secondary),
-        var(--primary)
-    );
-
-    transition:width .6s ease;
-
-}
-
-.completion-text{
-
-    margin-top:12px;
-
-    color:var(--text-muted);
-
-    font-size:13px;
-
-    line-height:1.7;
-
-}
-/* =============================================================================
-   PART 3 - MATCHES, ACTIVITY & ANIMATIONS
-   ============================================================================= */
-
-
-/* =============================================================================
-   MATCHES CARD
-   ============================================================================= */
-
-.matches-card{
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    border-radius:var(--radius-lg);
-
-    padding:32px;
-
-    margin-top:28px;
-
-}
-
-
-/* =============================================================================
-   SEE BUTTON
-   ============================================================================= */
-
-.see-btn{
-
-    padding:11px 18px;
-
-}
-
-
-/* =============================================================================
-   MATCH CONTAINER
-   ============================================================================= */
-
-#matchesContainer{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:18px;
-
-    margin-top:22px;
-
-}
-
-
-/* =============================================================================
-   INDIVIDUAL MATCH CARD
-   ============================================================================= */
-
-.match-item{
-
-    display:flex;
-
-    justify-content:space-between;
-
-    align-items:center;
-
-    gap:20px;
-
-    padding:18px;
-
-    border-radius:16px;
-
-    background:var(--surface-light);
-
-    border:1px solid var(--border-light);
-
-    transition:
-        transform var(--transition),
-        border-color var(--transition),
-        box-shadow var(--transition);
-
-}
-
-.match-item:hover{
-
-    transform:translateY(-3px);
-
-    border-color:var(--primary);
-
-    box-shadow:var(--shadow-sm);
-
-}
-
-
-/* =============================================================================
-   MATCH PROFILE
-   ============================================================================= */
-
-.match-profile{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:16px;
-
-}
-
-.match-avatar{
-
-    width:58px;
-
-    height:58px;
-
-    border-radius:50%;
-
-    background:linear-gradient(
-        135deg,
-        var(--secondary),
-        var(--primary)
-    );
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    color:white;
-
-    font-size:24px;
-
-    flex-shrink:0;
-
-}
-
-.match-info h3{
-
-    font-size:17px;
-
-    margin-bottom:4px;
-
-}
-
-.match-info p{
-
-    color:var(--text-muted);
-
-    font-size:13px;
-
-}
-
-.match-skills{
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    gap:8px;
-
-    margin-top:10px;
-
-}
-
-.match-skills span{
-
-    padding:6px 12px;
-
-    border-radius:999px;
-
-    background:#1e293b;
-
-    font-size:12px;
-
-    color:white;
-
-}
-
-
-/* =============================================================================
-   MATCH ACTION BUTTON
-   ============================================================================= */
-
-.match-btn{
-
-    min-width:120px;
-
-}
-
-
-/* =============================================================================
-   ACTIVITY CARD
-   ============================================================================= */
-
-.activity-card{
-
-    background:var(--surface);
-
-    border:1px solid var(--border);
-
-    border-radius:var(--radius-lg);
-
-    padding:32px;
-
-    margin-top:28px;
-
-}
-
-
-/* =============================================================================
-   ACTIVITY CONTAINER
-   ============================================================================= */
-
-#activityContainer{
-
-    display:flex;
-
-    flex-direction:column;
-
-    gap:16px;
-
-    margin-top:20px;
-
-}
-
-
-/* =============================================================================
-   ACTIVITY ITEM
-   ============================================================================= */
-
-.activity-item{
-
-    display:flex;
-
-    align-items:flex-start;
-
-    gap:16px;
-
-    padding:18px;
-
-    border-radius:16px;
-
-    background:var(--surface-light);
-
-    border:1px solid var(--border-light);
-
-    transition:
-        transform var(--transition),
-        border-color var(--transition);
-
-}
-
-.activity-item:hover{
-
-    transform:translateX(5px);
-
-    border-color:var(--primary);
-
-}
-
-
-/* =============================================================================
-   ACTIVITY ICON
-   ============================================================================= */
-
-.activity-item i{
-
-    width:44px;
-
-    height:44px;
-
-    border-radius:50%;
-
-    background:#1e293b;
-
-    color:var(--primary-light);
-
-    display:flex;
-
-    justify-content:center;
-
-    align-items:center;
-
-    flex-shrink:0;
-
-    font-size:18px;
-
-}
-
-.activity-content{
-
-    flex:1;
-
-}
-
-.activity-content h4{
-
-    font-size:15px;
-
-    margin-bottom:4px;
-
-    color:var(--text);
-
-}
-
-.activity-content p{
-
-    font-size:13px;
-
-    color:var(--text-muted);
-
-    line-height:1.6;
-
-}
-
-.activity-time{
-
-    margin-top:8px;
-
-    display:inline-block;
-
-    font-size:12px;
-
-    color:var(--primary-light);
-
-}
-
-
-/* =============================================================================
-   LOADING SKELETON
-   ============================================================================= */
-
-.skeleton{
-
-    position:relative;
-
-    overflow:hidden;
-
-    border-radius:12px;
-
-    background:#1f2937;
-
-}
-
-.skeleton::before{
-
-    content:"";
-
-    position:absolute;
-
-    inset:0;
+    border-radius:
+        999px;
 
     background:
+        rgba(59, 130, 246, 0.12);
 
+    border:
+        1px solid rgba(59, 130, 246, 0.18);
+
+    color:
+        var(--text-main);
+
+    font-size:
+        13px;
+
+    font-weight:
+        600;
+
+    transition:
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        color 0.25s ease;
+}
+
+.skill-tag:hover {
+
+    background:
+        var(--accent-blue);
+
+    border-color:
+        var(--accent-blue);
+
+    color:
+        #ffffff;
+
+    transform:
+        translateY(-2px);
+}
+
+.skills-loading-text {
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        14px;
+}
+
+
+/* ==========================================================================
+   19. ADD BUTTON
+   ========================================================================== */
+
+.add-btn {
+
+    display:
+        inline-flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    padding:
+        11px 20px;
+
+    border:
+        none;
+
+    border-radius:
+        12px;
+
+    background:
         linear-gradient(
-
-            90deg,
-
-            transparent,
-
-            rgba(255,255,255,.08),
-
-            transparent
-
+            135deg,
+            var(--secondary),
+            var(--primary)
         );
 
-    transform:translateX(-100%);
+    color:
+        #ffffff;
 
-    animation:skeleton-loading 1.4s infinite;
+    font-size:
+        14px;
 
-}
+    font-weight:
+        600;
 
-@keyframes skeleton-loading{
-
-    100%{
-
-        transform:translateX(100%);
-
-    }
-
-}
-
-
-/* =============================================================================
-   FADE IN ANIMATION
-   ============================================================================= */
-
-.fade-in{
-
-    animation:fadeIn .6s ease;
-
-}
-
-@keyframes fadeIn{
-
-    from{
-
-        opacity:0;
-
-        transform:translateY(12px);
-
-    }
-
-    to{
-
-        opacity:1;
-
-        transform:translateY(0);
-
-    }
-
-}
-
-
-/* =============================================================================
-   FLOAT ANIMATION
-   ============================================================================= */
-
-.float{
-
-    animation:float 3s ease-in-out infinite;
-
-}
-
-@keyframes float{
-
-    0%{
-
-        transform:translateY(0);
-
-    }
-
-    50%{
-
-        transform:translateY(-6px);
-
-    }
-
-    100%{
-
-        transform:translateY(0);
-
-    }
-
-}
-
-
-/* =============================================================================
-   PULSE ANIMATION
-   ============================================================================= */
-
-.pulse{
-
-    animation:pulse 2s infinite;
-
-}
-
-@keyframes pulse{
-
-    0%{
-
-        box-shadow:0 0 0 0 rgba(59,130,246,.4);
-
-    }
-
-    70%{
-
-        box-shadow:0 0 0 12px rgba(59,130,246,0);
-
-    }
-
-    100%{
-
-        box-shadow:0 0 0 0 rgba(59,130,246,0);
-
-    }
-
-}
-
-
-/* =============================================================================
-   SMOOTH CARD HOVER
-   ============================================================================= */
-
-.overview-card,
-.profile-card,
-.skills-card,
-.matches-card,
-.activity-card{
-
-    transition:
-
-        transform .3s ease,
-
-        border-color .3s ease,
-
-        box-shadow .3s ease;
-
-}
-
-.overview-card:hover,
-.profile-card:hover,
-.skills-card:hover,
-.matches-card:hover,
-.activity-card:hover{
+    cursor:
+        pointer;
 
     box-shadow:
-
-        0 20px 45px rgba(0,0,0,.25),
-
-        0 8px 20px rgba(59,130,246,.10);
-
-}
-
-
-/* =============================================================================
-   ICON HOVER EFFECT
-   ============================================================================= */
-
-.overview-card i,
-.activity-item i,
-.match-avatar{
+        0 8px 18px rgba(59, 130, 246, .20);
 
     transition:
-
-        transform .3s ease,
-
-        filter .3s ease;
-
+        transform .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease;
 }
 
-.overview-card:hover i,
-.activity-item:hover i,
-.match-item:hover .match-avatar{
+.add-btn:hover {
 
-    transform:scale(1.08);
+    transform:
+        translateY(-2px);
 
-    filter:brightness(1.15);
+    box-shadow:
+        0 12px 25px rgba(59, 130, 246, .30);
 
+    filter:
+        brightness(1.08);
 }
-/* =============================================================================
-   PART 4 - RESPONSIVE, SCROLLBAR, THEMES & ACCESSIBILITY
-   ============================================================================= */
 
+.add-btn:active {
 
-/* =============================================================================
-   LARGE TABLETS
-   ============================================================================= */
+    transform:
+        translateY(0);
 
-@media (max-width:1200px){
-
-    .dashboard-grid{
-
-        grid-template-columns:300px 1fr;
-
-    }
-
+    box-shadow:
+        0 6px 14px rgba(59, 130, 246, .20);
 }
 
 
-/* =============================================================================
-   TABLETS
-   ============================================================================= */
+/* ==========================================================================
+   20. PROFILE COMPLETION
+   ========================================================================== */
 
-@media (max-width:1024px){
+.completion-box {
 
-    .dashboard{
+    margin-top:
+        28px;
 
-        flex-direction:column;
+    padding-top:
+        24px;
 
-    }
+    border-top:
+        1px solid var(--border-color);
+}
 
-    .sidebar{
+.completion-header {
 
-        position:relative;
+    display:
+        flex;
 
-        width:100%;
+    justify-content:
+        space-between;
 
-        height:auto;
+    align-items:
+        center;
 
-        border-right:none;
+    gap:
+        15px;
 
-        border-bottom:1px solid var(--border);
+    margin-bottom:
+        12px;
 
-    }
+    font-size:
+        14px;
 
-    .main{
+    font-weight:
+        600;
 
-        max-width:100%;
+    color:
+        var(--text-main);
+}
 
-        padding:30px;
+.progress {
 
-    }
+    width:
+        100%;
 
-    .dashboard-grid{
+    height:
+        10px;
 
-        grid-template-columns:1fr;
+    border-radius:
+        999px;
 
-    }
+    overflow:
+        hidden;
 
+    background:
+        var(--bg-inner);
+}
+
+.progress-bar {
+
+    width:
+        0%;
+
+    height:
+        100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--accent-purple),
+            var(--accent-blue)
+        );
+
+    border-radius:
+        inherit;
+
+    transition:
+        width 0.6s ease;
+}
+
+.completion-text {
+
+    margin-top:
+        12px;
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        13px;
+
+    line-height:
+        1.7;
 }
 
 
-/* =============================================================================
-   SMALL TABLETS
-   ============================================================================= */
+/* ==========================================================================
+   21. MATCHES CARD
+   ========================================================================== */
 
-@media (max-width:900px){
+.matches-card {
 
-    .topbar{
+    background:
+        var(--bg-card);
 
-        flex-direction:column;
+    border:
+        1px solid var(--border-color);
 
-        align-items:flex-start;
+    border-radius:
+        18px;
 
-        gap:20px;
+    padding:
+        32px;
 
-    }
-
-    .search{
-
-        width:100%;
-
-    }
-
-    .top-icons{
-
-        width:100%;
-
-        justify-content:space-between;
-
-    }
-
+    margin-top:
+        28px;
 }
 
 
-/* =============================================================================
-   MOBILE
-   ============================================================================= */
+/* ==========================================================================
+   22. SEE BUTTON
+   ========================================================================== */
 
-@media (max-width:768px){
+.see-btn {
 
-    .main{
+    padding:
+        11px 18px;
 
-        padding:22px;
+    display:
+        inline-flex;
 
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    gap:
+        8px;
+
+    border:
+        none;
+
+    cursor:
+        pointer;
+
+    border-radius:
+        12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent-purple),
+            var(--accent-blue)
+        );
+
+    color:
+        #ffffff;
+
+    font-size:
+        15px;
+
+    font-weight:
+        600;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.see-btn:hover {
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+        0 12px 25px rgba(59, 130, 246, 0.28);
+}
+
+
+/* ==========================================================================
+   23. MATCH CONTAINER
+   ========================================================================== */
+
+#matchesContainer {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        18px;
+
+    margin-top:
+        22px;
+}
+
+
+/* ==========================================================================
+   24. MATCH ITEM
+   ========================================================================== */
+
+.match-item {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap:
+        20px;
+
+    padding:
+        18px;
+
+    border-radius:
+        16px;
+
+    background:
+        var(--bg-inner);
+
+    border:
+        1px solid var(--border-color);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background-color 0.25s ease;
+}
+
+.match-item:hover {
+
+    transform:
+        translateY(-3px);
+
+    border-color:
+        var(--accent-blue);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+
+/* ==========================================================================
+   25. MATCH PROFILE
+   ========================================================================== */
+
+.match-profile {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        16px;
+
+    min-width:
+        0;
+}
+
+.match-avatar {
+
+    width:
+        58px;
+
+    height:
+        58px;
+
+    border-radius:
+        50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent-purple),
+            var(--accent-blue)
+        );
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    color:
+        #ffffff;
+
+    font-size:
+        24px;
+
+    flex-shrink:
+        0;
+
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+}
+
+.match-item:hover .match-avatar {
+
+    transform:
+        scale(1.08);
+
+    filter:
+        brightness(1.12);
+}
+
+.match-info {
+
+    min-width:
+        0;
+}
+
+.match-info h3 {
+
+    font-size:
+        17px;
+
+    margin-bottom:
+        4px;
+
+    color:
+        var(--text-main);
+}
+
+.match-info p {
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        13px;
+}
+
+.match-skills {
+
+    display:
+        flex;
+
+    flex-wrap:
+        wrap;
+
+    gap:
+        8px;
+
+    margin-top:
+        10px;
+}
+
+.match-skills span {
+
+    padding:
+        6px 12px;
+
+    border-radius:
+        999px;
+
+    background:
+        rgba(59, 130, 246, 0.12);
+
+    border:
+        1px solid rgba(59, 130, 246, 0.15);
+
+    font-size:
+        12px;
+
+    color:
+        var(--text-main);
+}
+
+
+/* ==========================================================================
+   26. MATCH BUTTON
+   ========================================================================== */
+
+.match-btn {
+
+    min-width:
+        120px;
+
+    flex-shrink:
+        0;
+}
+
+
+/* ==========================================================================
+   27. ACTIVITY CARD
+   ========================================================================== */
+
+.activity-card {
+
+    background:
+        var(--bg-card);
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius:
+        18px;
+
+    padding:
+        32px;
+
+    margin-top:
+        28px;
+}
+
+
+/* ==========================================================================
+   28. ACTIVITY CONTAINER
+   ========================================================================== */
+
+#activityContainer {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        16px;
+
+    margin-top:
+        20px;
+}
+
+
+/* ==========================================================================
+   29. ACTIVITY ITEM
+   ========================================================================== */
+
+.activity-item {
+
+    display:
+        flex;
+
+    align-items:
+        flex-start;
+
+    gap:
+        16px;
+
+    padding:
+        18px;
+
+    border-radius:
+        16px;
+
+    background:
+        var(--bg-inner);
+
+    border:
+        1px solid var(--border-color);
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        background-color 0.25s ease;
+}
+
+.activity-item:hover {
+
+    transform:
+        translateX(5px);
+
+    border-color:
+        var(--accent-blue);
+}
+
+
+/* ==========================================================================
+   30. ACTIVITY ICON
+   ========================================================================== */
+
+.activity-item i {
+
+    width:
+        44px;
+
+    height:
+        44px;
+
+    border-radius:
+        50%;
+
+    background:
+        rgba(59, 130, 246, 0.12);
+
+    color:
+        var(--accent-blue);
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    flex-shrink:
+        0;
+
+    font-size:
+        18px;
+
+    transition:
+        transform 0.3s ease,
+        filter 0.3s ease;
+}
+
+.activity-item:hover i {
+
+    transform:
+        scale(1.08);
+
+    filter:
+        brightness(1.15);
+}
+
+.activity-content {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+}
+
+.activity-content h4 {
+
+    font-size:
+        15px;
+
+    margin-bottom:
+        4px;
+
+    color:
+        var(--text-main);
+}
+
+.activity-content p {
+
+    font-size:
+        13px;
+
+    color:
+        var(--text-muted);
+
+    line-height:
+        1.6;
+}
+
+.activity-time {
+
+    margin-top:
+        8px;
+
+    display:
+        inline-block;
+
+    font-size:
+        12px;
+
+    color:
+        var(--accent-blue);
+}
+
+
+/* ==========================================================================
+   31. RATINGS & REVIEWS
+   ========================================================================== */
+
+.reviews-card {
+
+    background:
+        var(--bg-card);
+
+    border:
+        1px solid var(--border-color);
+
+    border-radius:
+        18px;
+
+    padding:
+        32px;
+
+    margin-top:
+        28px;
+}
+
+
+/* ==========================================================================
+   32. OVERALL RATING
+   ========================================================================== */
+
+.overall-rating {
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    gap:
+        6px;
+
+    color:
+        var(--text-main);
+
+    font-size:
+        15px;
+}
+
+.overall-rating i {
+
+    color:
+        #fbbf24;
+}
+
+.overall-rating span {
+
+    font-weight:
+        700;
+}
+
+.overall-rating small {
+
+    color:
+        var(--text-muted);
+}
+
+
+/* ==========================================================================
+   33. REVIEWS CONTAINER
+   ========================================================================== */
+
+#reviewsContainer {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    gap:
+        16px;
+}
+
+
+/* ==========================================================================
+   34. SINGLE REVIEW
+   ========================================================================== */
+
+.review-item {
+
+    display:
+        flex;
+
+    gap:
+        16px;
+
+    padding:
+        20px;
+
+    border-radius:
+        16px;
+
+    background:
+        var(--bg-inner);
+
+    border:
+        1px solid var(--border-color);
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background-color .25s ease;
+}
+
+.review-item:hover {
+
+    transform:
+        translateY(-2px);
+
+    border-color:
+        var(--accent-blue);
+
+    box-shadow:
+        0 10px 25px rgba(0, 0, 0, .10);
+}
+
+
+/* ==========================================================================
+   35. REVIEWER AVATAR
+   ========================================================================== */
+
+.review-avatar {
+
+    width:
+        48px;
+
+    height:
+        48px;
+
+    min-width:
+        48px;
+
+    border-radius:
+        50%;
+
+    display:
+        flex;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent-purple),
+            var(--accent-blue)
+        );
+
+    color:
+        #ffffff;
+
+    font-size:
+        18px;
+
+    font-weight:
+        700;
+}
+
+
+/* ==========================================================================
+   36. REVIEW CONTENT
+   ========================================================================== */
+
+.review-content {
+
+    flex:
+        1;
+
+    min-width:
+        0;
+}
+
+.review-top {
+
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    align-items:
+        center;
+
+    gap:
+        12px;
+
+    margin-bottom:
+        6px;
+}
+
+.review-name {
+
+    margin:
+        0;
+
+    color:
+        var(--text-main);
+
+    font-size:
+        15px;
+
+    font-weight:
+        700;
+}
+
+
+/* ==========================================================================
+   37. REVIEW STARS
+   ========================================================================== */
+
+.review-stars {
+
+    display:
+        flex;
+
+    gap:
+        2px;
+}
+
+.review-stars i {
+
+    color:
+        #fbbf24;
+
+    font-size:
+        13px;
+}
+
+.review-stars i.empty {
+
+    color:
+        var(--text-muted);
+}
+
+
+/* ==========================================================================
+   38. REVIEW TEXT
+   ========================================================================== */
+
+.review-text {
+
+    margin:
+        6px 0 0;
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        14px;
+
+    line-height:
+        1.7;
+}
+
+
+/* ==========================================================================
+   39. REVIEW DATE
+   ========================================================================== */
+
+.review-date {
+
+    display:
+        block;
+
+    margin-top:
+        8px;
+
+    color:
+        var(--text-muted);
+
+    font-size:
+        11px;
+
+    opacity:
+        .8;
+}
+
+
+/* ==========================================================================
+   40. EMPTY REVIEWS
+   ========================================================================== */
+
+.reviews-empty {
+
+    display:
+        flex;
+
+    flex-direction:
+        column;
+
+    justify-content:
+        center;
+
+    align-items:
+        center;
+
+    text-align:
+        center;
+
+    padding:
+        45px 20px;
+
+    color:
+        var(--text-muted);
+}
+
+.reviews-empty i {
+
+    font-size:
+        40px;
+
+    color:
+        #fbbf24;
+
+    margin-bottom:
+        12px;
+}
+
+.reviews-empty p {
+
+    margin:
+        0 0 5px;
+
+    color:
+        var(--text-main);
+
+    font-size:
+        16px;
+
+    font-weight:
+        600;
+}
+
+.reviews-empty span {
+
+    font-size:
+        13px;
+}
+
+
+/* ==========================================================================
+   41. LOADING SKELETON
+   ========================================================================== */
+
+.skeleton {
+
+    position:
+        relative;
+
+    overflow:
+        hidden;
+
+    border-radius:
+        12px;
+
+    background:
+        var(--bg-inner);
+}
+
+.skeleton::before {
+
+    content:
+        "";
+
+    position:
+        absolute;
+
+    inset:
+        0;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255, 255, 255, 0.08),
+            transparent
+        );
+
+    transform:
+        translateX(-100%);
+
+    animation:
+        skeleton-loading 1.4s infinite;
+}
+
+@keyframes skeleton-loading {
+
+    100% {
+
+        transform:
+            translateX(100%);
+    }
+}
+
+
+/* ==========================================================================
+   42. FADE IN
+   ========================================================================== */
+
+.fade-in {
+
+    animation:
+        dashboardFadeIn 0.6s ease;
+}
+
+@keyframes dashboardFadeIn {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(12px);
     }
 
-    .overview{
+    to {
 
-        grid-template-columns:1fr;
+        opacity:
+            1;
 
+        transform:
+            translateY(0);
+    }
+}
+
+
+/* ==========================================================================
+   43. FLOAT
+   ========================================================================== */
+
+.float {
+
+    animation:
+        dashboardFloat 3s ease-in-out infinite;
+}
+
+@keyframes dashboardFloat {
+
+    0%,
+    100% {
+
+        transform:
+            translateY(0);
     }
 
-    .skills-grid-container{
+    50% {
 
-        grid-template-columns:1fr;
+        transform:
+            translateY(-6px);
+    }
+}
 
+
+/* ==========================================================================
+   44. PULSE
+   ========================================================================== */
+
+.pulse {
+
+    animation:
+        dashboardPulse 2s infinite;
+}
+
+@keyframes dashboardPulse {
+
+    0% {
+
+        box-shadow:
+            0 0 0 0 rgba(59, 130, 246, 0.4);
     }
 
-    .welcome h1{
+    70% {
 
-        font-size:30px;
+        box-shadow:
+            0 0 0 12px rgba(59, 130, 246, 0);
+    }
 
+    100% {
+
+        box-shadow:
+            0 0 0 0 rgba(59, 130, 246, 0);
+    }
+}
+
+
+/* ==========================================================================
+   45. FOCUS ACCESSIBILITY
+   ========================================================================== */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+
+    outline:
+        3px solid rgba(59, 130, 246, 0.35);
+
+    outline-offset:
+        3px;
+}
+
+
+/* ==========================================================================
+   46. RESPONSIVE - 1200px
+   ========================================================================== */
+
+@media (max-width: 1200px) {
+
+    .dashboard-grid {
+
+        grid-template-columns:
+            300px minmax(0, 1fr);
+    }
+}
+
+
+/* ==========================================================================
+   47. RESPONSIVE - 1024px
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+
+    .dashboard-grid {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .profile-card {
+
+        max-width:
+            600px;
+    }
+}
+
+
+/* ==========================================================================
+   48. RESPONSIVE - 900px
+   ========================================================================== */
+
+@media (max-width: 900px) {
+
+    .overview {
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+}
+
+
+/* ==========================================================================
+   49. RESPONSIVE - 768px
+   ========================================================================== */
+
+@media (max-width: 768px) {
+
+    .overview {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .skills-grid-container {
+
+        grid-template-columns:
+            1fr;
+    }
+
+    .welcome h1 {
+
+        font-size:
+            30px;
     }
 
     .profile-card,
     .skills-card,
     .matches-card,
-    .activity-card{
+    .activity-card,
+    .reviews-card {
 
-        padding:24px;
-
+        padding:
+            24px;
     }
 
-    .overview-card{
+    .overview-card {
 
-        padding:22px;
-
+        padding:
+            22px;
     }
 
-}
+    .card-header {
 
-
-/* =============================================================================
-   SMALL MOBILE
-   ============================================================================= */
-
-@media (max-width:600px){
-
-    .sidebar{
-
-        padding:18px;
-
+        flex-wrap:
+            wrap;
     }
-
-    .logo{
-
-        font-size:24px;
-
-    }
-
-    .sidebar li a{
-
-        padding:14px;
-
-        font-size:14px;
-
-    }
-
-    .overview-card{
-
-        flex-direction:column-reverse;
-
-        align-items:flex-start;
-
-        gap:18px;
-
-    }
-
-    .overview-card h2{
-
-        font-size:30px;
-
-    }
-
-    .overview-card i{
-
-        width:56px;
-
-        height:56px;
-
-        font-size:22px;
-
-    }
-
-    .profile{
-
-        gap:8px;
-
-    }
-
-    .profile span{
-
-        display:none;
-
-    }
-
-    .profile-avatar{
-
-        width:90px;
-
-        height:90px;
-
-    }
-
-    .profile-avatar i{
-
-        font-size:46px;
-
-    }
-
-    .card-header{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-        gap:16px;
-
-    }
-
-    .btn{
-
-        width:100%;
-
-    }
-
-    .match-item{
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-    }
-
-    .match-btn{
-
-        width:100%;
-
-    }
-
 }
 
 
-/* =============================================================================
-   EXTRA SMALL DEVICES
-   ============================================================================= */
-
-@media (max-width:420px){
-
-    .main{
-
-        padding:16px;
-
-    }
-
-    .welcome h1{
-
-        font-size:24px;
-
-    }
-
-    .welcome p{
-
-        font-size:14px;
-
-    }
-
-    .search{
-
-        height:46px;
-
-    }
-
-    .overview-card h2{
-
-        font-size:26px;
-
-    }
-
-    .skill-tag{
-
-        font-size:12px;
-
-        padding:6px 12px;
-
-    }
-
-}
-
-
-/* =============================================================================
-   CUSTOM SCROLLBAR
-   ============================================================================= */
-
-::-webkit-scrollbar{
-
-    width:10px;
-
-    height:10px;
-
-}
-
-::-webkit-scrollbar-track{
-
-    background:var(--bg);
-
-}
-
-::-webkit-scrollbar-thumb{
-
-    background:linear-gradient(
-        180deg,
-        var(--secondary),
-        var(--primary)
-    );
-
-    border-radius:999px;
-
-}
-
-::-webkit-scrollbar-thumb:hover{
-
-    background:linear-gradient(
-        180deg,
-        #7c3aed,
-        #2563eb
-    );
-
-}
-
-
-/* =============================================================================
-   TEXT SELECTION
-   ============================================================================= */
-
-::selection{
-
-    background:var(--primary);
-
-    color:white;
-
-}
-
-
-/* =============================================================================
-   LIGHT THEME
-   ============================================================================= */
-
-[data-theme="light"]{
-
-    --bg:#f5f7fb;
-
-    --surface:#ffffff;
-
-    --surface-light:#f8fafc;
-
-    --border:#dbe4ee;
-
-    --border-light:#cbd5e1;
-
-    --text:#111827;
-
-    --text-secondary:#374151;
-
-    --text-muted:#6b7280;
-
-}
-
-
-/* =============================================================================
-   REDUCED MOTION
-   ============================================================================= */
-
-@media (prefers-reduced-motion:reduce){
-
-    *{
-
-        animation:none !important;
-
-        transition:none !important;
-
-        scroll-behavior:auto !important;
-
-    }
-
-}
-
-
-/* =============================================================================
-   PRINT
-   ============================================================================= */
-
-@media print{
-
-    body{
-
-        background:white;
-
-        color:black;
-
-    }
-
-    .sidebar,
-    .topbar{
-
-        display:none;
-
-    }
-
-    .main{
-
-        max-width:100%;
-
-        padding:0;
-
-    }
-
-}
-
-
-/* =============================================================================
-   OPTIONAL GLASS EFFECT
-   ============================================================================= */
-
-.glass{
-
-    background:rgba(255,255,255,.05);
-
-    backdrop-filter:blur(18px);
-
-    -webkit-backdrop-filter:blur(18px);
-
-}
-
-
-/* =============================================================================
-   OPTIONAL BADGES
-   ============================================================================= */
-
-.badge{
-
-    display:inline-flex;
-
-    align-items:center;
-
-    justify-content:center;
-
-    padding:6px 12px;
-
-    border-radius:999px;
-
-    font-size:12px;
-
-    font-weight:600;
-
-}
-
-.badge-success{
-
-    background:rgba(16,185,129,.15);
-
-    color:#34d399;
-
-}
-
-.badge-warning{
-
-    background:rgba(245,158,11,.15);
-
-    color:#fbbf24;
-
-}
-
-.badge-danger{
-
-    background:rgba(239,68,68,.15);
-
-    color:#f87171;
-
-}
-
-/* ======================================
-   Notifications
-====================================== */
-
-.notification-wrapper {
-    position: relative;
-}
-
-.notification-btn {
-    position: relative;
-
-    border: none;
-    background: transparent;
-
-    color: var(--text-main);
-
-    font-size: 20px;
-
-    cursor: pointer;
-
-    padding: 6px;
-}
-
-
-/* Notification Badge */
-
-.notification-badge {
-    position: absolute;
-
-    top: -3px;
-    right: -5px;
-
-    min-width: 17px;
-    height: 17px;
-
-    padding: 0 4px;
-
-    border-radius: 50%;
-
-    background: #ef4444;
-
-    color: white;
-
-    font-size: 10px;
-    font-weight: 700;
-
-    display: flex;
-
-    justify-content: center;
-    align-items: center;
-}
-
-.notification-badge.hidden {
-    display: none;
-}
-
-
-/* Dropdown */
-
-.notification-dropdown {
-
-    position: absolute;
-
-    top: 42px;
-    right: 0;
-
-    width: 350px;
-
-    background: var(--surface);
-
-    border: 1px solid var(--border-color);
-
-    border-radius: 12px;
-
-    box-shadow: 0 10px 30px rgba(0,0,0,0.18);
-
-    z-index: 1000;
-
-    display: none;
-
-    overflow: hidden;
-}
-
-.notification-dropdown.show {
-    display: block;
-}
-
-
-/* Header */
-
-.notification-header {
-
-    display: flex;
-
-    justify-content: space-between;
-
-    align-items: center;
-
-    padding: 15px;
-
-    border-bottom: 1px solid var(--border-color);
-}
-
-.notification-header h3 {
-
-    margin: 0;
-
-    color: var(--text-main);
-
-    font-size: 16px;
-}
-
-.notification-header button {
-
-    border: none;
-
-    background: transparent;
-
-    color: var(--primary);
-
-    font-size: 12px;
-
-    cursor: pointer;
-}
-
-
-/* Notification */
-
-.notification-item {
-
-    display: flex;
-
-    gap: 12px;
-
-    padding: 13px 15px;
-
-    border-bottom: 1px solid var(--border-color);
-
-    cursor: pointer;
-}
-
-.notification-item:hover {
-    background: var(--background);
-}
-
-
-/* Unread */
-
-.notification-item.unread {
-    background: rgba(59, 130, 246, 0.07);
-}
-
-
-/* Icon */
-
-.notification-icon {
-
-    width: 34px;
-    height: 34px;
-
-    border-radius: 50%;
-
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    flex-shrink: 0;
-
-    background: var(--primary);
-
-    color: white;
-
-    font-size: 13px;
-}
-
-
-/* Text */
-
-.notification-content {
-    flex: 1;
-}
-
-.notification-message {
-
-    margin: 0;
-
-    color: var(--text-main);
-
-    font-size: 13px;
-
-    line-height: 1.4;
-}
-
-.notification-time {
-
-    display: block;
-
-    margin-top: 4px;
-
-    color: var(--text-muted);
-
-    font-size: 11px;
-}
-
-
-/* Empty */
-
-.notification-empty {
-
-    padding: 30px 15px;
-
-    text-align: center;
-
-    color: var(--text-muted);
-
-    font-size: 13px;
-}
-
-
-/* Responsive */
+/* ==========================================================================
+   50. RESPONSIVE - 600px
+   ========================================================================== */
 
 @media (max-width: 600px) {
 
-    .notification-dropdown {
+    .overview-card {
 
-        position: fixed;
+        flex-direction:
+            column-reverse;
 
-        top: 70px;
-        left: 10px;
-        right: 10px;
+        align-items:
+            flex-start;
 
-        width: auto;
-
+        gap:
+            18px;
     }
 
+    .overview-card h2 {
+
+        font-size:
+            30px;
+    }
+
+    .overview-card i {
+
+        width:
+            56px;
+
+        height:
+            56px;
+
+        font-size:
+            22px;
+    }
+
+    .profile {
+
+        gap:
+            8px;
+    }
+
+    .profile-avatar {
+
+        width:
+            90px;
+
+        height:
+            90px;
+    }
+
+    .profile-avatar i {
+
+        font-size:
+            46px;
+    }
+
+    .card-header {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap:
+            16px;
+    }
+
+    .btn,
+    .see-btn,
+    .edit-btn {
+
+        width:
+            100%;
+    }
+
+    .match-item {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+    }
+
+    .match-btn {
+
+        width:
+            100%;
+    }
+
+    .review-top {
+
+        flex-direction:
+            column;
+
+        align-items:
+            flex-start;
+
+        gap:
+            5px;
+    }
+
+    .review-item {
+
+        padding:
+            16px;
+    }
+
+    .reviews-card {
+
+        padding:
+            24px;
+    }
+}
+
+
+/* ==========================================================================
+   51. RESPONSIVE - 420px
+   ========================================================================== */
+
+@media (max-width: 420px) {
+
+    .welcome h1 {
+
+        font-size:
+            24px;
+    }
+
+    .welcome p {
+
+        font-size:
+            14px;
+    }
+
+    .overview-card h2 {
+
+        font-size:
+            26px;
+    }
+
+    .skill-tag {
+
+        font-size:
+            12px;
+
+        padding:
+            6px 12px;
+    }
+
+    .profile-card,
+    .skills-card,
+    .matches-card,
+    .activity-card,
+    .reviews-card {
+
+        padding:
+            20px;
+    }
+}
+
+
+/* ==========================================================================
+   52. REDUCED MOTION
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .card,
+    .overview-card,
+    .profile-card,
+    .skill-section,
+    .match-item,
+    .activity-item,
+    .review-item,
+    .btn,
+    .edit-btn,
+    .add-btn,
+    .see-btn {
+
+        transition:
+            none !important;
+    }
+
+    .skeleton::before,
+    .fade-in,
+    .float,
+    .pulse {
+
+        animation:
+            none !important;
+    }
 }

@@ -1,317 +1,424 @@
-/* ======================================================
-   ROOT / THEME
-====================================================== */
 
-:root {
-    --bg-primary: #0b0f19;
-    --bg-card: #111827;
-    --text-main: #ffffff;
-    --text-muted: #94a3b8;
-    --border-color: #1f2937;
-    --input-bg: #0f172a;
+.page-header {
+    margin-bottom: 28px;
 }
-
-body.light-theme {
-    --bg-primary: #f8fafc;
-    --bg-card: #ffffff;
-    --text-main: #0f172a;
-    --text-muted: #64748b;
-    --border-color: #cbd5e1;
-    --input-bg: #f1f5f9;
-}
-
-
-/* ======================================================
-   RESET
-====================================================== */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Segoe UI", sans-serif;
-}
-
-
-/* ======================================================
-   BODY
-====================================================== */
-
-body {
-    background: var(--bg-primary);
-    color: var(--text-main);
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-
-/* ======================================================
-   DASHBOARD
-====================================================== */
-
-.dashboard {
-    display: flex;
-    min-height: 100vh;
-}
-
-
-/* ======================================================
-   SIDEBAR
-====================================================== */
-
-.sidebar {
-    width: 260px;
-    background: var(--bg-card);
-    border-right: 1px solid var(--border-color);
-    padding: 30px;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    font-size: 26px;
-    font-weight: 700;
-
-    margin-bottom: 60px;
-
-    color: var(--text-main);
-}
-
-.logo i {
-    color: #60a5fa;
-}
-
-.sidebar ul {
-    list-style: none;
-}
-
-.sidebar li {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-
-    padding: 16px 20px;
-    margin-bottom: 10px;
-
-    border-radius: 14px;
-
-    cursor: pointer;
-    transition: .3s;
-
-    color: var(--text-muted);
-}
-
-.sidebar li:hover {
-    background: var(--border-color);
-    color: var(--text-main);
-}
-
-.sidebar li.active {
-    background: linear-gradient(135deg, #7c3aed, #3b82f6);
-    color: #ffffff;
-}
-
-
-/* ======================================================
-   MAIN
-====================================================== */
-
-.main {
-    flex: 1;
-    padding: 40px;
-}
-
-
-/* ======================================================
-   PAGE HEADER
-====================================================== */
 
 .page-header h1 {
-    font-size: 42px;
-    margin-bottom: 10px;
+    margin: 0 0 6px;
+
     color: var(--text-main);
+
+    font-size: 34px;
+    line-height: 1.2;
+    font-weight: 700;
+
+    letter-spacing: -0.5px;
 }
 
 .page-header p {
+    margin: 0;
+
     color: var(--text-muted);
-    font-size: 17px;
-    margin-bottom: 35px;
+
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 
-/* ======================================================
-   FILTER CARD
-====================================================== */
+/* ================================================================
+   2. FILTER CARD
+   ================================================================ */
 
 .filter-card {
+    width: 100%;
+
     background: var(--bg-card);
+
     border: 1px solid var(--border-color);
 
     border-radius: 22px;
 
-    padding: 30px;
-    margin-bottom: 30px;
+    padding: 28px 30px;
+
+    margin-bottom: 28px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.08);
 }
+
+
+/* ================================================================
+   3. FILTER GRID
+   ================================================================ */
 
 .filter-grid {
     display: grid;
+
     grid-template-columns: 2fr 1fr 1fr;
-    gap: 25px;
+
+    gap: 28px;
+
+    align-items: end;
 }
 
+
+/* ================================================================
+   4. FILTER ITEM
+   ================================================================ */
+
 .filter-item {
+    min-width: 0;
+
     display: flex;
+
     flex-direction: column;
 }
 
 .filter-item label {
-    margin-bottom: 12px;
+    display: block;
+
+    margin: 0 0 11px;
+
+    color: var(--text-main);
+
+    font-size: 16px;
 
     font-weight: 600;
-    font-size: 16px;
 
-    color: var(--text-main);
+    line-height: 1.3;
 }
 
 
-/* ======================================================
-   SEARCH
-====================================================== */
+/* ================================================================
+   5. SEARCH BOX
+   IMPORTANT:
+   Fixes the strange search-bar appearance caused by theme.css
+   ================================================================ */
 
 .search-box {
-    background: var(--input-bg);
-
-    border: 1px solid var(--border-color);
-
-    border-radius: 14px;
-
-    display: flex;
-    align-items: center;
-
-    padding: 0 18px;
-}
-
-.search-box i {
-    color: #94a3b8;
-    font-size: 18px;
-}
-
-.search-box input {
     width: 100%;
 
-    border: none;
-    outline: none;
-
-    background: none;
-
-    color: var(--text-main);
-
-    font-size: 16px;
-
-    padding: 16px;
-}
-
-
-/* ======================================================
-   SELECT
-====================================================== */
-
-.filter-item select {
     height: 56px;
 
-    background: var(--input-bg);
+    display: flex;
 
-    color: var(--text-main);
+    align-items: center;
+
+    overflow: hidden;
+
+    background: var(--bg-input);
 
     border: 1px solid var(--border-color);
 
-    border-radius: 14px;
+    border-radius: 15px;
 
-    padding: 0 16px;
+    padding: 0;
 
-    font-size: 16px;
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
 
-/* ======================================================
-   RESULT INFO
-====================================================== */
+/* Search box hover */
 
-.result-info {
+.search-box:hover {
+    border-color: rgba(124, 58, 237, 0.65);
+}
+
+
+/* Search box focus */
+
+.search-box:focus-within {
+    border-color: var(--primary);
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.10);
+}
+
+
+/* ================================================================
+   6. SEARCH ICON AREA
+   ================================================================ */
+
+.search-box i {
+    width: 58px;
+
+    height: 100%;
+
+    flex-shrink: 0;
+
     display: flex;
+
     align-items: center;
 
-    gap: 12px;
+    justify-content: center;
 
-    margin-bottom: 30px;
+    color: #94a3b8;
+
+    background: rgba(15, 23, 42, 0.35);
+
+    border-right: 1px solid var(--border-color);
+
+    font-size: 21px;
+}
+
+
+/* ================================================================
+   7. SEARCH INPUT
+   ================================================================ */
+
+.search-box input {
+    flex: 1;
+
+    width: 100%;
+
+    height: 100%;
+
+    min-width: 0;
+
+    margin: 0;
+
+    padding: 0 18px;
+
+    border: none !important;
+
+    outline: none !important;
+
+    background: transparent !important;
+
+    box-shadow: none !important;
+
+    color: var(--text-main) !important;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    font-weight: 400;
+
+    line-height: normal;
+}
+
+
+/* Placeholder */
+
+.search-box input::placeholder {
+    color: var(--text-muted);
+
+    opacity: 1;
+
+    font-size: 15px;
+}
+
+
+/* Prevent theme.css focus ring from changing the search input */
+
+.search-box input:focus {
+    border: none !important;
+
+    outline: none !important;
+
+    box-shadow: none !important;
+
+    background: transparent !important;
+}
+
+
+/* ================================================================
+   8. SELECT BOX
+   ================================================================ */
+
+.filter-item select {
+    width: 100%;
+
+    height: 56px;
+
+    padding: 0 17px;
+
+    border-radius: 15px;
+
+    border: 1px solid var(--border-color) !important;
+
+    background: var(--bg-input) !important;
+
+    color: var(--text-main) !important;
+
+    font-family: inherit;
+
+    font-size: 15px;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+    outline: none;
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+
+/* Select hover */
+
+.filter-item select:hover {
+    border-color: rgba(124, 58, 237, 0.65) !important;
+}
+
+
+/* Select focus */
+
+.filter-item select:focus {
+    border-color: var(--primary) !important;
+
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.10);
+}
+
+
+/* ================================================================
+   9. RESULT INFO
+   ================================================================ */
+
+.result-info {
+    width: 100%;
+
+    min-height: 74px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 28px;
+
+    padding: 18px 22px;
 
     background: var(--bg-card);
 
     border: 1px solid var(--border-color);
-
-    padding: 18px 22px;
 
     border-radius: 16px;
 
     color: var(--text-muted);
+
+    font-size: 16px;
+
+    font-weight: 500;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.06);
 }
+
+
+/* Result icon */
 
 .result-info i {
-    color: #8b5cf6;
+    flex-shrink: 0;
+
+    color: var(--secondary-light);
+
+    font-size: 22px;
 }
 
 
-/* ======================================================
-   USERS GRID
-====================================================== */
+/* ================================================================
+   10. USERS GRID
+   ================================================================ */
 
 .users-grid {
+    width: 100%;
+
     display: grid;
 
     grid-template-columns:
-        repeat(auto-fill, minmax(430px, 1fr));
+        repeat(2, minmax(0, 1fr));
 
-    gap: 28px;
+    gap: 22px;
 }
 
 
-/* ======================================================
-   USER CARD
-====================================================== */
+/* ================================================================
+   11. USER CARD
+   ================================================================ */
 
 .user-card {
     position: relative;
 
+    min-width: 0;
+
     overflow: hidden;
 
+    display: flex;
+
+    flex-direction: column;
+
     background: var(--bg-card);
+
+    /*
+       KEEP YOUR EXISTING BORDER
+    */
 
     border: 1px solid var(--border-color);
 
     border-radius: 26px;
 
-    padding: 32px;
-
-    display: flex;
-    flex-direction: column;
-
-    transition: .35s;
-}
-
-.user-card:hover {
-    transform: translateY(-8px);
-
-    border-color: #6d5dfc;
+    padding: 28px;
 
     box-shadow:
-        0 18px 45px rgba(109, 93, 252, .25);
+        0 10px 30px rgba(0, 0, 0, 0.08);
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
 }
 
 
-/* ======================================================
-   CARD TOP GRADIENT
-====================================================== */
+/* ================================================================
+   12. CARD HOVER
+   ================================================================ */
+
+.user-card:hover {
+    transform: translateY(-5px);
+
+    /*
+       Border stays consistent.
+       Only the color becomes slightly highlighted.
+    */
+
+    border-color: var(--border-color);
+
+    box-shadow:
+        0 18px 42px rgba(0, 0, 0, 0.18);
+}
+
+
+/* ================================================================
+   13. CARD CLICK / FOCUS
+   IMPORTANT:
+   Clicking the card will NOT change the border.
+   ================================================================ */
+
+.user-card:focus,
+.user-card:focus-visible,
+.user-card:active {
+    border-color: var(--border-color);
+
+    outline: none;
+
+    box-shadow:
+        0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+
+/* ================================================================
+   14. CARD TOP GRADIENT
+   ================================================================ */
 
 .user-card::before {
     content: "";
@@ -322,18 +429,19 @@ body {
     left: 0;
 
     width: 100%;
-    height: 4px;
+    height: 3px;
 
     background:
         linear-gradient(
             90deg,
-            #7c4dff,
-            #56ccf2
+            var(--secondary),
+            var(--primary),
+            var(--cyan)
         );
 
     opacity: 0;
 
-    transition: opacity .35s;
+    transition: opacity 0.3s ease;
 }
 
 .user-card:hover::before {
@@ -341,35 +449,56 @@ body {
 }
 
 
-/* ======================================================
-   USER HEADER
-====================================================== */
+/* ================================================================
+   15. USER HEADER
+   ================================================================ */
 
 .user-header {
+    width: 100%;
+
     display: flex;
 
-    justify-content: space-between;
     align-items: flex-start;
 
-    margin-bottom: 25px;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 22px;
 }
 
+
+/* ================================================================
+   16. USER INFO
+   ================================================================ */
+
 .user-info {
+    min-width: 0;
+
     display: flex;
 
     align-items: center;
 
-    gap: 18px;
+    gap: 16px;
 }
 
 
-/* ======================================================
-   AVATAR
-====================================================== */
+/* ================================================================
+   17. AVATAR
+   ================================================================ */
 
 .avatar {
-    width: 74px;
-    height: 74px;
+    width: 76px;
+
+    height: 76px;
+
+    min-width: 76px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
 
     border-radius: 50%;
 
@@ -380,73 +509,94 @@ body {
             #56ccf2
         );
 
-    display: flex;
+    color: #ffffff;
 
-    justify-content: center;
-    align-items: center;
-
-    font-size: 30px;
-    font-weight: bold;
-
-    color: white;
-}
-
-
-/* ======================================================
-   USER NAME
-====================================================== */
-
-.user-name {
-    font-size: 31px;
+    font-size: 29px;
 
     font-weight: 700;
 
-    margin-bottom: 6px;
+    box-shadow:
+        0 8px 20px rgba(59, 130, 246, 0.18);
+}
+
+
+/* ================================================================
+   18. USER NAME
+   ================================================================ */
+
+.user-name {
+    margin: 0 0 5px;
 
     color: var(--text-main);
+
+    font-size: 28px;
+
+    line-height: 1.2;
+
+    font-weight: 700;
+
+    letter-spacing: -0.3px;
 }
 
 
-/* ======================================================
-   LOCATION
-====================================================== */
+/* ================================================================
+   19. LOCATION
+   ================================================================ */
 
 .location {
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
     color: var(--text-muted);
 
-    font-size: 15px;
+    font-size: 14px;
+
+    line-height: 1.4;
 }
 
 
-/* ======================================================
-   SECTION TITLE
-====================================================== */
+/* ================================================================
+   20. SECTION TITLE
+   ================================================================ */
 
 .section-title {
-    margin-top: 24px;
-    margin-bottom: 12px;
+    margin-top: 20px;
+
+    margin-bottom: 10px;
 
     color: var(--text-muted);
 
-    font-size: 13px;
+    font-size: 12px;
 
-    letter-spacing: 2px;
+    line-height: 1.3;
+
+    font-weight: 600;
+
+    letter-spacing: 1.2px;
 
     text-transform: uppercase;
 }
 
 
-/* ======================================================
-   SKILLS
-====================================================== */
+/* ================================================================
+   21. SKILL LIST
+   ================================================================ */
 
 .skill-list {
     display: flex;
 
     flex-wrap: wrap;
 
-    gap: 10px;
+    gap: 8px;
 }
+
+
+/* ================================================================
+   22. SKILL TAGS
+   ================================================================ */
 
 .teach-tag,
 .learn-tag {
@@ -454,122 +604,134 @@ body {
 
     align-items: center;
 
-    gap: 8px;
+    gap: 6px;
 
-    padding: 10px 18px;
+    min-height: 38px;
 
-    border-radius: 999px;
+    padding: 7px 14px;
 
-    font-size: 15px;
+    border-radius: 10px;
+
+    font-size: 13px;
+
+    line-height: 1;
+
+    font-weight: 500;
+
+    white-space: nowrap;
 }
 
 
-/* TEACH SKILLS */
+/* ================================================================
+   23. TEACH TAG
+   ================================================================ */
 
 .teach-tag {
-    background: rgba(103, 80, 255, .12);
+    background:
+        rgba(103, 80, 255, 0.10);
 
-    color: #7d6bff;
+    color:
+        #9b8cff;
 
-    border: 1px solid
-        rgba(103, 80, 255, .35);
+    border:
+        1px solid rgba(103, 80, 255, 0.45);
 }
 
 
-/* LEARN SKILLS */
+/* ================================================================
+   24. LEARN TAG
+   ================================================================ */
 
 .learn-tag {
-    background: rgba(255, 99, 132, .12);
+    background:
+        rgba(255, 99, 132, 0.08);
 
-    color: #ff7292;
+    color:
+        #ff7f9d;
 
-    border: 1px solid
-        rgba(255, 99, 132, .35);
+    border:
+        1px solid rgba(255, 99, 132, 0.40);
 }
 
 
-/* ======================================================
-   CARD FOOTER
-====================================================== */
+/* ================================================================
+   25. CARD FOOTER
+   ================================================================ */
 
 .card-footer {
+    width: 100%;
+
     display: flex;
 
     align-items: center;
 
     justify-content: space-between;
 
-    margin-top: 28px;
+    gap: 15px;
 
-    margin-bottom: 24px;
+    margin-top: 22px;
+
+    margin-bottom: 20px;
 }
 
 
-/* ======================================================
-   CARD RATING
-====================================================== */
+/* ================================================================
+   26. RATING
+   ================================================================ */
 
 .rating {
-    color: #FFD54F;
-
-    font-size: 20px;
-
-    font-weight: 600;
-}
-
-.rating span {
-    color: #9CA3AF;
-
-    margin-left: 8px;
-
-    font-size: 16px;
-}
-
-
-/* ======================================================
-   CARD BUTTONS
-====================================================== */
-
-.card-buttons {
     display: flex;
 
     align-items: center;
 
-    gap: 12px;
+    gap: 5px;
+
+    color: #fbbf24;
+
+    font-size: 15px;
+
+    font-weight: 600;
+}
+
+
+.rating span {
+    margin-left: 4px;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+
+    font-weight: 400;
+}
+
+
+/* ================================================================
+   27. CARD BUTTONS
+   ================================================================ */
+
+.card-buttons {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
 
     margin-top: auto;
 }
 
 
-/* ======================================================
-   SEND REQUEST BUTTON
-====================================================== */
+/* ================================================================
+   28. REQUEST BUTTON
+   ================================================================ */
 
 .request-btn {
     flex: 1;
 
-    height: 60px;
+    min-width: 0;
 
-    border: none;
-
-    border-radius: 35px;
-
-    background:
-        linear-gradient(
-            90deg,
-            #7b61ff,
-            #56ccf2
-        );
-
-    color: #fff;
-
-    font-size: 18px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: .3s;
+    height: 52px;
 
     display: flex;
 
@@ -578,23 +740,56 @@ body {
     justify-content: center;
 
     gap: 8px;
+
+    padding: 0 18px;
+
+    border: none;
+
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #6d3df5,
+            #4e9df7
+        );
+
+    color: #ffffff;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        opacity 0.25s ease;
 }
+
 
 .request-btn:hover {
     transform: translateY(-2px);
 
     box-shadow:
-        0 10px 25px
-        rgba(123, 97, 255, .35);
+        0 10px 24px rgba(109, 61, 245, 0.30);
 }
 
 
-/* DISABLED REQUEST BUTTON */
+.request-btn:active {
+    transform: translateY(0);
+
+    box-shadow: none;
+}
+
 
 .request-btn:disabled {
     cursor: not-allowed;
 
-    opacity: .75;
+    opacity: 0.65;
 
     transform: none;
 
@@ -602,30 +797,16 @@ body {
 }
 
 
-/* ======================================================
-   VIEW PROFILE BUTTON
-====================================================== */
+/* ================================================================
+   29. VIEW PROFILE BUTTON
+   ================================================================ */
 
 .view-profile-btn {
     flex: 1;
 
-    height: 60px;
+    min-width: 0;
 
-    border: 1px solid #7b61ff;
-
-    border-radius: 35px;
-
-    background: transparent;
-
-    color: #7b61ff;
-
-    font-size: 18px;
-
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: .3s;
+    height: 52px;
 
     display: flex;
 
@@ -634,14 +815,39 @@ body {
     justify-content: center;
 
     gap: 8px;
+
+    padding: 0 18px;
+
+    border: 1px solid #7657ed;
+
+    border-radius: 13px;
+
+    background: transparent;
+
+    color: #a694ff;
+
+    font-family: inherit;
+
+    font-size: 14px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
 }
+
 
 .view-profile-btn:hover {
     background:
         linear-gradient(
             90deg,
-            #7b61ff,
-            #56ccf2
+            #6d3df5,
+            #4e9df7
         );
 
     color: #ffffff;
@@ -651,43 +857,59 @@ body {
     transform: translateY(-2px);
 
     box-shadow:
-        0 10px 25px
-        rgba(123, 97, 255, .25);
+        0 10px 24px rgba(109, 61, 245, 0.22);
 }
 
 
-/* ======================================================
-   REQUEST MODAL
-====================================================== */
+.view-profile-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ================================================================
+   30. REQUEST MODAL
+   ================================================================ */
 
 .modal {
     display: none;
 
     position: fixed;
 
-    top: 0;
-    left: 0;
+    inset: 0;
 
     width: 100%;
+
     height: 100%;
 
-    background:
-        rgba(0, 0, 0, .65);
+    align-items: center;
 
     justify-content: center;
 
-    align-items: center;
+    padding: 20px;
+
+    background:
+        rgba(0, 0, 0, 0.68);
 
     z-index: 9999;
 }
 
 
-/* ======================================================
-   REQUEST MODAL CONTENT
-====================================================== */
+/* ================================================================
+   31. REQUEST MODAL CONTENT
+   ================================================================ */
 
 .modal-content {
-    width: 420px;
+    width: 100%;
+
+    max-width: 430px;
+
+    padding: 28px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 17px;
 
     background: var(--bg-card);
 
@@ -695,37 +917,48 @@ body {
 
     border-radius: 20px;
 
-    padding: 30px;
-
-    display: flex;
-
-    flex-direction: column;
-
-    gap: 18px;
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, 0.40);
 }
 
+
+/* ================================================================
+   32. MODAL SELECT
+   ================================================================ */
+
 .modal-content select {
+    width: 100%;
+
     height: 50px;
 
-    background: var(--input-bg);
+    padding: 0 14px;
 
-    color: var(--text-main);
+    background: var(--bg-input) !important;
 
-    border: 1px solid var(--border-color);
+    color: var(--text-main) !important;
+
+    border: 1px solid var(--border-color) !important;
 
     border-radius: 10px;
 
-    padding: 0 15px;
+    font-family: inherit;
 
-    font-size: 16px;
+    font-size: 14px;
+
+    outline: none;
 }
+
+
+/* ================================================================
+   33. MODAL BUTTON
+   ================================================================ */
 
 .modal-content button {
     height: 50px;
 
     border: none;
 
-    border-radius: 30px;
+    border-radius: 12px;
 
     background:
         linear-gradient(
@@ -734,38 +967,59 @@ body {
             #56ccf2
         );
 
-    color: white;
+    color: #ffffff;
 
-    font-size: 18px;
+    font-family: inherit;
+
+    font-size: 15px;
+
+    font-weight: 600;
 
     cursor: pointer;
 }
 
 
-/* ======================================================
-   REQUEST MODAL CLOSE
-====================================================== */
+/* ================================================================
+   34. MODAL CLOSE
+   ================================================================ */
 
 .close {
     align-self: flex-end;
 
-    font-size: 30px;
+    width: 34px;
+
+    height: 34px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    color: var(--text-muted);
+
+    font-size: 26px;
 
     cursor: pointer;
 
-    color: var(--text-main);
+    border-radius: 50%;
 
-    transition: .2s;
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
 }
+
 
 .close:hover {
-    color: #7b61ff;
+    color: var(--text-main);
+
+    background: var(--hover-bg);
 }
 
 
-/* ======================================================
-   PROFILE MODAL
-====================================================== */
+/* ================================================================
+   35. PROFILE MODAL
+   ================================================================ */
 
 .profile-modal {
     display: none;
@@ -774,22 +1028,26 @@ body {
 
     inset: 0;
 
-    background:
-        rgba(0, 0, 0, .65);
+    width: 100%;
 
-    z-index: 9999;
+    height: 100%;
 
     align-items: center;
 
     justify-content: center;
 
     padding: 20px;
+
+    background:
+        rgba(0, 0, 0, 0.68);
+
+    z-index: 9999;
 }
 
 
-/* ======================================================
-   PROFILE MODAL CONTENT
-====================================================== */
+/* ================================================================
+   36. PROFILE MODAL CONTENT
+   ================================================================ */
 
 .profile-modal-content {
     position: relative;
@@ -802,32 +1060,31 @@ body {
 
     overflow-y: auto;
 
+    padding: 30px;
+
     background: var(--bg-card);
 
     color: var(--text-main);
 
     border: 1px solid var(--border-color);
 
-    border-radius: 26px;
-
-    padding: 32px;
+    border-radius: 24px;
 
     box-shadow:
-        0 20px 50px
-        rgba(0, 0, 0, .35);
+        0 25px 60px rgba(0, 0, 0, 0.40);
 }
 
 
-/* ======================================================
-   PROFILE CLOSE BUTTON
-====================================================== */
+/* ================================================================
+   37. PROFILE CLOSE
+   ================================================================ */
 
 .profile-close {
     position: absolute;
 
-    top: 15px;
+    top: 14px;
 
-    right: 20px;
+    right: 18px;
 
     width: 36px;
 
@@ -839,27 +1096,30 @@ body {
 
     justify-content: center;
 
-    font-size: 28px;
+    color: var(--text-muted);
+
+    font-size: 26px;
 
     cursor: pointer;
 
-    color: var(--text-muted);
-
     border-radius: 50%;
 
-    transition: .2s;
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
 }
+
 
 .profile-close:hover {
     color: var(--text-main);
 
-    background: var(--border-color);
+    background: var(--hover-bg);
 }
 
 
-/* ======================================================
-   PROFILE HEADER
-====================================================== */
+/* ================================================================
+   38. PROFILE MODAL HEADER
+   ================================================================ */
 
 .profile-modal-header {
     display: flex;
@@ -875,16 +1135,12 @@ body {
 }
 
 
-/* ======================================================
-   PROFILE AVATAR
-====================================================== */
-
 .profile-avatar {
     width: 70px;
 
     height: 70px;
 
-    border-radius: 50%;
+    min-width: 70px;
 
     display: flex;
 
@@ -892,9 +1148,7 @@ body {
 
     justify-content: center;
 
-    font-size: 28px;
-
-    font-weight: bold;
+    border-radius: 50%;
 
     background:
         linear-gradient(
@@ -903,70 +1157,81 @@ body {
             #56ccf2
         );
 
-    color: white;
+    color: #ffffff;
 
-    flex-shrink: 0;
+    font-size: 27px;
+
+    font-weight: 700;
 }
 
 
-/* ======================================================
-   PROFILE HEADER TEXT
-====================================================== */
+/* ================================================================
+   39. PROFILE HEADER TEXT
+   ================================================================ */
 
 .profile-modal-header h2 {
-    margin: 0 0 8px;
+    margin: 0 0 6px;
 
     color: var(--text-main);
 
-    font-size: 28px;
+    font-size: 25px;
+
+    font-weight: 700;
 }
+
 
 .profile-modal-header p {
     margin: 0;
 
     color: var(--text-muted);
+
+    font-size: 14px;
 }
 
 
-/* ======================================================
-   PROFILE SECTIONS
-====================================================== */
+/* ================================================================
+   40. PROFILE SECTIONS
+   ================================================================ */
 
 .profile-section {
     margin-top: 22px;
 }
 
+
 .profile-section h3 {
-    margin-bottom: 10px;
+    margin: 0 0 10px;
 
     color: var(--text-main);
 
-    font-size: 18px;
+    font-size: 17px;
+
+    font-weight: 600;
 }
+
 
 .profile-section h3 i {
-    margin-right: 8px;
+    margin-right: 7px;
 
-    color: #7b61ff;
+    color: var(--secondary-light);
 }
 
 
-/* ======================================================
-   PROFILE BIO
-====================================================== */
+/* ================================================================
+   41. PROFILE BIO
+   ================================================================ */
 
 #profileBio {
     color: var(--text-muted);
 
-    line-height: 1.6;
+    font-size: 14px;
 
-    font-size: 15px;
+    line-height: 1.7;
 }
 
 
-/* ======================================================
-   PROFILE RATING
-====================================================== */
+/* ================================================================
+   42. PROFILE RATING
+   ================================================================ */
 
 .profile-rating {
     display: flex;
@@ -977,213 +1242,196 @@ body {
 
     margin-top: 20px;
 
-    padding: 15px;
+    padding: 14px 16px;
 
-    border-radius: 14px;
-
-    background: var(--input-bg);
+    background: var(--bg-input);
 
     border: 1px solid var(--border-color);
+
+    border-radius: 13px;
 }
 
-
-/* STARS */
 
 #profileStars {
-    font-size: 24px;
+    color: #f59e0b;
+
+    font-size: 22px;
 
     letter-spacing: 2px;
-
-    color: #f59e0b;
 }
 
-
-/* RATING NUMBER */
 
 #profileRating {
-    font-size: 20px;
-
-    font-weight: bold;
-
     color: var(--text-main);
+
+    font-size: 18px;
+
+    font-weight: 700;
 }
 
-
-/* REVIEW COUNT */
 
 #profileReviewCount {
     color: var(--text-muted);
 
-    font-size: 14px;
+    font-size: 13px;
 }
 
 
-/* ======================================================
-   REVIEWS SECTION
-====================================================== */
+/* ================================================================
+   43. REVIEWS
+   ================================================================ */
 
 #profileReviews {
     margin-top: 15px;
 }
 
 
-/* ======================================================
-   INDIVIDUAL REVIEW
-====================================================== */
-
 .review-item {
-    padding: 16px;
+    padding: 15px;
 
-    margin-bottom: 12px;
+    margin-bottom: 10px;
+
+    background: var(--bg-input);
 
     border: 1px solid var(--border-color);
 
-    border-radius: 14px;
+    border-radius: 13px;
 
-    background: var(--input-bg);
-
-    transition: .2s;
+    transition:
+        border-color 0.2s ease;
 }
+
 
 .review-item:hover {
-    border-color: #7b61ff;
+    border-color: var(--border-color);
 }
 
-
-/* ======================================================
-   REVIEW HEADER
-====================================================== */
 
 .review-header {
     display: flex;
 
-    justify-content: space-between;
-
     align-items: center;
+
+    justify-content: space-between;
 
     gap: 10px;
 }
 
+
 .review-header strong {
     color: var(--text-main);
 
-    font-size: 16px;
+    font-size: 14px;
 }
 
-
-/* ======================================================
-   REVIEW STARS
-====================================================== */
 
 .review-stars {
-    color: #f59e0b;
-
     margin-top: 4px;
 
-    font-size: 16px;
-}
-
-
-/* ======================================================
-   REVIEW COMMENT
-====================================================== */
-
-.review-comment {
-    margin: 12px 0;
-
-    line-height: 1.5;
-
-    color: var(--text-muted);
+    color: #f59e0b;
 
     font-size: 15px;
 }
 
 
-/* ======================================================
-   RECOMMENDED
-====================================================== */
+.review-comment {
+    margin: 10px 0;
+
+    color: var(--text-muted);
+
+    font-size: 14px;
+
+    line-height: 1.6;
+}
+
 
 .recommended {
     display: inline-block;
 
-    font-size: 13px;
-
     color: #22c55e;
+
+    font-size: 12px;
 
     font-weight: 600;
 }
 
 
-/* ======================================================
-   NO REVIEWS
-====================================================== */
-
 .no-reviews {
-    text-align: center;
+    padding: 22px;
 
-    padding: 25px;
+    text-align: center;
 
     color: var(--text-muted);
 
+    background: var(--bg-input);
+
     border: 1px dashed var(--border-color);
 
-    border-radius: 14px;
+    border-radius: 13px;
 
-    background: var(--input-bg);
+    font-size: 14px;
 }
 
 
-/* ======================================================
-   PROFILE MODAL SCROLLBAR
-====================================================== */
+/* ================================================================
+   44. PROFILE MODAL SCROLLBAR
+   ================================================================ */
 
 .profile-modal-content::-webkit-scrollbar {
     width: 7px;
 }
 
+
 .profile-modal-content::-webkit-scrollbar-track {
-    background: var(--input-bg);
+    background: var(--bg-input);
 
     border-radius: 10px;
 }
+
 
 .profile-modal-content::-webkit-scrollbar-thumb {
-    background: #7b61ff;
+    background:
+        linear-gradient(
+            180deg,
+            var(--secondary),
+            var(--primary)
+        );
 
     border-radius: 10px;
 }
 
 
-/* ======================================================
-   RESPONSIVE
-====================================================== */
+/* ================================================================
+   45. RESPONSIVE - 1100px
+   ================================================================ */
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
+
+    .filter-grid {
+        grid-template-columns:
+            1.6fr 1fr 1fr;
+
+        gap: 18px;
+    }
+
+    .users-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* ================================================================
+   46. RESPONSIVE - 900px
+   ================================================================ */
+
+@media (max-width: 900px) {
 
     .filter-grid {
         grid-template-columns: 1fr;
     }
 
-}
-
-
-@media (max-width: 900px) {
-
-    .dashboard {
-        flex-direction: column;
-    }
-
-    .sidebar {
+    .filter-item {
         width: 100%;
-    }
-
-}
-
-
-@media (max-width: 700px) {
-
-    .main {
-        padding: 25px;
     }
 
     .users-grid {
@@ -1191,85 +1439,265 @@ body {
     }
 
     .user-card {
-        padding: 25px;
+        padding: 26px;
+    }
+}
+
+
+/* ================================================================
+   47. RESPONSIVE - 700px
+   ================================================================ */
+
+@media (max-width: 700px) {
+
+    .page-header h1 {
+        font-size: 30px;
+    }
+
+    .page-header p {
+        font-size: 15px;
+    }
+
+    .filter-card {
+        padding: 22px;
+    }
+
+    .filter-grid {
+        gap: 18px;
+    }
+
+    .user-card {
+        padding: 23px;
     }
 
     .user-name {
-        font-size: 26px;
+        font-size: 25px;
+    }
+
+    .avatar {
+        width: 68px;
+
+        height: 68px;
+
+        min-width: 68px;
+
+        font-size: 27px;
     }
 
     .card-buttons {
         flex-direction: column;
+
+        gap: 10px;
     }
 
     .request-btn,
     .view-profile-btn {
         width: 100%;
-    }
 
+        flex: none;
+    }
 }
 
+
+/* ================================================================
+   48. RESPONSIVE - 600px
+   ================================================================ */
 
 @media (max-width: 600px) {
 
+    .page-header {
+        margin-bottom: 22px;
+    }
+
     .page-header h1 {
-        font-size: 32px;
+        font-size: 27px;
     }
 
-    .profile-modal-content {
-        padding: 25px;
-
-        max-height: 92vh;
+    .page-header p {
+        font-size: 14px;
     }
 
-    .profile-modal-header {
-        gap: 12px;
+    .filter-card {
+        padding: 20px;
+
+        border-radius: 18px;
     }
 
-    .profile-avatar {
-        width: 60px;
-        height: 60px;
-
-        font-size: 24px;
+    .filter-item label {
+        font-size: 15px;
     }
 
-    .profile-modal-header h2 {
-        font-size: 23px;
+    .search-box,
+    .filter-item select {
+        height: 52px;
     }
 
-}
+    .search-box i {
+        width: 52px;
 
+        font-size: 19px;
+    }
 
-@media (max-width: 450px) {
+    .search-box input {
+        font-size: 14px;
+    }
 
-    .main {
-        padding: 18px;
+    .search-box input::placeholder {
+        font-size: 14px;
+    }
+
+    .result-info {
+        min-height: 65px;
+
+        padding: 15px 17px;
+
+        font-size: 14px;
     }
 
     .user-card {
-        padding: 20px;
+        padding: 21px;
 
         border-radius: 20px;
     }
 
-    .avatar {
-        width: 60px;
-        height: 60px;
-
-        font-size: 24px;
+    .user-header {
+        gap: 12px;
     }
 
     .user-info {
         gap: 12px;
     }
 
+    .avatar {
+        width: 62px;
+
+        height: 62px;
+
+        min-width: 62px;
+
+        font-size: 24px;
+    }
+
     .user-name {
         font-size: 22px;
     }
 
+    .location {
+        font-size: 13px;
+    }
+
     .teach-tag,
     .learn-tag {
-        padding: 8px 13px;
+        min-height: 34px;
+
+        padding: 7px 11px;
+
+        font-size: 12px;
+    }
+
+    .section-title {
+        font-size: 11px;
+    }
+
+    .card-footer {
+        margin-top: 18px;
+
+        margin-bottom: 17px;
+    }
+
+    .rating {
+        font-size: 14px;
+    }
+
+    .rating span {
+        font-size: 12px;
+    }
+}
+
+
+/* ================================================================
+   49. RESPONSIVE - 450px
+   ================================================================ */
+
+@media (max-width: 450px) {
+
+    .page-header h1 {
+        font-size: 24px;
+    }
+
+    .filter-card {
+        padding: 17px;
+
+        border-radius: 16px;
+    }
+
+    .search-box,
+    .filter-item select {
+        height: 50px;
+    }
+
+    .search-box i {
+        width: 48px;
+
+        font-size: 18px;
+    }
+
+    .search-box input {
+        padding: 0 13px;
+
+        font-size: 13px;
+    }
+
+    .search-box input::placeholder {
+        font-size: 13px;
+    }
+
+    .result-info {
+        padding: 14px;
+
+        font-size: 13px;
+    }
+
+    .user-card {
+        padding: 18px;
+
+        border-radius: 18px;
+    }
+
+    .avatar {
+        width: 56px;
+
+        height: 56px;
+
+        min-width: 56px;
+
+        font-size: 22px;
+    }
+
+    .user-name {
+        font-size: 20px;
+    }
+
+    .location {
+        font-size: 12px;
+    }
+
+    .skill-list {
+        gap: 6px;
+    }
+
+    .teach-tag,
+    .learn-tag {
+        min-height: 32px;
+
+        padding: 6px 9px;
+
+        font-size: 11px;
+    }
+
+    .request-btn,
+    .view-profile-btn {
+        height: 48px;
 
         font-size: 13px;
     }
@@ -1277,7 +1705,57 @@ body {
     .profile-modal-content {
         padding: 20px;
 
-        border-radius: 20px;
+        border-radius: 18px;
     }
-
 }
+
+
+/* ================================================================
+   50. LIGHT THEME ADJUSTMENTS
+   ================================================================ */
+
+body.light-theme .search-box i {
+    background: rgba(226, 232, 240, 0.65);
+}
+
+body.light-theme .user-card,
+body.light-theme .filter-card,
+body.light-theme .result-info {
+    box-shadow:
+        0 10px 28px rgba(15, 23, 42, 0.06);
+}
+
+
+/* ================================================================
+   51. PREVENT UNWANTED CLICK BORDER CHANGES
+   ================================================================ */
+
+.user-card,
+.user-card:hover,
+.user-card:focus,
+.user-card:focus-visible,
+.user-card:active {
+    outline: none;
+}
+
+
+/* Keep the original border */
+
+.user-card:focus,
+.user-card:focus-visible,
+.user-card:active {
+    border: 1px solid var(--border-color);
+}
+
+
+/* ================================================================
+   52. ACCESSIBILITY
+   ================================================================ */
+
+.request-btn:focus-visible,
+.view-profile-btn:focus-visible {
+    outline: 2px solid var(--primary-light);
+
+    outline-offset: 3px;
+}
+

@@ -1,46 +1,180 @@
 // ======================================================
-// SkillHub Request Management
-// Part 1A - Setup & Fetch Requests
+// SkillHub - Request Management
+// ======================================================
+// Compatible with:
+// - header.js
+// - theme.css
+// - sidebar.css
+//
+// Handles:
+// - Fetch requests
+// - Sent / Received / Accepted / Completed tabs
+// - Accept request
+// - Reject request
+// - Chat
+// - Complete swap
+// - Submit review
+//
+// header.js handles:
+// - Authentication redirect
+// - Header username
+// - Header profile picture
+// - Notifications
+// - Notification badge
+// - Profile dropdown
+// - Logout
+// ======================================================
+
+
+// ======================================================
+// API
 // ======================================================
 
 const API_BASE_URL =
     "https://skillhub-backend-cths.onrender.com/api";
-const token = localStorage.getItem("token");
 
-if (!token) {
-    window.location.href = "index.html";
-}
+
+// ======================================================
+// AUTHENTICATION
+// ======================================================
+
+// Keep token for request-specific API calls.
+// header.js is responsible for the main authentication
+// and redirect behavior.
+
+const token =
+    localStorage.getItem("token");
+
+
+// ======================================================
+// REQUEST STATE
+// ======================================================
 
 let requestsData = [];
+
 let currentReviewSwap = "";
+
 let selectedRating = 0;
 
-const params = new URLSearchParams(window.location.search);
-let currentFilter = params.get("tab") || "sent";
 
-document.addEventListener("DOMContentLoaded", () => {
-    setupTabListeners();
-    setupLogout();
-    fetchRequests();
-});
+// ======================================================
+// CURRENT TAB
+// ======================================================
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+let currentFilter =
+    params.get("tab") || "sent";
+
+
+// ======================================================
+// PAGE INITIALIZATION
+// ======================================================
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        setupTabListeners();
+
+        setupReviewStars();
+
+        fetchRequests();
+
+    }
+);
+
+
+// ======================================================
+// AUTHORIZATION HEADER
+// ======================================================
+
+function getAuthHeaders(
+    includeContentType = false
+) {
+
+    const headers = {
+        Authorization: `Bearer ${token}`
+    };
+
+
+    if (includeContentType) {
+
+        headers["Content-Type"] =
+            "application/json";
+
+    }
+
+
+    return headers;
+
+}
+
+
+// ======================================================
+// HANDLE UNAUTHORIZED REQUEST
+// ======================================================
+// header.js normally handles authentication.
+// This is only a fallback if a request API returns 401.
+// ======================================================
+
+function handleRequestUnauthorized() {
+
+    localStorage.removeItem("token");
+
+    localStorage.removeItem(
+        "skillhubUser"
+    );
+
+    window.location.href =
+        "index.html";
+
+}
+
 
 // ======================================================
 // Decode JWT
 // ======================================================
 
-function parseJwt(token) {
+function parseJwt(jwtToken) {
 
     try {
 
-        const base64Url = token.split(".")[1];
+        if (!jwtToken) {
+            return null;
+        }
 
-        const base64 = base64Url
-            .replace(/-/g, "+")
-            .replace(/_/g, "/");
 
-        return JSON.parse(atob(base64));
+        const base64Url =
+            jwtToken.split(".")[1];
 
-    } catch {
+
+        if (!base64Url) {
+            return null;
+        }
+
+
+        const base64 =
+            base64Url
+                .replace(/-/g, "+")
+                .replace(/_/g, "/");
+
+
+        return JSON.parse(
+            atob(base64)
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "JWT parsing error:",
+            error
+        );
 
         return null;
 
@@ -48,554 +182,1068 @@ function parseJwt(token) {
 
 }
 
+
 // ======================================================
-// Fetch All Requests
+// FETCH ALL REQUESTS
 // ======================================================
 
 async function fetchRequests() {
 
-    const container = document.getElementById("requestContainer");
+    const container =
+        document.getElementById(
+            "requestContainer"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
 
     container.innerHTML = `
+
         <div class="empty">
+
             <i class="fa-solid fa-spinner fa-spin"></i>
-            <h2>Loading Requests...</h2>
+
+            <h2>
+                Loading Requests...
+            </h2>
+
         </div>
+
     `;
+
 
     try {
 
-        const response = await fetch(
-            `${API_BASE_URL}/swaps/my`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
+        // ----------------------------------------------
+        // Check token
+        // ----------------------------------------------
 
-        const data = await response.json();
+        if (!token) {
 
-        if (!response.ok) {
-            throw new Error(data.message);
+            handleRequestUnauthorized();
+
+            return;
+
         }
 
-        const user = parseJwt(token);
-        const currentUserId = (user.id || user._id).toString();
 
-    requestsData = data.map(item => {
+        // ----------------------------------------------
+        // API request
+        // ----------------------------------------------
 
-    const senderId = (item.sender._id || item.sender).toString();
+        const response =
+            await fetch(
+                `${API_BASE_URL}/swaps/my`,
+                {
+                    method: "GET",
 
-    const receiverId = (item.receiver._id || item.receiver).toString();
+                    headers:
+                        getAuthHeaders()
+                }
+            );
 
-    const isSender = senderId === currentUserId;
 
-    const partner = isSender ? item.receiver : item.sender;
+        // ----------------------------------------------
+        // Unauthorized
+        // ----------------------------------------------
 
-    return {
+        if (
+            response.status === 401
+        ) {
 
-        id: item._id,
+            handleRequestUnauthorized();
 
-        partnerName: partner?.name || "Unknown User",
+            return;
 
-        location: partner?.location || "Location not added",
+        }
 
-        teachSkill: item.teachSkill,
 
-        learnSkill: item.learnSkill,
+        // ----------------------------------------------
+        // Parse response
+        // ----------------------------------------------
 
-        status: item.status,
+        const data =
+            await response.json();
 
-        isSender,
 
-        senderId,
+        if (!response.ok) {
 
-        receiverId,
+            throw new Error(
+                data.message ||
+                "Unable to load requests."
+            );
 
-        senderCompleted: item.senderCompleted,
+        }
 
-        receiverCompleted: item.receiverCompleted
 
-    };
+        // ----------------------------------------------
+        // Current user from JWT
+        // ----------------------------------------------
 
-});
+        const user =
+            parseJwt(token);
 
-        renderRequests(currentFilter);
+
+        if (!user) {
+
+            handleRequestUnauthorized();
+
+            return;
+
+        }
+
+
+        const currentUserId =
+            (
+                user.id ||
+                user._id ||
+                ""
+            ).toString();
+
+
+        // ----------------------------------------------
+        // Convert API data
+        // ----------------------------------------------
+
+        requestsData =
+            Array.isArray(data)
+                ? data.map(
+                    item => {
+
+                        const senderId =
+                            (
+                                item.sender?._id ||
+                                item.sender ||
+                                ""
+                            ).toString();
+
+
+                        const receiverId =
+                            (
+                                item.receiver?._id ||
+                                item.receiver ||
+                                ""
+                            ).toString();
+
+
+                        const isSender =
+                            senderId ===
+                            currentUserId;
+
+
+                        const partner =
+                            isSender
+                                ? item.receiver
+                                : item.sender;
+
+
+                        return {
+
+                            id:
+                                item._id,
+
+                            partnerName:
+                                partner?.name ||
+                                "Unknown User",
+
+                            location:
+                                partner?.location ||
+                                "Location not added",
+
+                            teachSkill:
+                                item.teachSkill ||
+                                "Not specified",
+
+                            learnSkill:
+                                item.learnSkill ||
+                                "Not specified",
+
+                            status:
+                                item.status ||
+                                "Pending",
+
+                            isSender,
+
+                            senderId,
+
+                            receiverId,
+
+                            senderCompleted:
+                                Boolean(
+                                    item.senderCompleted
+                                ),
+
+                            receiverCompleted:
+                                Boolean(
+                                    item.receiverCompleted
+                                )
+
+                        };
+
+                    }
+                )
+                : [];
+
+
+        // ----------------------------------------------
+        // Render
+        // ----------------------------------------------
+
+        renderRequests(
+            currentFilter
+        );
 
     }
 
     catch (error) {
 
-        console.error(error);
+        console.error(
+            "Request loading error:",
+            error
+        );
+
 
         container.innerHTML = `
+
             <div class="empty">
+
                 <i class="fa-solid fa-circle-exclamation"></i>
-                <h2>Unable to load requests</h2>
-                <p>Please try again later.</p>
+
+                <h2>
+                    Unable to load requests
+                </h2>
+
+                <p>
+                    ${escapeHTML(
+                        error.message ||
+                        "Please try again later."
+                    )}
+                </p>
+
+                <button
+                    type="button"
+                    onclick="refreshRequests()"
+                >
+                    <i class="fa-solid fa-rotate-right"></i>
+                    Try Again
+                </button>
+
             </div>
+
         `;
 
     }
 
 }
+
+
 // ======================================================
-// Render Requests
+// RENDER REQUESTS
 // ======================================================
 
-function renderRequests(filter = "sent") {
+function renderRequests(
+    filter = "sent"
+) {
 
-    const container = document.getElementById("requestContainer");
+    const container =
+        document.getElementById(
+            "requestContainer"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
     container.innerHTML = "";
+
 
     let filtered = [];
 
-    // -----------------------------
-    // Filter Requests
-    // -----------------------------
+
+    // ==================================================
+    // SENT
+    // ==================================================
 
     if (filter === "sent") {
 
-        filtered = requestsData.filter(request =>
-            request.isSender &&
-            request.status === "Pending"
-        );
+        filtered =
+            requestsData.filter(
+                request =>
+                    request.isSender &&
+                    request.status ===
+                        "Pending"
+            );
 
     }
 
-    else if (filter === "received") {
 
-        filtered = requestsData.filter(request =>
-            !request.isSender &&
-            request.status === "Pending"
-        );
+    // ==================================================
+    // RECEIVED
+    // ==================================================
+
+    else if (
+        filter === "received"
+    ) {
+
+        filtered =
+            requestsData.filter(
+                request =>
+                    !request.isSender &&
+                    request.status ===
+                        "Pending"
+            );
+
+    }
+
+
+    // ==================================================
+    // ACCEPTED
+    // ==================================================
+
+    else if (
+        filter === "accepted"
+    ) {
+
+        filtered =
+            requestsData.filter(
+                request =>
+                    request.status ===
+                        "Accepted" ||
+                    request.status ===
+                        "Pending Confirmation"
+            );
 
     }
 
-    else if (filter === "accepted") {
 
-        filtered = requestsData.filter(request =>
-            request.status === "Accepted" ||
-            request.status === "Pending Confirmation"
-        );
+    // ==================================================
+    // COMPLETED
+    // ==================================================
+
+    else if (
+        filter === "completed"
+    ) {
+
+        filtered =
+            requestsData.filter(
+                request =>
+                    request.status ===
+                    "Completed"
+            );
 
     }
 
-    else if (filter === "completed") {
 
-        filtered = requestsData.filter(request =>
-            request.status === "Completed"
-        );
-
-    }
+    // ==================================================
+    // NO RESULTS
+    // ==================================================
 
     if (filtered.length === 0) {
 
         container.innerHTML = `
+
             <div class="empty">
+
                 <i class="fa-regular fa-folder-open"></i>
-                <h2>No Requests Found</h2>
-                <p>You don't have any requests in this section yet.</p>
+
+                <h2>
+                    No Requests Found
+                </h2>
+
+                <p>
+                    You don't have any requests
+                    in this section yet.
+                </p>
+
             </div>
+
         `;
 
         return;
+
     }
 
-    filtered.forEach(request => {
 
-        let statusClass = "";
-        let buttons = "";
+    // ==================================================
+    // RENDER EACH REQUEST
+    // ==================================================
 
-        // =====================================================
-        // Pending
-        // =====================================================
+    filtered.forEach(
+        request => {
 
-        if (request.status === "Pending") {
+            let statusClass = "";
 
-            statusClass = "pending";
+            let buttons = "";
 
-            if (request.isSender) {
+
+            // ==================================================
+            // PENDING
+            // ==================================================
+
+            if (
+                request.status ===
+                "Pending"
+            ) {
+
+                statusClass =
+                    "pending";
+
+
+                // ------------------------------------------
+                // Sender
+                // ------------------------------------------
+
+                if (
+                    request.isSender
+                ) {
+
+                    buttons = `
+
+                        <button
+                            class="pending-btn"
+                            disabled
+                        >
+
+                            <i class="fa-solid fa-clock"></i>
+
+                            Waiting...
+
+                        </button>
+
+                    `;
+
+                }
+
+
+                // ------------------------------------------
+                // Receiver
+                // ------------------------------------------
+
+                else {
+
+                    buttons = `
+
+                        <button
+                            class="accept-btn"
+                            onclick="updateRequestStatus(
+                                '${escapeAttribute(request.id)}',
+                                'accept'
+                            )"
+                        >
+
+                            <i class="fa-solid fa-check"></i>
+
+                            Accept
+
+                        </button>
+
+
+                        <button
+                            class="reject-btn"
+                            onclick="updateRequestStatus(
+                                '${escapeAttribute(request.id)}',
+                                'reject'
+                            )"
+                        >
+
+                            <i class="fa-solid fa-xmark"></i>
+
+                            Reject
+
+                        </button>
+
+                    `;
+
+                }
+
+            }
+
+
+            // ==================================================
+            // ACCEPTED
+            // ==================================================
+
+            else if (
+                request.status ===
+                "Accepted"
+            ) {
+
+                statusClass =
+                    "accepted";
+
 
                 buttons = `
-                    <button class="pending-btn" disabled>
-                        <i class="fa-solid fa-clock"></i>
-                        Waiting...
-                    </button>
-                `;
-
-            } else {
-
-                buttons = `
-                    <button
-                        class="accept-btn"
-                        onclick="updateRequestStatus('${request.id}','accept')">
-
-                        <i class="fa-solid fa-check"></i>
-                        Accept
-                    </button>
 
                     <button
-                        class="reject-btn"
-                        onclick="updateRequestStatus('${request.id}','reject')">
+                        class="chat-btn"
+                        onclick="openChat(
+                            '${escapeAttribute(request.id)}'
+                        )"
+                    >
 
-                        <i class="fa-solid fa-xmark"></i>
-                        Reject
+                        <i class="fa-solid fa-comments"></i>
+
+                        Chat
+
                     </button>
+
+
+                    <button
+                        class="complete-btn"
+                        onclick="openReview(
+                            '${escapeAttribute(request.id)}'
+                        )"
+                    >
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                        Complete Swap
+
+                    </button>
+
                 `;
 
             }
 
-        }
 
-        // =====================================================
-        // Accepted
-        // =====================================================
+            // ==================================================
+            // PENDING CONFIRMATION
+            // ==================================================
 
-        else if (request.status === "Accepted") {
+            else if (
+                request.status ===
+                "Pending Confirmation"
+            ) {
 
-            statusClass = "accepted";
+                statusClass =
+                    "pending";
 
-            buttons = `
-                <button
-                    class="chat-btn"
-                    onclick="openChat('${request.id}')">
 
-                    <i class="fa-solid fa-comments"></i>
-                    Chat
-                </button>
+                buttons = `
 
-                <button
-                    class="complete-btn"
-                    onclick="openReview('${request.id}')">
+                    <button
+                        class="chat-btn"
+                        onclick="openChat(
+                            '${escapeAttribute(request.id)}'
+                        )"
+                    >
 
-                    <i class="fa-solid fa-circle-check"></i>
-                    Complete Swap
-                </button>
+                        <i class="fa-solid fa-comments"></i>
+
+                        Chat
+
+                    </button>
+
+                `;
+
+
+                // ------------------------------------------
+                // Check whether current user completed
+                // ------------------------------------------
+
+                const currentUserAlreadyReviewed =
+                    request.isSender
+                        ? request.senderCompleted
+                        : request.receiverCompleted;
+
+
+                // ------------------------------------------
+                // Already submitted
+                // ------------------------------------------
+
+                if (
+                    currentUserAlreadyReviewed
+                ) {
+
+                    buttons += `
+
+                        <button
+                            class="pending-btn"
+                            disabled
+                        >
+
+                            <i class="fa-solid fa-clock"></i>
+
+                            Waiting for partner confirmation
+
+                        </button>
+
+                    `;
+
+                }
+
+
+                // ------------------------------------------
+                // Not submitted
+                // ------------------------------------------
+
+                else {
+
+                    buttons += `
+
+                        <button
+                            class="complete-btn"
+                            onclick="openReview(
+                                '${escapeAttribute(request.id)}'
+                            )"
+                        >
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                            Complete Swap
+
+                        </button>
+
+                    `;
+
+                }
+
+            }
+
+
+            // ==================================================
+            // COMPLETED
+            // ==================================================
+
+            else if (
+                request.status ===
+                "Completed"
+            ) {
+
+                statusClass =
+                    "completed";
+
+
+                buttons = `
+
+                    <button
+                        class="completed-btn"
+                        disabled
+                    >
+
+                        <i class="fa-solid fa-check-double"></i>
+
+                        Swap Completed
+
+                    </button>
+
+                `;
+
+            }
+
+
+            // ==================================================
+            // REJECTED / OTHER
+            // ==================================================
+
+            else {
+
+                statusClass =
+                    "rejected";
+
+
+                buttons = `
+
+                    <button
+                        class="rejected-btn"
+                        disabled
+                    >
+
+                        <i class="fa-solid fa-ban"></i>
+
+                        Request Rejected
+
+                    </button>
+
+                `;
+
+            }
+
+
+            // ==================================================
+            // AVATAR
+            // ==================================================
+
+            const partnerName =
+                request.partnerName ||
+                "SkillHub User";
+
+
+            const avatar =
+                partnerName
+                    .charAt(0)
+                    .toUpperCase();
+
+
+            // ==================================================
+            // REQUEST TYPE
+            // ==================================================
+
+            const requestType =
+                request.isSender
+                    ? "Sent To"
+                    : "Received From";
+
+
+            // ==================================================
+            // CREATE CARD
+            // ==================================================
+
+            const requestCard =
+                document.createElement(
+                    "div"
+                );
+
+
+            requestCard.className =
+                "request-card";
+
+
+            requestCard.innerHTML = `
+
+                <div class="request-header">
+
+                    <div class="user-info">
+
+                        <div class="avatar">
+                            ${escapeHTML(
+                                avatar
+                            )}
+                        </div>
+
+
+                        <div>
+
+                            <p class="request-type">
+                                ${escapeHTML(
+                                    requestType
+                                )}
+                            </p>
+
+
+                            <h3>
+                                ${escapeHTML(
+                                    partnerName
+                                )}
+                            </h3>
+
+
+                            <p class="location">
+
+                                <i class="fa-solid fa-location-dot"></i>
+
+                                ${escapeHTML(
+                                    request.location ||
+                                    "Location not added"
+                                )}
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="status ${statusClass}"
+                    >
+
+                        <i class="fa-solid fa-circle"></i>
+
+                        ${escapeHTML(
+                            request.status
+                        )}
+
+                    </div>
+
+                </div>
+
+
+                <hr>
+
+
+                <div class="skill-row">
+
+
+                    <div class="skill-item">
+
+                        <span class="label">
+                            Teaching
+                        </span>
+
+
+                        <span class="skill">
+
+                            <i class="fa-solid fa-graduation-cap"></i>
+
+                            ${escapeHTML(
+                                request.teachSkill
+                            )}
+
+                        </span>
+
+                    </div>
+
+
+                    <i
+                        class="fa-solid fa-arrow-right-arrow-left swap-icon"
+                    ></i>
+
+
+                    <div class="skill-item">
+
+                        <span class="label">
+                            Learning
+                        </span>
+
+
+                        <span class="skill learn">
+
+                            <i class="fa-solid fa-lightbulb"></i>
+
+                            ${escapeHTML(
+                                request.learnSkill
+                            )}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="request-actions">
+
+                    ${buttons}
+
+                </div>
+
             `;
 
+
+            container.appendChild(
+                requestCard
+            );
+
         }
-
-        // =====================================================
-        // Pending Confirmation
-        // =====================================================
-
-       else if (request.status === "Pending Confirmation") {
-
-    statusClass = "pending";
-
-    buttons = `
-        <button
-            class="chat-btn"
-            onclick="openChat('${request.id}')">
-
-            <i class="fa-solid fa-comments"></i>
-            Chat
-
-        </button>
-    `;
-
-    // -----------------------------------------
-    // Current user already submitted review
-    // -----------------------------------------
-
-    const currentUserAlreadyReviewed =
-        request.isSender
-            ? request.senderCompleted
-            : request.receiverCompleted;
-
-    if (currentUserAlreadyReviewed) {
-
-        buttons += `
-            <button
-                class="pending-btn"
-                disabled>
-
-                <i class="fa-solid fa-clock"></i>
-
-                Waiting for partner confirmation
-
-            </button>
-        `;
-
-    }
-
-    // -----------------------------------------
-    // Current user has NOT reviewed yet
-    // -----------------------------------------
-
-    else {
-
-        buttons += `
-            <button
-                class="complete-btn"
-                onclick="openReview('${request.id}')">
-
-                <i class="fa-solid fa-circle-check"></i>
-
-                Complete Swap
-
-            </button>
-        `;
-
-    }
+    );
 
 }
 
-        // =====================================================
-        // Completed
-        // =====================================================
 
-        else if (request.status === "Completed") {
-
-            statusClass = "completed";
-
-            buttons = `
-                <button disabled>
-
-                    <i class="fa-solid fa-check-double"></i>
-
-                    Swap Completed
-
-                </button>
-            `;
-
-        }
-
-        // =====================================================
-        // Rejected
-        // =====================================================
-
-        else {
-
-            statusClass = "rejected";
-
-            buttons = `
-                <button disabled>
-
-                    <i class="fa-solid fa-ban"></i>
-
-                    Request Rejected
-
-                </button>
-            `;
-
-        }
-
-        const avatar =
-            (request.partnerName || "?")
-                .charAt(0)
-                .toUpperCase();
-
-        const requestType =
-            request.isSender
-                ? "Sent To"
-                : "Received From";
-
-        container.innerHTML += `
-
-<div class="request-card">
-
-    <div class="request-header">
-
-        <div class="user-info">
-
-            <div class="avatar">
-                ${avatar}
-            </div>
-
-            <div>
-
-                <p class="request-type">
-                    ${requestType}
-                </p>
-
-                <h3>
-                    ${request.partnerName}
-                </h3>
-
-                <p class="location">
-
-                    <i class="fa-solid fa-location-dot"></i>
-
-                    ${request.location}
-
-                </p>
-
-            </div>
-
-        </div>
-
-        <div class="status ${statusClass}">
-
-            <i class="fa-solid fa-circle"></i>
-
-            ${request.status}
-
-        </div>
-
-    </div>
-
-    <hr>
-
-    <div class="skill-row">
-
-        <div class="skill-item">
-
-            <span class="label">Teaching</span>
-
-            <span class="skill">
-
-                <i class="fa-solid fa-graduation-cap"></i>
-
-                ${request.teachSkill}
-
-            </span>
-
-        </div>
-
-        <i class="fa-solid fa-arrow-right-arrow-left swap-icon"></i>
-
-        <div class="skill-item">
-
-            <span class="label">Learning</span>
-
-            <span class="skill learn">
-
-                <i class="fa-solid fa-lightbulb"></i>
-
-                ${request.learnSkill}
-
-            </span>
-
-        </div>
-
-    </div>
-
-    <div class="request-actions">
-
-        ${buttons}
-
-    </div>
-
-</div>
-`;
-
-    });
-
-}
 // ======================================================
-// Update Request Status
+// UPDATE REQUEST STATUS
 // ======================================================
 
-async function updateRequestStatus(id, action) {
+async function updateRequestStatus(
+    id,
+    action
+) {
+
+    if (!id) {
+
+        alert(
+            "Invalid request."
+        );
+
+        return;
+
+    }
+
 
     try {
 
-        const response = await fetch(
-            `${API_BASE_URL}/swaps/${id}/${action}`,
-            {
-                method: "PUT",
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }
-        );
+        const response =
+            await fetch(
+                `${API_BASE_URL}/swaps/${encodeURIComponent(id)}/${action}`,
+                {
+                    method: "PUT",
 
-        const data = await response.json();
+                    headers:
+                        getAuthHeaders()
+                }
+            );
+
+
+        if (
+            response.status === 401
+        ) {
+
+            handleRequestUnauthorized();
+
+            return;
+
+        }
+
+
+        const data =
+            await response.json();
+
 
         if (!response.ok) {
-            alert(data.message || "Unable to update request.");
+
+            alert(
+                data.message ||
+                "Unable to update request."
+            );
+
             return;
+
         }
+
+
+        // ----------------------------------------------
+        // Refresh request list
+        // ----------------------------------------------
 
         await fetchRequests();
 
-        alert(data.message);
+
+        // ----------------------------------------------
+        // IMPORTANT:
+        // Refresh shared header
+        // ----------------------------------------------
+        // Accept/reject can create notifications.
+        // This makes notification badge/dropdown update
+        // immediately.
+        // ----------------------------------------------
+
+        if (
+            typeof window.refreshHeader ===
+            "function"
+        ) {
+
+            await window.refreshHeader();
+
+        }
+
+
+        alert(
+            data.message ||
+            "Request updated successfully."
+        );
 
     }
 
     catch (error) {
 
-        console.error(error);
+        console.error(
+            "Request status update error:",
+            error
+        );
 
-        alert("Something went wrong.");
+
+        alert(
+            "Something went wrong."
+        );
 
     }
 
 }
 
+
 // ======================================================
-// Tab Navigation
+// TAB NAVIGATION
 // ======================================================
 
 function setupTabListeners() {
 
-    const tabs = document.querySelectorAll(".tab-btn");
+    const tabs =
+        document.querySelectorAll(
+            ".tab-btn"
+        );
 
-    tabs.forEach(tab => {
 
-        if (tab.dataset.tab === currentFilter) {
+    tabs.forEach(
+        tab => {
 
-            tab.classList.add("active");
+            if (
+                tab.dataset.tab ===
+                currentFilter
+            ) {
 
-        } else {
+                tab.classList.add(
+                    "active"
+                );
 
-            tab.classList.remove("active");
+            }
+
+            else {
+
+                tab.classList.remove(
+                    "active"
+                );
+
+            }
 
         }
+    );
 
-    });
 
-    tabs.forEach(tab => {
+    tabs.forEach(
+        tab => {
 
-        tab.addEventListener("click", () => {
+            tab.addEventListener(
+                "click",
+                () => {
 
-            tabs.forEach(btn => btn.classList.remove("active"));
+                    tabs.forEach(
+                        button =>
+                            button.classList.remove(
+                                "active"
+                            )
+                    );
 
-            tab.classList.add("active");
 
-            currentFilter = tab.dataset.tab;
+                    tab.classList.add(
+                        "active"
+                    );
 
-            const url = new URL(window.location);
 
-            url.searchParams.set("tab", currentFilter);
+                    currentFilter =
+                        tab.dataset.tab ||
+                        "sent";
 
-            window.history.replaceState({}, "", url);
 
-            renderRequests(currentFilter);
+                    const url =
+                        new URL(
+                            window.location.href
+                        );
 
-        });
 
-    });
+                    url.searchParams.set(
+                        "tab",
+                        currentFilter
+                    );
+
+
+                    window.history.replaceState(
+                        {},
+                        "",
+                        url
+                    );
+
+
+                    renderRequests(
+                        currentFilter
+                    );
+
+                }
+            );
+
+        }
+    );
 
 }
 
-// ======================================================
-// Logout
-// ======================================================
-
-function setupLogout() {
-
-    const logoutBtn = document.getElementById("logoutBtn");
-
-    if (!logoutBtn) return;
-
-    logoutBtn.addEventListener("click", () => {
-
-        if (!confirm("Are you sure you want to logout?")) return;
-
-        localStorage.removeItem("token");
-
-        window.location.href = "index.html";
-
-    });
-
-}
 
 // ======================================================
-// Helpers
+// REFRESH REQUESTS
 // ======================================================
 
 function refreshRequests() {
@@ -603,7 +1251,15 @@ function refreshRequests() {
     fetchRequests();
 
 }
-function getStatusClass(status) {
+
+
+// ======================================================
+// GET STATUS CLASS
+// ======================================================
+
+function getStatusClass(
+    status
+) {
 
     switch (status) {
 
@@ -629,182 +1285,508 @@ function getStatusClass(status) {
 
 }
 
+
 // ======================================================
-// Open Chat
+// OPEN CHAT
 // ======================================================
 
-function openChat(swapId) {
+function openChat(
+    swapId
+) {
 
-    window.location.href = `chat.html?swapId=${swapId}`;
+    if (!swapId) {
+
+        alert(
+            "Invalid swap."
+        );
+
+        return;
+
+    }
+
+
+    window.location.href =
+        `chat.html?swapId=${encodeURIComponent(
+            swapId
+        )}`;
 
 }
 
-// ======================================================
-// Review Modal
-// ======================================================
-function openReview(swapId) {
 
-    currentReviewSwap = swapId;
+// ======================================================
+// REVIEW MODAL
+// ======================================================
 
-    selectedRating = 0;
+function openReview(
+    swapId
+) {
+
+    if (!swapId) {
+
+        alert(
+            "Invalid swap."
+        );
+
+        return;
+
+    }
+
+
+    currentReviewSwap =
+        swapId;
+
+
+    selectedRating =
+        0;
+
+
+    // ----------------------------------------------
+    // Reset stars
+    // ----------------------------------------------
 
     document
-        .querySelectorAll(".star-rating i")
-        .forEach(star => {
-            star.classList.remove("active");
-        });
+        .querySelectorAll(
+            ".star-rating i"
+        )
+        .forEach(
+            star => {
 
-    document.getElementById("reviewComment").value = "";
+                star.classList.remove(
+                    "active"
+                );
 
-    document.getElementById("recommendUser").checked = false;
-
-    document.getElementById("reviewModal").style.display = "flex";
-
-}
-// ======================================================
-// Close Review Modal
-// ======================================================
-function closeReviewModal() {
-
-    const modal = document.getElementById("reviewModal");
-
-    if (modal) {
-        modal.style.display = "none";
-    }
-
-}
-// ======================================================
-// Star Rating
-// ======================================================
-
-document.addEventListener("DOMContentLoaded", () => {
-
-    const stars = document.querySelectorAll(".star-rating i");
-
-    stars.forEach(star => {
-
-        star.addEventListener("click", () => {
-
-            selectedRating = Number(star.dataset.value);
-
-            stars.forEach(s => {
-
-                if (Number(s.dataset.value) <= selectedRating) {
-
-                    s.classList.add("active");
-
-                } else {
-
-                    s.classList.remove("active");
-
-                }
-
-            });
-
-        });
-
-    });
-
-});
-
-// ======================================================
-// Submit Review
-// ======================================================
-async function submitReview() {
-
-    if (!currentReviewSwap) {
-        alert("Invalid swap.");
-        return;
-    }
-
-    if (selectedRating === 0) {
-        alert("Please select a rating.");
-        return;
-    }
-
-    const comment = document
-        .getElementById("reviewComment")
-        .value
-        .trim();
-
-    if (!comment) {
-        alert("Please write your review.");
-        return;
-    }
-
-    const recommend =
-        document.getElementById("recommendUser").checked;
-
-    const submitButton =
-        document.querySelector(".submit-review");
-
-    try {
-
-        // Prevent double click
-        submitButton.disabled = true;
-        submitButton.innerHTML =
-            '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
-
-        const response = await fetch(
-            `${API_BASE_URL}/reviews`,
-            {
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-
-                body: JSON.stringify({
-                    swapId: currentReviewSwap,
-                    rating: selectedRating,
-                    comment: comment,
-                    recommend: recommend
-                })
             }
         );
 
-        const data = await response.json();
 
-        console.log("Review response:", data);
+    // ----------------------------------------------
+    // Reset comment
+    // ----------------------------------------------
+
+    const commentInput =
+        document.getElementById(
+            "reviewComment"
+        );
+
+
+    if (commentInput) {
+
+        commentInput.value =
+            "";
+
+    }
+
+
+    // ----------------------------------------------
+    // Reset recommendation
+    // ----------------------------------------------
+
+    const recommendInput =
+        document.getElementById(
+            "recommendUser"
+        );
+
+
+    if (recommendInput) {
+
+        recommendInput.checked =
+            false;
+
+    }
+
+
+    // ----------------------------------------------
+    // Show modal
+    // ----------------------------------------------
+
+    const modal =
+        document.getElementById(
+            "reviewModal"
+        );
+
+
+    if (modal) {
+
+        modal.style.display =
+            "flex";
+
+    }
+
+}
+
+
+// ======================================================
+// CLOSE REVIEW MODAL
+// ======================================================
+
+function closeReviewModal() {
+
+    const modal =
+        document.getElementById(
+            "reviewModal"
+        );
+
+
+    if (modal) {
+
+        modal.style.display =
+            "none";
+
+    }
+
+
+    currentReviewSwap =
+        "";
+
+    selectedRating =
+        0;
+
+}
+
+
+// ======================================================
+// REVIEW STAR SETUP
+// ======================================================
+
+function setupReviewStars() {
+
+    const stars =
+        document.querySelectorAll(
+            ".star-rating i"
+        );
+
+
+    stars.forEach(
+        star => {
+
+            star.addEventListener(
+                "click",
+                () => {
+
+                    selectedRating =
+                        Number(
+                            star.dataset.value
+                        );
+
+
+                    stars.forEach(
+                        currentStar => {
+
+                            if (
+                                Number(
+                                    currentStar.dataset.value
+                                ) <=
+                                selectedRating
+                            ) {
+
+                                currentStar.classList.add(
+                                    "active"
+                                );
+
+                            }
+
+                            else {
+
+                                currentStar.classList.remove(
+                                    "active"
+                                );
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// SUBMIT REVIEW
+// ======================================================
+
+async function submitReview() {
+
+    // ----------------------------------------------
+    // Validate swap
+    // ----------------------------------------------
+
+    if (!currentReviewSwap) {
+
+        alert(
+            "Invalid swap."
+        );
+
+        return;
+
+    }
+
+
+    // ----------------------------------------------
+    // Validate rating
+    // ----------------------------------------------
+
+    if (
+        selectedRating === 0
+    ) {
+
+        alert(
+            "Please select a rating."
+        );
+
+        return;
+
+    }
+
+
+    // ----------------------------------------------
+    // Comment
+    // ----------------------------------------------
+
+    const commentInput =
+        document.getElementById(
+            "reviewComment"
+        );
+
+
+    const comment =
+        commentInput
+            ? commentInput.value.trim()
+            : "";
+
+
+    if (!comment) {
+
+        alert(
+            "Please write your review."
+        );
+
+        if (commentInput) {
+
+            commentInput.focus();
+
+        }
+
+        return;
+
+    }
+
+
+    // ----------------------------------------------
+    // Recommendation
+    // ----------------------------------------------
+
+    const recommendInput =
+        document.getElementById(
+            "recommendUser"
+        );
+
+
+    const recommend =
+        recommendInput
+            ? recommendInput.checked
+            : false;
+
+
+    // ----------------------------------------------
+    // Submit button
+    // ----------------------------------------------
+
+    const submitButton =
+        document.querySelector(
+            ".submit-review"
+        );
+
+
+    try {
+
+        // ------------------------------------------
+        // Prevent double click
+        // ------------------------------------------
+
+        if (submitButton) {
+
+            submitButton.disabled =
+                true;
+
+
+            submitButton.innerHTML = `
+
+                <i
+                    class="fa-solid fa-spinner fa-spin"
+                ></i>
+
+                Submitting...
+
+            `;
+
+        }
+
+
+        // ------------------------------------------
+        // API request
+        // ------------------------------------------
+
+        const response =
+            await fetch(
+                `${API_BASE_URL}/reviews`,
+                {
+                    method: "POST",
+
+                    headers:
+                        getAuthHeaders(true),
+
+                    body:
+                        JSON.stringify({
+
+                            swapId:
+                                currentReviewSwap,
+
+                            rating:
+                                selectedRating,
+
+                            comment:
+                                comment,
+
+                            recommend:
+                                recommend
+
+                        })
+
+                }
+            );
+
+
+        // ------------------------------------------
+        // Unauthorized
+        // ------------------------------------------
+
+        if (
+            response.status === 401
+        ) {
+
+            handleRequestUnauthorized();
+
+            return;
+
+        }
+
+
+        // ------------------------------------------
+        // Parse response
+        // ------------------------------------------
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Review response:",
+            data
+        );
+
+
+        // ------------------------------------------
+        // Error
+        // ------------------------------------------
 
         if (!response.ok) {
 
-            alert(data.message || "Unable to submit review.");
-
-            submitButton.disabled = false;
-            submitButton.innerHTML = "Submit Review";
+            alert(
+                data.message ||
+                "Unable to submit review."
+            );
 
             return;
+
         }
 
-        // -----------------------------------------
-        // CLOSE MODAL IMMEDIATELY
-        // -----------------------------------------
+
+        // ------------------------------------------
+        // Save swap ID before reset
+        // ------------------------------------------
+
+        const completedSwapId =
+            currentReviewSwap;
+
+
+        // ------------------------------------------
+        // Close modal
+        // ------------------------------------------
 
         closeReviewModal();
 
-        // Reset review values
-        currentReviewSwap = "";
-        selectedRating = 0;
 
-        document.getElementById("reviewComment").value = "";
-        document.getElementById("recommendUser").checked = false;
+        // ------------------------------------------
+        // Reset form
+        // ------------------------------------------
 
-        document.querySelectorAll(".star-rating i")
-            .forEach(star => {
-                star.classList.remove("active");
-            });
+        if (commentInput) {
 
-        // -----------------------------------------
-        // Refresh request cards
-        // -----------------------------------------
+            commentInput.value =
+                "";
+
+        }
+
+
+        if (recommendInput) {
+
+            recommendInput.checked =
+                false;
+
+        }
+
+
+        document
+            .querySelectorAll(
+                ".star-rating i"
+            )
+            .forEach(
+                star =>
+                    star.classList.remove(
+                        "active"
+                    )
+            );
+
+
+        // ------------------------------------------
+        // Refresh requests
+        // ------------------------------------------
 
         await fetchRequests();
 
-        // -----------------------------------------
-        // Show backend message
-        // -----------------------------------------
+
+        // ------------------------------------------
+        // IMPORTANT:
+        // Refresh shared header
+        // ------------------------------------------
+        // Completing a swap may generate a
+        // notification for the other user.
+        // ------------------------------------------
+
+        if (
+            typeof window.refreshHeader ===
+            "function"
+        ) {
+
+            await window.refreshHeader();
+
+        }
+
+
+        console.log(
+            "Review submitted for swap:",
+            completedSwapId
+        );
+
+
+        // ------------------------------------------
+        // Backend message
+        // ------------------------------------------
 
         alert(
             data.message ||
@@ -815,18 +1797,164 @@ async function submitReview() {
 
     catch (error) {
 
-        console.error("Review submission error:", error);
+        console.error(
+            "Review submission error:",
+            error
+        );
 
-        alert("Unable to submit review.");
+
+        alert(
+            "Unable to submit review."
+        );
 
     }
 
     finally {
 
-        submitButton.disabled = false;
+        if (submitButton) {
 
-        submitButton.innerHTML = "Submit Review";
+            submitButton.disabled =
+                false;
+
+
+            submitButton.innerHTML = `
+
+                Submit Review
+
+            `;
+
+        }
 
     }
 
 }
+
+
+// ======================================================
+// ESCAPE HTML
+// ======================================================
+
+function escapeHTML(
+    value
+) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        value ?? "";
+
+
+    return div.innerHTML;
+
+}
+
+
+// ======================================================
+// ESCAPE ATTRIBUTE
+// ======================================================
+
+function escapeAttribute(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'");
+
+}
+
+
+// ======================================================
+// OPTIONAL:
+// REFRESH SHARED HEADER
+// ======================================================
+// You normally do NOT need to call this manually.
+// request.js already calls it after actions that may
+// change notifications.
+// ======================================================
+
+async function refreshSharedHeader() {
+
+    if (
+        typeof window.refreshHeader ===
+        "function"
+    ) {
+
+        await window.refreshHeader();
+
+    }
+
+}
+
+
+// ======================================================
+// CLOSE MODAL WHEN CLICKING OUTSIDE
+// ======================================================
+
+document.addEventListener(
+    "click",
+    event => {
+
+        const modal =
+            document.getElementById(
+                "reviewModal"
+            );
+
+
+        if (!modal) {
+            return;
+        }
+
+
+        if (
+            event.target === modal
+        ) {
+
+            closeReviewModal();
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// ESC KEY CLOSES REVIEW MODAL
+// ======================================================
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if (
+            event.key !== "Escape"
+        ) {
+
+            return;
+
+        }
+
+
+        const modal =
+            document.getElementById(
+                "reviewModal"
+            );
+
+
+        if (
+            modal &&
+            modal.style.display === "flex"
+        ) {
+
+            closeReviewModal();
+
+        }
+
+    }
+);

@@ -10,79 +10,150 @@
 
     <title>SkillHub | Requests</title>
 
-    <link rel="stylesheet" href="request.css">
+
+    <!-- =========================================================
+         SHARED THEME
+    ========================================================== -->
+
     <link rel="stylesheet" href="theme.css">
+
+
+    <!-- =========================================================
+         SHARED SIDEBAR
+    ========================================================== -->
+
+    <link rel="stylesheet" href="sidebar.css">
+
+
+    <!-- =========================================================
+         REQUEST PAGE CSS
+    ========================================================== -->
+
+    <link rel="stylesheet" href="request.css">
+
+
+    <!-- =========================================================
+         FONT AWESOME
+    ========================================================== -->
 
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+
+    <!-- =========================================================
+         THEME JAVASCRIPT
+    ========================================================== -->
 
     <script src="theme.js" defer></script>
 
 </head>
 
+
 <body>
+
 
 <div class="dashboard">
 
-    <!-- Sidebar -->
+
+    <!-- =========================================================
+         SIDEBAR
+    ========================================================== -->
 
     <aside class="sidebar">
+
+
+        <!-- Logo -->
 
         <div class="logo">
 
             <i class="fa-solid fa-graduation-cap"></i>
 
-            <span>SkillHub</span>
+            <span>
+                SkillHub
+            </span>
 
         </div>
 
+
+        <!-- Navigation -->
+
         <ul>
+
+
+            <!-- Dashboard -->
 
             <li onclick="location.href='dashboard.html'">
 
                 <i class="fa-solid fa-house"></i>
 
-                Dashboard
+                <span>
+                    Dashboard
+                </span>
 
             </li>
+
+
+            <!-- Browse Skills -->
 
             <li onclick="location.href='browse-skills.html'">
 
                 <i class="fa-solid fa-book-open"></i>
 
-                Browse Skills
+                <span>
+                    Browse Skills
+                </span>
 
             </li>
+
+
+            <!-- Requests -->
 
             <li class="active">
 
                 <i class="fa-solid fa-handshake"></i>
 
-                Requests
+                <span>
+                    Requests
+                </span>
 
             </li>
+
+
+            <!-- Chat -->
 
             <li onclick="location.href='chat.html'">
 
                 <i class="fa-solid fa-comments"></i>
 
-                Chat
+                <span>
+                    Chat
+                </span>
 
             </li>
+
+
+            <!-- Profile -->
 
             <li onclick="location.href='profile.html'">
 
                 <i class="fa-solid fa-user"></i>
 
-                Profile
+                <span>
+                    Profile
+                </span>
 
             </li>
+
+
+            <!-- Logout -->
 
             <li id="logoutBtn">
 
                 <i class="fa-solid fa-right-from-bracket"></i>
 
-                Logout
+                <span>
+                    Logout
+                </span>
 
             </li>
 
@@ -90,35 +161,198 @@
 
     </aside>
 
-    <!-- Main -->
+
+
+    <!-- =========================================================
+         MAIN CONTENT
+    ========================================================== -->
 
     <main class="main">
 
-        <!-- Page Header -->
 
-        <div class="page-header">
+        <!-- =====================================================
+             SHARED TOPBAR
+        ====================================================== -->
 
-            <div>
+        <header class="topbar">
+
+
+            <!-- Page Title -->
+
+            <div class="page-title">
 
                 <h1>
-
                     Skill Exchange Requests
-
                 </h1>
 
                 <p>
-
                     Manage all your skill exchange requests from one place.
-
                 </p>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 TOPBAR ACTIONS
+            ================================================== -->
+
+            <div class="topbar-actions">
+
+
+                <!-- Icons -->
+
+                <div class="top-icons">
+
+    <!-- Notification Wrapper -->
+    <div class="notification-wrapper">
+
+        <button
+            class="notification-btn"
+            id="notificationBtn"
+            type="button"
+            title="Notifications">
+
+            <i class="fa-regular fa-bell"></i>
+
+            <span
+                id="notificationBadge"
+                class="notification-badge hidden">
+                0
+            </span>
+
+        </button>
+
+        <!-- Notification Dropdown -->
+        <div
+            class="notification-dropdown"
+            id="notificationDropdown">
+
+            <div class="notification-header">
+
+                <h3>
+                    Notifications
+                </h3>
+
+                <button
+                    id="markAllReadBtn"
+                    type="button">
+
+                    Mark all as read
+
+                </button>
+
+            </div>
+
+            <div id="notificationList">
+
+                <div class="notification-empty">
+                    No notifications
+                </div>
 
             </div>
 
         </div>
 
-        <!-- Tabs -->
+    </div>
+
+    <!-- Theme Toggle -->
+    <i
+        class="fa-solid fa-moon"
+        id="themeToggle"
+        title="Toggle theme">
+    </i>
+
+</div>
+
+
+                <!-- =================================================
+                     PROFILE
+                ================================================== -->
+
+                <div
+                    class="profile"
+                    id="profileMenu">
+
+
+                    <!-- Profile Icon -->
+
+                    <div class="profile-icon">
+
+                        <i class="fa-solid fa-user"></i>
+
+                    </div>
+
+
+                    <!-- User Name -->
+
+                    <span id="userName">
+
+                        Loading...
+
+                    </span>
+
+
+
+                    <!-- =================================================
+                         PROFILE DROPDOWN
+                    ================================================== -->
+
+                    <div class="profile-dropdown">
+
+
+                        <!-- Profile -->
+
+                        <div
+                            class="profile-dropdown-item"
+                            onclick="location.href='profile.html'">
+
+                            <i class="fa-solid fa-user"></i>
+
+                            <span>
+                                Profile
+                            </span>
+
+                        </div>
+
+
+                        <!-- Logout -->
+
+                        <div
+                            class="profile-dropdown-item logout"
+                            id="topLogoutBtn">
+
+                            <i class="fa-solid fa-right-from-bracket"></i>
+
+                            <span>
+                                Logout
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+
+        <!-- =========================================================
+             REQUEST CONTENT
+        ========================================================== -->
+
+
+        <!-- =========================================================
+             REQUEST TABS
+        ========================================================== -->
 
         <div class="tabs">
+
+
+            <!-- Sent -->
 
             <button
                 class="tab-btn active"
@@ -126,9 +360,14 @@
 
                 <i class="fa-solid fa-paper-plane"></i>
 
-                Sent
+                <span>
+                    Sent
+                </span>
 
             </button>
+
+
+            <!-- Received -->
 
             <button
                 class="tab-btn"
@@ -136,9 +375,14 @@
 
                 <i class="fa-solid fa-inbox"></i>
 
-                Received
+                <span>
+                    Received
+                </span>
 
             </button>
+
+
+            <!-- Active Swaps -->
 
             <button
                 class="tab-btn"
@@ -146,9 +390,14 @@
 
                 <i class="fa-solid fa-handshake"></i>
 
-                Active Swaps
+                <span>
+                    Active Swaps
+                </span>
 
             </button>
+
+
+            <!-- Completed -->
 
             <button
                 class="tab-btn"
@@ -156,64 +405,149 @@
 
                 <i class="fa-solid fa-circle-check"></i>
 
-                Completed
+                <span>
+                    Completed
+                </span>
 
             </button>
 
         </div>
 
-        <!-- Requests -->
 
-        <section
-            id="requestContainer">
+
+        <!-- =========================================================
+             DYNAMIC REQUEST CONTAINER
+        ========================================================== -->
+
+        <section id="requestContainer">
+
+            <!--
+                Requests will be generated dynamically
+                by request.js
+            -->
 
         </section>
+
+
 
     </main>
 
 </div>
 
-<!-- Review Modal -->
-<div id="reviewModal" class="review-modal" style="display:none;">
+
+
+<!-- =============================================================
+     REVIEW MODAL
+============================================================= -->
+
+<div
+    id="reviewModal"
+    class="review-modal"
+    style="display: none;">
+
+
+    <!-- Review Box -->
 
     <div class="review-box">
 
-        <h2>Rate Your Skill Partner</h2>
 
-        <p>How was your learning experience?</p>
+        <!-- Title -->
 
-        <!-- Star Rating -->
+        <h2>
+            Rate Your Skill Partner
+        </h2>
+
+
+        <!-- Description -->
+
+        <p>
+            How was your learning experience?
+        </p>
+
+
+
+        <!-- =====================================================
+             STAR RATING
+        ====================================================== -->
+
         <div class="star-rating">
 
-            <i class="fa-solid fa-star" data-value="1"></i>
-            <i class="fa-solid fa-star" data-value="2"></i>
-            <i class="fa-solid fa-star" data-value="3"></i>
-            <i class="fa-solid fa-star" data-value="4"></i>
-            <i class="fa-solid fa-star" data-value="5"></i>
+
+            <i
+                class="fa-solid fa-star"
+                data-value="1">
+            </i>
+
+
+            <i
+                class="fa-solid fa-star"
+                data-value="2">
+            </i>
+
+
+            <i
+                class="fa-solid fa-star"
+                data-value="3">
+            </i>
+
+
+            <i
+                class="fa-solid fa-star"
+                data-value="4">
+            </i>
+
+
+            <i
+                class="fa-solid fa-star"
+                data-value="5">
+            </i>
 
         </div>
 
-        <!-- Review -->
+
+
+        <!-- =====================================================
+             REVIEW COMMENT
+        ====================================================== -->
+
         <textarea
             id="reviewComment"
             placeholder="Write your review..."
             maxlength="500"></textarea>
 
-        <!-- Recommend -->
+
+
+        <!-- =====================================================
+             RECOMMEND USER
+        ====================================================== -->
+
         <label class="recommend">
+
 
             <input
                 type="checkbox"
                 id="recommendUser">
 
-            I would recommend this user
+
+            <span>
+                I would recommend this user
+            </span>
 
         </label>
 
-        <!-- Buttons -->
+
+
+        <!-- =====================================================
+             REVIEW ACTIONS
+        ====================================================== -->
+
         <div class="review-actions">
 
+
+            <!-- Cancel -->
+
             <button
+                type="button"
                 class="cancel-review"
                 onclick="closeReviewModal()">
 
@@ -221,7 +555,11 @@
 
             </button>
 
+
+            <!-- Submit -->
+
             <button
+                type="button"
                 class="submit-review"
                 onclick="submitReview()">
 
@@ -234,7 +572,22 @@
     </div>
 
 </div>
+
+
+
+<!-- =============================================================
+     REQUEST JAVASCRIPT
+============================================================= -->
+
 <script src="request.js"></script>
+
+
+<!-- =============================================================
+     SHARED HEADER CONTROLLER
+============================================================= -->
+
+<script src="header.js"></script>
+
 
 </body>
 
