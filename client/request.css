@@ -24,16 +24,21 @@
 
 .welcome h1 {
     margin: 0 0 8px;
+
     color: var(--text-main);
+
     font-size: clamp(2rem, 3vw, 2.6rem);
     font-weight: 800;
+
     letter-spacing: -0.8px;
     line-height: 1.2;
 }
 
 .welcome p {
     margin: 0;
+
     color: var(--text-muted);
+
     font-size: 15px;
     line-height: 1.6;
 }
@@ -45,11 +50,13 @@
 
 .btn {
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
     gap: 8px;
 
     min-height: 44px;
+
     padding: 11px 20px;
 
     border: 1px solid transparent;
@@ -95,28 +102,27 @@
 
 .tabs {
     display: flex;
+
     align-items: center;
     gap: 12px;
+
     flex-wrap: wrap;
 
     margin-bottom: 28px;
 }
 
-
-/*
-   IMPORTANT:
-   Every tab is visually separated.
-*/
-
 .tab-btn {
     position: relative;
 
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
+
     gap: 9px;
 
     min-height: 44px;
+
     padding: 10px 18px;
 
     border: 1px solid var(--border-color);
@@ -131,7 +137,8 @@
 
     cursor: pointer;
 
-    box-shadow: 0 2px 8px rgba(0, 0, 0, .04);
+    box-shadow:
+        0 2px 8px rgba(0, 0, 0, .04);
 
     transition:
         color .2s ease,
@@ -145,13 +152,11 @@
     font-size: 13px;
 }
 
-
-/* Hover */
-
 .tab-btn:hover {
     color: var(--text-main);
 
-    border-color: rgba(59, 130, 246, .45);
+    border-color:
+        rgba(59, 130, 246, .45);
 
     background: var(--bg-card);
 
@@ -160,9 +165,6 @@
     box-shadow:
         0 8px 18px rgba(59, 130, 246, .10);
 }
-
-
-/* Active */
 
 .tab-btn.active {
     color: #fff;
@@ -204,6 +206,15 @@
    6. REQUEST CARD
    ========================================================================== */
 
+/*
+   IMPORTANT:
+   The card has NO visible border normally.
+   Border becomes visible only when the card is
+   hovered or focused.
+
+   There is NO ::before accent line.
+*/
+
 .request-card {
     position: relative;
 
@@ -217,16 +228,10 @@
 
     background: var(--bg-card);
 
-    /*
-       Border ALWAYS visible.
-    */
-    border: 1px solid var(--border-color);
+    border: 1px solid transparent;
 
     border-radius: 18px;
 
-    /*
-       Clean professional shadow.
-    */
     box-shadow:
         0 5px 18px rgba(0, 0, 0, .07);
 
@@ -240,46 +245,31 @@
 
 
 /*
-   Small accent line.
-   It is NOT connected to the tabs.
+   Hover / keyboard focus
 */
 
-.request-card::before {
-    content: "";
+.request-card:hover,
+.request-card:focus-within {
+    transform: translateY(-3px);
 
-    position: absolute;
-
-    top: 0;
-    left: 18px;
-    right: 18px;
-
-    height: 2px;
-
-    border-radius: 0 0 4px 4px;
-
-    background: linear-gradient(
-        90deg,
-        var(--secondary),
-        var(--primary)
-    );
-
-    opacity: .45;
-}
-
-
-/*
-   Card hover:
-   border becomes more visible.
-*/
-
-.request-card:hover {
-    transform: translateY(-4px);
-
-    border-color: rgba(59, 130, 246, .50);
+    border-color:
+        rgba(59, 130, 246, .50);
 
     box-shadow:
         0 14px 32px rgba(0, 0, 0, .12),
         0 5px 18px rgba(59, 130, 246, .08);
+}
+
+
+/*
+   Touch devices:
+   Keep the card clean.
+   The border appears while the card is actively touched.
+*/
+
+.request-card:active {
+    border-color:
+        rgba(59, 130, 246, .50);
 }
 
 
@@ -291,7 +281,9 @@
     margin: 0;
 
     border: none;
-    border-top: 1px solid var(--border-color);
+
+    border-top:
+        1px solid var(--border-color);
 }
 
 
@@ -318,6 +310,7 @@
     gap: 13px;
 
     min-width: 0;
+
     flex: 1;
 }
 
@@ -333,6 +326,7 @@
     flex-shrink: 0;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
@@ -381,6 +375,8 @@
     font-weight: 750;
 
     line-height: 1.3;
+
+    overflow-wrap: anywhere;
 }
 
 
@@ -398,12 +394,16 @@
     color: var(--text-muted);
 
     font-size: 12px;
+
+    min-width: 0;
 }
 
 .location i {
     color: var(--primary);
 
     font-size: 11px;
+
+    flex-shrink: 0;
 }
 
 
@@ -434,84 +434,104 @@
 }
 
 
-/*
+/* --------------------------------------------------------------------------
    PENDING
-   Standard amber.
-*/
+   -------------------------------------------------------------------------- */
 
 .pending {
     background: rgba(245, 158, 11, .10);
 
     color: #d97706;
 
-    border: 1px solid rgba(245, 158, 11, .28);
+    border:
+        1px solid rgba(245, 158, 11, .28);
 }
 
 
-/*
+/* --------------------------------------------------------------------------
    ACCEPTED / ACTIVE
-   Standard green.
-*/
+   -------------------------------------------------------------------------- */
 
 .accepted {
     background: rgba(34, 197, 94, .10);
 
     color: #16a34a;
 
-    border: 1px solid rgba(34, 197, 94, .25);
+    border:
+        1px solid rgba(34, 197, 94, .25);
 }
 
 
-/*
+/* --------------------------------------------------------------------------
    COMPLETED
-   Standard blue.
-*/
+   -------------------------------------------------------------------------- */
 
 .completed {
     background: rgba(59, 130, 246, .10);
 
     color: #2563eb;
 
-    border: 1px solid rgba(59, 130, 246, .25);
+    border:
+        1px solid rgba(59, 130, 246, .25);
 }
 
 
-/*
+/* --------------------------------------------------------------------------
    REJECTED
-   Standard red.
-*/
+   -------------------------------------------------------------------------- */
 
 .rejected {
     background: rgba(239, 68, 68, .10);
 
     color: #dc2626;
 
-    border: 1px solid rgba(239, 68, 68, .25);
+    border:
+        1px solid rgba(239, 68, 68, .25);
 }
 
 
-/*
-   Dark theme readability.
-*/
+/* --------------------------------------------------------------------------
+   DARK THEME STATUS COLORS
+   -------------------------------------------------------------------------- */
 
 [data-theme="dark"] .pending,
 .dark .pending {
     color: #fbbf24;
+
+    background: rgba(245, 158, 11, .13);
+
+    border-color:
+        rgba(245, 158, 11, .32);
 }
 
 [data-theme="dark"] .accepted,
 .dark .accepted {
     color: #4ade80;
+
+    background: rgba(34, 197, 94, .13);
+
+    border-color:
+        rgba(34, 197, 94, .30);
 }
 
 [data-theme="dark"] .completed,
 .dark .completed {
     color: #60a5fa;
+
+    background: rgba(59, 130, 246, .13);
+
+    border-color:
+        rgba(59, 130, 246, .30);
 }
 
 [data-theme="dark"] .rejected,
 .dark .rejected {
     color: #f87171;
+
+    background: rgba(239, 68, 68, .13);
+
+    border-color:
+        rgba(239, 68, 68, .30);
 }
 
 
@@ -592,7 +612,6 @@
     color: var(--text-muted);
 
     font-size: 9px;
-
     font-weight: 800;
 
     text-transform: uppercase;
@@ -616,23 +635,28 @@
     justify-content: center;
 
     width: fit-content;
+
     max-width: 100%;
 
     padding: 7px 13px;
 
     border-radius: 999px;
 
-    background: rgba(59, 130, 246, .09);
+    background:
+        rgba(59, 130, 246, .09);
 
-    border: 1px solid rgba(59, 130, 246, .22);
+    border:
+        1px solid rgba(59, 130, 246, .22);
 
     color: #3b82f6;
 
     font-size: 12px;
-
     font-weight: 650;
 
     white-space: nowrap;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     transition:
         background .2s ease,
@@ -641,9 +665,11 @@
 }
 
 .skill:hover {
-    background: rgba(59, 130, 246, .14);
+    background:
+        rgba(59, 130, 246, .14);
 
-    border-color: rgba(59, 130, 246, .38);
+    border-color:
+        rgba(59, 130, 246, .38);
 
     transform: translateY(-1px);
 }
@@ -652,17 +678,21 @@
 /* Learning skill */
 
 .skill.learn {
-    background: rgba(236, 72, 153, .08);
+    background:
+        rgba(236, 72, 153, .08);
 
-    border-color: rgba(236, 72, 153, .22);
+    border-color:
+        rgba(236, 72, 153, .22);
 
     color: #db2777;
 }
 
 .skill.learn:hover {
-    background: rgba(236, 72, 153, .14);
+    background:
+        rgba(236, 72, 153, .14);
 
-    border-color: rgba(236, 72, 153, .38);
+    border-color:
+        rgba(236, 72, 153, .38);
 }
 
 
@@ -670,11 +700,23 @@
 
 [data-theme="dark"] .skill,
 .dark .skill {
+    background:
+        rgba(59, 130, 246, .12);
+
+    border-color:
+        rgba(96, 165, 250, .25);
+
     color: #60a5fa;
 }
 
 [data-theme="dark"] .skill.learn,
 .dark .skill.learn {
+    background:
+        rgba(236, 72, 153, .11);
+
+    border-color:
+        rgba(244, 114, 182, .25);
+
     color: #f472b6;
 }
 
@@ -700,7 +742,8 @@
     align-items: center;
     justify-content: center;
 
-    transform: translate(-50%, -50%);
+    transform:
+        translate(-50%, -50%);
 
     box-sizing: border-box;
 
@@ -708,7 +751,8 @@
 
     background: var(--bg-card);
 
-    border: 1px solid rgba(124, 58, 237, .28);
+    border:
+        1px solid rgba(124, 58, 237, .28);
 
     color: #8b5cf6;
 
@@ -732,18 +776,26 @@
 .request-actions {
     display: grid;
 
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
 
     gap: 10px;
 
     width: 100%;
 
     margin-top: auto;
-    padding-top: 3px;
+
+    padding-top: 18px;
 }
 
 
+/* ==========================================================================
+   19. ALL REQUEST ACTION BUTTONS
+   ========================================================================== */
+
 .request-actions button {
+    min-width: 0;
+
     min-height: 42px;
 
     display: inline-flex;
@@ -755,7 +807,7 @@
 
     padding: 9px 13px;
 
-    border: none;
+    border: 1px solid transparent;
 
     border-radius: 10px;
 
@@ -766,12 +818,15 @@
     font-size: 12px;
     font-weight: 700;
 
+    line-height: 1.25;
+
     cursor: pointer;
 
     transition:
         transform .2s ease,
         box-shadow .2s ease,
-        filter .2s ease;
+        filter .2s ease,
+        opacity .2s ease;
 }
 
 .request-actions button:hover {
@@ -786,7 +841,7 @@
 
 
 /* ==========================================================================
-   19. ACCEPT
+   20. ACCEPT
    ========================================================================== */
 
 .accept-btn {
@@ -807,7 +862,7 @@
 
 
 /* ==========================================================================
-   20. REJECT
+   21. REJECT
    ========================================================================== */
 
 .reject-btn {
@@ -828,7 +883,7 @@
 
 
 /* ==========================================================================
-   21. CHAT
+   22. CHAT
    ========================================================================== */
 
 .chat-btn {
@@ -849,7 +904,7 @@
 
 
 /* ==========================================================================
-   22. COMPLETE
+   23. COMPLETE
    ========================================================================== */
 
 .complete-btn {
@@ -870,7 +925,36 @@
 
 
 /* ==========================================================================
-   23. PENDING BUTTON
+   24. COMPLETED BUTTON
+   ========================================================================== */
+
+/*
+   This is the "Swap Completed" button.
+
+   It is always centered when it is the only button.
+*/
+
+.completed-btn {
+    background: linear-gradient(
+        135deg,
+        #16a34a,
+        #22c55e
+    );
+
+    color: #fff;
+
+    box-shadow:
+        0 5px 14px rgba(34, 197, 94, .15);
+}
+
+.completed-btn:hover {
+    box-shadow:
+        0 9px 20px rgba(34, 197, 94, .25);
+}
+
+
+/* ==========================================================================
+   25. PENDING BUTTON
    ========================================================================== */
 
 .pending-btn {
@@ -889,29 +973,26 @@
 
 
 /* ==========================================================================
-   24. DISABLED
+   26. DISABLED
    ========================================================================== */
 
 .request-actions button:disabled {
-    opacity: .68;
+    opacity: .72;
 
     cursor: not-allowed;
 
     transform: none !important;
 
-    box-shadow: none !important;
-
-    filter: none;
+    filter: none !important;
 }
 
 
 /* ==========================================================================
-   25. SINGLE BUTTON - ALWAYS CENTERED
+   27. SINGLE BUTTON - CENTERED
    ========================================================================== */
 
-
 /*
-   Pending request
+   Pending / Waiting
 */
 
 .request-actions:has(.pending-btn) {
@@ -925,7 +1006,7 @@
 
 
 /*
-   Completed swap
+   Complete Swap
 */
 
 .request-actions:has(.complete-btn) {
@@ -939,7 +1020,21 @@
 
 
 /*
-   Only chat button
+   Swap Completed
+*/
+
+.request-actions:has(.completed-btn) {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+}
+
+
+/*
+   Chat only
 */
 
 .request-actions:has(.chat-btn):not(:has(.accept-btn)):not(:has(.reject-btn)) {
@@ -953,13 +1048,14 @@
 
 
 /*
-   Standard width for centered single buttons.
+   Centered single-button width
 */
 
 .request-actions:has(.pending-btn) .pending-btn,
 .request-actions:has(.complete-btn) .complete-btn,
+.request-actions:has(.completed-btn) .completed-btn,
 .request-actions:has(.chat-btn):not(:has(.accept-btn)):not(:has(.reject-btn)) .chat-btn {
-    width: min(220px, 65%);
+    width: min(220px, 75%);
 
     min-width: 180px;
 
@@ -969,13 +1065,14 @@
 
 
 /* ==========================================================================
-   26. ACCEPT + REJECT
+   28. ACCEPT + REJECT
    ========================================================================== */
 
 .request-actions:has(.accept-btn):has(.reject-btn) {
     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
 
     gap: 10px;
 
@@ -984,7 +1081,7 @@
 
 
 /* ==========================================================================
-   27. EMPTY STATE
+   29. EMPTY STATE
    ========================================================================== */
 
 .empty {
@@ -1005,7 +1102,8 @@
 
     background: var(--bg-card);
 
-    border: 1px dashed var(--border-color);
+    border:
+        1px dashed var(--border-color);
 
     border-radius: 18px;
 
@@ -1027,7 +1125,6 @@
     color: var(--text-main);
 
     font-size: 21px;
-
     font-weight: 750;
 }
 
@@ -1045,7 +1142,7 @@
 
 
 /* ==========================================================================
-   28. LOADING
+   30. LOADING
    ========================================================================== */
 
 .loading {
@@ -1070,7 +1167,8 @@
 
     font-size: 20px;
 
-    animation: requestSpin 1s linear infinite;
+    animation:
+        requestSpin 1s linear infinite;
 }
 
 @keyframes requestSpin {
@@ -1087,18 +1185,19 @@
 
 
 /* ==========================================================================
-   29. DIVIDER
+   31. DIVIDER
    ========================================================================== */
 
 hr {
     border: none;
 
-    border-top: 1px solid var(--border-color);
+    border-top:
+        1px solid var(--border-color);
 }
 
 
 /* ==========================================================================
-   30. REVIEW MODAL
+   32. REVIEW MODAL
    ========================================================================== */
 
 #reviewModal,
@@ -1114,10 +1213,14 @@ hr {
 
     padding: 20px;
 
-    background: rgba(2, 6, 23, .70);
+    background:
+        rgba(2, 6, 23, .70);
 
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter:
+        blur(8px);
+
+    -webkit-backdrop-filter:
+        blur(8px);
 
     z-index: 9999;
 }
@@ -1129,7 +1232,7 @@ hr {
 
 
 /* ==========================================================================
-   31. REVIEW BOX
+   33. REVIEW BOX
    ========================================================================== */
 
 .review-box {
@@ -1143,7 +1246,8 @@ hr {
 
     background: var(--bg-card);
 
-    border: 1px solid var(--border-color);
+    border:
+        1px solid var(--border-color);
 
     border-radius: 18px;
 
@@ -1154,7 +1258,8 @@ hr {
     box-shadow:
         0 25px 65px rgba(0, 0, 0, .30);
 
-    animation: reviewPopup .22s ease;
+    animation:
+        reviewPopup .22s ease;
 }
 
 @keyframes reviewPopup {
@@ -1199,7 +1304,7 @@ hr {
 
 
 /* ==========================================================================
-   32. STAR RATING
+   34. STAR RATING
    ========================================================================== */
 
 .star-rating {
@@ -1237,7 +1342,7 @@ hr {
 
 
 /* ==========================================================================
-   33. REVIEW COMMENT
+   35. REVIEW COMMENT
    ========================================================================== */
 
 #reviewComment {
@@ -1253,7 +1358,8 @@ hr {
 
     box-sizing: border-box;
 
-    border: 1px solid var(--border-color);
+    border:
+        1px solid var(--border-color);
 
     border-radius: 10px;
 
@@ -1279,15 +1385,17 @@ hr {
 }
 
 #reviewComment:focus {
-    border-color: var(--primary);
+    border-color:
+        var(--primary);
 
     box-shadow:
-        0 0 0 3px rgba(59, 130, 246, .10);
+        0 0 0 3px
+        rgba(59, 130, 246, .10);
 }
 
 
 /* ==========================================================================
-   34. RECOMMEND
+   36. RECOMMEND
    ========================================================================== */
 
 .recommend {
@@ -1308,12 +1416,13 @@ hr {
     width: 16px;
     height: 16px;
 
-    accent-color: var(--primary);
+    accent-color:
+        var(--primary);
 }
 
 
 /* ==========================================================================
-   35. REVIEW ACTIONS
+   37. REVIEW ACTIONS
    ========================================================================== */
 
 .review-actions {
@@ -1352,7 +1461,8 @@ hr {
 .cancel-review {
     background: var(--bg-input);
 
-    border: 1px solid var(--border-color);
+    border:
+        1px solid var(--border-color);
 
     color: var(--text-main);
 }
@@ -1360,11 +1470,13 @@ hr {
 .cancel-review:hover {
     transform: translateY(-1px);
 
-    border-color: var(--primary);
+    border-color:
+        var(--primary);
 }
 
 .submit-review {
-    border: 1px solid transparent;
+    border:
+        1px solid transparent;
 
     background: linear-gradient(
         135deg,
@@ -1389,7 +1501,7 @@ hr {
 
 
 /* ==========================================================================
-   36. NOTIFICATION
+   38. NOTIFICATION
    ========================================================================== */
 
 .notification-wrapper {
@@ -1407,7 +1519,8 @@ hr {
     align-items: center;
     justify-content: center;
 
-    border: 1px solid transparent;
+    border:
+        1px solid transparent;
 
     border-radius: 10px;
 
@@ -1428,14 +1541,16 @@ hr {
 .notification-btn:hover {
     color: var(--primary);
 
-    background: rgba(59, 130, 246, .07);
+    background:
+        rgba(59, 130, 246, .07);
 
-    border-color: var(--border-color);
+    border-color:
+        var(--border-color);
 }
 
 
 /* ==========================================================================
-   37. NOTIFICATION BADGE
+   39. NOTIFICATION BADGE
    ========================================================================== */
 
 .notification-badge {
@@ -1458,7 +1573,8 @@ hr {
 
     background: #ef4444;
 
-    border: 2px solid var(--bg-card);
+    border:
+        2px solid var(--bg-card);
 
     color: #fff;
 
@@ -1473,7 +1589,7 @@ hr {
 
 
 /* ==========================================================================
-   38. NOTIFICATION DROPDOWN
+   40. NOTIFICATION DROPDOWN
    ========================================================================== */
 
 .notification-dropdown {
@@ -1484,11 +1600,13 @@ hr {
 
     width: 350px;
 
-    max-width: calc(100vw - 30px);
+    max-width:
+        calc(100vw - 30px);
 
     background: var(--bg-card);
 
-    border: 1px solid var(--border-color);
+    border:
+        1px solid var(--border-color);
 
     border-radius: 14px;
 
@@ -1505,7 +1623,8 @@ hr {
 .notification-dropdown.show {
     display: block;
 
-    animation: notificationDrop .18s ease;
+    animation:
+        notificationDrop .18s ease;
 }
 
 @keyframes notificationDrop {
@@ -1513,20 +1632,22 @@ hr {
     from {
         opacity: 0;
 
-        transform: translateY(-5px);
+        transform:
+            translateY(-5px);
     }
 
     to {
         opacity: 1;
 
-        transform: translateY(0);
+        transform:
+            translateY(0);
     }
 
 }
 
 
 /* ==========================================================================
-   39. NOTIFICATION HEADER
+   41. NOTIFICATION HEADER
    ========================================================================== */
 
 .notification-header {
@@ -1538,7 +1659,8 @@ hr {
 
     padding: 15px;
 
-    border-bottom: 1px solid var(--border-color);
+    border-bottom:
+        1px solid var(--border-color);
 }
 
 .notification-header h3 {
@@ -1567,7 +1689,7 @@ hr {
 
 
 /* ==========================================================================
-   40. NOTIFICATION ITEM
+   42. NOTIFICATION ITEM
    ========================================================================== */
 
 .notification-item {
@@ -1577,11 +1699,13 @@ hr {
 
     padding: 13px 15px;
 
-    border-bottom: 1px solid var(--border-color);
+    border-bottom:
+        1px solid var(--border-color);
 
     cursor: pointer;
 
-    transition: background .18s ease;
+    transition:
+        background .18s ease;
 }
 
 .notification-item:hover {
@@ -1589,7 +1713,8 @@ hr {
 }
 
 .notification-item.unread {
-    background: rgba(59, 130, 246, .05);
+    background:
+        rgba(59, 130, 246, .05);
 }
 
 .notification-icon {
@@ -1654,7 +1779,7 @@ hr {
 
 
 /* ==========================================================================
-   41. UTILITY
+   43. UTILITY
    ========================================================================== */
 
 .text-success {
@@ -1687,19 +1812,20 @@ hr {
 
 
 /* ==========================================================================
-   42. ACCESSIBILITY
+   44. ACCESSIBILITY
    ========================================================================== */
 
 button:focus-visible,
 a:focus-visible {
-    outline: 3px solid rgba(59, 130, 246, .28);
+    outline:
+        3px solid rgba(59, 130, 246, .28);
 
     outline-offset: 3px;
 }
 
 
 /* ==========================================================================
-   43. RESPONSIVE - 1200px
+   45. RESPONSIVE - 1200px
    ========================================================================== */
 
 @media (max-width: 1200px) {
@@ -1713,7 +1839,7 @@ a:focus-visible {
 
 
 /* ==========================================================================
-   44. RESPONSIVE - 900px
+   46. RESPONSIVE - 900px
    ========================================================================== */
 
 @media (max-width: 900px) {
@@ -1740,7 +1866,7 @@ a:focus-visible {
 
 
 /* ==========================================================================
-   45. RESPONSIVE - 768px
+   47. RESPONSIVE - 768px
    ========================================================================== */
 
 @media (max-width: 768px) {
@@ -1767,7 +1893,7 @@ a:focus-visible {
 
 
 /* ==========================================================================
-   46. MOBILE - 600px
+   48. MOBILE - 600px
    ========================================================================== */
 
 @media (max-width: 600px) {
@@ -1781,9 +1907,9 @@ a:focus-visible {
     }
 
 
-    /* --------------------------------------------------------------
+    /* ----------------------------------------------------------------------
        MOBILE SKILL EXCHANGE
-       -------------------------------------------------------------- */
+       ---------------------------------------------------------------------- */
 
     .skill-row {
         display: flex;
@@ -1799,7 +1925,6 @@ a:focus-visible {
         min-height: 0;
     }
 
-
     .skill-row .skill-item:first-child,
     .skill-row .skill-item:last-child {
         width: 100%;
@@ -1809,7 +1934,6 @@ a:focus-visible {
         align-items: center;
     }
 
-
     .skill-row .swap-icon {
         position: static;
 
@@ -1818,44 +1942,60 @@ a:focus-visible {
 
         margin: 2px auto;
 
-        transform: rotate(90deg);
+        transform:
+            rotate(90deg);
     }
 
 
-    /*
-       Single buttons stay centered.
-    */
+    /* ----------------------------------------------------------------------
+       SINGLE BUTTONS
+       ---------------------------------------------------------------------- */
 
     .request-actions:has(.pending-btn),
     .request-actions:has(.complete-btn),
+    .request-actions:has(.completed-btn),
     .request-actions:has(.chat-btn):not(:has(.accept-btn)):not(:has(.reject-btn)) {
         display: flex;
 
-        justify-content: center;
-    }
+        align-items: center;
 
+        justify-content: center;
+
+        width: 100%;
+    }
 
     .request-actions:has(.pending-btn) .pending-btn,
     .request-actions:has(.complete-btn) .complete-btn,
+    .request-actions:has(.completed-btn) .completed-btn,
     .request-actions:has(.chat-btn):not(:has(.accept-btn)):not(:has(.reject-btn)) .chat-btn {
         width: 100%;
 
         min-width: 0;
 
         max-width: 280px;
+
+        margin-left: auto;
+        margin-right: auto;
     }
 
 
-    /*
-       Accept / Reject remain side-by-side.
-    */
+    /* ----------------------------------------------------------------------
+       ACCEPT / REJECT
+       ---------------------------------------------------------------------- */
 
     .request-actions:has(.accept-btn):has(.reject-btn) {
-        grid-template-columns: 1fr 1fr;
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 10px;
     }
 
 
-    /* Review */
+    /* ----------------------------------------------------------------------
+       REVIEW
+       ---------------------------------------------------------------------- */
 
     .review-box {
         padding: 25px 19px;
@@ -1873,7 +2013,9 @@ a:focus-visible {
     }
 
 
-    /* Notification */
+    /* ----------------------------------------------------------------------
+       NOTIFICATION
+       ---------------------------------------------------------------------- */
 
     .notification-dropdown {
         position: fixed;
@@ -1892,7 +2034,7 @@ a:focus-visible {
 
 
 /* ==========================================================================
-   47. MOBILE - 420px
+   49. MOBILE - 420px
    ========================================================================== */
 
 @media (max-width: 420px) {
@@ -1950,6 +2092,7 @@ a:focus-visible {
 
     .request-actions:has(.pending-btn) .pending-btn,
     .request-actions:has(.complete-btn) .complete-btn,
+    .request-actions:has(.completed-btn) .completed-btn,
     .request-actions:has(.chat-btn):not(:has(.accept-btn)):not(:has(.reject-btn)) .chat-btn {
         width: 100%;
 
@@ -1958,11 +2101,24 @@ a:focus-visible {
         max-width: none;
     }
 
+
+    /*
+       Prevent long button text from getting cut off
+       on very small screens.
+    */
+
+    .request-actions button {
+        font-size: 11px;
+
+        padding-left: 9px;
+        padding-right: 9px;
+    }
+
 }
 
 
 /* ==========================================================================
-   48. REDUCED MOTION
+   50. REDUCED MOTION
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -1981,7 +2137,7 @@ a:focus-visible {
 
 
 /* ==========================================================================
-   49. PRINT
+   51. PRINT
    ========================================================================== */
 
 @media print {
@@ -2008,13 +2164,15 @@ a:focus-visible {
     }
 
     #requestContainer {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns:
+            1fr 1fr;
     }
 
     .request-card {
         background: #fff;
 
-        border: 1px solid #ccc;
+        border:
+            1px solid #ccc;
 
         box-shadow: none;
 

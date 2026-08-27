@@ -1,5 +1,3 @@
-
-
 "use strict";
 
 
@@ -973,9 +971,61 @@ async function loadSkillOptions(
     }
 
 
+    // --------------------------------------------------
+    // Clear both dropdowns
+    // --------------------------------------------------
+
     teachSelect.innerHTML = "";
 
     learnSelect.innerHTML = "";
+
+
+    // --------------------------------------------------
+    // Add placeholder to TEACH dropdown
+    // --------------------------------------------------
+
+    const teachPlaceholder =
+        document.createElement(
+            "option"
+        );
+
+    teachPlaceholder.value = "";
+
+    teachPlaceholder.textContent =
+        "Select a skill you can teach";
+
+    teachPlaceholder.disabled = true;
+
+    teachPlaceholder.selected = true;
+
+
+    teachSelect.appendChild(
+        teachPlaceholder
+    );
+
+
+    // --------------------------------------------------
+    // Add placeholder to LEARN dropdown
+    // --------------------------------------------------
+
+    const learnPlaceholder =
+        document.createElement(
+            "option"
+        );
+
+    learnPlaceholder.value = "";
+
+    learnPlaceholder.textContent =
+        "Select a skill you want to learn";
+
+    learnPlaceholder.disabled = true;
+
+    learnPlaceholder.selected = true;
+
+
+    learnSelect.appendChild(
+        learnPlaceholder
+    );
 
 
     try {
@@ -1049,15 +1099,8 @@ async function loadSkillOptions(
 
         else {
 
-            teachSelect.innerHTML = `
-
-                <option value="">
-
-                    No Teaching Skills
-
-                </option>
-
-            `;
+            teachPlaceholder.textContent =
+                "You have no teaching skills";
 
         }
 
@@ -1111,17 +1154,21 @@ async function loadSkillOptions(
 
         else {
 
-            learnSelect.innerHTML = `
-
-                <option value="">
-
-                    User has no teaching skills
-
-                </option>
-
-            `;
+            learnPlaceholder.textContent =
+                "User has no teaching skills";
 
         }
+
+
+        // --------------------------------------------------
+        // IMPORTANT:
+        // Make sure neither dropdown automatically
+        // selects the first actual skill.
+        // --------------------------------------------------
+
+        teachSelect.value = "";
+
+        learnSelect.value = "";
 
     }
 

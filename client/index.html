@@ -1,196 +1,834 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkillHub - Skill Exchange Platform</title>
+
+    <title>SkillHub - Exchange Skills. Learn Together.</title>
 
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="theme.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    >
+
     <script src="theme.js" defer></script>
     <script src="script.js" defer></script>
 </head>
+
 <body>
 
-    <div id="landingPage">
+<div id="landingPage">
 
-        <header class="navbar">
-            <a href="#" class="logo">
+    <!-- ========================= NAVBAR ========================= -->
+
+    <header class="navbar">
+
+        <!-- LEFT: LOGO -->
+        <a href="#hero" class="logo">
+            <span class="logo-icon">
                 <i class="fa-solid fa-graduation-cap"></i>
-                SkillHub
+            </span>
+
+            <span class="logo-text">SkillHub</span>
+        </a>
+
+
+        <!-- CENTER: NAVIGATION -->
+        <nav id="mainNav">
+
+            <ul class="nav-links" id="navLinks">
+
+                <li>
+                    <a href="#features">
+                        Features
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#how-it-works">
+                        How It Works
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#hero" class="signup-link">
+                        Join
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+
+        <!-- RIGHT: ACTIONS -->
+        <div class="nav-right">
+
+            <button
+                id="themeToggle"
+                class="theme-toggle-btn"
+                aria-label="Toggle Theme"
+                type="button"
+            >
+                <i class="fa-solid fa-moon"></i>
+            </button>
+
+
+            <a href="#" class="login-btn">
+                Login
             </a>
 
-            <i class="fa-solid fa-bars menu-btn" id="menuBtn"></i>
 
-            <nav>
-                <ul class="nav-links" id="navLinks">
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#how-it-works">How It Works</a></li>
-                    <li><a href="#" class="signup-link">Join</a></li>
-                </ul>
-            </nav>
+            <a href="#" class="start-btn signup-link">
+                Get Started
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
 
-            <div class="nav-right">
-                <button id="themeToggle" class="theme-toggle-btn" aria-label="Toggle Theme">
-                    <i class="fa-solid fa-moon"></i>
-                </button>
-                <a href="#" class="login-btn">Login</a>
-                <a href="#" class="start-btn signup-link">
-                    Get Started
-                    <i class="fa-solid fa-arrow-right"></i>
-                </a>
-            </div>
-        </header>
+        </div>
+
+
+        <!-- MOBILE MENU -->
+        <button
+            class="menu-btn"
+            id="menuBtn"
+            aria-label="Open menu"
+            type="button"
+        >
+            <i class="fa-solid fa-bars"></i>
+        </button>
+
+    </header>
+
+
+    <!-- ========================= MAIN ========================= -->
+
+    <main>
+
+        <!-- ========================= HERO ========================= -->
 
         <section class="hero" id="hero">
-            <div class="hero-bg">
-                <span class="blob blob1"></span>
-                <span class="blob blob2"></span>
-                <span class="blob blob3"></span>
+
+            <div class="hero-background">
+
+                <div class="ambient-glow glow-one"></div>
+                <div class="ambient-glow glow-two"></div>
+                <div class="ambient-glow glow-three"></div>
+
+                <div class="hero-grid"></div>
+
+                <div class="light-streak streak-one"></div>
+                <div class="light-streak streak-two"></div>
+
+                <span class="particle particle-one"></span>
+                <span class="particle particle-two"></span>
+                <span class="particle particle-three"></span>
+                <span class="particle particle-four"></span>
+                <span class="particle particle-five"></span>
+                <span class="particle particle-six"></span>
+                <span class="particle particle-seven"></span>
+
             </div>
 
-            <div class="hero-content">
-                <span class="hero-badge">
-                    <i class="fa-solid fa-bolt"></i>
-                    #1 Skill Exchange Platform
-                </span>
 
-                <h1>Exchange Skills<br><span>Learn Together</span></h1>
-                <p>Join thousands of students and professionals who teach, learn and grow together through meaningful skill exchanges.</p>
+            <div class="hero-container">
 
-                <div class="hero-buttons">
-                    <a href="#" class="primary-btn signup-link">Get Started <i class="fa-solid fa-arrow-right"></i></a>
-                    <a href="#features" class="secondary-btn">Explore Features</a>
-                </div>
-            </div>
+                <!-- HERO TEXT -->
+                <div class="hero-content">
 
-            <div class="hero-cards">
-                <div class="floating-card">
-                    <i class="fa-solid fa-users"></i>
-                    <h3>10K+</h3>
-                    <p>Students</p>
-                </div>
-                <div class="floating-card">
-                    <i class="fa-solid fa-book"></i>
-                    <h3>500+</h3>
-                    <p>Skills</p>
-                </div>
-                <div class="floating-card">
-                    <i class="fa-solid fa-handshake"></i>
-                    <h3>25K+</h3>
-                    <p>Matches</p>
-                </div>
-            </div>
-        </section>
+                    <div class="hero-badge">
+                        <span class="badge-dot"></span>
 
-        <section id="features" class="features">
-            <h2>Why Choose SkillHub?</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <i class="fa-solid fa-coins"></i>
-                    <h3>Learn for Free</h3>
-                    <p>Exchange knowledge with others and learn valuable skills without paying any fees or subscriptions.</p>
-                </div>
-                <div class="feature-card featured">
-                    <i class="fa-solid fa-brain"></i>
-                    <h3>Teach What You Know</h3>
-                    <p>Share your knowledge and expertise while helping others improve their skills.</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fa-solid fa-users"></i>
-                    <h3>Find Learning Partners</h3>
-                    <p>Discover people with matching interests and connect with the right partners to achieve your learning goals.</p>
-                </div>
-                <div class="feature-card featured">
-                    <i class="fa-solid fa-rocket"></i>
-                    <h3>Build Confidence & Experience</h3>
-                    <p>Practice your skills, gain real-world experience and grow your confidence through collaborative learning.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="how-it-works" class="roadmap-section">
-            <h2>How It Works</h2>
-            <p class="roadmap-subtitle">Exchange Skills in Three Easy Steps</p>
-
-            <div class="roadmap-wrapper horizontal-steps">
-                <div class="road-card step-layout-card">
-                    <div class="step-icon-circle accent-purple-bg">
-                        <i class="fa-solid fa-file-invoice"></i>
+                        <span>
+                            Learn. Teach. Grow Together.
+                        </span>
                     </div>
-                    <span class="step-badge-tag">STEP 01</span>
-                    <h3>Create Your Profile</h3>
-                    <p>Sign up and create your profile by adding the skills you can teach and the skills you want to learn.</p>
-                </div>
-                
-                <div class="road-card step-layout-card highlight-border">
-                    <div class="step-icon-circle accent-pink-bg">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+
+
+                    <h1>
+                        Exchange skills.
+                        <span>Grow together.</span>
+                    </h1>
+
+
+                    <p>
+                        SkillHub connects people who want to teach what
+                        they know and learn the skills they need through
+                        meaningful skill exchange.
+                    </p>
+
+
+                    <div class="hero-buttons">
+
+                        <a href="#" class="primary-btn signup-link">
+                            Start Learning
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+
+
+                        <a href="#how-it-works" class="secondary-btn">
+                            <i class="fa-solid fa-play"></i>
+                            How It Works
+                        </a>
+
                     </div>
-                    <span class="step-badge-tag">STEP 02</span>
-                    <h3>Find a Partner</h3>
-                    <p>Browse user profiles and discover people whose skills match your learning interests and goals.</p>
+
                 </div>
-                
-                <div class="road-card step-layout-card">
-                    <div class="step-icon-circle accent-teal-bg">
+
+
+                <!-- HERO ROUND VISUAL -->
+                <div class="hero-visual">
+
+                    <div class="visual-glow"></div>
+
+                    <!-- ONLY ROUND RINGS -->
+                    <div class="network-ring ring-one"></div>
+                    <div class="network-ring ring-two"></div>
+                    <div class="network-ring ring-three"></div>
+
+
+                    <!-- SKILL POINTS -->
+
+                    <div class="skill-point point-python">
+
+                        <span class="point-icon">
+                            <i class="fa-brands fa-python"></i>
+                        </span>
+
+                        <span class="point-label">
+                            Python
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-point point-web">
+
+                        <span class="point-icon">
+                            <i class="fa-solid fa-code"></i>
+                        </span>
+
+                        <span class="point-label">
+                            Web Dev
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-point point-design">
+
+                        <span class="point-icon">
+                            <i class="fa-solid fa-pen-ruler"></i>
+                        </span>
+
+                        <span class="point-label">
+                            Design
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-point point-data">
+
+                        <span class="point-icon">
+                            <i class="fa-solid fa-chart-simple"></i>
+                        </span>
+
+                        <span class="point-label">
+                            Data
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-point point-ai">
+
+                        <span class="point-icon">
+                            <i class="fa-solid fa-brain"></i>
+                        </span>
+
+                        <span class="point-label">
+                            AI
+                        </span>
+
+                    </div>
+
+
+                    <div class="skill-point point-business">
+
+                        <span class="point-icon">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </span>
+
+                        <span class="point-label">
+                            Business
+                        </span>
+
+                    </div>
+
+
+                    <!-- SMALL GLOWING DOTS -->
+
+                    <div class="connection-dot dot-a"></div>
+                    <div class="connection-dot dot-b"></div>
+                    <div class="connection-dot dot-c"></div>
+                    <div class="connection-dot dot-d"></div>
+
+
+                    <!-- CENTER -->
+
+                    <div class="skill-center">
+
+                        <div class="center-orbit"></div>
+
+                        <div class="center-logo">
+                            <i class="fa-solid fa-handshake"></i>
+                        </div>
+
+                        <strong>
+                            SkillHub
+                        </strong>
+
+                        <span>
+                            Connect
+                            <i class="fa-solid fa-arrow-right"></i>
+                            Learn
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================= STATS ========================= -->
+
+            <div class="hero-stats">
+
+                <div class="stat-item">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+
+                    <div class="stat-content">
+
+                        <strong id="studentsStat">
+                            0
+                        </strong>
+
+                        <span>
+                            Students
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-divider"></div>
+
+
+                <div class="stat-item">
+
+                    <div class="stat-icon">
+                        <i class="fa-solid fa-lightbulb"></i>
+                    </div>
+
+                    <div class="stat-content">
+
+                        <strong id="skillsStat">
+                            0
+                        </strong>
+
+                        <span>
+                            Skills
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="stat-divider"></div>
+
+
+                <div class="stat-item">
+
+                    <div class="stat-icon">
                         <i class="fa-solid fa-handshake"></i>
                     </div>
-                    <span class="step-badge-tag">STEP 03</span>
-                    <h3>Request & Chat</h3>
-                    <p>Send a skill exchange request and use the built-in chat to discuss schedules, goals, and expectations.</p>
+
+                    <div class="stat-content">
+
+                        <strong id="matchesStat">
+                            0
+                        </strong>
+
+                        <span>
+                            Exchanges
+                        </span>
+
+                    </div>
+
                 </div>
+
             </div>
+
         </section>
 
-        <footer class="footer">
-            <p>© 2026 SkillHub. All Rights Reserved.</p>
-        </footer>
-    </div>
 
-    <!-- Modal -->
-    <div id="loginModal" class="modal">
-        <div class="modal-box">
-            <span id="closeModal" class="close-btn">&times;</span>
-            <div class="auth-header">
-                <div class="auth-logo"><i class="fa-solid fa-graduation-cap"></i></div>
-                <h2 id="authModeText">Welcome Back!</h2>
-                <p id="authSubtitleText" class="auth-subtitle">Sign In</p>
+        <!-- ========================= FEATURES ========================= -->
+
+        <section class="features" id="features">
+
+            <div class="section-heading">
+
+                <span class="section-label">
+                    WHY SKILLHUB
+                </span>
+
+                <h2>
+                    Everything you need to
+                    <span>learn and share.</span>
+                </h2>
+
+                <p>
+                    Turn your knowledge into meaningful learning
+                    connections through simple skill exchange.
+                </p>
+
             </div>
-            <form id="authForm">
-                <div class="input-wrapper" id="nameInputWrapper">
-                    <i class="fa-solid fa-user field-icon"></i>
-                    <input id="nameInput" type="text" placeholder="Name" autocomplete="name">
-                </div>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-envelope field-icon"></i>
-                    <input id="emailInput" type="email" placeholder="Email" autocomplete="email" required>
-                </div>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-lock field-icon"></i>
-                    <input id="passwordInput" type="password" placeholder="Password" required>
-                    <i class="fa-solid fa-eye toggle-password" id="togglePassword"></i>
-                </div>
-                <div class="input-wrapper" id="confirmPasswordWrapper">
-                    <i class="fa-solid fa-lock field-icon"></i>
-                    <input id="confirmPasswordInput" type="password" placeholder="Confirm password" autocomplete="new-password">
-                    <i class="fa-solid fa-eye toggle-password" id="toggleConfirmPassword"></i>
-                </div>
-                <a href="#" class="forgot" id="forgotLink">Forgot your password?</a>
-                <button id="authSubmit" class="auth-submit-btn">
-                    <span class="btn-text">Sign In</span>
-                </button>
-            </form>
-            <div class="auth-footer">
-                <button id="authSwitch" class="auth-alt-btn">Create Account</button>
+
+
+            <div class="features-grid">
+
+                <article class="feature-card">
+
+                    <div class="feature-top">
+
+                        <span class="feature-number">
+                            01
+                        </span>
+
+                        <div class="feature-icon blue">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+
+                    </div>
+
+                    <h3>
+                        Learn for Free
+                    </h3>
+
+                    <p>
+                        Learn valuable skills by exchanging knowledge
+                        with students and professionals without course
+                        or subscription fees.
+                    </p>
+
+                    <div class="feature-line"></div>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <div class="feature-top">
+
+                        <span class="feature-number">
+                            02
+                        </span>
+
+                        <div class="feature-icon purple">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+
+                    </div>
+
+                    <h3>
+                        Teach What You Know
+                    </h3>
+
+                    <p>
+                        Share the skills you already have and help
+                        another learner while strengthening your own
+                        understanding.
+                    </p>
+
+                    <div class="feature-line"></div>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <div class="feature-top">
+
+                        <span class="feature-number">
+                            03
+                        </span>
+
+                        <div class="feature-icon teal">
+                            <i class="fa-solid fa-user-group"></i>
+                        </div>
+
+                    </div>
+
+                    <h3>
+                        Find the Right Partner
+                    </h3>
+
+                    <p>
+                        Discover people with complementary skills and
+                        connect with learning partners who match your
+                        goals.
+                    </p>
+
+                    <div class="feature-line"></div>
+
+                </article>
+
+
+                <article class="feature-card">
+
+                    <div class="feature-top">
+
+                        <span class="feature-number">
+                            04
+                        </span>
+
+                        <div class="feature-icon orange">
+                            <i class="fa-solid fa-rocket"></i>
+                        </div>
+
+                    </div>
+
+                    <h3>
+                        Build Real Experience
+                    </h3>
+
+                    <p>
+                        Practice through collaboration, gain confidence
+                        and develop practical experience while learning
+                        with others.
+                    </p>
+
+                    <div class="feature-line"></div>
+
+                </article>
+
             </div>
+
+        </section>
+
+
+        <!-- ========================= HOW IT WORKS ========================= -->
+
+        <section class="how-it-works" id="how-it-works">
+
+            <div class="section-heading">
+
+                <span class="section-label">
+                    SIMPLE PROCESS
+                </span>
+
+                <h2>
+                    Start exchanging skills
+                    <span>in three steps.</span>
+                </h2>
+
+                <p>
+                    Create your profile, discover the right person
+                    and start learning together.
+                </p>
+
+            </div>
+
+
+            <div class="steps-container">
+
+                <article class="step-card">
+
+                    <div class="step-top">
+
+                        <span class="step-number">
+                            01
+                        </span>
+
+                        <div class="step-icon">
+                            <i class="fa-solid fa-user-plus"></i>
+                        </div>
+
+                    </div>
+
+                    <h3>
+                        Create Your Profile
+                    </h3>
+
+                    <p>
+                        Tell the community which skills you can teach
+                        and which skills you want to learn.
+                    </p>
+
+                </article>
+
+
+                <div class="step-connector">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+
+
+                <article class="step-card">
+
+                    <div class="step-top">
+
+                        <span class="step-number">
+                            02
+                        </span>
+
+                        <div class="step-icon">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+
+                    </div>
+
+                    <h3>
+                        Find a Partner
+                    </h3>
+
+                    <p>
+                        Explore profiles and discover people whose
+                        skills match your learning goals.
+                    </p>
+
+                </article>
+
+
+                <div class="step-connector">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+
+
+                <article class="step-card">
+
+                    <div class="step-top">
+
+                        <span class="step-number">
+                            03
+                        </span>
+
+                        <div class="step-icon">
+                            <i class="fa-solid fa-comments"></i>
+                        </div>
+
+                    </div>
+
+                    <h3>
+                        Request & Connect
+                    </h3>
+
+                    <p>
+                        Send an exchange request and use chat to
+                        plan your learning sessions.
+                    </p>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- ========================= FOOTER ========================= -->
+
+    <footer class="footer">
+
+        <div class="footer-content">
+
+            <a href="#hero" class="footer-logo">
+
+                <span class="logo-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </span>
+
+                SkillHub
+
+            </a>
+
+            <p>
+                Exchange skills. Learn together. Grow together.
+            </p>
+
+            <span class="footer-copy">
+                © 2026 SkillHub. All Rights Reserved.
+            </span>
+
         </div>
+
+    </footer>
+
+</div>
+
+
+<!-- ========================= AUTH MODAL ========================= -->
+
+<div id="loginModal" class="modal">
+
+    <div class="modal-box">
+
+        <button
+            id="closeModal"
+            class="close-btn"
+            aria-label="Close"
+            type="button"
+        >
+            &times;
+        </button>
+
+
+        <div class="auth-header">
+
+            <div class="auth-logo">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+
+            <h2 id="authModeText">
+                Welcome Back!
+            </h2>
+
+            <p
+                id="authSubtitleText"
+                class="auth-subtitle"
+            >
+                Sign In
+            </p>
+
+        </div>
+
+
+        <form id="authForm">
+
+            <div
+                class="input-wrapper"
+                id="nameInputWrapper"
+            >
+
+                <i class="fa-solid fa-user field-icon"></i>
+
+                <input
+                    id="nameInput"
+                    type="text"
+                    placeholder="Name"
+                    autocomplete="name"
+                >
+
+            </div>
+
+
+            <div class="input-wrapper">
+
+                <i class="fa-solid fa-envelope field-icon"></i>
+
+                <input
+                    id="emailInput"
+                    type="email"
+                    placeholder="Email"
+                    autocomplete="email"
+                    required
+                >
+
+            </div>
+
+
+            <div class="input-wrapper">
+
+                <i class="fa-solid fa-lock field-icon"></i>
+
+                <input
+                    id="passwordInput"
+                    type="password"
+                    placeholder="Password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <i
+                    class="fa-solid fa-eye toggle-password"
+                    id="togglePassword"
+                ></i>
+
+            </div>
+
+
+            <div
+                class="input-wrapper"
+                id="confirmPasswordWrapper"
+            >
+
+                <i class="fa-solid fa-lock field-icon"></i>
+
+                <input
+                    id="confirmPasswordInput"
+                    type="password"
+                    placeholder="Confirm password"
+                    autocomplete="new-password"
+                >
+
+                <i
+                    class="fa-solid fa-eye toggle-password"
+                    id="toggleConfirmPassword"
+                ></i>
+
+            </div>
+
+
+            <a
+                href="#"
+                class="forgot"
+                id="forgotLink"
+            >
+                Forgot your password?
+            </a>
+
+
+            <button
+                id="authSubmit"
+                class="auth-submit-btn"
+                type="submit"
+            >
+                <span class="btn-text">
+                    Sign In
+                </span>
+            </button>
+
+        </form>
+
+
+        <div class="auth-footer">
+
+            <button
+                id="authSwitch"
+                class="auth-alt-btn"
+                type="button"
+            >
+                Create Account
+            </button>
+
+        </div>
+
     </div>
 
-    <div id="toast"></div>
+</div>
+
+
+<div id="toast"></div>
 
 </body>
 </html>

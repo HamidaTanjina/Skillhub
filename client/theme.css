@@ -2,8 +2,9 @@
    SKILLHUB - SHARED THEME.CSS
    ==========================================================================
    Includes:
-   - Dark / Light themes
-   - Strong dynamic animated background
+   - Light / Dark themes
+   - Professional dark/light background
+   - Dynamic animated background
    - Shared colors
    - Global typography
    - Forms
@@ -44,75 +45,98 @@
 
     --pink: #ec4899;
 
+
     /* ----------------------------------------------------------------------
-       BACKGROUND COLORS
+       DARK BACKGROUND
        ---------------------------------------------------------------------- */
 
-    --bg-primary: #070b16;
-    --bg-card: #111827;
-    --bg-input: #1f2937;
-    --bg-inner: #0f172a;
+    --bg-primary: #141c2e;
+
+    --bg-card: #202b40;
+
+    --bg-input: #26344b;
+
+    --bg-inner: #182338;
+
 
     /* ----------------------------------------------------------------------
        TEXT
        ---------------------------------------------------------------------- */
 
-    --text-main: #ffffff;
-    --text-muted: #94a3b8;
-    --text-soft: #cbd5e1;
+    --text-main: #f8fafc;
+
+    --text-muted: #aebbd0;
+
+    --text-soft: #d9e2ef;
+
 
     /* ----------------------------------------------------------------------
        BORDERS
        ---------------------------------------------------------------------- */
 
-    --border-color: #1f2937;
-    --border-light: rgba(255, 255, 255, 0.08);
+    --border-color: #34445d;
+
+    --border-light: rgba(255, 255, 255, 0.11);
+
 
     /* ----------------------------------------------------------------------
        COMPATIBILITY VARIABLES
        ---------------------------------------------------------------------- */
 
     --bg: var(--bg-primary);
+
     --surface: var(--bg-card);
+
     --border: var(--border-color);
 
     --text: var(--text-main);
+
     --muted: var(--text-muted);
+
 
     /* ----------------------------------------------------------------------
        STATUS
        ---------------------------------------------------------------------- */
 
     --success: #22c55e;
+
     --warning: #f59e0b;
+
     --danger: #ef4444;
+
 
     /* ----------------------------------------------------------------------
        ACCENTS
        ---------------------------------------------------------------------- */
 
     --accent-blue: #3b82f6;
+
     --accent-purple: #7c3aed;
+
 
     /* ----------------------------------------------------------------------
        HOVER
        ---------------------------------------------------------------------- */
 
-    --hover-bg: #1f2937;
+    --hover-bg: #2a3850;
+
 
     /* ----------------------------------------------------------------------
        SHADOW
        ---------------------------------------------------------------------- */
 
     --shadow:
-        0 15px 40px rgba(0, 0, 0, 0.25);
+        0 12px 32px rgba(0, 0, 0, 0.24);
+
 
     /* ----------------------------------------------------------------------
        LAYOUT
        ---------------------------------------------------------------------- */
 
     --sidebar-width: 255px;
+
     --topbar-height: 80px;
+
 
     /* ----------------------------------------------------------------------
        TRANSITION
@@ -120,23 +144,37 @@
 
     --transition: 0.3s ease;
 
+
     /* ----------------------------------------------------------------------
        DYNAMIC BACKGROUND
        ---------------------------------------------------------------------- */
 
-    --dynamic-bg-base: #070b16;
+    --dynamic-bg-base: #141c2e;
 
     --blob-purple:
-        rgba(124, 58, 237, 0.38);
+        rgba(124, 58, 237, 0.20);
 
     --blob-blue:
-        rgba(37, 99, 235, 0.32);
+        rgba(37, 99, 235, 0.17);
 
     --blob-cyan:
-        rgba(6, 182, 212, 0.25);
+        rgba(6, 182, 212, 0.13);
 
     --blob-pink:
-        rgba(236, 72, 153, 0.20);
+        rgba(236, 72, 153, 0.10);
+
+
+    /* ----------------------------------------------------------------------
+       HEADER PROFILE AVATAR
+       ---------------------------------------------------------------------- */
+
+    --profile-avatar-start: #7c3aed;
+
+    --profile-avatar-middle: #3b82f6;
+
+    --profile-avatar-end: #06b6d4;
+
+    --profile-avatar-text: #ffffff;
 }
 
 
@@ -151,64 +189,86 @@ body.light-theme {
        ---------------------------------------------------------------------- */
 
     --bg-primary: #f4f7fb;
+
     --bg-card: #ffffff;
+
     --bg-input: #f8fafc;
+
     --bg-inner: #eef2f7;
+
 
     /* ----------------------------------------------------------------------
        TEXT
        ---------------------------------------------------------------------- */
 
     --text-main: #0f172a;
+
     --text-muted: #64748b;
+
     --text-soft: #475569;
+
 
     /* ----------------------------------------------------------------------
        BORDER
        ---------------------------------------------------------------------- */
 
     --border-color: #d8e0ea;
+
     --border-light: rgba(15, 23, 42, 0.08);
+
 
     /* ----------------------------------------------------------------------
        COMPATIBILITY
        ---------------------------------------------------------------------- */
 
     --bg: var(--bg-primary);
+
     --surface: var(--bg-card);
+
     --border: var(--border-color);
 
     --text: var(--text-main);
+
     --muted: var(--text-muted);
+
 
     /* ----------------------------------------------------------------------
        PRIMARY
        ---------------------------------------------------------------------- */
 
     --primary: #2563eb;
+
     --primary-light: #3b82f6;
+
     --primary-dark: #1d4ed8;
+
 
     /* ----------------------------------------------------------------------
        SECONDARY
        ---------------------------------------------------------------------- */
 
     --secondary: #6d28d9;
+
     --secondary-light: #7c3aed;
+
     --secondary-dark: #5b21b6;
+
 
     /* ----------------------------------------------------------------------
        ACCENTS
        ---------------------------------------------------------------------- */
 
     --accent-blue: #2563eb;
+
     --accent-purple: #6d28d9;
+
 
     /* ----------------------------------------------------------------------
        HOVER
        ---------------------------------------------------------------------- */
 
     --hover-bg: #f1f5f9;
+
 
     /* ----------------------------------------------------------------------
        SHADOW
@@ -217,6 +277,7 @@ body.light-theme {
     --shadow:
         0 12px 30px rgba(15, 23, 42, 0.10);
 
+
     /* ----------------------------------------------------------------------
        DYNAMIC BACKGROUND
        ---------------------------------------------------------------------- */
@@ -224,16 +285,30 @@ body.light-theme {
     --dynamic-bg-base: #f4f7fb;
 
     --blob-purple:
-        rgba(124, 58, 237, 0.16);
+        rgba(124, 58, 237, 0.12);
 
     --blob-blue:
-        rgba(37, 99, 235, 0.14);
+        rgba(37, 99, 235, 0.11);
 
     --blob-cyan:
-        rgba(6, 182, 212, 0.11);
+        rgba(6, 182, 212, 0.09);
 
     --blob-pink:
-        rgba(236, 72, 153, 0.09);
+        rgba(236, 72, 153, 0.07);
+
+
+    /* ----------------------------------------------------------------------
+       IMPORTANT:
+       KEEP PROFILE INITIAL WHITE IN LIGHT THEME TOO
+       ---------------------------------------------------------------------- */
+
+    --profile-avatar-start: #7c3aed;
+
+    --profile-avatar-middle: #3b82f6;
+
+    --profile-avatar-end: #06b6d4;
+
+    --profile-avatar-text: #ffffff;
 }
 
 
@@ -244,6 +319,7 @@ body.light-theme {
 * {
 
     margin: 0;
+
     padding: 0;
 
     box-sizing: border-box;
@@ -257,11 +333,19 @@ body.light-theme {
 }
 
 
+/* ==========================================================================
+   4. HTML
+   ========================================================================== */
+
 html {
 
     scroll-behavior: smooth;
 }
 
+
+/* ==========================================================================
+   5. BODY
+   ========================================================================== */
 
 body {
 
@@ -273,6 +357,8 @@ body {
 
     position: relative;
 
+    isolation: isolate;
+
     transition:
         background-color 0.4s ease,
         color 0.4s ease;
@@ -280,7 +366,7 @@ body {
 
 
 /* ==========================================================================
-   4. DYNAMIC BACKGROUND BASE
+   6. DYNAMIC BACKGROUND
    ========================================================================== */
 
 body {
@@ -290,23 +376,21 @@ body {
 
     background-image:
 
-        /* Main gradient */
         linear-gradient(
             135deg,
             var(--dynamic-bg-base) 0%,
-            var(--bg-primary) 45%,
+            var(--bg-primary) 48%,
             var(--dynamic-bg-base) 100%
         ),
 
-        /* Grid */
         linear-gradient(
-            rgba(59, 130, 246, 0.035) 1px,
+            rgba(96, 165, 250, 0.025) 1px,
             transparent 1px
         ),
 
         linear-gradient(
             90deg,
-            rgba(59, 130, 246, 0.035) 1px,
+            rgba(96, 165, 250, 0.025) 1px,
             transparent 1px
         );
 
@@ -320,15 +404,8 @@ body {
 
 
 /* ==========================================================================
-   5. DYNAMIC BACKGROUND BLOBS
+   7. FIRST DYNAMIC BACKGROUND BLOB
    ========================================================================== */
-
-/*
-   These are actual animated background objects.
-
-   They are intentionally larger and more visible than the previous
-   version so the background looks dynamic rather than like a shadow.
-*/
 
 body::before {
 
@@ -337,9 +414,11 @@ body::before {
     position: fixed;
 
     width: 520px;
+
     height: 520px;
 
     top: -180px;
+
     left: -150px;
 
     border-radius: 50%;
@@ -348,11 +427,11 @@ body::before {
         radial-gradient(
             circle,
             var(--blob-purple) 0%,
-            rgba(124, 58, 237, 0.18) 35%,
+            rgba(124, 58, 237, 0.08) 35%,
             transparent 70%
         );
 
-    filter: blur(25px);
+    filter: blur(30px);
 
     pointer-events: none;
 
@@ -363,9 +442,9 @@ body::before {
 }
 
 
-/* --------------------------------------------------------------------------
-   SECOND BLOB
-   -------------------------------------------------------------------------- */
+/* ==========================================================================
+   8. SECOND DYNAMIC BACKGROUND BLOB
+   ========================================================================== */
 
 body::after {
 
@@ -374,9 +453,11 @@ body::after {
     position: fixed;
 
     width: 600px;
+
     height: 600px;
 
     right: -200px;
+
     bottom: -220px;
 
     border-radius: 50%;
@@ -385,11 +466,11 @@ body::after {
         radial-gradient(
             circle,
             var(--blob-blue) 0%,
-            rgba(37, 99, 235, 0.15) 35%,
+            rgba(37, 99, 235, 0.07) 35%,
             transparent 70%
         );
 
-    filter: blur(25px);
+    filter: blur(30px);
 
     pointer-events: none;
 
@@ -401,24 +482,7 @@ body::after {
 
 
 /* ==========================================================================
-   6. EXTRA DYNAMIC BACKGROUND LAYER
-   ========================================================================== */
-
-/*
-   This creates the third moving color area.
-
-   It is attached to the application wrapper through a fixed background
-   layer using the body background itself.
-*/
-
-body {
-
-    isolation: isolate;
-}
-
-
-/* ==========================================================================
-   7. ANIMATION - BLOB ONE
+   9. ANIMATION - BLOB ONE
    ========================================================================== */
 
 @keyframes dynamicBlobOne {
@@ -461,7 +525,7 @@ body {
 
 
 /* ==========================================================================
-   8. ANIMATION - BLOB TWO
+   10. ANIMATION - BLOB TWO
    ========================================================================== */
 
 @keyframes dynamicBlobTwo {
@@ -504,7 +568,7 @@ body {
 
 
 /* ==========================================================================
-   9. LIGHT THEME BACKGROUND
+   11. LIGHT THEME BACKGROUND
    ========================================================================== */
 
 body.light-theme {
@@ -522,13 +586,13 @@ body.light-theme {
         ),
 
         linear-gradient(
-            rgba(37, 99, 235, 0.045) 1px,
+            rgba(37, 99, 235, 0.035) 1px,
             transparent 1px
         ),
 
         linear-gradient(
             90deg,
-            rgba(37, 99, 235, 0.045) 1px,
+            rgba(37, 99, 235, 0.035) 1px,
             transparent 1px
         );
 
@@ -540,14 +604,14 @@ body.light-theme {
 
 
 /* ==========================================================================
-   10. LIGHT THEME BLOBS
+   12. LIGHT THEME BLOBS
    ========================================================================== */
 
 body.light-theme::before {
 
     opacity: 1;
 
-    filter: blur(30px);
+    filter: blur(35px);
 }
 
 
@@ -555,12 +619,12 @@ body.light-theme::after {
 
     opacity: 1;
 
-    filter: blur(30px);
+    filter: blur(35px);
 }
 
 
 /* ==========================================================================
-   11. GLOBAL LINKS
+   13. GLOBAL LINKS
    ========================================================================== */
 
 a {
@@ -578,7 +642,7 @@ a:hover {
 
 
 /* ==========================================================================
-   12. GLOBAL IMAGES
+   14. GLOBAL IMAGES
    ========================================================================== */
 
 img {
@@ -590,7 +654,7 @@ img {
 
 
 /* ==========================================================================
-   13. GLOBAL FORM ELEMENTS
+   15. GLOBAL FORM ELEMENTS
    ========================================================================== */
 
 input,
@@ -648,7 +712,7 @@ select option {
 
 
 /* ==========================================================================
-   14. BUTTON
+   16. BUTTON
    ========================================================================== */
 
 button {
@@ -681,7 +745,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   15. SHARED TOPBAR
+   17. SHARED TOPBAR
    ========================================================================== */
 
 .topbar {
@@ -715,7 +779,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   16. PAGE TITLE
+   18. PAGE TITLE
    ========================================================================== */
 
 .page-title {
@@ -761,7 +825,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   17. TOPBAR ACTIONS
+   19. TOPBAR ACTIONS
    ========================================================================== */
 
 .topbar-actions {
@@ -779,7 +843,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   18. TOP ICONS
+   20. TOP ICONS
    ========================================================================== */
 
 .top-icons {
@@ -795,6 +859,7 @@ button:focus-visible {
 .top-icons > i {
 
     width: 40px;
+
     height: 40px;
 
     min-width: 40px;
@@ -802,6 +867,7 @@ button:focus-visible {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     border-radius: 50%;
@@ -835,7 +901,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   19. NOTIFICATION WRAPPER
+   21. NOTIFICATION WRAPPER
    ========================================================================== */
 
 .notification-wrapper {
@@ -843,23 +909,26 @@ button:focus-visible {
     position: relative;
 
     width: 40px;
+
     height: 40px;
 
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 }
 
 
 /* ==========================================================================
-   20. NOTIFICATION BUTTON
+   22. NOTIFICATION BUTTON
    ========================================================================== */
 
 #notificationBtn,
 .notification-btn {
 
     width: 40px;
+
     height: 40px;
 
     min-width: 40px;
@@ -867,6 +936,7 @@ button:focus-visible {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     border-radius: 50%;
@@ -905,7 +975,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   21. NOTIFICATION BADGE
+   23. NOTIFICATION BADGE
    ========================================================================== */
 
 .notification-badge {
@@ -913,9 +983,11 @@ button:focus-visible {
     position: absolute;
 
     top: -2px;
+
     right: -2px;
 
     min-width: 18px;
+
     height: 18px;
 
     padding:
@@ -924,6 +996,7 @@ button:focus-visible {
     display: flex;
 
     align-items: center;
+
     justify-content: center;
 
     border-radius: 20px;
@@ -960,7 +1033,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   22. REMOVE OLD NOTIFICATION DOT
+   24. REMOVE OLD NOTIFICATION DOT
    ========================================================================== */
 
 .notification-icon::after {
@@ -971,7 +1044,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   23. NOTIFICATION DROPDOWN
+   25. NOTIFICATION DROPDOWN
    ========================================================================== */
 
 .notification-dropdown {
@@ -1000,7 +1073,7 @@ button:focus-visible {
         14px;
 
     box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.28);
+        0 20px 50px rgba(0, 0, 0, 0.25);
 
     overflow:
         hidden;
@@ -1038,7 +1111,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   24. NOTIFICATION HEADER
+   26. NOTIFICATION HEADER
    ========================================================================== */
 
 .notification-header {
@@ -1115,7 +1188,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   25. NOTIFICATION LIST
+   27. NOTIFICATION LIST
    ========================================================================== */
 
 .notification-list {
@@ -1129,7 +1202,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   26. NOTIFICATION ITEM
+   28. NOTIFICATION ITEM
    ========================================================================== */
 
 .notification-item {
@@ -1182,7 +1255,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   27. NOTIFICATION ITEM ICON
+   29. NOTIFICATION ITEM ICON
    ========================================================================== */
 
 .notification-item .notification-icon {
@@ -1220,7 +1293,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   28. NOTIFICATION CONTENT
+   30. NOTIFICATION CONTENT
    ========================================================================== */
 
 .notification-content {
@@ -1269,7 +1342,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   29. NOTIFICATION EMPTY
+   31. NOTIFICATION EMPTY
    ========================================================================== */
 
 .notification-empty {
@@ -1301,7 +1374,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   30. PROFILE / USER AREA
+   32. PROFILE / USER AREA
    ========================================================================== */
 
 .profile {
@@ -1330,7 +1403,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   31. PROFILE ICON
+   33. PROFILE ICON
    ========================================================================== */
 
 .profile-icon {
@@ -1363,23 +1436,27 @@ button:focus-visible {
         21px;
 
     color:
-        #ffffff;
+        var(--profile-avatar-text) !important;
 
     background:
         linear-gradient(
             135deg,
-            var(--secondary),
-            var(--primary),
-            var(--cyan)
-        );
+            var(--profile-avatar-start),
+            var(--profile-avatar-middle),
+            var(--profile-avatar-end)
+        ) !important;
 
     box-shadow:
-        0 8px 20px rgba(59, 130, 246, 0.22);
+        0 8px 20px rgba(59, 130, 246, 0.20);
 
     transition:
         var(--transition);
 }
 
+
+/* ==========================================================================
+   34. PROFILE HOVER
+   ========================================================================== */
 
 .profile:hover .profile-icon {
 
@@ -1389,7 +1466,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   32. PROFILE IMAGE
+   35. PROFILE IMAGE
    ========================================================================== */
 
 .header-profile-image {
@@ -1409,7 +1486,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   33. PROFILE INITIAL
+   36. PROFILE INITIAL
    ========================================================================== */
 
 .header-profile-initial {
@@ -1430,39 +1507,94 @@ button:focus-visible {
         center;
 
     color:
-        #ffffff;
+        #ffffff !important;
+
+    -webkit-text-fill-color:
+        #ffffff !important;
 
     font-size:
         19px;
 
     font-weight:
         700;
+
+    line-height:
+        1;
+
+    text-align:
+        center;
+
+    background:
+        transparent !important;
+
+    opacity:
+        1 !important;
 }
 
 
 /* ==========================================================================
-   34. USER NAME
+   37. FORCE INITIAL WHITE IN BOTH THEMES
    ========================================================================== */
 
-.profile span,
-#userName {
-
-    font-size:
-        14px;
-
-    font-weight:
-        600;
+body.light-theme .profile-icon,
+body:not(.light-theme) .profile-icon {
 
     color:
-        var(--text-main);
+        #ffffff !important;
 
-    white-space:
-        nowrap;
+    background:
+        linear-gradient(
+            135deg,
+            #7c3aed,
+            #3b82f6,
+            #06b6d4
+        ) !important;
+}
+
+
+body.light-theme .header-profile-initial,
+body:not(.light-theme) .header-profile-initial {
+
+    color:
+        #ffffff !important;
+
+    -webkit-text-fill-color:
+        #ffffff !important;
 }
 
 
 /* ==========================================================================
-   35. PROFILE DROPDOWN
+   38. HIDE USER NAME
+   ========================================================================== */
+
+/*
+   The avatar remains visible.
+   The user's name beside the avatar is hidden on ALL devices.
+*/
+
+.profile > #userName,
+.profile > span#userName {
+
+    display:
+        none !important;
+}
+
+
+/*
+   If the HTML uses another direct span for the name,
+   hide only the direct text span while keeping
+   the avatar intact.
+*/
+
+.profile > span:not(.profile-icon) {
+
+    display:
+        none !important;
+}
+
+
+/* ==========================================================================
+   39. PROFILE DROPDOWN
    ========================================================================== */
 
 .profile-dropdown {
@@ -1528,7 +1660,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   36. PROFILE DROPDOWN ITEMS
+   40. PROFILE DROPDOWN ITEMS
    ========================================================================== */
 
 .profile-dropdown-item {
@@ -1606,7 +1738,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   37. SEARCH
+   41. SEARCH
    ========================================================================== */
 
 .search {
@@ -1649,7 +1781,7 @@ button:focus-visible {
         var(--primary);
 
     box-shadow:
-        0 8px 25px rgba(59, 130, 246, 0.12);
+        0 8px 25px rgba(59, 130, 246, 0.10);
 }
 
 
@@ -1700,7 +1832,7 @@ button:focus-visible {
 
 
 /* ==========================================================================
-   38. COMMON CARD
+   42. COMMON CARD
    ========================================================================== */
 
 .card {
@@ -1712,26 +1844,37 @@ button:focus-visible {
         1px solid var(--border-color);
 
     border-radius:
-        18px;
+        16px;
 
     box-shadow:
-        var(--shadow);
+        0 10px 28px rgba(0, 0, 0, 0.18);
 
     transition:
-        background-color 0.3s ease,
-        border-color 0.3s ease,
-        box-shadow 0.3s ease;
+        background-color 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+}
+
+
+.card:hover {
+
+    border-color:
+        rgba(96, 165, 250, 0.42);
+
+    box-shadow:
+        0 14px 34px rgba(0, 0, 0, 0.23);
 }
 
 
 /* ==========================================================================
-   39. GLASS
+   43. GLASS
    ========================================================================== */
 
 .glass {
 
     background:
-        rgba(17, 24, 39, 0.72);
+        rgba(32, 43, 64, 0.80);
 
     backdrop-filter:
         blur(18px);
@@ -1752,7 +1895,7 @@ body.light-theme .glass {
 
 
 /* ==========================================================================
-   40. COMMON PAGE SECTIONS
+   44. COMMON PAGE SECTIONS
    ========================================================================== */
 
 section,
@@ -1772,7 +1915,7 @@ section,
 
 
 /* ==========================================================================
-   41. COMMON HEADINGS
+   45. COMMON HEADINGS
    ========================================================================== */
 
 h1,
@@ -1788,7 +1931,7 @@ h6 {
 
 
 /* ==========================================================================
-   42. COMMON PARAGRAPHS
+   46. COMMON PARAGRAPHS
    ========================================================================== */
 
 p {
@@ -1799,7 +1942,7 @@ p {
 
 
 /* ==========================================================================
-   43. COMMON TABLE
+   47. COMMON TABLE
    ========================================================================== */
 
 table {
@@ -1836,7 +1979,7 @@ td {
 
 
 /* ==========================================================================
-   44. COMMON MODAL
+   48. COMMON MODAL
    ========================================================================== */
 
 .modal,
@@ -1854,7 +1997,7 @@ td {
 
 
 /* ==========================================================================
-   45. COMMON DIVIDER
+   49. COMMON DIVIDER
    ========================================================================== */
 
 hr {
@@ -1868,7 +2011,7 @@ hr {
 
 
 /* ==========================================================================
-   46. SCROLLBAR
+   50. SCROLLBAR
    ========================================================================== */
 
 ::-webkit-scrollbar {
@@ -1914,7 +2057,7 @@ hr {
 
 
 /* ==========================================================================
-   47. TEXT SELECTION
+   51. TEXT SELECTION
    ========================================================================== */
 
 ::selection {
@@ -1928,7 +2071,7 @@ hr {
 
 
 /* ==========================================================================
-   48. UTILITY CLASSES
+   52. UTILITY CLASSES
    ========================================================================== */
 
 .text-success {
@@ -1981,7 +2124,7 @@ hr {
 
 
 /* ==========================================================================
-   49. RESPONSIVE - 1024px
+   53. RESPONSIVE - 1024px
    ========================================================================== */
 
 @media (max-width: 1024px) {
@@ -2036,7 +2179,7 @@ hr {
 
 
 /* ==========================================================================
-   50. RESPONSIVE - 900px
+   54. RESPONSIVE - 900px
    ========================================================================== */
 
 @media (max-width: 900px) {
@@ -2086,7 +2229,7 @@ hr {
 
 
 /* ==========================================================================
-   51. RESPONSIVE - 768px
+   55. RESPONSIVE - 768px
    ========================================================================== */
 
 @media (max-width: 768px) {
@@ -2153,6 +2296,9 @@ hr {
 
         min-width:
             42px;
+
+        font-size:
+            19px;
     }
 
 
@@ -2198,7 +2344,7 @@ hr {
 
 
 /* ==========================================================================
-   52. RESPONSIVE - 600px
+   56. RESPONSIVE - 600px
    ========================================================================== */
 
 @media (max-width: 600px) {
@@ -2269,14 +2415,6 @@ hr {
     }
 
 
-    .profile span,
-    #userName {
-
-        display:
-            none;
-    }
-
-
     .profile-icon {
 
         width:
@@ -2287,6 +2425,9 @@ hr {
 
         min-width:
             40px;
+
+        font-size:
+            18px;
     }
 
 
@@ -2347,7 +2488,7 @@ hr {
 
 
 /* ==========================================================================
-   53. RESPONSIVE - 420px
+   57. RESPONSIVE - 420px
    ========================================================================== */
 
 @media (max-width: 420px) {
@@ -2452,7 +2593,7 @@ hr {
 
 
 /* ==========================================================================
-   54. REDUCED MOTION
+   58. REDUCED MOTION
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
@@ -2470,4 +2611,4 @@ hr {
         scroll-behavior:
             auto !important;
     }
-} 
+}

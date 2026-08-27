@@ -1,207 +1,81 @@
-
-
-
-/* ==========================================================
-   1. PROFILE PAGE LAYOUT
-   ========================================================== */
-
-.profile-page {
-
-    display: flex;
-
-    min-height: 100vh;
-
-    width: 100%;
-
-    background: var(--bg-primary);
-
-    color: var(--text-main);
-}
-
-
-/* ==========================================================
-   2. MAIN CONTENT
-   ========================================================== */
-
-.profile-main {
-
-    flex: 1;
-
-    width: auto;
-
-    max-width: none;
-
-    min-width: 0;
-
-    min-height: 100vh;
-
-    margin-left: 0;
-
-    padding: 0 30px 50px;
-
-    background: var(--bg-primary);
-
-    color: var(--text-main);
-
-    overflow-x: hidden;
-}
-
-
-/* ==========================================================
-   3. TOPBAR
-   ========================================================== */
-
-.profile-topbar {
-
-    height: 80px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 20px;
-
-    border-bottom: 1px solid var(--border-color);
-
-    margin-bottom: 30px;
-}
-
-
-.page-title {
-
-    min-width: 0;
-}
-
-
-.page-title h1 {
-
-    margin: 0;
-
-    font-size: 26px;
-
-    font-weight: 750;
-
-    color: var(--text-main);
-}
-
-
-.page-title p {
-
-    margin: 5px 0 0;
-
-    color: var(--text-muted);
-
-    font-size: 13px;
-}
-
-
-/* ==========================================================
-   TOPBAR ACTIONS
-   ========================================================== */
-
-.topbar-actions {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 22px;
-
-    flex-shrink: 0;
-}
-
-
-#themeToggle {
-
-    color: var(--text-muted);
-
-    font-size: 18px;
-
-    cursor: pointer;
-
-    transition:
-        color 0.2s ease,
-        transform 0.2s ease;
-}
-
-
-#themeToggle:hover {
-
-    color: var(--text-main);
-
-    transform: rotate(15deg);
-}
-
-
-.topbar-user {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 9px;
-
-    color: var(--text-main);
-
-    font-size: 14px;
-
-    font-weight: 600;
-}
-
-
-.topbar-user i {
-
-    font-size: 27px;
-
-    color: var(--primary);
-}
-
-
-/* ==========================================================
-   4. CONTENT
-   ========================================================== */
+/* ==========================================================================
+   SKILLHUB - PROFILE PAGE
+   Professional, Responsive & Theme-Safe Profile UI
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. PROFILE CONTENT
+   ========================================================================== */
 
 .profile-content {
-
     width: 100%;
-
     max-width: 1200px;
-
     margin: 0 auto;
+    padding: 0;
+    min-width: 0;
+    box-sizing: border-box;
 }
 
 
-/* ==========================================================
-   5. COMMON CARD
-   ========================================================== */
+/* ==========================================================================
+   2. COMMON BOX SIZING
+   ========================================================================== */
+
+.profile-content *,
+.profile-content *::before,
+.profile-content *::after {
+    box-sizing: border-box;
+}
+
+
+/* ==========================================================================
+   3. COMMON CARDS
+   ========================================================================== */
 
 .profile-summary-card,
 .profile-form-card,
 .reviews-card {
 
+    width: 100%;
+
     background: var(--bg-card);
 
     border: 1px solid var(--border-color);
 
-    border-radius: 18px;
+    border-radius: 16px;
 
     box-shadow:
         var(
             --card-shadow,
-            0 8px 25px rgba(0, 0, 0, 0.08)
+            0 6px 20px rgba(0, 0, 0, 0.08)
         );
+
+    color: var(--text-main);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
 }
 
 
-/* ==========================================================
-   6. PROFILE SUMMARY
-   ========================================================== */
+/* Subtle card interaction */
+
+.profile-summary-card:hover,
+.profile-form-card:hover,
+.reviews-card:hover {
+
+    border-color: var(--border-color);
+
+}
+
+
+/* ==========================================================================
+   4. PROFILE SUMMARY
+   ========================================================================== */
 
 .profile-summary-card {
-
-    padding: 28px 32px;
 
     display: flex;
 
@@ -209,11 +83,19 @@
 
     justify-content: space-between;
 
-    gap: 30px;
+    gap: 28px;
 
-    margin-bottom: 25px;
+    padding: 26px 28px;
+
+    margin-bottom: 22px;
+
+    min-width: 0;
 }
 
+
+/* ==========================================================================
+   5. PROFILE SUMMARY LEFT
+   ========================================================================== */
 
 .profile-summary-left {
 
@@ -221,17 +103,25 @@
 
     align-items: center;
 
-    gap: 20px;
+    gap: 18px;
 
     min-width: 0;
+
+    flex: 1;
 }
 
 
+/* ==========================================================================
+   6. PROFILE AVATAR
+   ========================================================================== */
+
 .profile-avatar {
 
-    width: 82px;
+    width: 76px;
 
-    height: 82px;
+    height: 76px;
+
+    min-width: 76px;
 
     border-radius: 50%;
 
@@ -240,8 +130,6 @@
     align-items: center;
 
     justify-content: center;
-
-    flex-shrink: 0;
 
     background:
         linear-gradient(
@@ -252,25 +140,37 @@
 
     color: #ffffff;
 
-    font-size: 34px;
+    font-size: 30px;
+
+    flex-shrink: 0;
 }
 
+
+/* ==========================================================================
+   7. PROFILE INFORMATION
+   ========================================================================== */
 
 .profile-summary-info {
 
     min-width: 0;
+
+    flex: 1;
 }
 
 
 .profile-summary-info h2 {
 
-    margin: 0 0 7px;
+    margin: 0 0 6px;
 
-    font-size: 24px;
+    color: var(--text-main);
+
+    font-size: clamp(19px, 2vw, 23px);
+
+    line-height: 1.25;
 
     font-weight: 700;
 
-    color: var(--text-main);
+    letter-spacing: -0.2px;
 
     word-break: break-word;
 }
@@ -282,11 +182,17 @@
 
     color: var(--text-muted);
 
-    font-size: 14px;
+    font-size: 13px;
+
+    line-height: 1.5;
 
     word-break: break-word;
 }
 
+
+/* ==========================================================================
+   8. LOCATION
+   ========================================================================== */
 
 .location-text {
 
@@ -295,6 +201,8 @@
     align-items: center;
 
     gap: 7px;
+
+    min-width: 0;
 }
 
 
@@ -302,23 +210,33 @@
 
     color: var(--primary);
 
+    font-size: 13px;
+
     flex-shrink: 0;
 }
 
 
-/* ==========================================================
-   7. RATING SUMMARY
-   ========================================================== */
+.location-text span {
+
+    min-width: 0;
+
+    word-break: break-word;
+}
+
+
+/* ==========================================================================
+   9. RATING SUMMARY
+   ========================================================================== */
 
 .rating-summary {
 
-    min-width: 150px;
+    min-width: 145px;
 
-    text-align: center;
-
-    padding-left: 30px;
+    padding-left: 28px;
 
     border-left: 1px solid var(--border-color);
+
+    text-align: center;
 
     flex-shrink: 0;
 }
@@ -326,11 +244,13 @@
 
 .rating-number {
 
-    font-size: 30px;
-
-    font-weight: 750;
-
     color: var(--text-main);
+
+    font-size: clamp(24px, 2.5vw, 29px);
+
+    line-height: 1.2;
+
+    font-weight: 700;
 }
 
 
@@ -339,6 +259,8 @@
     display: flex;
 
     justify-content: center;
+
+    align-items: center;
 
     gap: 3px;
 
@@ -350,7 +272,7 @@
 
     color: #f59e0b;
 
-    font-size: 15px;
+    font-size: 13px;
 }
 
 
@@ -360,27 +282,27 @@
 
     color: var(--text-muted);
 
-    font-size: 13px;
+    font-size: 12px;
+
+    line-height: 1.4;
 }
 
 
-/* ==========================================================
-   8. EDIT PROFILE
-   ========================================================== */
+/* ==========================================================================
+   10. EDIT PROFILE CARD
+   ========================================================================== */
 
 .profile-form-card {
 
-    width: 100%;
+    padding: 26px 28px;
 
-    padding: 28px;
-
-    margin-bottom: 25px;
+    margin-bottom: 22px;
 }
 
 
-/* ==========================================================
-   9. SECTION HEADING
-   ========================================================== */
+/* ==========================================================================
+   11. SECTION HEADING
+   ========================================================================== */
 
 .section-heading {
 
@@ -392,7 +314,15 @@
 
     gap: 15px;
 
-    margin-bottom: 25px;
+    margin-bottom: 22px;
+
+    min-width: 0;
+}
+
+
+.section-heading > div {
+
+    min-width: 0;
 }
 
 
@@ -400,11 +330,13 @@
 
     margin: 0;
 
-    font-size: 20px;
+    color: var(--text-main);
+
+    font-size: clamp(17px, 1.8vw, 20px);
+
+    line-height: 1.3;
 
     font-weight: 700;
-
-    color: var(--text-main);
 }
 
 
@@ -414,7 +346,7 @@
 
     color: var(--text-muted);
 
-    font-size: 13px;
+    font-size: 12px;
 
     line-height: 1.5;
 }
@@ -422,9 +354,11 @@
 
 .section-heading > i {
 
-    width: 38px;
+    width: 36px;
 
-    height: 38px;
+    height: 36px;
+
+    min-width: 36px;
 
     display: flex;
 
@@ -432,23 +366,27 @@
 
     justify-content: center;
 
-    flex-shrink: 0;
+    border-radius: 9px;
 
-    border-radius: 10px;
+    background: rgba(59, 130, 246, 0.10);
 
     color: var(--primary);
 
-    background: rgba(59, 130, 246, 0.10);
+    font-size: 14px;
+
+    flex-shrink: 0;
 }
 
 
-/* ==========================================================
-   10. FORM GROUP
-   ========================================================== */
+/* ==========================================================================
+   12. FORM GROUP
+   ========================================================================== */
 
 .form-group {
 
-    margin-bottom: 19px;
+    width: 100%;
+
+    margin-bottom: 17px;
 }
 
 
@@ -456,26 +394,36 @@
 
     display: block;
 
-    margin-bottom: 7px;
-
-    font-size: 13px;
-
-    font-weight: 650;
+    margin-bottom: 6px;
 
     color: var(--text-muted);
+
+    font-size: 12px;
+
+    line-height: 1.4;
+
+    font-weight: 600;
 }
 
+
+/* ==========================================================================
+   13. INPUTS / TEXTAREA
+   ========================================================================== */
 
 .form-group input,
 .form-group textarea {
 
+    display: block;
+
     width: 100%;
 
-    padding: 13px 14px;
+    max-width: 100%;
+
+    padding: 12px 13px;
 
     border: 1px solid var(--border-color);
 
-    border-radius: 10px;
+    border-radius: 9px;
 
     background: var(--bg-primary);
 
@@ -483,9 +431,13 @@
 
     font-family: inherit;
 
-    font-size: 14px;
+    font-size: 13px;
+
+    line-height: 1.5;
 
     outline: none;
+
+    appearance: none;
 
     transition:
         border-color 0.2s ease,
@@ -503,6 +455,8 @@
 }
 
 
+/* Focus */
+
 .form-group input:focus,
 .form-group textarea:focus {
 
@@ -513,6 +467,8 @@
 }
 
 
+/* Read-only email */
+
 .form-group input:read-only {
 
     opacity: 0.65;
@@ -521,15 +477,19 @@
 }
 
 
+/* Textarea */
+
 .form-group textarea {
+
+    min-height: 120px;
 
     resize: vertical;
 
-    min-height: 125px;
-
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
+
+/* Small helper text */
 
 .form-group small {
 
@@ -539,23 +499,27 @@
 
     color: var(--text-muted);
 
-    font-size: 11px;
+    font-size: 10px;
+
+    line-height: 1.4;
 }
 
 
-/* ==========================================================
-   11. SAVE BUTTON
-   ========================================================== */
+/* ==========================================================================
+   14. SAVE BUTTON
+   ========================================================================== */
 
 .save-btn {
 
     width: 100%;
 
-    min-height: 48px;
+    min-height: 46px;
+
+    padding: 11px 16px;
 
     border: none;
 
-    border-radius: 10px;
+    border-radius: 9px;
 
     background:
         linear-gradient(
@@ -568,7 +532,9 @@
 
     font-family: inherit;
 
-    font-size: 14px;
+    font-size: 13px;
+
+    line-height: 1.4;
 
     font-weight: 700;
 
@@ -580,7 +546,7 @@
 
     justify-content: center;
 
-    gap: 8px;
+    gap: 7px;
 
     transition:
         transform 0.2s ease,
@@ -591,16 +557,25 @@
 
 .save-btn:hover {
 
-    transform: translateY(-2px);
+    transform: translateY(-1px);
 
     box-shadow:
-        0 8px 20px rgba(59, 130, 246, 0.25);
+        0 7px 18px rgba(59, 130, 246, 0.22);
 }
 
 
 .save-btn:active {
 
     transform: translateY(0);
+
+}
+
+
+.save-btn:focus-visible {
+
+    outline: 2px solid var(--primary);
+
+    outline-offset: 2px;
 }
 
 
@@ -616,17 +591,21 @@
 }
 
 
-/* ==========================================================
-   12. REVIEWS
-   ========================================================== */
+/* ==========================================================================
+   15. REVIEWS CARD
+   ========================================================================== */
 
 .reviews-card {
 
-    padding: 28px;
+    padding: 26px 28px;
 
     margin-bottom: 30px;
 }
 
+
+/* ==========================================================================
+   16. REVIEWS HEADING
+   ========================================================================== */
 
 .reviews-heading {
 
@@ -636,65 +615,85 @@
 }
 
 
+/* ==========================================================================
+   17. REVIEW TOTAL
+   ========================================================================== */
+
 .review-total {
 
-    display: flex;
+    display: inline-flex;
 
     align-items: center;
 
-    gap: 7px;
+    justify-content: center;
 
-    padding: 8px 12px;
+    gap: 6px;
 
-    border-radius: 20px;
+    padding: 7px 11px;
+
+    border-radius: 18px;
 
     background: rgba(245, 158, 11, 0.10);
 
     color: var(--text-main);
 
-    font-size: 13px;
+    font-size: 11px;
+
+    line-height: 1.4;
 
     white-space: nowrap;
+
+    flex-shrink: 0;
 }
 
 
 .review-total i {
 
     color: #f59e0b;
+
+    font-size: 11px;
 }
 
 
-/* ==========================================================
-   13. REVIEWS CONTAINER
-   ========================================================== */
+/* ==========================================================================
+   18. REVIEWS CONTAINER
+   ========================================================================== */
 
 .reviews-container {
+
+    width: 100%;
 
     display: flex;
 
     flex-direction: column;
 
-    gap: 15px;
+    gap: 13px;
+
+    min-width: 0;
 }
 
 
-/* ==========================================================
-   14. REVIEW ITEM
-   ========================================================== */
+/* ==========================================================================
+   19. REVIEW ITEM
+   ========================================================================== */
 
 .review-item {
 
-    padding: 18px;
+    width: 100%;
+
+    padding: 16px;
 
     border: 1px solid var(--border-color);
 
-    border-radius: 13px;
+    border-radius: 11px;
 
     background: var(--bg-primary);
 
+    color: var(--text-main);
+
     transition:
-        transform 0.2s ease,
-        border-color 0.2s ease;
+        border-color 0.2s ease,
+        transform 0.2s ease;
 }
 
 
@@ -706,6 +705,10 @@
 }
 
 
+/* ==========================================================================
+   20. REVIEW TOP
+   ========================================================================== */
+
 .review-top {
 
     display: flex;
@@ -714,11 +717,17 @@
 
     justify-content: space-between;
 
-    gap: 15px;
+    gap: 14px;
 
-    margin-bottom: 10px;
+    margin-bottom: 9px;
+
+    min-width: 0;
 }
 
+
+/* ==========================================================================
+   21. REVIEWER INFORMATION
+   ========================================================================== */
 
 .reviewer-info {
 
@@ -726,17 +735,25 @@
 
     align-items: center;
 
-    gap: 10px;
+    gap: 9px;
 
     min-width: 0;
+
+    flex: 1;
 }
 
 
+/* ==========================================================================
+   22. REVIEWER AVATAR
+   ========================================================================== */
+
 .reviewer-avatar {
 
-    width: 38px;
+    width: 36px;
 
-    height: 38px;
+    height: 36px;
+
+    min-width: 36px;
 
     border-radius: 50%;
 
@@ -745,8 +762,6 @@
     align-items: center;
 
     justify-content: center;
-
-    flex-shrink: 0;
 
     background:
         linear-gradient(
@@ -757,17 +772,25 @@
 
     color: #ffffff;
 
-    font-size: 14px;
+    font-size: 13px;
 
     font-weight: 700;
+
+    flex-shrink: 0;
 }
 
+
+/* ==========================================================================
+   23. REVIEWER NAME
+   ========================================================================== */
 
 .reviewer-name {
 
     color: var(--text-main);
 
-    font-size: 14px;
+    font-size: 13px;
+
+    line-height: 1.4;
 
     font-weight: 700;
 
@@ -779,13 +802,19 @@
 
     display: block;
 
-    margin-top: 3px;
+    margin-top: 2px;
 
     color: var(--text-muted);
 
-    font-size: 11px;
+    font-size: 10px;
+
+    line-height: 1.4;
 }
 
+
+/* ==========================================================================
+   24. REVIEW RATING
+   ========================================================================== */
 
 .review-rating {
 
@@ -803,29 +832,33 @@
 
     color: #f59e0b;
 
-    font-size: 13px;
+    font-size: 11px;
 }
 
 
 .review-rating span {
 
-    margin-left: 5px;
+    margin-left: 4px;
 
     color: var(--text-main);
 
-    font-size: 12px;
+    font-size: 11px;
 
     font-weight: 700;
 }
 
 
+/* ==========================================================================
+   25. REVIEW COMMENT
+   ========================================================================== */
+
 .review-comment {
 
-    margin: 12px 0 10px;
+    margin: 10px 0 9px;
 
     color: var(--text-muted);
 
-    font-size: 14px;
+    font-size: 13px;
 
     line-height: 1.6;
 
@@ -833,42 +866,52 @@
 }
 
 
+/* ==========================================================================
+   26. RECOMMEND BADGE
+   ========================================================================== */
+
 .recommend-badge {
 
     display: inline-flex;
 
     align-items: center;
 
-    gap: 5px;
+    gap: 4px;
 
-    padding: 5px 9px;
+    padding: 4px 8px;
 
-    border-radius: 15px;
+    border-radius: 14px;
 
     background: rgba(34, 197, 94, 0.10);
 
     color: #22c55e;
 
-    font-size: 11px;
+    font-size: 10px;
+
+    line-height: 1.4;
 
     font-weight: 600;
 }
 
 
-/* ==========================================================
-   15. EMPTY / LOADING
-   ========================================================== */
+/* ==========================================================================
+   27. EMPTY / LOADING REVIEWS
+   ========================================================================== */
 
 .no-reviews,
 .reviews-loading {
 
-    padding: 35px 20px;
+    width: 100%;
+
+    padding: 32px 18px;
 
     text-align: center;
 
     color: var(--text-muted);
 
-    font-size: 14px;
+    font-size: 13px;
+
+    line-height: 1.5;
 }
 
 
@@ -876,9 +919,9 @@
 
     display: block;
 
-    margin-bottom: 10px;
+    margin-bottom: 9px;
 
-    font-size: 28px;
+    font-size: 25px;
 
     opacity: 0.6;
 }
@@ -888,129 +931,76 @@
 
     display: block;
 
-    margin-top: 7px;
+    margin-top: 6px;
 
     color: var(--text-muted);
+
+    font-size: 10px;
 
     opacity: 0.8;
 }
 
 
-/* ==========================================================
-   16. TABLET
-   ========================================================== */
+/* ==========================================================================
+   28. LARGE DESKTOP
+   ========================================================================== */
+
+@media (min-width: 1400px) {
+
+    .profile-content {
+        max-width: 1200px;
+    }
+
+}
+
+
+/* ==========================================================================
+   29. TABLET / SMALL DESKTOP
+   ========================================================================== */
 
 @media (max-width: 1024px) {
 
-    .profile-main {
-
-        padding-left: 25px;
-
-        padding-right: 25px;
-    }
-
-
     .profile-content {
-
         max-width: 100%;
-    }
-
-}
-
-
-/* ==========================================================
-   17. SMALL TABLET
-   ========================================================== */
-
-@media (max-width: 900px) {
-
-    .profile-page {
-
-        flex-direction: column;
-    }
-
-
-    .profile-main {
-
-        width: 100%;
-
-        max-width: 100%;
-
-        padding:
-            0 20px 40px;
     }
 
 
     .profile-summary-card {
 
-        align-items: flex-start;
+        padding: 24px;
+
+        gap: 22px;
+    }
+
+
+    .profile-form-card,
+    .reviews-card {
+
+        padding: 24px;
+    }
+
+
+    .rating-summary {
+
+        min-width: 135px;
+
+        padding-left: 22px;
     }
 
 }
 
 
-/* ==========================================================
-   18. MOBILE
-   ========================================================== */
+/* ==========================================================================
+   30. TABLET
+   ========================================================================== */
 
-@media (max-width: 600px) {
-
-    .profile-main {
-
-        padding:
-            0 15px 30px;
-    }
-
-
-    .profile-topbar {
-
-        height: auto;
-
-        padding: 20px 0;
-
-        align-items: flex-start;
-
-        gap: 15px;
-    }
-
-
-    .page-title h1 {
-
-        font-size: 22px;
-    }
-
-
-    .page-title p {
-
-        font-size: 12px;
-    }
-
-
-    .topbar-actions {
-
-        gap: 15px;
-    }
-
-
-    .topbar-user span {
-
-        display: none;
-    }
-
+@media (max-width: 800px) {
 
     .profile-summary-card {
 
-        padding: 22px;
+        align-items: flex-start;
 
-        flex-direction: column;
-
-        gap: 25px;
-    }
-
-
-    .profile-summary-left {
-
-        width: 100%;
+        gap: 20px;
     }
 
 
@@ -1020,40 +1010,124 @@
 
         height: 70px;
 
-        font-size: 28px;
-    }
+        min-width: 70px;
 
-
-    .profile-summary-info h2 {
-
-        font-size: 21px;
+        font-size: 27px;
     }
 
 
     .rating-summary {
 
+        min-width: 125px;
+
+        padding-left: 18px;
+    }
+
+
+    .rating-number {
+
+        font-size: 25px;
+    }
+
+}
+
+
+/* ==========================================================================
+   31. MOBILE
+   ========================================================================== */
+
+@media (max-width: 600px) {
+
+    .profile-content {
+
+        width: 100%;
+    }
+
+
+    /* Profile summary */
+
+    .profile-summary-card {
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        gap: 20px;
+
+        padding: 20px;
+
+        border-radius: 14px;
+
+        margin-bottom: 18px;
+    }
+
+
+    .profile-summary-left {
+
         width: 100%;
 
-        padding:
-            18px 0 0;
+        gap: 14px;
+    }
+
+
+    .profile-avatar {
+
+        width: 64px;
+
+        height: 64px;
+
+        min-width: 64px;
+
+        font-size: 25px;
+    }
+
+
+    .profile-summary-info h2 {
+
+        font-size: 20px;
+    }
+
+
+    .profile-summary-info > p {
+
+        font-size: 12px;
+    }
+
+
+    /* Rating */
+
+    .rating-summary {
+
+        width: 100%;
+
+        min-width: 0;
+
+        padding: 16px 0 0;
 
         border-left: none;
 
-        border-top:
-            1px solid var(--border-color);
+        border-top: 1px solid var(--border-color);
     }
 
+
+    /* Form and reviews */
 
     .profile-form-card,
     .reviews-card {
 
-        padding: 22px;
+        padding: 20px;
+
+        border-radius: 14px;
     }
 
+
+    /* Section heading */
 
     .section-heading {
 
         gap: 10px;
+
+        margin-bottom: 19px;
     }
 
 
@@ -1063,19 +1137,25 @@
     }
 
 
-    .review-top {
+    .section-heading p {
 
-        align-items: flex-start;
-
-        flex-direction: column;
+        font-size: 11px;
     }
 
 
-    .review-rating {
+    .section-heading > i {
 
-        padding-left: 48px;
+        width: 34px;
+
+        height: 34px;
+
+        min-width: 34px;
+
+        font-size: 13px;
     }
 
+
+    /* Reviews heading */
 
     .reviews-heading {
 
@@ -1088,31 +1168,36 @@
     .review-total {
 
         width: fit-content;
+
+        font-size: 11px;
+    }
+
+
+    /* Review */
+
+    .review-top {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 9px;
+    }
+
+
+    .review-rating {
+
+        padding-left: 45px;
     }
 
 }
 
 
-/* ==========================================================
-   19. EXTRA SMALL MOBILE
-   ========================================================== */
+/* ==========================================================================
+   32. SMALL MOBILE
+   ========================================================================== */
 
-@media (max-width: 400px) {
-
-    .profile-main {
-
-        padding:
-            0 12px 25px;
-    }
-
-
-    .profile-summary-card,
-    .profile-form-card,
-    .reviews-card {
-
-        border-radius: 14px;
-    }
-
+@media (max-width: 450px) {
 
     .profile-summary-card {
 
@@ -1129,37 +1214,169 @@
 
     .profile-summary-left {
 
-        gap: 14px;
+        gap: 12px;
     }
 
 
     .profile-avatar {
 
-        width: 60px;
+        width: 58px;
 
-        height: 60px;
+        height: 58px;
 
-        font-size: 24px;
+        min-width: 58px;
+
+        font-size: 23px;
     }
 
 
     .profile-summary-info h2 {
 
-        font-size: 19px;
+        font-size: 18px;
+    }
+
+
+    .profile-summary-info > p {
+
+        font-size: 11px;
+    }
+
+
+    .form-group {
+
+        margin-bottom: 15px;
+    }
+
+
+    .form-group input,
+    .form-group textarea {
+
+        padding: 11px 12px;
+
+        font-size: 12px;
+    }
+
+
+    .form-group label {
+
+        font-size: 11px;
+    }
+
+
+    .save-btn {
+
+        min-height: 44px;
+
+        font-size: 12px;
+    }
+
+
+    .review-item {
+
+        padding: 14px;
+    }
+
+
+    .review-comment {
+
+        font-size: 12px;
     }
 
 }
 
 
-/* ==========================================================
-   20. REDUCED MOTION
-   ========================================================== */
+/* ==========================================================================
+   33. EXTRA SMALL MOBILE
+   ========================================================================== */
+
+@media (max-width: 360px) {
+
+    .profile-summary-card,
+    .profile-form-card,
+    .reviews-card {
+
+        border-radius: 12px;
+    }
+
+
+    .profile-summary-card {
+
+        padding: 15px;
+    }
+
+
+    .profile-form-card,
+    .reviews-card {
+
+        padding: 15px;
+    }
+
+
+    .profile-avatar {
+
+        width: 52px;
+
+        height: 52px;
+
+        min-width: 52px;
+
+        font-size: 21px;
+    }
+
+
+    .profile-summary-info h2 {
+
+        font-size: 17px;
+    }
+
+
+    .section-heading h2 {
+
+        font-size: 16px;
+    }
+
+
+    .section-heading p {
+
+        font-size: 10px;
+    }
+
+
+    .review-rating {
+
+        padding-left: 44px;
+    }
+
+}
+
+
+/* ==========================================================================
+   34. PREVENT OVERFLOW
+   ========================================================================== */
+
+.profile-content,
+.profile-summary-card,
+.profile-form-card,
+.reviews-card,
+.profile-summary-left,
+.profile-summary-info,
+.reviews-container,
+.review-item {
+
+    overflow-wrap: anywhere;
+
+}
+
+
+/* ==========================================================================
+   35. REDUCED MOTION
+   ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
 
-    *,
-    *::before,
-    *::after {
+    .profile-content *,
+    .profile-content *::before,
+    .profile-content *::after {
 
         animation: none !important;
 

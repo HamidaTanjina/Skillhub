@@ -1,158 +1,680 @@
+/* ==========================================================================
+   SKILLHUB - ADD SKILLS PAGE
+   Consistent Project-Wide Sizing
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. NAVBAR
+   ========================================================================== */
 
 .navbar {
-    height: 80px;
+    height: 70px;
+
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0 60px;
+    justify-content: space-between;
+
+    padding: 0 40px;
+
     background: var(--bg-card);
     border-bottom: 1px solid var(--border-color);
+
+    position: relative;
+    z-index: 10;
 }
+
+
+/* ==========================================================================
+   2. LOGO
+   ========================================================================== */
 
 .logo {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 34px;
-    font-weight: 700;
+
+    gap: 9px;
+
     color: var(--text-main);
+
+    font-size: 26px;
+    font-weight: 700;
 }
 
-.logo i { color: #6366f1; }
+.logo i {
+    color: #6366f1;
+    font-size: 24px;
+}
+
+
+/* ==========================================================================
+   3. DASHBOARD BUTTON
+   ========================================================================== */
 
 .dashboard-btn {
-    padding: 14px 28px;
-    border-radius: 40px;
-    border: 2px solid #6366f1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    padding: 9px 18px;
+
+    border: 1px solid #6366f1;
+    border-radius: 10px;
+
     background: transparent;
     color: var(--text-main);
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
     cursor: pointer;
-    font-size: 16px;
-    transition: .3s;
+
+    transition:
+        background-color 0.25s ease,
+        color 0.25s ease,
+        transform 0.25s ease;
 }
 
-.dashboard-btn:hover { background: #6366f1; color: white; }
+.dashboard-btn:hover {
+    background: #6366f1;
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+/* ==========================================================================
+   4. MAIN CONTAINER
+   ========================================================================== */
 
 .container {
-    width: 90%;
-    margin: 40px auto;
+    width: min(92%, 1250px);
+
+    margin: 32px auto;
+
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 24px;
+
+    align-items: stretch;
 }
 
+
+/* ==========================================================================
+   5. CARD
+   ========================================================================== */
+
 .card {
+    min-width: 0;
+
+    padding: 26px;
+
     background: var(--bg-card);
+
     border: 1px solid var(--border-color);
-    border-radius: 22px;
-    padding: 35px;
-    transition: .3s;
+    border-radius: 16px;
+
+    transition:
+        transform 0.25s ease,
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
 }
 
 .card:hover {
-    transform: translateY(-5px);
-    border-color: #3b82f6;
-    box-shadow: 0 12px 28px rgba(59, 130, 246, .20);
+    transform: translateY(-2px);
+
+    border-color: #6366f1;
+
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, 0.10);
 }
+
+
+/* ==========================================================================
+   6. CARD TITLE
+   ========================================================================== */
 
 .title {
     display: flex;
-    gap: 20px;
     align-items: center;
-    margin-bottom: 30px;
+
+    gap: 14px;
+
+    margin-bottom: 22px;
 }
+
+
+/* ==========================================================================
+   7. TITLE ICON
+   ========================================================================== */
 
 .icon {
-    width: 70px; height: 70px;
-    border-radius: 18px;
-    display: flex; justify-content: center; align-items: center;
-    font-size: 30px;
+    flex: 0 0 54px;
+
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    font-size: 23px;
 }
 
-.blue { background: #312e81; color: #818cf8; }
-.pink { background: #4c1d2f; color: #fb7185; }
+.blue {
+    background: rgba(99, 102, 241, 0.14);
+    color: #6366f1;
+}
 
-.title h2 { font-size: 36px; color: var(--text-main); }
-.title p { color: var(--text-muted); margin-top: 8px; }
+.pink {
+    background: rgba(236, 72, 153, 0.14);
+    color: #ec4899;
+}
+
+
+/* ==========================================================================
+   8. TITLE TEXT
+   ========================================================================== */
+
+.title h2 {
+    margin: 0;
+
+    color: var(--text-main);
+
+    font-size: 24px;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.title p {
+    margin: 5px 0 0;
+
+    color: var(--text-muted);
+
+    font-size: 13px;
+    line-height: 1.45;
+}
+
+
+/* ==========================================================================
+   9. LABELS
+   ========================================================================== */
 
 label {
     display: block;
-    margin: 25px 0 12px;
-    font-weight: 600;
+
+    margin: 18px 0 8px;
+
     color: var(--text-main);
+
+    font-size: 14px;
+    font-weight: 600;
 }
 
-select, input {
+
+/* ==========================================================================
+   10. SELECT + INPUT
+   ========================================================================== */
+
+select,
+input {
     width: 100%;
-    padding: 16px;
-    border-radius: 14px;
+
+    height: 44px;
+
+    padding: 0 13px;
+
     border: 1px solid var(--border-color);
+    border-radius: 10px;
+
     background: var(--input-bg);
     color: var(--text-main);
+
     outline: none;
-    font-size: 16px;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-select:focus, input:focus { border-color: #6366f1; }
+select {
+    cursor: pointer;
+}
+
+input::placeholder {
+    color: var(--text-muted);
+    opacity: 0.8;
+}
+
+select:focus,
+input:focus {
+    border-color: #6366f1;
+
+    box-shadow:
+        0 0 0 3px rgba(99, 102, 241, 0.10);
+}
+
+
+/* ==========================================================================
+   11. SUGGESTIONS
+   ========================================================================== */
 
 .suggestions {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 20px;
-    margin-bottom: 25px;
+
+    gap: 8px;
+
+    margin-top: 14px;
+    margin-bottom: 18px;
 }
+
+
+/* ==========================================================================
+   12. SKILL SUGGESTION BUTTON
+   ========================================================================== */
 
 .skill-btn {
-    padding: 10px 18px;
-    border-radius: 30px;
-    border: 1px solid #3b82f6;
-    background: #1e293b;
-    color: #93c5fd;
+    padding: 7px 12px;
+
+    border: 1px solid rgba(99, 102, 241, 0.40);
+    border-radius: 8px;
+
+    background: rgba(99, 102, 241, 0.08);
+    color: var(--text-main);
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+
     cursor: pointer;
-    transition: .3s;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
 }
 
-.skill-btn:hover { background: #3b82f6; color: white; }
+.skill-btn:hover {
+    background: #6366f1;
+    border-color: #6366f1;
+
+    color: #ffffff;
+
+    transform: translateY(-1px);
+}
+
+
+/* ==========================================================================
+   13. ADDED SKILLS HEADING
+   ========================================================================== */
+
+.card h3 {
+    margin: 20px 0 9px;
+
+    color: var(--text-main);
+
+    font-size: 15px;
+    font-weight: 650;
+}
+
+
+/* ==========================================================================
+   14. SELECTED SKILLS
+   ========================================================================== */
 
 .selected-skills {
-    margin-top: 20px;
-    min-height: 90px;
-    border: 2px dashed var(--border-color);
-    border-radius: 16px;
-    padding: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+
+    gap: 4px;
+
+    min-height: 75px;
+
+    padding: 11px;
+
+    border: 1px dashed var(--border-color);
+    border-radius: 11px;
+
+    background: transparent;
 }
+
+
+/* ==========================================================================
+   15. SKILL TAG
+   ========================================================================== */
 
 .skill-tag {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    margin: 8px;
-    padding: 10px 18px;
-    border-radius: 30px;
-    background: #312e81;
-    color: white;
-    font-size: 15px;
+
+    gap: 7px;
+
+    margin: 2px;
+
+    padding: 7px 10px;
+
+    border-radius: 8px;
+
+    background: #6366f1;
+    color: #ffffff;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    white-space: nowrap;
 }
 
-.skill-tag i { cursor: pointer; }
+.skill-tag i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 
-.save-area { text-align: center; margin-bottom: 50px; }
+    width: 17px;
+    height: 17px;
+
+    border-radius: 50%;
+
+    color: #ffffff;
+
+    cursor: pointer;
+
+    font-size: 10px;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.skill-tag i:hover {
+    background: rgba(255, 255, 255, 0.18);
+
+    transform: scale(1.05);
+}
+
+
+/* ==========================================================================
+   16. SAVE AREA
+   ========================================================================== */
+
+.save-area {
+    display: flex;
+    justify-content: center;
+
+    margin: 0 auto 40px;
+
+    padding: 0 20px;
+}
+
+
+/* ==========================================================================
+   17. SAVE BUTTON
+   ========================================================================== */
 
 .save-btn {
-    width: 420px;
-    max-width: 90%;
-    padding: 18px;
+    width: 330px;
+    max-width: 100%;
+
+    height: 48px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
     border: none;
-    border-radius: 50px;
-    background: linear-gradient(135deg, #7c3aed, #38bdf8);
-    color: white;
-    font-size: 20px;
+    border-radius: 11px;
+
+    background: linear-gradient(
+        135deg,
+        #6366f1,
+        #8b5cf6
+    );
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 15px;
     font-weight: 700;
+
     cursor: pointer;
-    transition: .3s;
+
+    box-shadow:
+        0 6px 16px rgba(99, 102, 241, 0.18);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.save-btn:hover { transform: scale(1.03); }
+.save-btn:hover {
+    transform: translateY(-2px);
 
-@media(max-width: 1000px) { .container { grid-template-columns: 1fr; } }
+    box-shadow:
+        0 9px 20px rgba(99, 102, 241, 0.25);
+}
+
+.save-btn:active {
+    transform: translateY(0);
+}
+
+
+/* ==========================================================================
+   18. TABLET
+   ========================================================================== */
+
+@media (max-width: 1050px) {
+
+    .navbar {
+        padding: 0 28px;
+    }
+
+    .container {
+        width: 92%;
+
+        gap: 20px;
+    }
+
+    .card {
+        padding: 23px;
+    }
+
+    .title h2 {
+        font-size: 22px;
+    }
+}
+
+
+/* ==========================================================================
+   19. MOBILE
+   ========================================================================== */
+
+@media (max-width: 750px) {
+
+    .navbar {
+        height: 66px;
+
+        padding: 0 18px;
+    }
+
+    .logo {
+        font-size: 23px;
+    }
+
+    .logo i {
+        font-size: 21px;
+    }
+
+    .dashboard-btn {
+        padding: 8px 13px;
+
+        font-size: 13px;
+    }
+
+    .container {
+        width: 94%;
+
+        margin: 24px auto;
+
+        grid-template-columns: 1fr;
+
+        gap: 18px;
+    }
+
+    .card {
+        padding: 21px;
+
+        border-radius: 14px;
+    }
+
+    .title {
+        gap: 12px;
+
+        margin-bottom: 19px;
+    }
+
+    .icon {
+        flex-basis: 50px;
+
+        width: 50px;
+        height: 50px;
+
+        border-radius: 12px;
+
+        font-size: 21px;
+    }
+
+    .title h2 {
+        font-size: 21px;
+    }
+
+    .title p {
+        font-size: 12px;
+    }
+
+    label {
+        margin-top: 16px;
+
+        font-size: 13px;
+    }
+
+    select,
+    input {
+        height: 42px;
+
+        font-size: 13px;
+    }
+
+    .skill-btn {
+        font-size: 12px;
+
+        padding: 7px 10px;
+    }
+
+    .card h3 {
+        font-size: 14px;
+    }
+
+    .skill-tag {
+        font-size: 12px;
+
+        padding: 6px 9px;
+    }
+
+    .save-btn {
+        width: 300px;
+
+        height: 46px;
+
+        font-size: 14px;
+    }
+}
+
+
+/* ==========================================================================
+   20. SMALL MOBILE
+   ========================================================================== */
+
+@media (max-width: 450px) {
+
+    .navbar {
+        padding: 0 13px;
+    }
+
+    .logo {
+        font-size: 21px;
+    }
+
+    .logo i {
+        font-size: 19px;
+    }
+
+    .dashboard-btn {
+        padding: 7px 10px;
+
+        font-size: 12px;
+    }
+
+    .dashboard-btn i {
+        font-size: 11px;
+    }
+
+    .container {
+        width: 94%;
+
+        margin-top: 18px;
+    }
+
+    .card {
+        padding: 18px;
+    }
+
+    .title h2 {
+        font-size: 19px;
+    }
+
+    .title p {
+        font-size: 11px;
+    }
+
+    .icon {
+        flex-basis: 46px;
+
+        width: 46px;
+        height: 46px;
+
+        font-size: 19px;
+    }
+
+    select,
+    input {
+        height: 40px;
+
+        padding: 0 11px;
+
+        font-size: 12px;
+    }
+
+    .save-area {
+        margin-bottom: 28px;
+    }
+
+    .save-btn {
+        width: 100%;
+
+        height: 44px;
+    }
+}
