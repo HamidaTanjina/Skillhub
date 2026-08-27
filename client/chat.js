@@ -1,31 +1,57 @@
 const params = new URLSearchParams(window.location.search);
 const autoSwapId = params.get("swapId");
+
 const API_BASE_URL =
     "https://skillhub-backend-cths.onrender.com/api";
 
 const SOCKET_URL =
     "https://skillhub-backend-cths.onrender.com";
 
-const token = localStorage.getItem("token");
+const token =
+    localStorage.getItem("token");
 
 if (!token) {
     window.location.href = "index.html";
 }
 
-const chatList = document.getElementById("chatList");
-const chatBody = document.getElementById("chatBody");
+const chatList =
+    document.getElementById("chatList");
 
-const chatUser = document.getElementById("chatUser");
-const chatAvatar = document.getElementById("chatAvatar");
-const chatStatus = document.getElementById("chatStatus");
+const chatBody =
+    document.getElementById("chatBody");
 
-const messageInput = document.getElementById("messageInput");
-const sendBtn = document.getElementById("sendBtn");
+const chatUser =
+    document.getElementById("chatUser");
 
-const searchChat = document.getElementById("searchChat");
+const chatAvatar =
+    document.getElementById("chatAvatar");
 
-const emojiBtn = document.getElementById("emojiBtn");
-const emojiPicker = document.getElementById("emojiPicker");
+const chatStatus =
+    document.getElementById("chatStatus");
+
+const chatSkill =
+    document.getElementById("chatSkill");
+
+const chatHeader =
+    document.getElementById("chatHeader");
+
+const chatInputArea =
+    document.getElementById("chatInputArea");
+
+const messageInput =
+    document.getElementById("messageInput");
+
+const sendBtn =
+    document.getElementById("sendBtn");
+
+const searchChat =
+    document.getElementById("searchChat");
+
+const emojiBtn =
+    document.getElementById("emojiBtn");
+
+const emojiPicker =
+    document.getElementById("emojiPicker");
 
 let socket = null;
 
@@ -36,72 +62,111 @@ let currentRoom = "";
 let chatData = [];
 
 let isLoadingMessages = false;
-let onlineUsers = new Set();
 
-document.addEventListener("DOMContentLoaded", async () => {
+let onlineUsers =
+    new Set();
 
-    const user = parseJwt(token);
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
 
-    currentUserId = String(
-        user.id ||
-        user._id ||
-        ""
-    );
+        const user =
+            parseJwt(token);
 
-    messageInput.disabled = true;
-    sendBtn.disabled = true;
+        currentUserId =
+            String(
+                user.id ||
+                user._id ||
+                ""
+            );
 
-    initializeEmojiPicker();
+        if (!currentUserId) {
+            localStorage.removeItem("token");
+            window.location.href =
+                "index.html";
+            return;
+        }
 
-    initializeSocket();
+        messageInput.disabled = true;
+        sendBtn.disabled = true;
 
-    await loadChatList(autoSwapId);
+        initializeEmojiPicker();
 
-    sendBtn.addEventListener(
-        "click",
-        sendMessage
-    );
+        initializeSocket();
 
-    messageInput.addEventListener(
-        "keydown",
-        (e) => {
+        await loadChatList(
+            autoSwapId
+        );
 
-            if (e.key === "Enter") {
+        sendBtn.addEventListener(
+            "click",
+            sendMessage
+        );
 
-                e.preventDefault();
+        messageInput.addEventListener(
+            "keydown",
+            event => {
 
-                sendMessage();
+                if (
+                    event.key === "Enter" &&
+                    !event.shiftKey
+                ) {
+
+                    event.preventDefault();
+
+                    sendMessage();
+
+                }
 
             }
+        );
+
+        if (searchChat) {
+
+            searchChat.addEventListener(
+                "input",
+                filterChats
+            );
 
         }
-    );
 
-    if (searchChat) {
+    }
+);
 
-        searchChat.addEventListener(
-            "keyup",
-            filterChats
+function parseJwt(
+    jwtToken
+) {
+
+    try {
+
+        if (!jwtToken) {
+            return {};
+        }
+
+        const parts =
+            jwtToken.split(".");
+
+        if (parts.length !== 3) {
+            return {};
+        }
+
+        const base64 =
+            parts[1]
+                .replace(/-/g, "+")
+                .replace(/_/g, "/");
+
+        return JSON.parse(
+            atob(base64)
         );
 
     }
 
-});
+    catch (error) {
 
-function parseJwt(token) {
-
-    try {
-
-        const base64 = token
-            .split(".")[1]
-            .replace(/-/g, "+")
-            .replace(/_/g, "/");
-
-        return JSON.parse(atob(base64));
-
-    }
-
-    catch {
+        console.error(
+            "JWT parsing error:",
+            error
+        );
 
         return {};
 
@@ -109,7 +174,9 @@ function parseJwt(token) {
 
 }
 
-function getChatSwapId(chat) {
+function getChatSwapId(
+    chat
+) {
 
     if (!chat) {
         return "";
@@ -118,7 +185,8 @@ function getChatSwapId(chat) {
     if (chat.swapId) {
 
         if (
-            typeof chat.swapId === "object"
+            typeof chat.swapId ===
+            "object"
         ) {
 
             return String(
@@ -129,14 +197,17 @@ function getChatSwapId(chat) {
 
         }
 
-        return String(chat.swapId);
+        return String(
+            chat.swapId
+        );
 
     }
 
     if (chat.swap) {
 
         if (
-            typeof chat.swap === "object"
+            typeof chat.swap ===
+            "object"
         ) {
 
             return String(
@@ -147,14 +218,17 @@ function getChatSwapId(chat) {
 
         }
 
-        return String(chat.swap);
+        return String(
+            chat.swap
+        );
 
     }
 
     if (chat.swapData) {
 
         if (
-            typeof chat.swapData === "object"
+            typeof chat.swapData ===
+            "object"
         ) {
 
             return String(
@@ -165,13 +239,17 @@ function getChatSwapId(chat) {
 
         }
 
-        return String(chat.swapData);
+        return String(
+            chat.swapData
+        );
 
     }
 
     if (chat._id) {
 
-        return String(chat._id);
+        return String(
+            chat._id
+        );
 
     }
 
@@ -181,105 +259,201 @@ function getChatSwapId(chat) {
 
 function initializeSocket() {
 
-    socket = io(SOCKET_URL, {
+    if (
+        typeof io !== "function"
+    ) {
 
-        auth: {
-            token
-        },
-
-        transports: [
-            "websocket",
-            "polling"
-        ]
-
-    });
-
-    socket.on("onlineUsers", (users) => {
-
-        onlineUsers = new Set(
-            users.map(id => String(id))
+        console.error(
+            "Socket.IO library not loaded."
         );
 
-        updateCurrentUserStatus();
+        return;
 
-        loadChatList();
+    }
 
-    });
+    socket =
+        io(
+            SOCKET_URL,
+            {
+                auth: {
+                    token: token
+                },
 
-    socket.on("userOnline", (userId) => {
-
-        onlineUsers.add(
-            String(userId)
+                transports: [
+                    "websocket",
+                    "polling"
+                ]
+            }
         );
 
-        updateCurrentUserStatus();
+    socket.on(
+        "connect",
+        () => {
 
-        loadChatList();
+            console.log(
+                "Socket connected:",
+                socket.id
+            );
 
-    });
+            if (currentSwapId) {
 
-    socket.on("userOffline", (userId) => {
+                joinRoom(
+                    currentSwapId
+                );
 
-        onlineUsers.delete(
-            String(userId)
-        );
-
-        updateCurrentUserStatus();
-
-        loadChatList();
-
-    });
-
-    socket.on("connect", () => {
-
-        console.log(
-            "Connected:",
-            socket.id
-        );
-
-        if (currentSwapId) {
-
-            joinRoom(currentSwapId);
+            }
 
         }
+    );
 
-    });
+    socket.on(
+        "onlineUsers",
+        users => {
+
+            onlineUsers =
+                new Set(
+                    Array.isArray(users)
+                        ? users.map(
+                            id =>
+                                String(id)
+                        )
+                        : []
+                );
+
+            updateCurrentUserStatus();
+
+            loadChatList();
+
+        }
+    );
+
+    socket.on(
+        "userOnline",
+        userId => {
+
+            onlineUsers.add(
+                String(userId)
+            );
+
+            updateCurrentUserStatus();
+
+            updateChatListOnlineStatus();
+
+        }
+    );
+
+    socket.on(
+        "userOffline",
+        userId => {
+
+            onlineUsers.delete(
+                String(userId)
+            );
+
+            updateCurrentUserStatus();
+
+            updateChatListOnlineStatus();
+
+        }
+    );
 
     socket.on(
         "receiveMessage",
         receiveMessage
     );
 
-    socket.on("disconnect", () => {
+    socket.on(
+        "disconnect",
+        reason => {
 
-        console.log(
-            "Socket disconnected"
-        );
+            console.log(
+                "Socket disconnected:",
+                reason
+            );
 
-    });
+        }
+    );
 
-    socket.on("connect_error", (err) => {
+    socket.on(
+        "connect_error",
+        error => {
 
-        console.log(
-            "Socket Error:",
-            err.message
-        );
+            console.error(
+                "Socket connection error:",
+                error.message
+            );
 
-    });
+        }
+    );
+
+}
+
+function updateChatListOnlineStatus() {
+
+    document
+        .querySelectorAll(".chat-item")
+        .forEach(item => {
+
+            const swapId =
+                item.dataset.swap;
+
+            const chat =
+                chatData.find(
+                    currentChat =>
+                        getChatSwapId(
+                            currentChat
+                        ) ===
+                        String(swapId)
+                );
+
+            if (!chat) {
+                return;
+            }
+
+            const partnerId =
+                chat.partner?._id ||
+                chat.partner?.id;
+
+            const avatar =
+                item.querySelector(
+                    ".chat-avatar"
+                );
+
+            if (!avatar) {
+                return;
+            }
+
+            const isOnline =
+                partnerId &&
+                onlineUsers.has(
+                    String(partnerId)
+                );
+
+            avatar.classList.toggle(
+                "online",
+                Boolean(isOnline)
+            );
+
+        });
 
 }
 
 function updateCurrentUserStatus() {
 
-    if (!currentSwapId) return;
+    if (!currentSwapId) {
+        return;
+    }
 
-    const chat = chatData.find(
-        c =>
-            getChatSwapId(c) ===
-            String(currentSwapId)
-    );
+    const chat =
+        chatData.find(
+            item =>
+                getChatSwapId(item) ===
+                String(currentSwapId)
+        );
 
-    if (!chat) return;
+    if (!chat) {
+        return;
+    }
 
     const partnerId =
         chat.partner?._id ||
@@ -291,24 +465,46 @@ function updateCurrentUserStatus() {
             String(partnerId)
         );
 
-    chatStatus.textContent = "";
+    if (chatStatus) {
 
-    chatAvatar.classList.toggle(
-        "online",
-        Boolean(isOnline)
-    );
+        chatStatus.textContent =
+            isOnline
+                ? "Active now"
+                : "Offline";
+
+        chatStatus.classList.toggle(
+            "active",
+            Boolean(isOnline)
+        );
+
+    }
+
+    if (chatAvatar) {
+
+        chatAvatar.classList.toggle(
+            "online",
+            Boolean(isOnline)
+        );
+
+    }
 
 }
 
-function joinRoom(roomId) {
+function joinRoom(
+    roomId
+) {
 
-    if (!socket) return;
-
-    if (!socket.connected) return;
+    if (
+        !socket ||
+        !socket.connected ||
+        !roomId
+    ) {
+        return;
+    }
 
     if (
         currentRoom &&
-        currentRoom !== roomId
+        currentRoom !== String(roomId)
     ) {
 
         socket.emit(
@@ -318,43 +514,46 @@ function joinRoom(roomId) {
 
     }
 
-    currentRoom = roomId;
+    currentRoom =
+        String(roomId);
 
     socket.emit(
         "joinRoom",
-        roomId
+        currentRoom
     );
 
     console.log(
-        "Joined Room:",
-        roomId
+        "Joined room:",
+        currentRoom
     );
 
 }
 
-function openChatById(swapId) {
+function openChatById(
+    swapId
+) {
 
     const targetSwapId =
-        String(swapId || "");
+        String(
+            swapId || ""
+        );
 
-    const chat = chatData.find(
-        c =>
-            getChatSwapId(c) ===
-            targetSwapId
-    );
+    if (!targetSwapId) {
+        return;
+    }
+
+    const chat =
+        chatData.find(
+            item =>
+                getChatSwapId(item) ===
+                targetSwapId
+        );
 
     if (!chat) {
 
-        console.log(
+        console.error(
             "Chat not found:",
             targetSwapId
-        );
-
-        console.log(
-            "Available chat swap IDs:",
-            chatData.map(
-                c => getChatSwapId(c)
-            )
         );
 
         return;
@@ -365,26 +564,49 @@ function openChatById(swapId) {
 
 }
 
-async function loadChatList(autoOpenId = null) {
+async function loadChatList(
+    autoOpenId = null
+) {
 
     try {
 
-        const response = await fetch(
-            `${API_BASE_URL}/chat`,
-            {
-                headers: {
-                    Authorization:
-                        `Bearer ${token}`
+        const response =
+            await fetch(
+                `${API_BASE_URL}/chat`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
                 }
-            }
-        );
+            );
+
+        if (
+            response.status === 401
+        ) {
+
+            localStorage.removeItem(
+                "token"
+            );
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
 
         const chats =
             await response.json();
 
         if (!response.ok) {
 
-            console.log(chats);
+            console.error(
+                "Chat list error:",
+                chats
+            );
 
             return;
 
@@ -405,7 +627,9 @@ async function loadChatList(autoOpenId = null) {
 
                     <i class="fa-solid fa-comments"></i>
 
-                    <h3>No Active Chats</h3>
+                    <h3>
+                        No Active Chats
+                    </h3>
 
                     <p>
                         When a swap request is accepted,
@@ -416,142 +640,240 @@ async function loadChatList(autoOpenId = null) {
 
             `;
 
+            if (
+                chatHeader
+            ) {
+
+                chatHeader.style.display =
+                    "none";
+
+            }
+
+            if (
+                chatInputArea
+            ) {
+
+                chatInputArea.style.display =
+                    "none";
+
+            }
+
             return;
 
         }
 
-        chatData.forEach(chat => {
+        chatData.forEach(
+            chat => {
 
-            const item =
-                document.createElement("div");
+                const item =
+                    document.createElement(
+                        "div"
+                    );
 
-            item.className =
-                "chat-item";
+                item.className =
+                    "chat-item";
 
-            const chatSwapId =
-                getChatSwapId(chat);
+                const chatSwapId =
+                    getChatSwapId(
+                        chat
+                    );
 
-            item.dataset.swap =
-                chatSwapId;
+                item.dataset.swap =
+                    chatSwapId;
 
-            if (
-                String(chatSwapId) ===
-                String(currentSwapId)
-            ) {
+                if (
+                    String(chatSwapId) ===
+                    String(currentSwapId)
+                ) {
 
-                item.classList.add("active");
-
-            }
-
-            const partnerName =
-                chat.partner?.name ||
-                "Unknown User";
-
-            const firstLetter =
-                partnerName
-                    .charAt(0)
-                    .toUpperCase();
-
-            const partnerId =
-                chat.partner?._id ||
-                chat.partner?.id;
-
-            const isOnline =
-                partnerId &&
-                onlineUsers.has(
-                    String(partnerId)
-                );
-
-            item.innerHTML = `
-
-                <div class="chat-avatar ${isOnline ? "online" : ""}">
-
-                    ${firstLetter}
-
-                </div>
-
-                <div class="chat-info">
-
-                    <h4>
-                        ${partnerName}
-                    </h4>
-
-                    <p>
-                        ${chat.lastMessage ||
-                        "💬 Start chatting now"}
-                    </p>
-
-                </div>
-
-                <div class="chat-time">
-
-                    ${
-                        chat.lastTime
-                            ? formatTime(chat.lastTime)
-                            : ""
-                    }
-
-                </div>
-
-            `;
-
-            item.addEventListener(
-                "click",
-                () => {
-
-                    openChat(chat);
+                    item.classList.add(
+                        "active"
+                    );
 
                 }
-            );
 
-            chatList.appendChild(item);
+                const partnerName =
+                    chat.partner?.name ||
+                    "Unknown User";
 
-        });
+                const firstLetter =
+                    partnerName
+                        .charAt(0)
+                        .toUpperCase();
 
-        if (autoOpenId) {
+                const partnerId =
+                    chat.partner?._id ||
+                    chat.partner?.id;
 
-            setTimeout(() => {
+                const isOnline =
+                    partnerId &&
+                    onlineUsers.has(
+                        String(partnerId)
+                    );
 
-                openChatById(
-                    autoOpenId
+                const avatar =
+                    document.createElement(
+                        "div"
+                    );
+
+                avatar.className =
+                    "chat-avatar";
+
+                if (isOnline) {
+
+                    avatar.classList.add(
+                        "online"
+                    );
+
+                }
+
+                avatar.textContent =
+                    firstLetter;
+
+                const info =
+                    document.createElement(
+                        "div"
+                    );
+
+                info.className =
+                    "chat-info";
+
+                const name =
+                    document.createElement(
+                        "h4"
+                    );
+
+                name.textContent =
+                    partnerName;
+
+                const preview =
+                    document.createElement(
+                        "p"
+                    );
+
+                preview.textContent =
+                    chat.lastMessage ||
+                    "Start chatting now...";
+
+                info.appendChild(
+                    name
                 );
 
-            }, 100);
+                info.appendChild(
+                    preview
+                );
 
-        }
+                const time =
+                    document.createElement(
+                        "div"
+                    );
+
+                time.className =
+                    "chat-time";
+
+                time.textContent =
+                    chat.lastTime
+                        ? formatTime(
+                            chat.lastTime
+                        )
+                        : "";
+
+                item.appendChild(
+                    avatar
+                );
+
+                item.appendChild(
+                    info
+                );
+
+                item.appendChild(
+                    time
+                );
+
+                item.addEventListener(
+                    "click",
+                    () => {
+
+                        openChat(
+                            chat
+                        );
+
+                    }
+                );
+
+                chatList.appendChild(
+                    item
+                );
+
+            }
+        );
 
         updateCurrentUserStatus();
 
+        if (autoOpenId) {
+
+            setTimeout(
+                () => {
+
+                    openChatById(
+                        autoOpenId
+                    );
+
+                },
+                100
+            );
+
+        }
+
     }
 
-    catch (err) {
+    catch (error) {
 
-        console.log(
-            "Chat List Error:",
-            err
+        console.error(
+            "Chat list error:",
+            error
         );
+
+        chatList.innerHTML = `
+
+            <div class="empty-chat-list">
+
+                <i class="fa-solid fa-circle-exclamation"></i>
+
+                <h3>
+                    Unable to load chats
+                </h3>
+
+                <p>
+                    Please try again later.
+                </p>
+
+            </div>
+
+        `;
 
     }
 
 }
 
-function getSkillExchange(chat) {
+function getSkillExchange(
+    chat
+) {
 
-    let teachSkill = "";
-    let learnSkill = "";
-
-    teachSkill =
-        chat.teachSkill ||
+    let teachSkill =
+        chat?.teachSkill ||
         "";
 
-    learnSkill =
-        chat.learnSkill ||
+    let learnSkill =
+        chat?.learnSkill ||
         "";
 
     if (
-        (!teachSkill || !learnSkill) &&
-        chat.swap &&
-        typeof chat.swap === "object"
+        (!teachSkill ||
+            !learnSkill) &&
+        chat?.swap &&
+        typeof chat.swap ===
+            "object"
     ) {
 
         teachSkill =
@@ -565,9 +887,11 @@ function getSkillExchange(chat) {
     }
 
     if (
-        (!teachSkill || !learnSkill) &&
-        chat.swapData &&
-        typeof chat.swapData === "object"
+        (!teachSkill ||
+            !learnSkill) &&
+        chat?.swapData &&
+        typeof chat.swapData ===
+            "object"
     ) {
 
         teachSkill =
@@ -580,19 +904,10 @@ function getSkillExchange(chat) {
 
     }
 
-    teachSkill =
-        teachSkill ||
-        chat.mySkill ||
-        chat.offeredSkill ||
-        "";
-
-    learnSkill =
-        learnSkill ||
-        chat.partnerSkill ||
-        chat.requestedSkill ||
-        "";
-
-    if (teachSkill && learnSkill) {
+    if (
+        teachSkill &&
+        learnSkill
+    ) {
 
         return `${teachSkill} <-> ${learnSkill}`;
 
@@ -614,17 +929,16 @@ function getSkillExchange(chat) {
 
 }
 
-function openChat(chat) {
+function openChat(
+    chat
+) {
 
     const swapId =
-        getChatSwapId(chat);
-
-    if (!swapId) {
-
-        console.log(
-            "Invalid chat swap:",
+        getChatSwapId(
             chat
         );
+
+    if (!swapId) {
 
         alert(
             "Unable to open this conversation."
@@ -637,13 +951,19 @@ function openChat(chat) {
     currentSwapId =
         String(swapId);
 
-    document.getElementById(
-        "chatHeader"
-    ).style.display = "flex";
+    if (chatHeader) {
 
-    document.getElementById(
-        "chatInputArea"
-    ).style.display = "flex";
+        chatHeader.style.display =
+            "flex";
+
+    }
+
+    if (chatInputArea) {
+
+        chatInputArea.style.display =
+            "flex";
+
+    }
 
     const partnerName =
         chat.partner?.name ||
@@ -657,51 +977,34 @@ function openChat(chat) {
             .charAt(0)
             .toUpperCase();
 
-    const chatSkill =
-        document.getElementById(
-            "chatSkill"
-        );
-
     chatSkill.textContent =
-        getSkillExchange(chat);
+        getSkillExchange(
+            chat
+        );
 
     updateCurrentUserStatus();
 
-    messageInput.disabled = false;
+    messageInput.disabled =
+        false;
 
-    sendBtn.disabled = false;
-
-    const welcome =
-        chatBody.querySelector(
-            ".empty-chat"
-        );
-
-    if (welcome) {
-
-        welcome.remove();
-
-    }
+    sendBtn.disabled =
+        false;
 
     document
-        .querySelectorAll(".chat-item")
-        .forEach(item => {
+        .querySelectorAll(
+            ".chat-item"
+        )
+        .forEach(
+            item => {
 
-            item.classList.remove(
-                "active"
-            );
-
-            if (
-                item.dataset.swap ===
-                currentSwapId
-            ) {
-
-                item.classList.add(
-                    "active"
+                item.classList.toggle(
+                    "active",
+                    item.dataset.swap ===
+                        currentSwapId
                 );
 
             }
-
-        });
+        );
 
     chatBody.innerHTML = "";
 
@@ -710,7 +1013,9 @@ function openChat(chat) {
     );
 
     const url =
-        new URL(window.location);
+        new URL(
+            window.location.href
+        );
 
     url.searchParams.set(
         "swapId",
@@ -731,30 +1036,70 @@ function openChat(chat) {
 
 async function loadMessages() {
 
-    if (!currentSwapId) return;
+    if (!currentSwapId) {
+        return;
+    }
 
-    if (isLoadingMessages) return;
+    if (isLoadingMessages) {
+        return;
+    }
 
-    isLoadingMessages = true;
+    isLoadingMessages =
+        true;
+
+    const swapIdAtStart =
+        currentSwapId;
 
     try {
 
-        const response = await fetch(
-            `${API_BASE_URL}/chat/${currentSwapId}`,
-            {
-                headers: {
-                    Authorization:
-                        `Bearer ${token}`
+        const response =
+            await fetch(
+                `${API_BASE_URL}/chat/${encodeURIComponent(
+                    swapIdAtStart
+                )}`,
+                {
+                    method: "GET",
+
+                    headers: {
+                        Authorization:
+                            `Bearer ${token}`
+                    }
                 }
-            }
-        );
+            );
+
+        if (
+            response.status === 401
+        ) {
+
+            localStorage.removeItem(
+                "token"
+            );
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
 
         const messages =
             await response.json();
 
         if (!response.ok) {
 
-            console.log(messages);
+            console.error(
+                "Messages error:",
+                messages
+            );
+
+            return;
+
+        }
+
+        if (
+            currentSwapId !==
+            swapIdAtStart
+        ) {
 
             return;
 
@@ -762,7 +1107,10 @@ async function loadMessages() {
 
         chatBody.innerHTML = "";
 
-        if (!messages.length) {
+        if (
+            !Array.isArray(messages) ||
+            !messages.length
+        ) {
 
             chatBody.innerHTML = `
 
@@ -770,7 +1118,9 @@ async function loadMessages() {
 
                     <i class="fa-regular fa-comments"></i>
 
-                    <h2>No Messages Yet</h2>
+                    <h2>
+                        No Messages Yet
+                    </h2>
 
                     <p>
                         Start chatting with your
@@ -785,62 +1135,79 @@ async function loadMessages() {
 
         }
 
-        messages.forEach(msg => {
+        messages.forEach(
+            msg => {
 
-            const senderId =
-                String(
-                    msg.sender?._id ||
-                    msg.sender?.id ||
-                    msg.sender
+                const senderId =
+                    String(
+                        msg.sender?._id ||
+                        msg.sender?.id ||
+                        msg.sender ||
+                        ""
+                    );
+
+                createMessage(
+                    msg.message,
+                    senderId ===
+                        currentUserId
+                        ? "sent"
+                        : "received",
+                    formatTime(
+                        msg.createdAt
+                    ),
+                    msg._id
                 );
 
-            createMessage(
-                msg.message,
-                senderId === currentUserId
-                    ? "sent"
-                    : "received",
-                formatTime(
-                    msg.createdAt
-                ),
-                msg._id
-            );
-
-        });
+            }
+        );
 
         scrollToBottom();
 
     }
 
-    catch (err) {
+    catch (error) {
 
-        console.log(
-            "Load Messages Error:",
-            err
+        console.error(
+            "Load messages error:",
+            error
         );
 
     }
 
     finally {
 
-        isLoadingMessages = false;
+        isLoadingMessages =
+            false;
 
     }
 
 }
 
-function receiveMessage(msg) {
+function receiveMessage(
+    msg
+) {
 
-    loadChatList();
+    if (!msg) {
+        return;
+    }
 
     const swapId =
-        typeof msg.swap === "object"
-            ? msg.swap?._id
+        typeof msg.swap ===
+            "object"
+            ? msg.swap?._id ||
+              msg.swap?.id
             : msg.swap;
+
+    if (!swapId) {
+        return;
+    }
 
     if (
         String(swapId) !==
         String(currentSwapId)
     ) {
+
+        loadChatList();
 
         return;
 
@@ -850,7 +1217,8 @@ function receiveMessage(msg) {
         String(
             msg.sender?._id ||
             msg.sender?.id ||
-            msg.sender
+            msg.sender ||
+            ""
         );
 
     createMessage(
@@ -863,6 +1231,8 @@ function receiveMessage(msg) {
         ),
         msg._id
     );
+
+    loadChatList();
 
     scrollToBottom();
 
@@ -884,33 +1254,51 @@ async function sendMessage() {
         messageInput.value.trim();
 
     if (!text) {
-
         return;
-
     }
 
-    sendBtn.disabled = true;
+    sendBtn.disabled =
+        true;
 
     try {
 
-        const response = await fetch(
-            `${API_BASE_URL}/chat/${currentSwapId}`,
-            {
-                method: "POST",
+        const response =
+            await fetch(
+                `${API_BASE_URL}/chat/${encodeURIComponent(
+                    currentSwapId
+                )}`,
+                {
+                    method: "POST",
 
-                headers: {
-                    "Content-Type":
-                        "application/json",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
 
-                    Authorization:
-                        `Bearer ${token}`
-                },
+                        Authorization:
+                            `Bearer ${token}`
+                    },
 
-                body: JSON.stringify({
-                    message: text
-                })
-            }
-        );
+                    body:
+                        JSON.stringify({
+                            message: text
+                        })
+                }
+            );
+
+        if (
+            response.status === 401
+        ) {
+
+            localStorage.removeItem(
+                "token"
+            );
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
 
         const data =
             await response.json();
@@ -926,23 +1314,8 @@ async function sendMessage() {
 
         }
 
-        messageInput.value = "";
-
-        if (
-            !socket ||
-            !socket.connected
-        ) {
-
-            createMessage(
-                data.message,
-                "sent",
-                formatTime(
-                    data.createdAt
-                ),
-                data._id
-            );
-
-        }
+        messageInput.value =
+            "";
 
         loadChatList();
 
@@ -950,11 +1323,11 @@ async function sendMessage() {
 
     }
 
-    catch (err) {
+    catch (error) {
 
         console.error(
-            "Send Message Error:",
-            err
+            "Send message error:",
+            error
         );
 
         alert(
@@ -965,7 +1338,8 @@ async function sendMessage() {
 
     finally {
 
-        sendBtn.disabled = false;
+        sendBtn.disabled =
+            false;
 
     }
 
@@ -981,7 +1355,9 @@ function createMessage(
     if (
         id &&
         document.querySelector(
-            `[data-id="${id}"]`
+            `[data-id="${CSS.escape(
+                String(id)
+            )}"]`
         )
     ) {
 
@@ -990,18 +1366,18 @@ function createMessage(
     }
 
     const empty =
-        document.querySelector(
+        chatBody.querySelector(
             ".empty-chat"
         );
 
     if (empty) {
-
         empty.remove();
-
     }
 
     const wrapper =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     wrapper.className =
         `message ${type}`;
@@ -1009,33 +1385,39 @@ function createMessage(
     if (id) {
 
         wrapper.dataset.id =
-            id;
+            String(id);
 
     }
 
     const bubble =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     bubble.className =
         "bubble";
 
     const messageText =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     messageText.className =
         "message-text";
 
     messageText.textContent =
-        text;
+        text || "";
 
     const messageTime =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     messageTime.className =
         "message-time";
 
     messageTime.textContent =
-        time;
+        time || "";
 
     bubble.appendChild(
         messageText
@@ -1065,17 +1447,13 @@ function initializeEmojiPicker() {
         !messageInput
     ) {
 
-        console.log(
-            "Emoji elements not found."
-        );
-
         return;
 
     }
 
     emojiBtn.addEventListener(
         "click",
-        (event) => {
+        event => {
 
             event.stopPropagation();
 
@@ -1091,62 +1469,65 @@ function initializeEmojiPicker() {
             "button"
         );
 
-    emojiButtons.forEach(button => {
+    emojiButtons.forEach(
+        button => {
 
-        button.addEventListener(
-            "click",
-            (event) => {
+            button.addEventListener(
+                "click",
+                event => {
 
-                event.stopPropagation();
+                    event.stopPropagation();
 
-                const emoji =
-                    button.textContent;
+                    const emoji =
+                        button.dataset.emoji ||
+                        button.textContent.trim();
 
-                const start =
-                    messageInput.selectionStart ??
-                    messageInput.value.length;
+                    const start =
+                        messageInput.selectionStart ??
+                        messageInput.value.length;
 
-                const end =
-                    messageInput.selectionEnd ??
-                    messageInput.value.length;
+                    const end =
+                        messageInput.selectionEnd ??
+                        messageInput.value.length;
 
-                const text =
-                    messageInput.value;
+                    const text =
+                        messageInput.value;
 
-                messageInput.value =
-                    text.substring(
-                        0,
-                        start
-                    ) +
-                    emoji +
-                    text.substring(
-                        end
+                    messageInput.value =
+                        text.substring(
+                            0,
+                            start
+                        ) +
+                        emoji +
+                        text.substring(
+                            end
+                        );
+
+                    const position =
+                        start +
+                        emoji.length;
+
+                    messageInput.focus();
+
+                    messageInput.selectionStart =
+                        position;
+
+                    messageInput.selectionEnd =
+                        position;
+
+                    emojiPicker.classList.remove(
+                        "show"
                     );
 
-                const newPosition =
-                    start +
-                    emoji.length;
+                }
+            );
 
-                messageInput.focus();
-
-                messageInput.selectionStart =
-                    newPosition;
-
-                messageInput.selectionEnd =
-                    newPosition;
-
-                emojiPicker.classList.remove(
-                    "show"
-                );
-
-            }
-        );
-
-    });
+        }
+    );
 
     document.addEventListener(
         "click",
-        (event) => {
+        event => {
 
             if (
                 !emojiPicker.contains(
@@ -1170,7 +1551,9 @@ function initializeEmojiPicker() {
 
 function filterChats() {
 
-    if (!searchChat) return;
+    if (!searchChat) {
+        return;
+    }
 
     const keyword =
         searchChat.value
@@ -1178,32 +1561,51 @@ function filterChats() {
             .toLowerCase();
 
     document
-        .querySelectorAll(".chat-item")
-        .forEach(item => {
+        .querySelectorAll(
+            ".chat-item"
+        )
+        .forEach(
+            item => {
 
-            const name =
-                item
-                    .querySelector("h4")
-                    .textContent
-                    .toLowerCase();
+                const nameElement =
+                    item.querySelector(
+                        "h4"
+                    );
 
-            item.style.display =
-                name.includes(keyword)
-                    ? "flex"
-                    : "none";
+                const name =
+                    nameElement
+                        ? nameElement.textContent
+                            .toLowerCase()
+                        : "";
 
-        });
+                item.style.display =
+                    name.includes(
+                        keyword
+                    )
+                        ? "flex"
+                        : "none";
+
+            }
+        );
 
 }
 
-function formatTime(date) {
+function formatTime(
+    date
+) {
 
-    if (!date) return "";
+    if (!date) {
+        return "";
+    }
 
     const d =
         new Date(date);
 
-    if (isNaN(d.getTime())) {
+    if (
+        Number.isNaN(
+            d.getTime()
+        )
+    ) {
 
         return "";
 
@@ -1224,14 +1626,15 @@ function formatTime(date) {
         hour % 12;
 
     if (hour === 0) {
-
         hour = 12;
-
     }
 
     minute =
         String(minute)
-            .padStart(2, "0");
+            .padStart(
+                2,
+                "0"
+            );
 
     return `${hour}:${minute} ${ampm}`;
 
@@ -1239,16 +1642,31 @@ function formatTime(date) {
 
 function scrollToBottom() {
 
-    requestAnimationFrame(() => {
+    requestAnimationFrame(
+        () => {
 
-        chatBody.scrollTop =
-            chatBody.scrollHeight;
+            chatBody.scrollTop =
+                chatBody.scrollHeight;
 
-    });
+        }
+    );
 
 }
 
 function clearChat() {
+
+    if (
+        socket &&
+        socket.connected &&
+        currentRoom
+    ) {
+
+        socket.emit(
+            "leaveRoom",
+            currentRoom
+        );
+
+    }
 
     currentSwapId = "";
     currentRoom = "";
@@ -1284,13 +1702,33 @@ function clearChat() {
     );
 
     chatStatus.textContent =
-        "Select a conversation";
+        "Offline";
 
-    messageInput.value = "";
+    chatSkill.textContent =
+        "Skill Exchange";
 
-    messageInput.disabled = true;
+    messageInput.value =
+        "";
 
-    sendBtn.disabled = true;
+    messageInput.disabled =
+        true;
+
+    sendBtn.disabled =
+        true;
+
+    if (chatHeader) {
+
+        chatHeader.style.display =
+            "none";
+
+    }
+
+    if (chatInputArea) {
+
+        chatInputArea.style.display =
+            "none";
+
+    }
 
 }
 
@@ -1299,9 +1737,7 @@ window.addEventListener(
     () => {
 
         if (!socket) {
-
             return;
-
         }
 
         if (currentRoom) {

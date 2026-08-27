@@ -1,8 +1,9 @@
 const Message = require("../models/Message");
 const Swap = require("../models/swapRequest");
+
 // ======================================================
 // Get All Active Chats
-// =============================================f=========
+// ======================================================
 
 exports.getChatList = async (req, res) => {
 
@@ -22,7 +23,11 @@ exports.getChatList = async (req, res) => {
 
             status: {
 
-                $in: ["Accepted", "Completed"]
+                $in: [
+                    "Accepted",
+                    "Pending Confirmation",
+                    "Completed"
+                ]
 
             }
 
@@ -61,31 +66,58 @@ exports.getChatList = async (req, res) => {
                     createdAt: -1
 
                 });
-                console.log("========== CHAT DEBUG ==========");
 
-return {
-    swapId: swap._id,
-    partner,
+                console.log(
+                    "========== CHAT DEBUG =========="
+                );
 
-    teachSkill: swap.teachSkill,
-    learnSkill: swap.learnSkill,
+                return {
 
-    lastMessage: lastMessage
-        ? lastMessage.message
-        : "Start chatting now...",
+                    swapId: swap._id,
 
-    lastTime: lastMessage
-        ? lastMessage.createdAt
-        : swap.updatedAt
-};
+                    partner,
+
+                    teachSkill: swap.teachSkill,
+
+                    learnSkill: swap.learnSkill,
+
+                    lastMessage: lastMessage
+
+                        ? lastMessage.message
+
+                        : "Start chatting now...",
+
+                    lastTime: lastMessage
+
+                        ? lastMessage.createdAt
+
+                        : swap.updatedAt
+
+                };
 
             })
 
         );
-console.log("Logged User:", userId);
-console.log("Swaps Found:", swaps.length);
-console.log("Chats:", chats);
-console.log("================================");
+
+        console.log(
+            "Logged User:",
+            userId
+        );
+
+        console.log(
+            "Swaps Found:",
+            swaps.length
+        );
+
+        console.log(
+            "Chats:",
+            chats
+        );
+
+        console.log(
+            "================================"
+        );
+
         res.json(chats);
 
     }
@@ -103,6 +135,8 @@ console.log("================================");
     }
 
 };
+
+
 // ======================================================
 // Get All Messages
 // ======================================================
@@ -112,40 +146,66 @@ exports.getMessages = async (req, res) => {
     try {
 
         const { swapId } = req.params;
+
         const userId = req.user.id;
 
-        const swap = await Swap.findById(swapId);
+        const swap =
+            await Swap.findById(swapId);
 
         if (!swap) {
 
             return res.status(404).json({
+
                 message: "Swap not found"
+
             });
 
         }
 
-        const senderId = swap.sender.toString();
-        const receiverId = swap.receiver.toString();
+        const senderId =
+            swap.sender.toString();
+
+        const receiverId =
+            swap.receiver.toString();
 
         if (
+
             senderId !== userId &&
+
             receiverId !== userId
+
         ) {
 
             return res.status(403).json({
+
                 message: "Unauthorized"
+
             });
 
         }
 
-        const messages = await Message.find({
-            swap: swapId
-        })
-        .populate("sender", "name")
-        .populate("receiver", "name")
-        .sort({
-            createdAt: 1
-        });
+        const messages =
+            await Message.find({
+
+                swap: swapId
+
+            })
+
+            .populate(
+                "sender",
+                "name"
+            )
+
+            .populate(
+                "receiver",
+                "name"
+            )
+
+            .sort({
+
+                createdAt: 1
+
+            });
 
         res.json(messages);
 
@@ -156,12 +216,15 @@ exports.getMessages = async (req, res) => {
         console.error(error);
 
         res.status(500).json({
+
             message: "Server Error"
+
         });
 
     }
 
 };
+
 
 // ======================================================
 // Send Message
@@ -171,70 +234,119 @@ exports.sendMessage = async (req, res) => {
 
     try {
 
-        const { swapId } = req.params;
-        const { message } = req.body;
-        const userId = req.user.id;
+        const { swapId } =
+            req.params;
 
-        if (!message || message.trim() === "") {
+        const { message } =
+            req.body;
+
+        const userId =
+            req.user.id;
+
+        if (
+            !message ||
+            message.trim() === ""
+        ) {
 
             return res.status(400).json({
-                message: "Message cannot be empty"
+
+                message:
+                    "Message cannot be empty"
+
             });
 
         }
 
-        const swap = await Swap.findById(swapId);
+        const swap =
+            await Swap.findById(
+                swapId
+            );
 
         if (!swap) {
 
             return res.status(404).json({
-                message: "Swap not found"
+
+                message:
+                    "Swap not found"
+
             });
 
         }
 
         let receiver;
 
-        if (swap.sender.toString() === userId) {
+        if (
+            swap.sender.toString() ===
+            userId
+        ) {
 
-            receiver = swap.receiver;
+            receiver =
+                swap.receiver;
 
         }
-        else if (swap.receiver.toString() === userId) {
 
-            receiver = swap.sender;
+        else if (
+            swap.receiver.toString() ===
+            userId
+        ) {
+
+            receiver =
+                swap.sender;
 
         }
+
         else {
 
             return res.status(403).json({
-                message: "Unauthorized"
+
+                message:
+                    "Unauthorized"
+
             });
 
         }
 
-        // Save message
-        const newMessage = await Message.create({
+        const newMessage =
+            await Message.create({
 
-            swap: swapId,
-            sender: userId,
-            receiver,
-            message
+                swap: swapId,
 
-        });
+                sender: userId,
 
-        // Populate sender & receiver
-        const populatedMessage = await Message.findById(newMessage._id)
-            .populate("sender", "name")
-            .populate("receiver", "name");
+                receiver,
 
-        // Send message instantly using Socket.IO
-        const io = req.app.get("io");
+                message
 
-      io.to(String(swapId)).emit("receiveMessage", populatedMessage);
+            });
 
-        // Return response
-        res.status(201).json(populatedMessage);
+        const populatedMessage =
+            await Message.findById(
+                newMessage._id
+            )
+
+            .populate(
+                "sender",
+                "name"
+            )
+
+            .populate(
+                "receiver",
+                "name"
+            );
+
+        const io =
+            req.app.get("io");
+
+        io.to(
+            String(swapId)
+        ).emit(
+            "receiveMessage",
+            populatedMessage
+        );
+
+        res.status(201).json(
+            populatedMessage
+        );
 
     }
 
@@ -243,7 +355,10 @@ exports.sendMessage = async (req, res) => {
         console.error(error);
 
         res.status(500).json({
-            message: "Server Error"
+
+            message:
+                "Server Error"
+
         });
 
     }
