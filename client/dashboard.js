@@ -1,4 +1,3 @@
-
 const token =
     localStorage.getItem("token");
 
@@ -95,10 +94,6 @@ async function loadDashboardData() {
 
         // ==================================================
         // DASHBOARD PROFILE INITIAL
-        // ==================================================
-        // Person icon is shown by HTML while loading.
-        // After user data loads, replace it with the
-        // user's real initial.
         // ==================================================
 
         const profileAvatar =
@@ -541,11 +536,24 @@ async function loadDashboardData() {
 
                     activeEl.textContent =
                         swaps.filter(
-                            swap =>
-                                swap.status ===
-                                    "Accepted" ||
-                                swap.status ===
-                                    "Active"
+                            swap => {
+
+                                const status =
+                                    String(
+                                        swap.status || ""
+                                    )
+                                        .trim()
+                                        .toLowerCase();
+
+
+                                return (
+                                    status ===
+                                        "accepted" ||
+                                    status ===
+                                        "active"
+                                );
+
+                            }
                         ).length;
 
                 }
@@ -565,9 +573,22 @@ async function loadDashboardData() {
 
                     pendingEl.textContent =
                         swaps.filter(
-                            swap =>
-                                swap.status ===
-                                "Pending"
+                            swap => {
+
+                                const status =
+                                    String(
+                                        swap.status || ""
+                                    )
+                                        .trim()
+                                        .toLowerCase();
+
+
+                                return (
+                                    status ===
+                                    "pending"
+                                );
+
+                            }
                         ).length;
 
                 }
@@ -587,9 +608,22 @@ async function loadDashboardData() {
 
                     completedEl.textContent =
                         swaps.filter(
-                            swap =>
-                                swap.status ===
-                                "Completed"
+                            swap => {
+
+                                const status =
+                                    String(
+                                        swap.status || ""
+                                    )
+                                        .trim()
+                                        .toLowerCase();
+
+
+                                return (
+                                    status ===
+                                    "completed"
+                                );
+
+                            }
                         ).length;
 
                 }
@@ -775,22 +809,6 @@ function setupDashboardNavigation() {
 // ======================================================
 // SUGGESTED MATCHES
 // ======================================================
-// Shows users whose skills are actually compatible.
-//
-// Example:
-//
-// Current user:
-//   Can teach  -> JavaScript
-//   Wants learn -> Python
-//
-// Suggested user:
-//   Can teach  -> Python
-//   Wants learn -> JavaScript
-//
-// This is a strong two-way match.
-//
-// One-way matches are also accepted.
-// ======================================================
 
 async function loadSuggestedMatches(
     currentUser
@@ -909,10 +927,6 @@ async function loadSuggestedMatches(
                         );
 
 
-                    // --------------------------------------
-                    // What they can teach me
-                    // --------------------------------------
-
                     const teachMatch =
                         getCommonSkills(
                             myLearnSkills,
@@ -920,20 +934,12 @@ async function loadSuggestedMatches(
                         );
 
 
-                    // --------------------------------------
-                    // What I can teach them
-                    // --------------------------------------
-
                     const learnMatch =
                         getCommonSkills(
                             myTeachSkills,
                             theirLearnSkills
                         );
 
-
-                    // --------------------------------------
-                    // Total score
-                    // --------------------------------------
 
                     let score = 0;
 
@@ -946,7 +952,6 @@ async function loadSuggestedMatches(
                         learnMatch.length * 2;
 
 
-                    // Extra point for two-way exchange
                     if (
                         teachMatch.length > 0 &&
                         learnMatch.length > 0
@@ -957,9 +962,6 @@ async function loadSuggestedMatches(
                     }
 
 
-                    // Rating can slightly influence
-                    // ordering, but skill compatibility
-                    // remains the main factor.
                     const rating =
                         Number(user.rating) || 0;
 
@@ -1082,10 +1084,6 @@ async function loadSuggestedMatches(
                     ) || 0;
 
 
-                // ==================================================
-                // MATCH LABEL
-                // ==================================================
-
                 let matchLabel =
                     "Suggested for you";
 
@@ -1114,10 +1112,6 @@ async function loadSuggestedMatches(
 
                 }
 
-
-                // ==================================================
-                // MATCH SKILLS
-                // ==================================================
 
                 let matchSkills = "";
 
@@ -1169,10 +1163,6 @@ async function loadSuggestedMatches(
                 }
 
 
-                // ==================================================
-                // MATCH ITEM
-                // ==================================================
-
                 const matchItem =
                     document.createElement(
                         "div"
@@ -1204,8 +1194,6 @@ async function loadSuggestedMatches(
                         min-width:0;
                     ">
 
-                        <!-- Avatar -->
-
                         <div style="
                             width:48px;
                             height:48px;
@@ -1230,8 +1218,6 @@ async function loadSuggestedMatches(
                         </div>
 
 
-                        <!-- User Info -->
-
                         <div style="
                             min-width:0;
                         ">
@@ -1252,8 +1238,6 @@ async function loadSuggestedMatches(
                             </h4>
 
 
-                            <!-- Match label -->
-
                             <div style="
                                 margin-top:3px;
                                 font-size:11px;
@@ -1265,8 +1249,6 @@ async function loadSuggestedMatches(
 
                             </div>
 
-
-                            <!-- Their skills -->
 
                             <div style="
                                 margin-top:5px;
@@ -1291,8 +1273,6 @@ async function loadSuggestedMatches(
                             </div>
 
 
-                            <!-- Matching skills -->
-
                             <div style="
                                 margin-top:5px;
                             ">
@@ -1301,8 +1281,6 @@ async function loadSuggestedMatches(
 
                             </div>
 
-
-                            <!-- Rating -->
 
                             <div style="
                                 margin-top:5px;
@@ -1329,8 +1307,6 @@ async function loadSuggestedMatches(
                     </div>
 
 
-                    <!-- View -->
-
                     <button
                         type="button"
                         style="
@@ -1350,10 +1326,6 @@ async function loadSuggestedMatches(
 
                 `;
 
-
-                // ==================================================
-                // VIEW BUTTON
-                // ==================================================
 
                 const viewButton =
                     matchItem.querySelector(
@@ -1650,4 +1622,3 @@ function openRequests(
         `request.html?tab=${tab}`;
 
 }
-
