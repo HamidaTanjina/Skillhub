@@ -32,6 +32,33 @@ function handleUnauthorized() {
 
 
 // ==========================================================
+// UPDATE PROFILE AVATAR INITIAL
+// ==========================================================
+
+function updateProfileAvatar(user) {
+
+    const name =
+        (user?.name || "User").trim();
+
+    const initial =
+        name.charAt(0).toUpperCase() || "U";
+
+
+    const profileAvatar =
+        document.getElementById("profileAvatar");
+
+
+    if (profileAvatar) {
+
+        profileAvatar.textContent =
+            initial;
+
+    }
+
+}
+
+
+// ==========================================================
 // LOAD PROFILE
 // ==========================================================
 
@@ -60,6 +87,7 @@ async function loadProfile() {
             handleUnauthorized();
 
             return;
+
         }
 
 
@@ -68,10 +96,12 @@ async function loadProfile() {
             throw new Error(
                 "Failed to load profile."
             );
+
         }
 
 
-        const user = await response.json();
+        const user =
+            await response.json();
 
 
         console.log(
@@ -80,7 +110,15 @@ async function loadProfile() {
         );
 
 
-        currentUser = user;
+        currentUser =
+            user;
+
+
+        // ==================================================
+        // UPDATE MAIN PROFILE AVATAR
+        // ==================================================
+
+        updateProfileAvatar(user);
 
 
         // ==================================================
@@ -90,11 +128,14 @@ async function loadProfile() {
         const editName =
             document.getElementById("editName");
 
+
         const editEmail =
             document.getElementById("editEmail");
 
+
         const editLocation =
             document.getElementById("editLocation");
+
 
         const editBio =
             document.getElementById("editBio");
@@ -104,6 +145,7 @@ async function loadProfile() {
 
             editName.value =
                 user.name || "";
+
         }
 
 
@@ -111,6 +153,7 @@ async function loadProfile() {
 
             editEmail.value =
                 user.email || "";
+
         }
 
 
@@ -118,6 +161,7 @@ async function loadProfile() {
 
             editLocation.value =
                 user.location || "";
+
         }
 
 
@@ -125,6 +169,7 @@ async function loadProfile() {
 
             editBio.value =
                 user.bio || "";
+
         }
 
 
@@ -146,9 +191,11 @@ async function loadProfile() {
         } else {
 
             renderReviews([]);
+
         }
 
     }
+
 
     catch (error) {
 
@@ -161,7 +208,9 @@ async function loadProfile() {
         showProfileError(
             "Unable to load profile. Please try again."
         );
+
     }
+
 }
 
 
@@ -174,11 +223,14 @@ function updateProfileDisplay(user) {
     const name =
         user.name || "SkillHub User";
 
+
     const email =
         user.email || "No email";
 
+
     const location =
         user.location || "Add Location";
+
 
     const bio =
         user.bio ||
@@ -194,10 +246,12 @@ function updateProfileDisplay(user) {
             "profileName"
         );
 
+
     const profileEmail =
         document.getElementById(
             "profileEmail"
         );
+
 
     const profileLocation =
         document.getElementById(
@@ -209,6 +263,7 @@ function updateProfileDisplay(user) {
 
         profileName.textContent =
             name;
+
     }
 
 
@@ -216,6 +271,7 @@ function updateProfileDisplay(user) {
 
         profileEmail.textContent =
             email;
+
     }
 
 
@@ -223,6 +279,7 @@ function updateProfileDisplay(user) {
 
         profileLocation.textContent =
             location;
+
     }
 
 
@@ -235,15 +292,18 @@ function updateProfileDisplay(user) {
             "aboutName"
         );
 
+
     const aboutEmail =
         document.getElementById(
             "aboutEmail"
         );
 
+
     const aboutLocation =
         document.getElementById(
             "aboutLocation"
         );
+
 
     const aboutBio =
         document.getElementById(
@@ -255,6 +315,7 @@ function updateProfileDisplay(user) {
 
         aboutName.textContent =
             name;
+
     }
 
 
@@ -262,6 +323,7 @@ function updateProfileDisplay(user) {
 
         aboutEmail.textContent =
             email;
+
     }
 
 
@@ -269,6 +331,7 @@ function updateProfileDisplay(user) {
 
         aboutLocation.textContent =
             location;
+
     }
 
 
@@ -276,6 +339,7 @@ function updateProfileDisplay(user) {
 
         aboutBio.textContent =
             bio;
+
     }
 
 
@@ -287,6 +351,7 @@ function updateProfileDisplay(user) {
         user.rating || 0,
         user.totalReviews || 0
     );
+
 }
 
 
@@ -301,6 +366,7 @@ function updateRatingDisplay(
 
     const numericRating =
         Number(rating) || 0;
+
 
     const numericReviews =
         Number(totalReviews) || 0;
@@ -320,6 +386,7 @@ function updateRatingDisplay(
 
         userRating.textContent =
             numericRating.toFixed(1);
+
     }
 
 
@@ -337,6 +404,7 @@ function updateRatingDisplay(
 
         reviewCount.textContent =
             numericReviews;
+
     }
 
 
@@ -354,6 +422,7 @@ function updateRatingDisplay(
 
         reviewSummary.textContent =
             `${numericRating.toFixed(1)} · ${numericReviews} Reviews`;
+
     }
 
 
@@ -365,6 +434,7 @@ function updateRatingDisplay(
         "ratingStars",
         numericRating
     );
+
 }
 
 
@@ -386,6 +456,7 @@ function renderStars(
     if (!container) {
 
         return;
+
     }
 
 
@@ -394,6 +465,7 @@ function renderStars(
 
     const numericRating =
         Number(rating) || 0;
+
 
     const roundedRating =
         Math.round(numericRating);
@@ -418,11 +490,16 @@ function renderStars(
 
             star.className =
                 "fa-regular fa-star";
+
         }
 
 
-        container.appendChild(star);
+        container.appendChild(
+            star
+        );
+
     }
+
 }
 
 
@@ -441,6 +518,7 @@ async function loadUserReviews(userId) {
     if (!container) {
 
         return;
+
     }
 
 
@@ -460,6 +538,7 @@ async function loadUserReviews(userId) {
             throw new Error(
                 "Failed to load reviews."
             );
+
         }
 
 
@@ -473,7 +552,9 @@ async function loadUserReviews(userId) {
         );
 
 
-        renderReviews(reviews);
+        renderReviews(
+            reviews
+        );
 
 
         // ==================================================
@@ -511,9 +592,11 @@ async function loadUserReviews(userId) {
                 average,
                 reviews.length
             );
+
         }
 
     }
+
 
     catch (error) {
 
@@ -536,7 +619,9 @@ async function loadUserReviews(userId) {
             </div>
 
         `;
+
     }
+
 }
 
 
@@ -555,6 +640,7 @@ function renderReviews(reviews) {
     if (!container) {
 
         return;
+
     }
 
 
@@ -583,6 +669,7 @@ function renderReviews(reviews) {
         `;
 
         return;
+
     }
 
 
@@ -620,7 +707,9 @@ function renderReviews(reviews) {
 
 
         const reviewItem =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         reviewItem.className =
@@ -653,7 +742,9 @@ function renderReviews(reviews) {
                 starsHTML += `
                     <i class="fa-regular fa-star"></i>
                 `;
+
             }
+
         }
 
 
@@ -679,6 +770,7 @@ function renderReviews(reviews) {
                 </span>
 
             `;
+
         }
 
 
@@ -755,6 +847,7 @@ function renderReviews(reviews) {
         );
 
     });
+
 }
 
 
@@ -767,6 +860,7 @@ function formatReviewDate(date) {
     if (!date) {
 
         return "";
+
     }
 
 
@@ -781,6 +875,7 @@ function formatReviewDate(date) {
     ) {
 
         return "";
+
     }
 
 
@@ -792,6 +887,7 @@ function formatReviewDate(date) {
             day: "numeric"
         }
     );
+
 }
 
 
@@ -812,6 +908,7 @@ function escapeHTML(value) {
 
 
     return div.innerHTML;
+
 }
 
 
@@ -830,6 +927,7 @@ function showProfileError(message) {
     if (!container) {
 
         return;
+
     }
 
 
@@ -848,6 +946,7 @@ function showProfileError(message) {
         </div>
 
     `;
+
 }
 
 
@@ -913,10 +1012,12 @@ async function saveProfile() {
         if (editName) {
 
             editName.focus();
+
         }
 
 
         return;
+
     }
 
 
@@ -924,7 +1025,9 @@ async function saveProfile() {
 
         if (saveProfileBtn) {
 
-            saveProfileBtn.disabled = true;
+            saveProfileBtn.disabled =
+                true;
+
 
             saveProfileBtn.innerHTML = `
 
@@ -933,6 +1036,7 @@ async function saveProfile() {
                 Saving...
 
             `;
+
         }
 
 
@@ -949,6 +1053,7 @@ async function saveProfile() {
 
                         Authorization:
                             `Bearer ${token}`
+
                     },
 
                     body:
@@ -957,6 +1062,7 @@ async function saveProfile() {
                             location,
                             bio
                         })
+
                 }
             );
 
@@ -970,6 +1076,7 @@ async function saveProfile() {
             handleUnauthorized();
 
             return;
+
         }
 
 
@@ -983,6 +1090,7 @@ async function saveProfile() {
                 data.message ||
                 "Failed to update profile."
             );
+
         }
 
 
@@ -994,6 +1102,13 @@ async function saveProfile() {
 
         currentUser =
             data;
+
+
+        // ==================================================
+        // UPDATE MAIN PROFILE AVATAR
+        // ==================================================
+
+        updateProfileAvatar(data);
 
 
         // ==================================================
@@ -1013,6 +1128,7 @@ async function saveProfile() {
 
             editName.value =
                 data.name || "";
+
         }
 
 
@@ -1020,6 +1136,7 @@ async function saveProfile() {
 
             editLocation.value =
                 data.location || "";
+
         }
 
 
@@ -1027,6 +1144,7 @@ async function saveProfile() {
 
             editBio.value =
                 data.bio || "";
+
         }
 
 
@@ -1035,6 +1153,7 @@ async function saveProfile() {
         );
 
     }
+
 
     catch (error) {
 
@@ -1051,11 +1170,13 @@ async function saveProfile() {
 
     }
 
+
     finally {
 
         if (saveProfileBtn) {
 
-            saveProfileBtn.disabled = false;
+            saveProfileBtn.disabled =
+                false;
 
 
             saveProfileBtn.innerHTML = `
@@ -1065,8 +1186,11 @@ async function saveProfile() {
                 Save Changes
 
             `;
+
         }
+
     }
+
 }
 
 
@@ -1083,7 +1207,9 @@ document.addEventListener(
         // -----------------------------------------------
 
         token =
-            localStorage.getItem("token");
+            localStorage.getItem(
+                "token"
+            );
 
 
         if (!token) {
@@ -1092,6 +1218,7 @@ document.addEventListener(
                 "index.html";
 
             return;
+
         }
 
 
@@ -1111,6 +1238,7 @@ document.addEventListener(
                 "click",
                 saveProfile
             );
+
         }
 
 
