@@ -38,17 +38,15 @@ function handleUnauthorized() {
 function updateProfileAvatar(user) {
 
     const name =
-        (user?.name || "User").trim();
+        (user?.name || "").trim();
 
     const initial =
-        name.charAt(0).toUpperCase() || "U";
-
+        name.charAt(0).toUpperCase();
 
     const profileAvatar =
         document.getElementById("profileAvatar");
 
-
-    if (profileAvatar) {
+    if (profileAvatar && initial) {
 
         profileAvatar.textContent =
             initial;

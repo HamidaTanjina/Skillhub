@@ -15,10 +15,6 @@ const API_BASE_URL =
 // AUTHENTICATION
 // ======================================================
 
-// header.js already performs authentication.
-// This fallback keeps this page safe if header.js
-// is accidentally not loaded.
-
 if (!token) {
     window.location.href = "index.html";
 }
@@ -35,6 +31,22 @@ let allUsers = [];
 let filteredUsers = [];
 
 let requestStatusMap = {};
+
+
+// ======================================================
+// DASHBOARD USER ID
+// ======================================================
+
+// If the page was opened from Dashboard > Suggested Matches > View,
+// this contains the specific user's ID.
+
+const urlParams =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const highlightedUserId =
+    urlParams.get("userId");
 
 
 // ======================================================
@@ -236,6 +248,58 @@ async function loadUsers() {
         renderUsers(
             filteredUsers
         );
+
+
+        // ==================================================
+        // OPEN SPECIFIC USER CARD FROM DASHBOARD
+        // ==================================================
+
+        if (highlightedUserId) {
+
+            setTimeout(
+                () => {
+
+                    const userCard =
+                        document.getElementById(
+                            `user-card-${highlightedUserId}`
+                        );
+
+
+                    if (userCard) {
+
+                        userCard.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
+
+
+                        userCard.style.outline =
+                            "2px solid #3b82f6";
+
+                        userCard.style.outlineOffset =
+                            "4px";
+
+
+                        setTimeout(
+                            () => {
+
+                                userCard.style.outline =
+                                    "";
+
+                                userCard.style.outlineOffset =
+                                    "";
+
+                            },
+                            2500
+                        );
+
+                    }
+
+                },
+                100
+            );
+
+        }
 
 
     }
@@ -582,7 +646,10 @@ function renderUsers(users) {
 
             container.innerHTML += `
 
-                <div class="user-card">
+                <div
+                    class="user-card"
+                    id="user-card-${user._id}"
+                >
 
                     <div class="user-header">
 
@@ -971,18 +1038,10 @@ async function loadSkillOptions(
     }
 
 
-    // --------------------------------------------------
-    // Clear both dropdowns
-    // --------------------------------------------------
-
     teachSelect.innerHTML = "";
 
     learnSelect.innerHTML = "";
 
-
-    // --------------------------------------------------
-    // Add placeholder to TEACH dropdown
-    // --------------------------------------------------
 
     const teachPlaceholder =
         document.createElement(
@@ -1003,10 +1062,6 @@ async function loadSkillOptions(
         teachPlaceholder
     );
 
-
-    // --------------------------------------------------
-    // Add placeholder to LEARN dropdown
-    // --------------------------------------------------
 
     const learnPlaceholder =
         document.createElement(
@@ -1029,10 +1084,6 @@ async function loadSkillOptions(
 
 
     try {
-
-        // ------------------------------------------
-        // Load current user's profile
-        // ------------------------------------------
 
         const myResponse =
             await fetch(
@@ -1061,10 +1112,6 @@ async function loadSkillOptions(
         const myProfile =
             await myResponse.json();
 
-
-        // ------------------------------------------
-        // My teaching skills
-        // ------------------------------------------
 
         if (
             myProfile.teachSkills &&
@@ -1105,20 +1152,12 @@ async function loadSkillOptions(
         }
 
 
-        // ------------------------------------------
-        // Receiver
-        // ------------------------------------------
-
         const receiver =
             allUsers.find(
                 user =>
                     user._id === receiverId
             );
 
-
-        // ------------------------------------------
-        // Receiver teaching skills
-        // ------------------------------------------
 
         if (
             receiver &&
@@ -1159,12 +1198,6 @@ async function loadSkillOptions(
 
         }
 
-
-        // --------------------------------------------------
-        // IMPORTANT:
-        // Make sure neither dropdown automatically
-        // selects the first actual skill.
-        // --------------------------------------------------
 
         teachSelect.value = "";
 
@@ -1219,10 +1252,6 @@ async function sendRequest() {
             : "";
 
 
-    // ----------------------------------------------
-    // Validate receiver
-    // ----------------------------------------------
-
     if (!selectedReceiver) {
 
         alert(
@@ -1232,10 +1261,6 @@ async function sendRequest() {
         return;
     }
 
-
-    // ----------------------------------------------
-    // Validate skills
-    // ----------------------------------------------
 
     if (
         !teachSkill ||
@@ -1305,16 +1330,8 @@ async function sendRequest() {
         closeModal();
 
 
-        // ------------------------------------------
-        // Refresh users/request status
-        // ------------------------------------------
-
         await loadUsers();
 
-
-        // ------------------------------------------
-        // Refresh shared header
-        // ------------------------------------------
 
         if (
             typeof window.refreshHeader ===
@@ -1367,10 +1384,6 @@ window.viewProfile =
             return;
         }
 
-
-        // ------------------------------------------
-        // Basic user information
-        // ------------------------------------------
 
         const name =
             user.name ||
@@ -1444,10 +1457,6 @@ window.viewProfile =
         }
 
 
-        // ------------------------------------------
-        // Show modal
-        // ------------------------------------------
-
         const profileModal =
             document.getElementById(
                 "profileModal"
@@ -1461,10 +1470,6 @@ window.viewProfile =
 
         }
 
-
-        // ------------------------------------------
-        // Loading state
-        // ------------------------------------------
 
         const profileReviews =
             document.getElementById(
@@ -1489,10 +1494,6 @@ window.viewProfile =
         }
 
 
-        // ------------------------------------------
-        // Load reviews
-        // ------------------------------------------
-
         try {
 
             const response =
@@ -1515,10 +1516,6 @@ window.viewProfile =
             }
 
 
-            // --------------------------------------
-            // Calculate rating
-            // --------------------------------------
-
             let totalRating = 0;
 
 
@@ -1540,10 +1537,6 @@ window.viewProfile =
                         reviews.length
                     : 0;
 
-
-            // --------------------------------------
-            // Display rating
-            // --------------------------------------
 
             let stars = "";
 
@@ -1607,10 +1600,6 @@ window.viewProfile =
             }
 
 
-            // --------------------------------------
-            // No reviews
-            // --------------------------------------
-
             if (
                 reviews.length === 0
             ) {
@@ -1634,10 +1623,6 @@ window.viewProfile =
                 return;
             }
 
-
-            // --------------------------------------
-            // Display reviews
-            // --------------------------------------
 
             let reviewsHTML = "";
 

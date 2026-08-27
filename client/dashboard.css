@@ -19,6 +19,9 @@
         background-color 0.3s ease;
 }
 
+.profile-modal {
+    display: none;
+}
 .card:hover {
 
     transform: translateY(-4px);
@@ -435,7 +438,28 @@
     color:
         #ffffff;
 }
+/* Dashboard Profile Initial */
 
+#profileInitial {
+
+    font-size:
+        52px;
+
+    font-weight:
+        700;
+
+    color:
+        #ffffff;
+
+    line-height:
+        1;
+
+    text-transform:
+        uppercase;
+
+    user-select:
+        none;
+}
 
 /* ==========================================================================
    10. PROFILE CARD TITLE

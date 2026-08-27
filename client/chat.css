@@ -1,5 +1,3 @@
-
-
 /* =============================================================================
    1. CHAT PAGE FOUNDATION
 ============================================================================= */
@@ -475,9 +473,18 @@
 }
 
 
-/* Online status */
+/* Hide online indicator by default */
 
 .chat-header .avatar::after {
+
+    content: none;
+
+}
+
+
+/* Show green indicator only when partner is online */
+
+.chat-header .avatar.online::after {
 
     content: "";
 
@@ -1620,10 +1627,15 @@
     }
 
 }
+
+
 /* =============================================================================
    HIDE NO ACTIVE CHATS MESSAGE
 ============================================================================= */
+
 .chat-list:empty,
 .chat-list:not(:has(.chat-item)) {
+
     display: none !important;
+
 }

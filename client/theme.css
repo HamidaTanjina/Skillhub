@@ -1,2614 +1,2613 @@
-/* ==========================================================================
-   SKILLHUB - SHARED THEME.CSS
-   ==========================================================================
-   Includes:
-   - Light / Dark themes
-   - Professional dark/light background
-   - Dynamic animated background
-   - Shared colors
-   - Global typography
-   - Forms
-   - Buttons
-   - Topbar
-   - Profile
-   - Notifications
-   - Cards
-   - Glass effects
-   - Responsive styles
-
-   IMPORTANT:
-   - sidebar.css controls sidebar/layout positioning.
-   - dashboard.css controls dashboard-specific components.
-   - request.css / profile.css / other page CSS can use these variables.
-   ========================================================================== */
-
-
-/* ==========================================================================
-   1. THEME VARIABLES
-   ========================================================================== */
-
-:root {
-
-    /* ----------------------------------------------------------------------
-       PRIMARY COLORS
-       ---------------------------------------------------------------------- */
-
-    --primary: #3b82f6;
-    --primary-light: #60a5fa;
-    --primary-dark: #2563eb;
-
-    --secondary: #7c3aed;
-    --secondary-light: #8b5cf6;
-    --secondary-dark: #6d28d9;
-
-    --cyan: #06b6d4;
-
-    --pink: #ec4899;
-
-
-    /* ----------------------------------------------------------------------
-       DARK BACKGROUND
-       ---------------------------------------------------------------------- */
-
-    --bg-primary: #141c2e;
-
-    --bg-card: #202b40;
-
-    --bg-input: #26344b;
-
-    --bg-inner: #182338;
-
-
-    /* ----------------------------------------------------------------------
-       TEXT
-       ---------------------------------------------------------------------- */
-
-    --text-main: #f8fafc;
-
-    --text-muted: #aebbd0;
-
-    --text-soft: #d9e2ef;
-
-
-    /* ----------------------------------------------------------------------
-       BORDERS
-       ---------------------------------------------------------------------- */
-
-    --border-color: #34445d;
-
-    --border-light: rgba(255, 255, 255, 0.11);
-
-
-    /* ----------------------------------------------------------------------
-       COMPATIBILITY VARIABLES
-       ---------------------------------------------------------------------- */
-
-    --bg: var(--bg-primary);
-
-    --surface: var(--bg-card);
-
-    --border: var(--border-color);
-
-    --text: var(--text-main);
-
-    --muted: var(--text-muted);
-
-
-    /* ----------------------------------------------------------------------
-       STATUS
-       ---------------------------------------------------------------------- */
-
-    --success: #22c55e;
-
-    --warning: #f59e0b;
-
-    --danger: #ef4444;
-
-
-    /* ----------------------------------------------------------------------
-       ACCENTS
-       ---------------------------------------------------------------------- */
-
-    --accent-blue: #3b82f6;
-
-    --accent-purple: #7c3aed;
-
-
-    /* ----------------------------------------------------------------------
-       HOVER
-       ---------------------------------------------------------------------- */
-
-    --hover-bg: #2a3850;
-
-
-    /* ----------------------------------------------------------------------
-       SHADOW
-       ---------------------------------------------------------------------- */
-
-    --shadow:
-        0 12px 32px rgba(0, 0, 0, 0.24);
-
-
-    /* ----------------------------------------------------------------------
-       LAYOUT
-       ---------------------------------------------------------------------- */
-
-    --sidebar-width: 255px;
-
-    --topbar-height: 80px;
-
-
-    /* ----------------------------------------------------------------------
-       TRANSITION
-       ---------------------------------------------------------------------- */
-
-    --transition: 0.3s ease;
-
-
-    /* ----------------------------------------------------------------------
-       DYNAMIC BACKGROUND
-       ---------------------------------------------------------------------- */
-
-    --dynamic-bg-base: #141c2e;
-
-    --blob-purple:
-        rgba(124, 58, 237, 0.20);
-
-    --blob-blue:
-        rgba(37, 99, 235, 0.17);
-
-    --blob-cyan:
-        rgba(6, 182, 212, 0.13);
-
-    --blob-pink:
-        rgba(236, 72, 153, 0.10);
-
-
-    /* ----------------------------------------------------------------------
-       HEADER PROFILE AVATAR
-       ---------------------------------------------------------------------- */
-
-    --profile-avatar-start: #7c3aed;
-
-    --profile-avatar-middle: #3b82f6;
-
-    --profile-avatar-end: #06b6d4;
-
-    --profile-avatar-text: #ffffff;
-}
-
-
-/* ==========================================================================
-   2. LIGHT THEME
-   ========================================================================== */
-
-body.light-theme {
-
-    /* ----------------------------------------------------------------------
-       BACKGROUND
-       ---------------------------------------------------------------------- */
-
-    --bg-primary: #f4f7fb;
-
-    --bg-card: #ffffff;
-
-    --bg-input: #f8fafc;
-
-    --bg-inner: #eef2f7;
-
-
-    /* ----------------------------------------------------------------------
-       TEXT
-       ---------------------------------------------------------------------- */
-
-    --text-main: #0f172a;
-
-    --text-muted: #64748b;
-
-    --text-soft: #475569;
-
-
-    /* ----------------------------------------------------------------------
-       BORDER
-       ---------------------------------------------------------------------- */
-
-    --border-color: #d8e0ea;
-
-    --border-light: rgba(15, 23, 42, 0.08);
-
-
-    /* ----------------------------------------------------------------------
-       COMPATIBILITY
-       ---------------------------------------------------------------------- */
-
-    --bg: var(--bg-primary);
-
-    --surface: var(--bg-card);
-
-    --border: var(--border-color);
-
-    --text: var(--text-main);
-
-    --muted: var(--text-muted);
-
-
-    /* ----------------------------------------------------------------------
-       PRIMARY
-       ---------------------------------------------------------------------- */
-
-    --primary: #2563eb;
-
-    --primary-light: #3b82f6;
-
-    --primary-dark: #1d4ed8;
-
-
-    /* ----------------------------------------------------------------------
-       SECONDARY
-       ---------------------------------------------------------------------- */
-
-    --secondary: #6d28d9;
-
-    --secondary-light: #7c3aed;
-
-    --secondary-dark: #5b21b6;
-
-
-    /* ----------------------------------------------------------------------
-       ACCENTS
-       ---------------------------------------------------------------------- */
-
-    --accent-blue: #2563eb;
-
-    --accent-purple: #6d28d9;
-
-
-    /* ----------------------------------------------------------------------
-       HOVER
-       ---------------------------------------------------------------------- */
-
-    --hover-bg: #f1f5f9;
-
-
-    /* ----------------------------------------------------------------------
-       SHADOW
-       ---------------------------------------------------------------------- */
-
-    --shadow:
-        0 12px 30px rgba(15, 23, 42, 0.10);
-
-
-    /* ----------------------------------------------------------------------
-       DYNAMIC BACKGROUND
-       ---------------------------------------------------------------------- */
-
-    --dynamic-bg-base: #f4f7fb;
-
-    --blob-purple:
-        rgba(124, 58, 237, 0.12);
-
-    --blob-blue:
-        rgba(37, 99, 235, 0.11);
-
-    --blob-cyan:
-        rgba(6, 182, 212, 0.09);
-
-    --blob-pink:
-        rgba(236, 72, 153, 0.07);
-
-
-    /* ----------------------------------------------------------------------
-       IMPORTANT:
-       KEEP PROFILE INITIAL WHITE IN LIGHT THEME TOO
-       ---------------------------------------------------------------------- */
-
-    --profile-avatar-start: #7c3aed;
-
-    --profile-avatar-middle: #3b82f6;
-
-    --profile-avatar-end: #06b6d4;
-
-    --profile-avatar-text: #ffffff;
-}
-
-
-/* ==========================================================================
-   3. GLOBAL RESET
-   ========================================================================== */
-
-* {
-
-    margin: 0;
-
-    padding: 0;
-
-    box-sizing: border-box;
-
-    font-family:
-        "Segoe UI",
-        -apple-system,
-        BlinkMacSystemFont,
-        "Roboto",
-        sans-serif;
-}
-
-
-/* ==========================================================================
-   4. HTML
-   ========================================================================== */
-
-html {
-
-    scroll-behavior: smooth;
-}
-
-
-/* ==========================================================================
-   5. BODY
-   ========================================================================== */
-
-body {
-
-    min-height: 100vh;
-
-    color: var(--text-main);
-
-    overflow-x: hidden;
-
-    position: relative;
-
-    isolation: isolate;
-
-    transition:
-        background-color 0.4s ease,
-        color 0.4s ease;
-}
-
-
-/* ==========================================================================
-   6. DYNAMIC BACKGROUND
-   ========================================================================== */
-
-body {
-
-    background-color:
-        var(--dynamic-bg-base);
-
-    background-image:
-
-        linear-gradient(
-            135deg,
-            var(--dynamic-bg-base) 0%,
-            var(--bg-primary) 48%,
-            var(--dynamic-bg-base) 100%
-        ),
-
-        linear-gradient(
-            rgba(96, 165, 250, 0.025) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(96, 165, 250, 0.025) 1px,
-            transparent 1px
-        );
-
-    background-size:
-        100% 100%,
-        45px 45px,
-        45px 45px;
-
-    background-attachment: fixed;
-}
-
-
-/* ==========================================================================
-   7. FIRST DYNAMIC BACKGROUND BLOB
-   ========================================================================== */
-
-body::before {
-
-    content: "";
-
-    position: fixed;
-
-    width: 520px;
-
-    height: 520px;
-
-    top: -180px;
-
-    left: -150px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            var(--blob-purple) 0%,
-            rgba(124, 58, 237, 0.08) 35%,
-            transparent 70%
-        );
-
-    filter: blur(30px);
-
-    pointer-events: none;
-
-    z-index: -2;
-
-    animation:
-        dynamicBlobOne 16s ease-in-out infinite;
-}
-
-
-/* ==========================================================================
-   8. SECOND DYNAMIC BACKGROUND BLOB
-   ========================================================================== */
-
-body::after {
-
-    content: "";
-
-    position: fixed;
-
-    width: 600px;
-
-    height: 600px;
-
-    right: -200px;
-
-    bottom: -220px;
-
-    border-radius: 50%;
-
-    background:
-        radial-gradient(
-            circle,
-            var(--blob-blue) 0%,
-            rgba(37, 99, 235, 0.07) 35%,
-            transparent 70%
-        );
-
-    filter: blur(30px);
-
-    pointer-events: none;
-
-    z-index: -2;
-
-    animation:
-        dynamicBlobTwo 19s ease-in-out infinite;
-}
-
-
-/* ==========================================================================
-   9. ANIMATION - BLOB ONE
-   ========================================================================== */
-
-@keyframes dynamicBlobOne {
-
-    0% {
-
-        transform:
-            translate3d(0, 0, 0)
-            scale(1);
-    }
-
-    25% {
-
-        transform:
-            translate3d(180px, 100px, 0)
-            scale(1.12);
-    }
-
-    50% {
-
-        transform:
-            translate3d(300px, 240px, 0)
-            scale(0.95);
-    }
-
-    75% {
-
-        transform:
-            translate3d(120px, 320px, 0)
-            scale(1.10);
-    }
-
-    100% {
-
-        transform:
-            translate3d(0, 0, 0)
-            scale(1);
-    }
-}
-
-
-/* ==========================================================================
-   10. ANIMATION - BLOB TWO
-   ========================================================================== */
-
-@keyframes dynamicBlobTwo {
-
-    0% {
-
-        transform:
-            translate3d(0, 0, 0)
-            scale(1);
-    }
-
-    25% {
-
-        transform:
-            translate3d(-180px, -80px, 0)
-            scale(1.10);
-    }
-
-    50% {
-
-        transform:
-            translate3d(-300px, -220px, 0)
-            scale(0.92);
-    }
-
-    75% {
-
-        transform:
-            translate3d(-100px, -300px, 0)
-            scale(1.08);
-    }
-
-    100% {
-
-        transform:
-            translate3d(0, 0, 0)
-            scale(1);
-    }
-}
-
-
-/* ==========================================================================
-   11. LIGHT THEME BACKGROUND
-   ========================================================================== */
-
-body.light-theme {
-
-    background-color:
-        var(--dynamic-bg-base);
-
-    background-image:
-
-        linear-gradient(
-            135deg,
-            #f8fbff 0%,
-            #f1f5fb 45%,
-            #f8fbff 100%
-        ),
-
-        linear-gradient(
-            rgba(37, 99, 235, 0.035) 1px,
-            transparent 1px
-        ),
-
-        linear-gradient(
-            90deg,
-            rgba(37, 99, 235, 0.035) 1px,
-            transparent 1px
-        );
-
-    background-size:
-        100% 100%,
-        45px 45px,
-        45px 45px;
-}
-
-
-/* ==========================================================================
-   12. LIGHT THEME BLOBS
-   ========================================================================== */
-
-body.light-theme::before {
-
-    opacity: 1;
-
-    filter: blur(35px);
-}
-
-
-body.light-theme::after {
-
-    opacity: 1;
-
-    filter: blur(35px);
-}
-
-
-/* ==========================================================================
-   13. GLOBAL LINKS
-   ========================================================================== */
-
-a {
-
-    color: inherit;
-
-    text-decoration: none;
-}
-
-
-a:hover {
-
-    text-decoration: none;
-}
-
-
-/* ==========================================================================
-   14. GLOBAL IMAGES
-   ========================================================================== */
-
-img {
-
-    max-width: 100%;
-
-    display: block;
-}
-
-
-/* ==========================================================================
-   15. GLOBAL FORM ELEMENTS
-   ========================================================================== */
-
-input,
-textarea,
-select {
-
-    background:
-        var(--bg-input) !important;
-
-    color:
-        var(--text-main) !important;
-
-    border:
-        1px solid var(--border-color) !important;
-
-    transition:
-        background-color 0.3s ease,
-        border-color 0.3s ease,
-        color 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-
-input::placeholder,
-textarea::placeholder {
-
-    color:
-        var(--text-muted);
-}
-
-
-input:focus,
-textarea:focus,
-select:focus {
-
-    outline: none;
-
-    border-color:
-        var(--primary) !important;
-
-    box-shadow:
-        0 0 0 3px
-        rgba(59, 130, 246, 0.15);
-}
-
-
-select option {
-
-    background:
-        var(--bg-card);
-
-    color:
-        var(--text-main);
-}
-
-
-/* ==========================================================================
-   16. BUTTON
-   ========================================================================== */
-
-button {
-
-    cursor: pointer;
-
-    font-family: inherit;
-
-    transition:
-        var(--transition);
-}
-
-
-button:hover {
-
-    transform:
-        translateY(-2px);
-}
-
-
-button:focus-visible {
-
-    outline:
-        3px solid
-        rgba(59, 130, 246, 0.30);
-
-    outline-offset:
-        3px;
-}
-
-
-/* ==========================================================================
-   17. SHARED TOPBAR
-   ========================================================================== */
-
-.topbar {
-
-    width: 100%;
-
-    min-height:
-        var(--topbar-height);
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 25px;
-
-    margin:
-        0 0 30px;
-
-    padding:
-        0;
-
-    border-bottom:
-        1px solid var(--border-color);
-
-    position: relative;
-
-    z-index: 50;
-}
-
-
-/* ==========================================================================
-   18. PAGE TITLE
-   ========================================================================== */
-
-.page-title {
-
-    min-width: 0;
-
-    flex: 1;
-}
-
-
-.page-title h1 {
-
-    margin: 0;
-
-    color:
-        var(--text-main);
-
-    font-size:
-        26px;
-
-    line-height:
-        1.2;
-
-    font-weight:
-        700;
-}
-
-
-.page-title p {
-
-    margin:
-        5px 0 0;
-
-    color:
-        var(--text-muted);
-
-    font-size:
-        13px;
-
-    line-height:
-        1.4;
-}
-
-
-/* ==========================================================================
-   19. TOPBAR ACTIONS
-   ========================================================================== */
-
-.topbar-actions {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: flex-end;
-
-    gap: 22px;
-
-    flex-shrink: 0;
-}
-
-
-/* ==========================================================================
-   20. TOP ICONS
-   ========================================================================== */
-
-.top-icons {
-
-    display: flex;
-
-    align-items: center;
-
-    gap: 18px;
-}
-
-
-.top-icons > i {
-
-    width: 40px;
-
-    height: 40px;
-
-    min-width: 40px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 50%;
-
-    color:
-        var(--text-muted);
-
-    font-size:
-        18px;
-
-    cursor: pointer;
-
-    transition:
-        color 0.2s ease,
-        background-color 0.2s ease,
-        transform 0.2s ease;
-}
-
-
-.top-icons > i:hover {
-
-    color:
-        var(--primary);
-
-    background:
-        var(--hover-bg);
-
-    transform:
-        translateY(-2px);
-}
-
-
-/* ==========================================================================
-   21. NOTIFICATION WRAPPER
-   ========================================================================== */
-
-.notification-wrapper {
-
-    position: relative;
-
-    width: 40px;
-
-    height: 40px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-}
-
-
-/* ==========================================================================
-   22. NOTIFICATION BUTTON
-   ========================================================================== */
-
-#notificationBtn,
-.notification-btn {
-
-    width: 40px;
-
-    height: 40px;
-
-    min-width: 40px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 50%;
-
-    border: none;
-
-    background: transparent;
-
-    color:
-        var(--text-muted);
-
-    font-size:
-        18px;
-
-    cursor: pointer;
-
-    transition:
-        color 0.2s ease,
-        background-color 0.2s ease,
-        transform 0.2s ease;
-}
-
-
-#notificationBtn:hover,
-.notification-btn:hover {
-
-    color:
-        var(--primary);
-
-    background:
-        var(--hover-bg);
-
-    transform:
-        translateY(-2px);
-}
-
-
-/* ==========================================================================
-   23. NOTIFICATION BADGE
-   ========================================================================== */
-
-.notification-badge {
-
-    position: absolute;
-
-    top: -2px;
-
-    right: -2px;
-
-    min-width: 18px;
-
-    height: 18px;
-
-    padding:
-        0 5px;
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: center;
-
-    border-radius: 20px;
-
-    background:
-        var(--danger);
-
-    color:
-        #ffffff;
-
-    border:
-        2px solid var(--bg-card);
-
-    font-size:
-        10px;
-
-    font-weight:
-        700;
-
-    line-height:
-        1;
-
-    z-index: 5;
-
-    pointer-events: none;
-}
-
-
-.notification-badge.hidden {
-
-    display:
-        none !important;
-}
-
-
-/* ==========================================================================
-   24. REMOVE OLD NOTIFICATION DOT
-   ========================================================================== */
-
-.notification-icon::after {
-
-    content:
-        none !important;
-}
-
-
-/* ==========================================================================
-   25. NOTIFICATION DROPDOWN
-   ========================================================================== */
-
-.notification-dropdown {
-
-    position: absolute;
-
-    top:
-        calc(100% + 14px);
-
-    right:
-        -10px;
-
-    width:
-        360px;
-
-    max-width:
-        calc(100vw - 30px);
-
-    background:
-        var(--bg-card);
-
-    border:
-        1px solid var(--border-color);
-
-    border-radius:
-        14px;
-
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.25);
-
-    overflow:
-        hidden;
-
-    opacity:
-        0;
-
-    visibility:
-        hidden;
-
-    transform:
-        translateY(-8px);
-
-    transition:
-        opacity 0.2s ease,
-        visibility 0.2s ease,
-        transform 0.2s ease;
-
-    z-index:
-        200;
-}
-
-
-.notification-dropdown.show {
-
-    opacity:
-        1;
-
-    visibility:
-        visible;
-
-    transform:
-        translateY(0);
-}
-
-
-/* ==========================================================================
-   26. NOTIFICATION HEADER
-   ========================================================================== */
-
-.notification-header {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap:
-        15px;
-
-    padding:
-        15px 16px;
-
-    border-bottom:
-        1px solid var(--border-color);
-
-    background:
-        var(--bg-card);
-}
-
-
-.notification-header h3 {
-
-    margin:
-        0;
-
-    color:
-        var(--text-main);
-
-    font-size:
-        15px;
-
-    font-weight:
-        700;
-}
-
-
-#markAllReadBtn {
-
-    border:
-        none;
-
-    background:
-        transparent;
-
-    color:
-        var(--primary);
-
-    font-size:
-        11px;
-
-    font-weight:
-        600;
-
-    padding:
-        5px 0;
-
-    cursor:
-        pointer;
-}
-
-
-#markAllReadBtn:hover {
-
-    color:
-        var(--primary-light);
-
-    transform:
-        none;
-}
-
-
-/* ==========================================================================
-   27. NOTIFICATION LIST
-   ========================================================================== */
-
-.notification-list {
-
-    max-height:
-        390px;
-
-    overflow-y:
-        auto;
-}
-
-
-/* ==========================================================================
-   28. NOTIFICATION ITEM
-   ========================================================================== */
-
-.notification-item {
-
-    display:
-        flex;
-
-    align-items:
-        flex-start;
-
-    gap:
-        12px;
-
-    padding:
-        13px 15px;
-
-    border-bottom:
-        1px solid var(--border-color);
-
-    cursor:
-        pointer;
-
-    background:
-        var(--bg-card);
-
-    transition:
-        background-color 0.2s ease;
-}
-
-
-.notification-item:last-child {
-
-    border-bottom:
-        none;
-}
-
-
-.notification-item:hover {
-
-    background:
-        var(--hover-bg);
-}
-
-
-.notification-item.unread {
-
-    background:
-        rgba(59, 130, 246, 0.08);
-}
-
-
-/* ==========================================================================
-   29. NOTIFICATION ITEM ICON
-   ========================================================================== */
-
-.notification-item .notification-icon {
-
-    width:
-        34px;
-
-    height:
-        34px;
-
-    min-width:
-        34px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    border-radius:
-        50%;
-
-    background:
-        rgba(59, 130, 246, 0.12);
-
-    color:
-        var(--primary);
-
-    font-size:
-        14px;
-}
-
-
-/* ==========================================================================
-   30. NOTIFICATION CONTENT
-   ========================================================================== */
-
-.notification-content {
-
-    flex:
-        1;
-
-    min-width:
-        0;
-}
-
-
-.notification-message {
-
-    margin:
-        0;
-
-    color:
-        var(--text-main);
-
-    font-size:
-        13px;
-
-    line-height:
-        1.45;
-
-    word-break:
-        break-word;
-}
-
-
-.notification-time {
-
-    display:
-        block;
-
-    margin-top:
-        5px;
-
-    color:
-        var(--text-muted);
-
-    font-size:
-        11px;
-}
-
-
-/* ==========================================================================
-   31. NOTIFICATION EMPTY
-   ========================================================================== */
-
-.notification-empty {
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    min-height:
-        100px;
-
-    padding:
-        20px;
-
-    text-align:
-        center;
-
-    color:
-        var(--text-muted);
-
-    font-size:
-        13px;
-}
-
-
-/* ==========================================================================
-   32. PROFILE / USER AREA
-   ========================================================================== */
-
-.profile {
-
-    position:
-        relative;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        10px;
-
-    cursor:
-        pointer;
-
-    min-height:
-        46px;
-
-    flex-shrink:
-        0;
-}
-
-
-/* ==========================================================================
-   33. PROFILE ICON
-   ========================================================================== */
-
-.profile-icon {
-
-    width:
-        44px;
-
-    height:
-        44px;
-
-    min-width:
-        44px;
-
-    border-radius:
-        50%;
-
-    display:
-        flex;
-
-    justify-content:
-        center;
-
-    align-items:
-        center;
-
-    overflow:
-        hidden;
-
-    font-size:
-        21px;
-
-    color:
-        var(--profile-avatar-text) !important;
-
-    background:
-        linear-gradient(
-            135deg,
-            var(--profile-avatar-start),
-            var(--profile-avatar-middle),
-            var(--profile-avatar-end)
-        ) !important;
-
-    box-shadow:
-        0 8px 20px rgba(59, 130, 246, 0.20);
-
-    transition:
-        var(--transition);
-}
-
-
-/* ==========================================================================
-   34. PROFILE HOVER
-   ========================================================================== */
-
-.profile:hover .profile-icon {
-
-    transform:
-        scale(1.05);
-}
-
-
-/* ==========================================================================
-   35. PROFILE IMAGE
-   ========================================================================== */
-
-.header-profile-image {
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    object-fit:
-        cover;
-
-    border-radius:
-        50%;
-}
-
-
-/* ==========================================================================
-   36. PROFILE INITIAL
-   ========================================================================== */
-
-.header-profile-initial {
-
-    width:
-        100%;
-
-    height:
-        100%;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    justify-content:
-        center;
-
-    color:
-        #ffffff !important;
-
-    -webkit-text-fill-color:
-        #ffffff !important;
-
-    font-size:
-        19px;
-
-    font-weight:
-        700;
-
-    line-height:
-        1;
-
-    text-align:
-        center;
-
-    background:
-        transparent !important;
-
-    opacity:
-        1 !important;
-}
-
-
-/* ==========================================================================
-   37. FORCE INITIAL WHITE IN BOTH THEMES
-   ========================================================================== */
-
-body.light-theme .profile-icon,
-body:not(.light-theme) .profile-icon {
-
-    color:
-        #ffffff !important;
-
-    background:
-        linear-gradient(
-            135deg,
-            #7c3aed,
-            #3b82f6,
-            #06b6d4
-        ) !important;
-}
-
-
-body.light-theme .header-profile-initial,
-body:not(.light-theme) .header-profile-initial {
-
-    color:
-        #ffffff !important;
-
-    -webkit-text-fill-color:
-        #ffffff !important;
-}
-
-
-/* ==========================================================================
-   38. HIDE USER NAME
-   ========================================================================== */
-
-/*
-   The avatar remains visible.
-   The user's name beside the avatar is hidden on ALL devices.
-*/
-
-.profile > #userName,
-.profile > span#userName {
-
-    display:
-        none !important;
-}
-
-
-/*
-   If the HTML uses another direct span for the name,
-   hide only the direct text span while keeping
-   the avatar intact.
-*/
-
-.profile > span:not(.profile-icon) {
-
-    display:
-        none !important;
-}
-
-
-/* ==========================================================================
-   39. PROFILE DROPDOWN
-   ========================================================================== */
-
-.profile-dropdown {
-
-    position:
-        absolute;
-
-    top:
-        calc(100% + 12px);
-
-    right:
-        0;
-
-    width:
-        190px;
-
-    padding:
-        8px;
-
-    background:
-        var(--bg-card);
-
-    border:
-        1px solid var(--border-color);
-
-    border-radius:
-        12px;
-
-    box-shadow:
-        0 15px 40px rgba(0, 0, 0, 0.25);
-
-    opacity:
-        0;
-
-    visibility:
-        hidden;
-
-    transform:
-        translateY(-8px);
-
-    transition:
-        opacity 0.2s ease,
-        visibility 0.2s ease,
-        transform 0.2s ease;
-
-    z-index:
-        100;
-}
-
-
-.profile:hover .profile-dropdown,
-.profile.active .profile-dropdown {
-
-    opacity:
-        1;
-
-    visibility:
-        visible;
-
-    transform:
-        translateY(0);
-}
-
-
-/* ==========================================================================
-   40. PROFILE DROPDOWN ITEMS
-   ========================================================================== */
-
-.profile-dropdown-item {
-
-    width:
-        100%;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        10px;
-
-    padding:
-        11px 12px;
-
-    border-radius:
-        8px;
-
-    color:
-        var(--text-muted);
-
-    font-size:
-        13px;
-
-    cursor:
-        pointer;
-
-    transition:
-        var(--transition);
-}
-
-
-.profile-dropdown-item:hover {
-
-    background:
-        var(--hover-bg);
-
-    color:
-        var(--text-main);
-
-    transform:
-        none;
-}
-
-
-.profile-dropdown-item i {
-
-    width:
-        18px;
-
-    text-align:
-        center;
-
-    color:
-        var(--primary);
-}
-
-
-.profile-dropdown-item.logout {
-
-    color:
-        var(--danger);
-}
-
-
-.profile-dropdown-item.logout i {
-
-    color:
-        var(--danger);
-}
-
-
-/* ==========================================================================
-   41. SEARCH
-   ========================================================================== */
-
-.search {
-
-    width:
-        440px;
-
-    height:
-        50px;
-
-    display:
-        flex;
-
-    align-items:
-        center;
-
-    gap:
-        14px;
-
-    padding:
-        0 18px;
-
-    border-radius:
-        14px;
-
-    background:
-        var(--bg-card);
-
-    border:
-        1px solid var(--border-color);
-
-    transition:
-        var(--transition);
-}
-
-
-.search:hover {
-
-    border-color:
-        var(--primary);
-
-    box-shadow:
-        0 8px 25px rgba(59, 130, 246, 0.10);
-}
-
-
-.search:focus-within {
-
-    border-color:
-        var(--primary);
-
-    box-shadow:
-        0 0 0 3px
-        rgba(59, 130, 246, 0.12);
-}
-
-
-.search i {
-
-    color:
-        var(--text-muted);
-
-    font-size:
-        15px;
-}
-
-
-.search input {
-
-    flex:
-        1;
-
-    border:
-        none !important;
-
-    outline:
-        none;
-
-    background:
-        transparent !important;
-
-    box-shadow:
-        none !important;
-
-    color:
-        var(--text-main) !important;
-
-    font-size:
-        14px;
-}
-
-
-/* ==========================================================================
-   42. COMMON CARD
-   ========================================================================== */
-
-.card {
-
-    background:
-        var(--bg-card);
-
-    border:
-        1px solid var(--border-color);
-
-    border-radius:
-        16px;
-
-    box-shadow:
-        0 10px 28px rgba(0, 0, 0, 0.18);
-
-    transition:
-        background-color 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease,
-        transform 0.25s ease;
-}
-
-
-.card:hover {
-
-    border-color:
-        rgba(96, 165, 250, 0.42);
-
-    box-shadow:
-        0 14px 34px rgba(0, 0, 0, 0.23);
-}
-
-
-/* ==========================================================================
-   43. GLASS
-   ========================================================================== */
-
-.glass {
-
-    background:
-        rgba(32, 43, 64, 0.80);
-
-    backdrop-filter:
-        blur(18px);
-
-    -webkit-backdrop-filter:
-        blur(18px);
-
-    border:
-        1px solid var(--border-color);
-}
-
-
-body.light-theme .glass {
-
-    background:
-        rgba(255, 255, 255, 0.78);
-}
-
-
-/* ==========================================================================
-   44. COMMON PAGE SECTIONS
-   ========================================================================== */
-
-section,
-.card,
-.profile-card,
-.skills-card,
-.matches-card,
-.activity-card,
-.reviews-card,
-.requests-card,
-.request-card,
-.swap-card {
-
-    color:
-        var(--text-main);
-}
-
-
-/* ==========================================================================
-   45. COMMON HEADINGS
-   ========================================================================== */
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-
-    color:
-        var(--text-main);
-}
-
-
-/* ==========================================================================
-   46. COMMON PARAGRAPHS
-   ========================================================================== */
-
-p {
-
-    color:
-        var(--text-muted);
-}
-
-
-/* ==========================================================================
-   47. COMMON TABLE
-   ========================================================================== */
-
-table {
-
-    width:
-        100%;
-
-    border-collapse:
-        collapse;
-
-    color:
-        var(--text-main);
-}
-
-
-th {
-
-    color:
-        var(--text-main);
-
-    background:
-        var(--bg-inner);
-}
-
-
-td {
-
-    color:
-        var(--text-muted);
-
-    border-color:
-        var(--border-color);
-}
-
-
-/* ==========================================================================
-   48. COMMON MODAL
-   ========================================================================== */
-
-.modal,
-.modal-content {
-
-    background:
-        var(--bg-card);
-
-    color:
-        var(--text-main);
-
-    border:
-        1px solid var(--border-color);
-}
-
-
-/* ==========================================================================
-   49. COMMON DIVIDER
-   ========================================================================== */
-
-hr {
-
-    border:
-        none;
-
-    border-top:
-        1px solid var(--border-color);
-}
-
-
-/* ==========================================================================
-   50. SCROLLBAR
-   ========================================================================== */
-
-::-webkit-scrollbar {
-
-    width:
-        9px;
-
-    height:
-        9px;
-}
-
-
-::-webkit-scrollbar-track {
-
-    background:
-        var(--bg-inner);
-}
-
-
-::-webkit-scrollbar-thumb {
-
-    background:
-        linear-gradient(
-            180deg,
-            var(--secondary),
-            var(--primary)
-        );
-
-    border-radius:
-        20px;
-}
-
-
-::-webkit-scrollbar-thumb:hover {
-
-    background:
-        linear-gradient(
-            180deg,
-            var(--secondary-light),
-            var(--primary-light)
-        );
-}
-
-
-/* ==========================================================================
-   51. TEXT SELECTION
-   ========================================================================== */
-
-::selection {
-
-    background:
-        var(--primary);
-
-    color:
-        #ffffff;
-}
-
-
-/* ==========================================================================
-   52. UTILITY CLASSES
-   ========================================================================== */
-
-.text-success {
-
-    color:
-        var(--success) !important;
-}
-
-
-.text-warning {
-
-    color:
-        var(--warning) !important;
-}
-
-
-.text-danger {
-
-    color:
-        var(--danger) !important;
-}
-
-
-.text-primary {
-
-    color:
-        var(--primary) !important;
-}
-
-
-.hidden {
-
-    display:
-        none !important;
-}
-
-
-.w-100 {
-
-    width:
-        100%;
-}
-
-
-.text-center {
-
-    text-align:
-        center;
-}
-
-
-/* ==========================================================================
-   53. RESPONSIVE - 1024px
-   ========================================================================== */
-
-@media (max-width: 1024px) {
-
-    :root {
-
-        --sidebar-width:
-            230px;
-    }
-
-
-    .page-title h1 {
-
-        font-size:
-            24px;
-    }
-
-
-    .topbar-actions {
-
-        gap:
-            16px;
-    }
-
-
-    .top-icons {
-
-        gap:
-            12px;
-    }
-
-
-    body::before {
-
-        width:
-            430px;
-
-        height:
-            430px;
-    }
-
-
-    body::after {
-
-        width:
-            500px;
-
-        height:
-            500px;
-    }
-}
-
-
-/* ==========================================================================
-   54. RESPONSIVE - 900px
-   ========================================================================== */
-
-@media (max-width: 900px) {
-
-    .topbar {
-
-        min-height:
-            var(--topbar-height);
-
-        height:
-            auto;
-
-        padding:
-            18px 0;
-
-        flex-wrap:
-            wrap;
-    }
-
-
-    .notification-dropdown {
-
-        right:
-            0;
-    }
-
-
-    body::before {
-
-        width:
-            380px;
-
-        height:
-            380px;
-    }
-
-
-    body::after {
-
-        width:
-            430px;
-
-        height:
-            430px;
-    }
-}
-
-
-/* ==========================================================================
-   55. RESPONSIVE - 768px
-   ========================================================================== */
-
-@media (max-width: 768px) {
-
-    .topbar {
-
-        gap:
-            15px;
-
-        margin-bottom:
-            25px;
-    }
-
-
-    .topbar-actions {
-
-        gap:
-            12px;
-    }
-
-
-    .top-icons {
-
-        gap:
-            8px;
-    }
-
-
-    .top-icons > i,
-    #notificationBtn,
-    .notification-btn {
-
-        width:
-            38px;
-
-        height:
-            38px;
-
-        min-width:
-            38px;
-
-        font-size:
-            17px;
-    }
-
-
-    .notification-wrapper {
-
-        width:
-            38px;
-
-        height:
-            38px;
-    }
-
-
-    .profile-icon {
-
-        width:
-            42px;
-
-        height:
-            42px;
-
-        min-width:
-            42px;
-
-        font-size:
-            19px;
-    }
-
-
-    .notification-dropdown {
-
-        width:
-            340px;
-
-        max-width:
-            calc(100vw - 30px);
-    }
-
-
-    .search {
-
-        width:
-            100%;
-
-        max-width:
-            100%;
-    }
-
-
-    body::before {
-
-        width:
-            320px;
-
-        height:
-            320px;
-    }
-
-
-    body::after {
-
-        width:
-            360px;
-
-        height:
-            360px;
-    }
-}
-
-
-/* ==========================================================================
-   56. RESPONSIVE - 600px
-   ========================================================================== */
-
-@media (max-width: 600px) {
-
-    .topbar {
-
-        min-height:
-            auto;
-
-        padding:
-            18px 0;
-
-        align-items:
-            center;
-    }
-
-
-    .page-title h1 {
-
-        font-size:
-            22px;
-    }
-
-
-    .page-title p {
-
-        font-size:
-            12px;
-    }
-
-
-    .topbar-actions {
-
-        gap:
-            8px;
-    }
-
-
-    .top-icons {
-
-        gap:
-            4px;
-    }
-
-
-    .top-icons > i,
-    #notificationBtn,
-    .notification-btn {
-
-        width:
-            36px;
-
-        height:
-            36px;
-
-        min-width:
-            36px;
-    }
-
-
-    .notification-wrapper {
-
-        width:
-            36px;
-
-        height:
-            36px;
-    }
-
-
-    .profile-icon {
-
-        width:
-            40px;
-
-        height:
-            40px;
-
-        min-width:
-            40px;
-
-        font-size:
-            18px;
-    }
-
-
-    .profile-dropdown {
-
-        right:
-            0;
-
-        width:
-            175px;
-    }
-
-
-    .notification-dropdown {
-
-        position:
-            fixed;
-
-        top:
-            75px;
-
-        right:
-            12px;
-
-        width:
-            calc(100vw - 24px);
-
-        max-width:
-            none;
-    }
-
-
-    body::before {
-
-        width:
-            280px;
-
-        height:
-            280px;
-
-        filter:
-            blur(35px);
-    }
-
-
-    body::after {
-
-        width:
-            300px;
-
-        height:
-            300px;
-
-        filter:
-            blur(35px);
-    }
-}
-
-
-/* ==========================================================================
-   57. RESPONSIVE - 420px
-   ========================================================================== */
-
-@media (max-width: 420px) {
-
-    .page-title h1 {
-
-        font-size:
-            20px;
-    }
-
-
-    .page-title p {
-
-        display:
-            none;
-    }
-
-
-    .topbar-actions {
-
-        gap:
-            4px;
-    }
-
-
-    .top-icons > i,
-    #notificationBtn,
-    .notification-btn {
-
-        width:
-            34px;
-
-        height:
-            34px;
-
-        min-width:
-            34px;
-
-        font-size:
-            16px;
-    }
-
-
-    .notification-wrapper {
-
-        width:
-            34px;
-
-        height:
-            34px;
-    }
-
-
-    .profile-icon {
-
-        width:
-            38px;
-
-        height:
-            38px;
-
-        min-width:
-            38px;
-
-        font-size:
-            17px;
-    }
-
-
-    .notification-badge {
-
-        min-width:
-            17px;
-
-        height:
-            17px;
-
-        font-size:
-            9px;
-    }
-
-
-    body::before {
-
-        width:
-            240px;
-
-        height:
-            240px;
-    }
-
-
-    body::after {
-
-        width:
-            260px;
-
-        height:
-            260px;
-    }
-}
-
-
-/* ==========================================================================
-   58. REDUCED MOTION
-   ========================================================================== */
-
-@media (prefers-reduced-motion: reduce) {
-
-    *,
-    *::before,
-    *::after {
-
-        animation:
-            none !important;
-
-        transition:
-            none !important;
-
-        scroll-behavior:
-            auto !important;
-    }
+/* ========================================================================== 
+   SKILLHUB - SHARED THEME.CSS 
+   ========================================================================== 
+   Includes: 
+   - Light / Dark themes 
+   - Professional dark/light background 
+   - Dynamic animated background 
+   - Shared colors 
+   - Global typography 
+   - Forms 
+   - Buttons 
+   - Topbar 
+   - Profile 
+   - Notifications 
+   - Cards 
+   - Glass effects 
+   - Responsive styles 
+ 
+   IMPORTANT: 
+   - sidebar.css controls sidebar/layout positioning. 
+   - dashboard.css controls dashboard-specific components. 
+   - request.css / profile.css / other page CSS can use these variables. 
+   ========================================================================== */ 
+ 
+ 
+/* ========================================================================== 
+   1. THEME VARIABLES 
+   ========================================================================== */ 
+ 
+:root { 
+ 
+    /* ---------------------------------------------------------------------- 
+       PRIMARY COLORS 
+       ---------------------------------------------------------------------- */ 
+ 
+    --primary: #3b82f6; 
+    --primary-light: #60a5fa; 
+    --primary-dark: #2563eb; 
+ 
+    --secondary: #7c3aed; 
+    --secondary-light: #8b5cf6; 
+    --secondary-dark: #6d28d9; 
+ 
+    --cyan: #06b6d4; 
+ 
+    --pink: #ec4899; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       DARK BACKGROUND 
+       ---------------------------------------------------------------------- */ 
+ 
+    /* 
+       Page background is intentionally LIGHTER than cards.
+       This creates clear visual separation between:
+       background -> sidebar -> cards -> inputs
+    */ 
+ 
+    --bg-primary: #182235; 
+ 
+    --bg-card: #101827; 
+ 
+    --bg-input: #1b2638; 
+ 
+    --bg-inner: #151f31; 
+ 
+    --bg-sidebar: #121a2a; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       TEXT 
+       ---------------------------------------------------------------------- */ 
+ 
+    --text-main: #f8fafc; 
+ 
+    --text-muted: #9aa9bf; 
+ 
+    --text-soft: #d2dbea; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       BORDERS 
+       ---------------------------------------------------------------------- */ 
+ 
+    --border-color: #2d3b52; 
+ 
+    --border-light: rgba(255, 255, 255, 0.10); 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       COMPATIBILITY VARIABLES 
+       ---------------------------------------------------------------------- */ 
+ 
+    --bg: var(--bg-primary); 
+ 
+    --surface: var(--bg-card); 
+ 
+    --border: var(--border-color); 
+ 
+    --text: var(--text-main); 
+ 
+    --muted: var(--text-muted); 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       STATUS 
+       ---------------------------------------------------------------------- */ 
+ 
+    --success: #22c55e; 
+ 
+    --warning: #f59e0b; 
+ 
+    --danger: #ef4444; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       ACCENTS 
+       ---------------------------------------------------------------------- */ 
+ 
+    --accent-blue: #3b82f6; 
+ 
+    --accent-purple: #7c3aed; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       HOVER 
+       ---------------------------------------------------------------------- */ 
+ 
+    --hover-bg: #202d42; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       SHADOW 
+       ---------------------------------------------------------------------- */ 
+ 
+    --shadow: 
+        0 12px 32px rgba(0, 0, 0, 0.32); 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       LAYOUT 
+       ---------------------------------------------------------------------- */ 
+ 
+    --sidebar-width: 255px; 
+ 
+    --topbar-height: 80px; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       TRANSITION 
+       ---------------------------------------------------------------------- */ 
+ 
+    --transition: 0.3s ease; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       DYNAMIC BACKGROUND 
+       ---------------------------------------------------------------------- */ 
+ 
+    --dynamic-bg-base: #182235; 
+ 
+    --blob-purple: 
+        rgba(124, 58, 237, 0.18); 
+ 
+    --blob-blue: 
+        rgba(37, 99, 235, 0.15); 
+ 
+    --blob-cyan: 
+        rgba(6, 182, 212, 0.11); 
+ 
+    --blob-pink: 
+        rgba(236, 72, 153, 0.08); 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       HEADER PROFILE AVATAR 
+       ---------------------------------------------------------------------- */ 
+ 
+    --profile-avatar-start: #7c3aed; 
+ 
+    --profile-avatar-middle: #3b82f6; 
+ 
+    --profile-avatar-end: #06b6d4; 
+ 
+    --profile-avatar-text: #ffffff; 
+} 
+ 
+ 
+/* ========================================================================== 
+   2. LIGHT THEME 
+   ========================================================================== */ 
+ 
+body.light-theme { 
+ 
+    /* ---------------------------------------------------------------------- 
+       BACKGROUND 
+       ---------------------------------------------------------------------- */ 
+ 
+    --bg-primary: #f4f7fb; 
+ 
+    --bg-card: #ffffff; 
+ 
+    --bg-input: #f8fafc; 
+ 
+    --bg-inner: #eef2f7; 
+ 
+    --bg-sidebar: #ffffff; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       TEXT 
+       ---------------------------------------------------------------------- */ 
+ 
+    --text-main: #0f172a; 
+ 
+    --text-muted: #64748b; 
+ 
+    --text-soft: #475569; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       BORDER 
+       ---------------------------------------------------------------------- */ 
+ 
+    --border-color: #d8e0ea; 
+ 
+    --border-light: rgba(15, 23, 42, 0.08); 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       COMPATIBILITY 
+       ---------------------------------------------------------------------- */ 
+ 
+    --bg: var(--bg-primary); 
+ 
+    --surface: var(--bg-card); 
+ 
+    --border: var(--border-color); 
+ 
+    --text: var(--text-main); 
+ 
+    --muted: var(--text-muted); 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       PRIMARY 
+       ---------------------------------------------------------------------- */ 
+ 
+    --primary: #2563eb; 
+ 
+    --primary-light: #3b82f6; 
+ 
+    --primary-dark: #1d4ed8; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       SECONDARY 
+       ---------------------------------------------------------------------- */ 
+ 
+    --secondary: #6d28d9; 
+ 
+    --secondary-light: #7c3aed; 
+ 
+    --secondary-dark: #5b21b6; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       ACCENTS 
+       ---------------------------------------------------------------------- */ 
+ 
+    --accent-blue: #2563eb; 
+ 
+    --accent-purple: #6d28d9; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       HOVER 
+       ---------------------------------------------------------------------- */ 
+ 
+    --hover-bg: #f1f5f9; 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       SHADOW 
+       ---------------------------------------------------------------------- */ 
+ 
+    --shadow: 
+        0 12px 30px rgba(15, 23, 42, 0.10); 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       DYNAMIC BACKGROUND 
+       ---------------------------------------------------------------------- */ 
+ 
+    --dynamic-bg-base: #f4f7fb; 
+ 
+    --blob-purple: 
+        rgba(124, 58, 237, 0.12); 
+ 
+    --blob-blue: 
+        rgba(37, 99, 235, 0.11); 
+ 
+    --blob-cyan: 
+        rgba(6, 182, 212, 0.09); 
+ 
+    --blob-pink: 
+        rgba(236, 72, 153, 0.07); 
+ 
+ 
+    /* ---------------------------------------------------------------------- 
+       IMPORTANT: 
+       KEEP PROFILE INITIAL WHITE IN LIGHT THEME TOO 
+       ---------------------------------------------------------------------- */ 
+ 
+    --profile-avatar-start: #7c3aed; 
+ 
+    --profile-avatar-middle: #3b82f6; 
+ 
+    --profile-avatar-end: #06b6d4; 
+ 
+    --profile-avatar-text: #ffffff; 
+} 
+ 
+ 
+/* ========================================================================== 
+   3. GLOBAL RESET 
+   ========================================================================== */ 
+ 
+* { 
+ 
+    margin: 0; 
+ 
+    padding: 0; 
+ 
+    box-sizing: border-box; 
+ 
+    font-family: 
+        "Segoe UI", 
+        -apple-system, 
+        BlinkMacSystemFont, 
+        "Roboto", 
+        sans-serif; 
+} 
+ 
+ 
+/* ========================================================================== 
+   4. HTML 
+   ========================================================================== */ 
+ 
+html { 
+ 
+    scroll-behavior: smooth; 
+} 
+ 
+ 
+/* ========================================================================== 
+   5. BODY 
+   ========================================================================== */ 
+ 
+body { 
+ 
+    min-height: 100vh; 
+ 
+    color: var(--text-main); 
+ 
+    overflow-x: hidden; 
+ 
+    position: relative; 
+ 
+    isolation: isolate; 
+ 
+    transition: 
+        background-color 0.4s ease, 
+        color 0.4s ease; 
+} 
+ 
+ 
+/* ========================================================================== 
+   6. DYNAMIC BACKGROUND 
+   ========================================================================== */ 
+ 
+body { 
+ 
+    background-color: 
+        var(--dynamic-bg-base); 
+ 
+    background-image: 
+ 
+        linear-gradient( 
+            135deg, 
+            var(--dynamic-bg-base) 0%, 
+            var(--bg-primary) 48%, 
+            var(--dynamic-bg-base) 100% 
+        ), 
+ 
+        linear-gradient( 
+            rgba(96, 165, 250, 0.025) 1px, 
+            transparent 1px 
+        ), 
+ 
+        linear-gradient( 
+            90deg, 
+            rgba(96, 165, 250, 0.025) 1px, 
+            transparent 1px 
+        ); 
+ 
+    background-size: 
+        100% 100%, 
+        45px 45px, 
+        45px 45px; 
+ 
+    background-attachment: fixed; 
+} 
+ 
+ 
+/* ========================================================================== 
+   7. FIRST DYNAMIC BACKGROUND BLOB 
+   ========================================================================== */ 
+ 
+body::before { 
+ 
+    content: ""; 
+ 
+    position: fixed; 
+ 
+    width: 520px; 
+ 
+    height: 520px; 
+ 
+    top: -180px; 
+ 
+    left: -150px; 
+ 
+    border-radius: 50%; 
+ 
+    background: 
+        radial-gradient( 
+            circle, 
+            var(--blob-purple) 0%, 
+            rgba(124, 58, 237, 0.08) 35%, 
+            transparent 70% 
+        ); 
+ 
+    filter: blur(30px); 
+ 
+    pointer-events: none; 
+ 
+    z-index: -2; 
+ 
+    animation: 
+        dynamicBlobOne 16s ease-in-out infinite; 
+} 
+ 
+ 
+/* ========================================================================== 
+   8. SECOND DYNAMIC BACKGROUND BLOB 
+   ========================================================================== */ 
+ 
+body::after { 
+ 
+    content: ""; 
+ 
+    position: fixed; 
+ 
+    width: 600px; 
+ 
+    height: 600px; 
+ 
+    right: -200px; 
+ 
+    bottom: -220px; 
+ 
+    border-radius: 50%; 
+ 
+    background: 
+        radial-gradient( 
+            circle, 
+            var(--blob-blue) 0%, 
+            rgba(37, 99, 235, 0.07) 35%, 
+            transparent 70% 
+        ); 
+ 
+    filter: blur(30px); 
+ 
+    pointer-events: none; 
+ 
+    z-index: -2; 
+ 
+    animation: 
+        dynamicBlobTwo 19s ease-in-out infinite; 
+} 
+ 
+ 
+/* ========================================================================== 
+   9. ANIMATION - BLOB ONE 
+   ========================================================================== */ 
+ 
+@keyframes dynamicBlobOne { 
+ 
+    0% { 
+ 
+        transform: 
+            translate3d(0, 0, 0) 
+            scale(1); 
+    } 
+ 
+    25% { 
+ 
+        transform: 
+            translate3d(180px, 100px, 0) 
+            scale(1.12); 
+    } 
+ 
+    50% { 
+ 
+        transform: 
+            translate3d(300px, 240px, 0) 
+            scale(0.95); 
+    } 
+ 
+    75% { 
+ 
+        transform: 
+            translate3d(120px, 320px, 0) 
+            scale(1.10); 
+    } 
+ 
+    100% { 
+ 
+        transform: 
+            translate3d(0, 0, 0) 
+            scale(1); 
+    } 
+} 
+ 
+ 
+/* ========================================================================== 
+   10. ANIMATION - BLOB TWO 
+   ========================================================================== */ 
+ 
+@keyframes dynamicBlobTwo { 
+ 
+    0% { 
+ 
+        transform: 
+            translate3d(0, 0, 0) 
+            scale(1); 
+    } 
+ 
+    25% { 
+ 
+        transform: 
+            translate3d(-180px, -80px, 0) 
+            scale(1.10); 
+    } 
+ 
+    50% { 
+ 
+        transform: 
+            translate3d(-300px, -220px, 0) 
+            scale(0.92); 
+    } 
+ 
+    75% { 
+ 
+        transform: 
+            translate3d(-100px, -300px, 0) 
+            scale(1.08); 
+    } 
+ 
+    100% { 
+ 
+        transform: 
+            translate3d(0, 0, 0) 
+            scale(1); 
+    } 
+} 
+ 
+ 
+/* ========================================================================== 
+   11. LIGHT THEME BACKGROUND 
+   ========================================================================== */ 
+ 
+body.light-theme { 
+ 
+    background-color: 
+        var(--dynamic-bg-base); 
+ 
+    background-image: 
+ 
+        linear-gradient( 
+            135deg, 
+            #f8fbff 0%, 
+            #f1f5fb 45%, 
+            #f8fbff 100% 
+        ), 
+ 
+        linear-gradient( 
+            rgba(37, 99, 235, 0.035) 1px, 
+            transparent 1px 
+        ), 
+ 
+        linear-gradient( 
+            90deg, 
+            rgba(37, 99, 235, 0.035) 1px, 
+            transparent 1px 
+        ); 
+ 
+    background-size: 
+        100% 100%, 
+        45px 45px, 
+        45px 45px; 
+} 
+ 
+ 
+/* ========================================================================== 
+   12. LIGHT THEME BLOBS 
+   ========================================================================== */ 
+ 
+body.light-theme::before { 
+ 
+    opacity: 1; 
+ 
+    filter: blur(35px); 
+} 
+ 
+ 
+body.light-theme::after { 
+ 
+    opacity: 1; 
+ 
+    filter: blur(35px); 
+} 
+ 
+ 
+/* ========================================================================== 
+   13. GLOBAL LINKS 
+   ========================================================================== */ 
+ 
+a { 
+ 
+    color: inherit; 
+ 
+    text-decoration: none; 
+} 
+ 
+ 
+a:hover { 
+ 
+    text-decoration: none; 
+} 
+ 
+ 
+/* ========================================================================== 
+   14. GLOBAL IMAGES 
+   ========================================================================== */ 
+ 
+img { 
+ 
+    max-width: 100%; 
+ 
+    display: block; 
+} 
+ 
+ 
+/* ========================================================================== 
+   15. GLOBAL FORM ELEMENTS 
+   ========================================================================== */ 
+ 
+input, 
+textarea, 
+select { 
+ 
+    background: 
+        var(--bg-input) !important; 
+ 
+    color: 
+        var(--text-main) !important; 
+ 
+    border: 
+        1px solid var(--border-color) !important; 
+ 
+    transition: 
+        background-color 0.3s ease, 
+        border-color 0.3s ease, 
+        color 0.3s ease, 
+        box-shadow 0.3s ease; 
+} 
+ 
+ 
+input::placeholder, 
+textarea::placeholder { 
+ 
+    color: 
+        var(--text-muted); 
+} 
+ 
+ 
+input:focus, 
+textarea:focus, 
+select:focus { 
+ 
+    outline: none; 
+ 
+    border-color: 
+        var(--primary) !important; 
+ 
+    box-shadow: 
+        0 0 0 3px 
+        rgba(59, 130, 246, 0.15); 
+} 
+ 
+ 
+select option { 
+ 
+    background: 
+        var(--bg-card); 
+ 
+    color: 
+        var(--text-main); 
+} 
+ 
+ 
+/* ========================================================================== 
+   16. BUTTON 
+   ========================================================================== */ 
+ 
+button { 
+ 
+    cursor: pointer; 
+ 
+    font-family: inherit; 
+ 
+    transition: 
+        var(--transition); 
+} 
+ 
+ 
+button:hover { 
+ 
+    transform: 
+        translateY(-2px); 
+} 
+ 
+ 
+button:focus-visible { 
+ 
+    outline: 
+        3px solid 
+        rgba(59, 130, 246, 0.30); 
+ 
+    outline-offset: 
+        3px; 
+} 
+ 
+ 
+/* ========================================================================== 
+   17. SHARED TOPBAR 
+   ========================================================================== */ 
+ 
+.topbar { 
+ 
+    width: 100%; 
+ 
+    min-height: 
+        var(--topbar-height); 
+ 
+    display: flex; 
+ 
+    align-items: center; 
+ 
+    justify-content: space-between; 
+ 
+    gap: 25px; 
+ 
+    margin: 
+        0 0 30px; 
+ 
+    padding: 
+        0; 
+ 
+    border-bottom: 
+        1px solid var(--border-color); 
+ 
+    position: relative; 
+ 
+    z-index: 50; 
+} 
+ 
+ 
+/* ========================================================================== 
+   18. PAGE TITLE 
+   ========================================================================== */ 
+ 
+.page-title { 
+ 
+    min-width: 0; 
+ 
+    flex: 1; 
+} 
+ 
+ 
+.page-title h1 { 
+ 
+    margin: 0; 
+ 
+    color: 
+        var(--text-main); 
+ 
+    font-size: 
+        26px; 
+ 
+    line-height: 
+        1.2; 
+ 
+    font-weight: 
+        700; 
+} 
+ 
+ 
+.page-title p { 
+ 
+    margin: 
+        5px 0 0; 
+ 
+    color: 
+        var(--text-muted); 
+ 
+    font-size: 
+        13px; 
+ 
+    line-height: 
+        1.4; 
+} 
+ 
+ 
+/* ========================================================================== 
+   19. TOPBAR ACTIONS 
+   ========================================================================== */ 
+ 
+.topbar-actions { 
+ 
+    display: flex; 
+ 
+    align-items: center; 
+ 
+    justify-content: flex-end; 
+ 
+    gap: 22px; 
+ 
+    flex-shrink: 0; 
+} 
+ 
+ 
+/* ========================================================================== 
+   20. TOP ICONS 
+   ========================================================================== */ 
+ 
+.top-icons { 
+ 
+    display: flex; 
+ 
+    align-items: center; 
+ 
+    gap: 18px; 
+} 
+ 
+ 
+.top-icons > i { 
+ 
+    width: 40px; 
+ 
+    height: 40px; 
+ 
+    min-width: 40px; 
+ 
+    display: flex; 
+ 
+    align-items: center; 
+ 
+    justify-content: center; 
+ 
+    border-radius: 50%; 
+ 
+    color: 
+        var(--text-muted); 
+ 
+    font-size: 
+        18px; 
+ 
+    cursor: pointer; 
+ 
+    transition: 
+        color 0.2s ease, 
+        background-color 0.2s ease, 
+        transform 0.2s ease; 
+} 
+ 
+ 
+.top-icons > i:hover { 
+ 
+    color: 
+        var(--primary); 
+ 
+    background: 
+        var(--hover-bg); 
+ 
+    transform: 
+        translateY(-2px); 
+} 
+ 
+ 
+/* ========================================================================== 
+   21. NOTIFICATION WRAPPER 
+   ========================================================================== */ 
+ 
+.notification-wrapper { 
+ 
+    position: relative; 
+ 
+    width: 40px; 
+ 
+    height: 40px; 
+ 
+    display: flex; 
+ 
+    align-items: center; 
+ 
+    justify-content: center; 
+} 
+ 
+ 
+/* ========================================================================== 
+   22. NOTIFICATION BUTTON 
+   ========================================================================== */ 
+ 
+#notificationBtn, 
+.notification-btn { 
+ 
+    width: 40px; 
+ 
+    height: 40px; 
+ 
+    min-width: 40px; 
+ 
+    display: flex; 
+ 
+    align-items: center; 
+ 
+    justify-content: center; 
+ 
+    border-radius: 50%; 
+ 
+    border: none; 
+ 
+    background: transparent; 
+ 
+    color: 
+        var(--text-muted); 
+ 
+    font-size: 
+        18px; 
+ 
+    cursor: pointer; 
+ 
+    transition: 
+        color 0.2s ease, 
+        background-color 0.2s ease, 
+        transform 0.2s ease; 
+} 
+ 
+ 
+#notificationBtn:hover, 
+.notification-btn:hover { 
+ 
+    color: 
+        var(--primary); 
+ 
+    background: 
+        var(--hover-bg); 
+ 
+    transform: 
+        translateY(-2px); 
+} 
+ 
+ 
+/* ========================================================================== 
+   23. NOTIFICATION BADGE 
+   ========================================================================== */ 
+ 
+.notification-badge { 
+ 
+    position: absolute; 
+ 
+    top: -2px; 
+ 
+    right: -2px; 
+ 
+    min-width: 18px; 
+ 
+    height: 18px; 
+ 
+    padding: 
+        0 5px; 
+ 
+    display: flex; 
+ 
+    align-items: center; 
+ 
+    justify-content: center; 
+ 
+    border-radius: 20px; 
+ 
+    background: 
+        var(--danger); 
+ 
+    color: 
+        #ffffff; 
+ 
+    border: 
+        2px solid var(--bg-card); 
+ 
+    font-size: 
+        10px; 
+ 
+    font-weight: 
+        700; 
+ 
+    line-height: 
+        1; 
+ 
+    z-index: 5; 
+ 
+    pointer-events: none; 
+} 
+ 
+ 
+.notification-badge.hidden { 
+ 
+    display: 
+        none !important; 
+} 
+ 
+ 
+/* ========================================================================== 
+   24. REMOVE OLD NOTIFICATION DOT 
+   ========================================================================== */ 
+ 
+.notification-icon::after { 
+ 
+    content: 
+        none !important; 
+} 
+ 
+ 
+/* ========================================================================== 
+   25. NOTIFICATION DROPDOWN 
+   ========================================================================== */ 
+ 
+.notification-dropdown { 
+ 
+    position: absolute; 
+ 
+    top: 
+        calc(100% + 14px); 
+ 
+    right: 
+        -10px; 
+ 
+    width: 
+        360px; 
+ 
+    max-width: 
+        calc(100vw - 30px); 
+ 
+    background: 
+        var(--bg-card); 
+ 
+    border: 
+        1px solid var(--border-color); 
+ 
+    border-radius: 
+        14px; 
+ 
+    box-shadow: 
+        0 20px 50px rgba(0, 0, 0, 0.25); 
+ 
+    overflow: 
+        hidden; 
+ 
+    opacity: 
+        0; 
+ 
+    visibility: 
+        hidden; 
+ 
+    transform: 
+        translateY(-8px); 
+ 
+    transition: 
+        opacity 0.2s ease, 
+        visibility 0.2s ease, 
+        transform 0.2s ease; 
+ 
+    z-index: 
+        200; 
+} 
+ 
+ 
+.notification-dropdown.show { 
+ 
+    opacity: 
+        1; 
+ 
+    visibility: 
+        visible; 
+ 
+    transform: 
+        translateY(0); 
+} 
+ 
+ 
+/* ========================================================================== 
+   26. NOTIFICATION HEADER 
+   ========================================================================== */ 
+ 
+.notification-header { 
+ 
+    display: flex; 
+ 
+    align-items: center; 
+ 
+    justify-content: space-between; 
+ 
+    gap: 
+        15px; 
+ 
+    padding: 
+        15px 16px; 
+ 
+    border-bottom: 
+        1px solid var(--border-color); 
+ 
+    background: 
+        var(--bg-card); 
+} 
+ 
+ 
+.notification-header h3 { 
+ 
+    margin: 
+        0; 
+ 
+    color: 
+        var(--text-main); 
+ 
+    font-size: 
+        15px; 
+ 
+    font-weight: 
+        700; 
+} 
+ 
+ 
+#markAllReadBtn { 
+ 
+    border: 
+        none; 
+ 
+    background: 
+        transparent; 
+ 
+    color: 
+        var(--primary); 
+ 
+    font-size: 
+        11px; 
+ 
+    font-weight: 
+        600; 
+ 
+    padding: 
+        5px 0; 
+ 
+    cursor: 
+        pointer; 
+} 
+ 
+ 
+#markAllReadBtn:hover { 
+ 
+    color: 
+        var(--primary-light); 
+ 
+    transform: 
+        none; 
+} 
+ 
+ 
+/* ========================================================================== 
+   27. NOTIFICATION LIST 
+   ========================================================================== */ 
+ 
+.notification-list { 
+ 
+    max-height: 
+        390px; 
+ 
+    overflow-y: 
+        auto; 
+} 
+ 
+ 
+/* ========================================================================== 
+   28. NOTIFICATION ITEM 
+   ========================================================================== */ 
+ 
+.notification-item { 
+ 
+    display: 
+        flex; 
+ 
+    align-items: 
+        flex-start; 
+ 
+    gap: 
+        12px; 
+ 
+    padding: 
+        13px 15px; 
+ 
+    border-bottom: 
+        1px solid var(--border-color); 
+ 
+    cursor: 
+        pointer; 
+ 
+    background: 
+        var(--bg-card); 
+ 
+    transition: 
+        background-color 0.2s ease; 
+} 
+ 
+ 
+.notification-item:last-child { 
+ 
+    border-bottom: 
+        none; 
+} 
+ 
+ 
+.notification-item:hover { 
+ 
+    background: 
+        var(--hover-bg); 
+} 
+ 
+ 
+.notification-item.unread { 
+ 
+    background: 
+        rgba(59, 130, 246, 0.08); 
+} 
+ 
+ 
+/* ========================================================================== 
+   29. NOTIFICATION ITEM ICON 
+   ========================================================================== */ 
+ 
+.notification-item .notification-icon { 
+ 
+    width: 
+        34px; 
+ 
+    height: 
+        34px; 
+ 
+    min-width: 
+        34px; 
+ 
+    display: 
+        flex; 
+ 
+    align-items: 
+        center; 
+ 
+    justify-content: 
+        center; 
+ 
+    border-radius: 
+        50%; 
+ 
+    background: 
+        rgba(59, 130, 246, 0.12); 
+ 
+    color: 
+        var(--primary); 
+ 
+    font-size: 
+        14px; 
+} 
+ 
+ 
+/* ========================================================================== 
+   30. NOTIFICATION CONTENT 
+   ========================================================================== */ 
+ 
+.notification-content { 
+ 
+    flex: 
+        1; 
+ 
+    min-width: 
+        0; 
+} 
+ 
+ 
+.notification-message { 
+ 
+    margin: 
+        0; 
+ 
+    color: 
+        var(--text-main); 
+ 
+    font-size: 
+        13px; 
+ 
+    line-height: 
+        1.45; 
+ 
+    word-break: 
+        break-word; 
+} 
+ 
+ 
+.notification-time { 
+ 
+    display: 
+        block; 
+ 
+    margin-top: 
+        5px; 
+ 
+    color: 
+        var(--text-muted); 
+ 
+    font-size: 
+        11px; 
+} 
+ 
+ 
+/* ========================================================================== 
+   31. NOTIFICATION EMPTY 
+   ========================================================================== */ 
+ 
+.notification-empty { 
+ 
+    display: 
+        flex; 
+ 
+    align-items: 
+        center; 
+ 
+    justify-content: 
+        center; 
+ 
+    min-height: 
+        100px; 
+ 
+    padding: 
+        20px; 
+ 
+    text-align: 
+        center; 
+ 
+    color: 
+        var(--text-muted); 
+ 
+    font-size: 
+        13px; 
+} 
+ 
+ 
+/* ========================================================================== 
+   32. PROFILE / USER AREA 
+   ========================================================================== */ 
+ 
+.profile { 
+ 
+    position: 
+        relative; 
+ 
+    display: 
+        flex; 
+ 
+    align-items: 
+        center; 
+ 
+    gap: 
+        10px; 
+ 
+    cursor: 
+        pointer; 
+ 
+    min-height: 
+        46px; 
+ 
+    flex-shrink: 
+        0; 
+} 
+ 
+ 
+/* ========================================================================== 
+   33. PROFILE ICON 
+   ========================================================================== */ 
+ 
+.profile-icon { 
+ 
+    width: 
+        44px; 
+ 
+    height: 
+        44px; 
+ 
+    min-width: 
+        44px; 
+ 
+    border-radius: 
+        50%; 
+ 
+    display: 
+        flex; 
+ 
+    justify-content: 
+        center; 
+ 
+    align-items: 
+        center; 
+ 
+    overflow: 
+        hidden; 
+ 
+    font-size: 
+        21px; 
+ 
+    color: 
+        var(--profile-avatar-text) !important; 
+ 
+    background: 
+        linear-gradient( 
+            135deg, 
+            var(--profile-avatar-start), 
+            var(--profile-avatar-middle), 
+            var(--profile-avatar-end) 
+        ) !important; 
+ 
+    box-shadow: 
+        0 8px 20px rgba(59, 130, 246, 0.20); 
+ 
+    transition: 
+        var(--transition); 
+} 
+ 
+ 
+/* ========================================================================== 
+   34. PROFILE HOVER 
+   ========================================================================== */ 
+ 
+.profile:hover .profile-icon { 
+ 
+    transform: 
+        scale(1.05); 
+} 
+ 
+ 
+/* ========================================================================== 
+   35. PROFILE IMAGE 
+   ========================================================================== */ 
+ 
+.header-profile-image { 
+ 
+    width: 
+        100%; 
+ 
+    height: 
+        100%; 
+ 
+    object-fit: 
+        cover; 
+ 
+    border-radius: 
+        50%; 
+} 
+ 
+ 
+/* ========================================================================== 
+   36. PROFILE INITIAL 
+   ========================================================================== */ 
+ 
+.header-profile-initial { 
+ 
+    width: 
+        100%; 
+ 
+    height: 
+        100%; 
+ 
+    display: 
+        flex; 
+ 
+    align-items: 
+        center; 
+ 
+    justify-content: 
+        center; 
+ 
+    color: 
+        #ffffff !important; 
+ 
+    -webkit-text-fill-color: 
+        #ffffff !important; 
+ 
+    font-size: 
+        19px; 
+ 
+    font-weight: 
+        700; 
+ 
+    line-height: 
+        1; 
+ 
+    text-align: 
+        center; 
+ 
+    background: 
+        transparent !important; 
+ 
+    opacity: 
+        1 !important; 
+} 
+ 
+ 
+/* ========================================================================== 
+   37. FORCE INITIAL WHITE IN BOTH THEMES 
+   ========================================================================== */ 
+ 
+body.light-theme .profile-icon, 
+body:not(.light-theme) .profile-icon { 
+ 
+    color: 
+        #ffffff !important; 
+ 
+    background: 
+        linear-gradient( 
+            135deg, 
+            #7c3aed, 
+            #3b82f6, 
+            #06b6d4 
+        ) !important; 
+} 
+ 
+ 
+body.light-theme .header-profile-initial, 
+body:not(.light-theme) .header-profile-initial { 
+ 
+    color: 
+        #ffffff !important; 
+ 
+    -webkit-text-fill-color: 
+        #ffffff !important; 
+} 
+ 
+ 
+/* ========================================================================== 
+   38. HIDE USER NAME 
+   ========================================================================== */ 
+ 
+.profile > #userName, 
+.profile > span#userName { 
+ 
+    display: 
+        none !important; 
+} 
+ 
+ 
+.profile > span:not(.profile-icon) { 
+ 
+    display: 
+        none !important; 
+} 
+ 
+ 
+/* ========================================================================== 
+   39. PROFILE DROPDOWN 
+   ========================================================================== */ 
+ 
+.profile-dropdown { 
+ 
+    position: 
+        absolute; 
+ 
+    top: 
+        calc(100% + 12px); 
+ 
+    right: 
+        0; 
+ 
+    width: 
+        190px; 
+ 
+    padding: 
+        8px; 
+ 
+    background: 
+        var(--bg-card); 
+ 
+    border: 
+        1px solid var(--border-color); 
+ 
+    border-radius: 
+        12px; 
+ 
+    box-shadow: 
+        0 15px 40px rgba(0, 0, 0, 0.25); 
+ 
+    opacity: 
+        0; 
+ 
+    visibility: 
+        hidden; 
+ 
+    transform: 
+        translateY(-8px); 
+ 
+    transition: 
+        opacity 0.2s ease, 
+        visibility 0.2s ease, 
+        transform 0.2s ease; 
+ 
+    z-index: 
+        100; 
+} 
+ 
+ 
+.profile:hover .profile-dropdown, 
+.profile.active .profile-dropdown { 
+ 
+    opacity: 
+        1; 
+ 
+    visibility: 
+        visible; 
+ 
+    transform: 
+        translateY(0); 
+} 
+ 
+ 
+/* ========================================================================== 
+   40. PROFILE DROPDOWN ITEMS 
+   ========================================================================== */ 
+ 
+.profile-dropdown-item { 
+ 
+    width: 
+        100%; 
+ 
+    display: 
+        flex; 
+ 
+    align-items: 
+        center; 
+ 
+    gap: 
+        10px; 
+ 
+    padding: 
+        11px 12px; 
+ 
+    border-radius: 
+        8px; 
+ 
+    color: 
+        var(--text-muted); 
+ 
+    font-size: 
+        13px; 
+ 
+    cursor: 
+        pointer; 
+ 
+    transition: 
+        var(--transition); 
+} 
+ 
+ 
+.profile-dropdown-item:hover { 
+ 
+    background: 
+        var(--hover-bg); 
+ 
+    color: 
+        var(--text-main); 
+ 
+    transform: 
+        none; 
+} 
+ 
+ 
+.profile-dropdown-item i { 
+ 
+    width: 
+        18px; 
+ 
+    text-align: 
+        center; 
+ 
+    color: 
+        var(--primary); 
+} 
+ 
+ 
+.profile-dropdown-item.logout { 
+ 
+    color: 
+        var(--danger); 
+} 
+ 
+ 
+.profile-dropdown-item.logout i { 
+ 
+    color: 
+        var(--danger); 
+} 
+ 
+ 
+/* ========================================================================== 
+   41. SEARCH 
+   ========================================================================== */ 
+ 
+.search { 
+ 
+    width: 
+        440px; 
+ 
+    height: 
+        50px; 
+ 
+    display: 
+        flex; 
+ 
+    align-items: 
+        center; 
+ 
+    gap: 
+        14px; 
+ 
+    padding: 
+        0 18px; 
+ 
+    border-radius: 
+        14px; 
+ 
+    background: 
+        var(--bg-card); 
+ 
+    border: 
+        1px solid var(--border-color); 
+ 
+    transition: 
+        var(--transition); 
+} 
+ 
+ 
+.search:hover { 
+ 
+    border-color: 
+        var(--primary); 
+ 
+    box-shadow: 
+        0 8px 25px rgba(59, 130, 246, 0.10); 
+} 
+ 
+ 
+.search:focus-within { 
+ 
+    border-color: 
+        var(--primary); 
+ 
+    box-shadow: 
+        0 0 0 3px 
+        rgba(59, 130, 246, 0.12); 
+} 
+ 
+ 
+.search i { 
+ 
+    color: 
+        var(--text-muted); 
+ 
+    font-size: 
+        15px; 
+} 
+ 
+ 
+.search input { 
+ 
+    flex: 
+        1; 
+ 
+    border: 
+        none !important; 
+ 
+    outline: 
+        none; 
+ 
+    background: 
+        transparent !important; 
+ 
+    box-shadow: 
+        none !important; 
+ 
+    color: 
+        var(--text-main) !important; 
+ 
+    font-size: 
+        14px; 
+} 
+ 
+ 
+/* ========================================================================== 
+   42. COMMON CARD 
+   ========================================================================== */ 
+ 
+.card { 
+ 
+    background: 
+        var(--bg-card); 
+ 
+    border: 
+        1px solid var(--border-color); 
+ 
+    border-radius: 
+        16px; 
+ 
+    box-shadow: 
+        0 10px 28px rgba(0, 0, 0, 0.28); 
+ 
+    transition: 
+        background-color 0.25s ease, 
+        border-color 0.25s ease, 
+        box-shadow 0.25s ease, 
+        transform 0.25s ease; 
+} 
+ 
+ 
+.card:hover { 
+ 
+    border-color: 
+        rgba(96, 165, 250, 0.42); 
+ 
+    box-shadow: 
+        0 14px 34px rgba(0, 0, 0, 0.34); 
+} 
+ 
+ 
+/* ========================================================================== 
+   43. GLASS 
+   ========================================================================== */ 
+ 
+.glass { 
+ 
+    background: 
+        rgba(16, 24, 39, 0.82); 
+ 
+    backdrop-filter: 
+        blur(18px); 
+ 
+    -webkit-backdrop-filter: 
+        blur(18px); 
+ 
+    border: 
+        1px solid var(--border-color); 
+} 
+ 
+ 
+body.light-theme .glass { 
+ 
+    background: 
+        rgba(255, 255, 255, 0.78); 
+} 
+ 
+ 
+/* ========================================================================== 
+   44. COMMON PAGE SECTIONS 
+   ========================================================================== */ 
+ 
+section, 
+.card, 
+.profile-card, 
+.skills-card, 
+.matches-card, 
+.activity-card, 
+.reviews-card, 
+.requests-card, 
+.request-card, 
+.swap-card { 
+ 
+    color: 
+        var(--text-main); 
+} 
+ 
+ 
+/* ========================================================================== 
+   45. COMMON HEADINGS 
+   ========================================================================== */ 
+ 
+h1, 
+h2, 
+h3, 
+h4, 
+h5, 
+h6 { 
+ 
+    color: 
+        var(--text-main); 
+} 
+ 
+ 
+/* ========================================================================== 
+   46. COMMON PARAGRAPHS 
+   ========================================================================== */ 
+ 
+p { 
+ 
+    color: 
+        var(--text-muted); 
+} 
+ 
+ 
+/* ========================================================================== 
+   47. COMMON TABLE 
+   ========================================================================== */ 
+ 
+table { 
+ 
+    width: 
+        100%; 
+ 
+    border-collapse: 
+        collapse; 
+ 
+    color: 
+        var(--text-main); 
+} 
+ 
+ 
+th { 
+ 
+    color: 
+        var(--text-main); 
+ 
+    background: 
+        var(--bg-inner); 
+} 
+ 
+ 
+td { 
+ 
+    color: 
+        var(--text-muted); 
+ 
+    border-color: 
+        var(--border-color); 
+} 
+ 
+ 
+/* ========================================================================== 
+   48. COMMON MODAL 
+   ========================================================================== */ 
+ 
+.modal, 
+.modal-content { 
+ 
+    background: 
+        var(--bg-card); 
+ 
+    color: 
+        var(--text-main); 
+ 
+    border: 
+        1px solid var(--border-color); 
+} 
+ 
+ 
+/* ========================================================================== 
+   49. COMMON DIVIDER 
+   ========================================================================== */ 
+ 
+hr { 
+ 
+    border: 
+        none; 
+ 
+    border-top: 
+        1px solid var(--border-color); 
+} 
+ 
+ 
+/* ========================================================================== 
+   50. SCROLLBAR 
+   ========================================================================== */ 
+ 
+::-webkit-scrollbar { 
+ 
+    width: 
+        9px; 
+ 
+    height: 
+        9px; 
+} 
+ 
+ 
+::-webkit-scrollbar-track { 
+ 
+    background: 
+        var(--bg-inner); 
+} 
+ 
+ 
+::-webkit-scrollbar-thumb { 
+ 
+    background: 
+        linear-gradient( 
+            180deg, 
+            var(--secondary), 
+            var(--primary) 
+        ); 
+ 
+    border-radius: 
+        20px; 
+} 
+ 
+ 
+::-webkit-scrollbar-thumb:hover { 
+ 
+    background: 
+        linear-gradient( 
+            180deg, 
+            var(--secondary-light), 
+            var(--primary-light) 
+        ); 
+} 
+ 
+ 
+/* ========================================================================== 
+   51. TEXT SELECTION 
+   ========================================================================== */ 
+ 
+::selection { 
+ 
+    background: 
+        var(--primary); 
+ 
+    color: 
+        #ffffff; 
+} 
+ 
+ 
+/* ========================================================================== 
+   52. UTILITY CLASSES 
+   ========================================================================== */ 
+ 
+.text-success { 
+ 
+    color: 
+        var(--success) !important; 
+} 
+ 
+ 
+.text-warning { 
+ 
+    color: 
+        var(--warning) !important; 
+} 
+ 
+ 
+.text-danger { 
+ 
+    color: 
+        var(--danger) !important; 
+} 
+ 
+ 
+.text-primary { 
+ 
+    color: 
+        var(--primary) !important; 
+} 
+ 
+ 
+.hidden { 
+ 
+    display: 
+        none !important; 
+} 
+ 
+ 
+.w-100 { 
+ 
+    width: 
+        100%; 
+} 
+ 
+ 
+.text-center { 
+ 
+    text-align: 
+        center; 
+} 
+ 
+ 
+/* ========================================================================== 
+   53. RESPONSIVE - 1024px 
+   ========================================================================== */ 
+ 
+@media (max-width: 1024px) { 
+ 
+    :root { 
+ 
+        --sidebar-width: 
+            230px; 
+    } 
+ 
+ 
+    .page-title h1 { 
+ 
+        font-size: 
+            24px; 
+    } 
+ 
+ 
+    .topbar-actions { 
+ 
+        gap: 
+            16px; 
+    } 
+ 
+ 
+    .top-icons { 
+ 
+        gap: 
+            12px; 
+    } 
+ 
+ 
+    body::before { 
+ 
+        width: 
+            430px; 
+ 
+        height: 
+            430px; 
+    } 
+ 
+ 
+    body::after { 
+ 
+        width: 
+            500px; 
+ 
+        height: 
+            500px; 
+    } 
+} 
+ 
+ 
+/* ========================================================================== 
+   54. RESPONSIVE - 900px 
+   ========================================================================== */ 
+ 
+@media (max-width: 900px) { 
+ 
+    .topbar { 
+ 
+        min-height: 
+            var(--topbar-height); 
+ 
+        height: 
+            auto; 
+ 
+        padding: 
+            18px 0; 
+ 
+        flex-wrap: 
+            wrap; 
+    } 
+ 
+ 
+    .notification-dropdown { 
+ 
+        right: 
+            0; 
+    } 
+ 
+ 
+    body::before { 
+ 
+        width: 
+            380px; 
+ 
+        height: 
+            380px; 
+    } 
+ 
+ 
+    body::after { 
+ 
+        width: 
+            430px; 
+ 
+        height: 
+            430px; 
+    } 
+} 
+ 
+ 
+/* ========================================================================== 
+   55. RESPONSIVE - 768px 
+   ========================================================================== */ 
+ 
+@media (max-width: 768px) { 
+ 
+    .topbar { 
+ 
+        gap: 
+            15px; 
+ 
+        margin-bottom: 
+            25px; 
+    } 
+ 
+ 
+    .topbar-actions { 
+ 
+        gap: 
+            12px; 
+    } 
+ 
+ 
+    .top-icons { 
+ 
+        gap: 
+            8px; 
+    } 
+ 
+ 
+    .top-icons > i, 
+    #notificationBtn, 
+    .notification-btn { 
+ 
+        width: 
+            38px; 
+ 
+        height: 
+            38px; 
+ 
+        min-width: 
+            38px; 
+ 
+        font-size: 
+            17px; 
+    } 
+ 
+ 
+    .notification-wrapper { 
+ 
+        width: 
+            38px; 
+ 
+        height: 
+            38px; 
+    } 
+ 
+ 
+    .profile-icon { 
+ 
+        width: 
+            42px; 
+ 
+        height: 
+            42px; 
+ 
+        min-width: 
+            42px; 
+ 
+        font-size: 
+            19px; 
+    } 
+ 
+ 
+    .notification-dropdown { 
+ 
+        width: 
+            340px; 
+ 
+        max-width: 
+            calc(100vw - 30px); 
+    } 
+ 
+ 
+    .search { 
+ 
+        width: 
+            100%; 
+ 
+        max-width: 
+            100%; 
+    } 
+ 
+ 
+    body::before { 
+ 
+        width: 
+            320px; 
+ 
+        height: 
+            320px; 
+    } 
+ 
+ 
+    body::after { 
+ 
+        width: 
+            360px; 
+ 
+        height: 
+            360px; 
+    } 
+} 
+ 
+ 
+/* ========================================================================== 
+   56. RESPONSIVE - 600px 
+   ========================================================================== */ 
+ 
+@media (max-width: 600px) { 
+ 
+    .topbar { 
+ 
+        min-height: 
+            auto; 
+ 
+        padding: 
+            18px 0; 
+ 
+        align-items: 
+            center; 
+    } 
+ 
+ 
+    .page-title h1 { 
+ 
+        font-size: 
+            22px; 
+    } 
+ 
+ 
+    .page-title p { 
+ 
+        font-size: 
+            12px; 
+    } 
+ 
+ 
+    .topbar-actions { 
+ 
+        gap: 
+            8px; 
+    } 
+ 
+ 
+    .top-icons { 
+ 
+        gap: 
+            4px; 
+    } 
+ 
+ 
+    .top-icons > i, 
+    #notificationBtn, 
+    .notification-btn { 
+ 
+        width: 
+            36px; 
+ 
+        height: 
+            36px; 
+ 
+        min-width: 
+            36px; 
+    } 
+ 
+ 
+    .notification-wrapper { 
+ 
+        width: 
+            36px; 
+ 
+        height: 
+            36px; 
+    } 
+ 
+ 
+    .profile-icon { 
+ 
+        width: 
+            40px; 
+ 
+        height: 
+            40px; 
+ 
+        min-width: 
+            40px; 
+ 
+        font-size: 
+            18px; 
+    } 
+ 
+ 
+    .profile-dropdown { 
+ 
+        right: 
+            0; 
+ 
+        width: 
+            175px; 
+    } 
+ 
+ 
+    .notification-dropdown { 
+ 
+        position: 
+            fixed; 
+ 
+        top: 
+            75px; 
+ 
+        right: 
+            12px; 
+ 
+        width: 
+            calc(100vw - 24px); 
+ 
+        max-width: 
+            none; 
+    } 
+ 
+ 
+    body::before { 
+ 
+        width: 
+            280px; 
+ 
+        height: 
+            280px; 
+ 
+        filter: 
+            blur(35px); 
+    } 
+ 
+ 
+    body::after { 
+ 
+        width: 
+            300px; 
+ 
+        height: 
+            300px; 
+ 
+        filter: 
+            blur(35px); 
+    } 
+} 
+ 
+ 
+/* ========================================================================== 
+   57. RESPONSIVE - 420px 
+   ========================================================================== */ 
+ 
+@media (max-width: 420px) { 
+ 
+    .page-title h1 { 
+ 
+        font-size: 
+            20px; 
+    } 
+ 
+ 
+    .page-title p { 
+ 
+        display: 
+            none; 
+    } 
+ 
+ 
+    .topbar-actions { 
+ 
+        gap: 
+            4px; 
+    } 
+ 
+ 
+    .top-icons > i, 
+    #notificationBtn, 
+    .notification-btn { 
+ 
+        width: 
+            34px; 
+ 
+        height: 
+            34px; 
+ 
+        min-width: 
+            34px; 
+ 
+        font-size: 
+            16px; 
+    } 
+ 
+ 
+    .notification-wrapper { 
+ 
+        width: 
+            34px; 
+ 
+        height: 
+            34px; 
+    } 
+ 
+ 
+    .profile-icon { 
+ 
+        width: 
+            38px; 
+ 
+        height: 
+            38px; 
+ 
+        min-width: 
+            38px; 
+ 
+        font-size: 
+            17px; 
+    } 
+ 
+ 
+    .notification-badge { 
+ 
+        min-width: 
+            17px; 
+ 
+        height: 
+            17px; 
+ 
+        font-size: 
+            9px; 
+    } 
+ 
+ 
+    body::before { 
+ 
+        width: 
+            240px; 
+ 
+        height: 
+            240px; 
+    } 
+ 
+ 
+    body::after { 
+ 
+        width: 
+            260px; 
+ 
+        height: 
+            260px; 
+    } 
+} 
+ 
+ 
+/* ========================================================================== 
+   58. REDUCED MOTION 
+   ========================================================================== */ 
+ 
+@media (prefers-reduced-motion: reduce) { 
+ 
+    *, 
+    *::before, 
+    *::after { 
+ 
+        animation: 
+            none !important; 
+ 
+        transition: 
+            none !important; 
+ 
+        scroll-behavior: 
+            auto !important; 
+    } 
 }

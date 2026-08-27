@@ -52,6 +52,7 @@
 
 <body>
 
+
 <div class="dashboard">
 
 
@@ -177,9 +178,7 @@
         <header class="topbar">
 
 
-            <!-- =================================================
-                 PAGE TITLE / WELCOME
-                 ================================================= -->
+            <!-- PAGE TITLE / WELCOME -->
 
             <div class="page-title">
 
@@ -195,16 +194,12 @@
 
 
 
-            <!-- =================================================
-                 TOPBAR ACTIONS
-                 ================================================= -->
+            <!-- TOPBAR ACTIONS -->
 
             <div class="topbar-actions">
 
 
-                <!-- =================================================
-                     NOTIFICATIONS + THEME
-                     ================================================= -->
+                <!-- NOTIFICATIONS + THEME -->
 
                 <div class="top-icons">
 
@@ -292,9 +287,7 @@
 
 
 
-                <!-- =================================================
-                     PROFILE
-                     ================================================= -->
+                <!-- PROFILE -->
 
                 <div
                     class="profile"
@@ -313,14 +306,14 @@
                     <!-- User Name -->
 
                     <span id="userName">
+
                         Loading...
+
                     </span>
 
 
 
-                    <!-- =================================================
-                         PROFILE DROPDOWN
-                         ================================================= -->
+                    <!-- PROFILE DROPDOWN -->
 
                     <div class="profile-dropdown">
 
@@ -454,14 +447,16 @@
 
 
                 <!-- Avatar -->
+<!-- Avatar -->
 
-                <div class="profile-avatar">
+<!-- Avatar -->
+<!-- Avatar -->
 
-                    <i class="fa-solid fa-circle-user"></i>
+<div class="profile-avatar" id="profileInitial">
 
-                </div>
+    <i class="fa-solid fa-circle-user"></i>
 
-
+</div>
                 <!-- Name -->
 
                 <h2 id="profileName">
@@ -470,9 +465,7 @@
 
 
 
-                <!-- =================================================
-                     PROFILE RATING
-                     ================================================= -->
+                <!-- PROFILE RATING -->
 
                 <div class="profile-rating">
 
@@ -605,16 +598,12 @@
 
 
 
-                <!-- =================================================
-                     SKILLS GRID
-                     ================================================= -->
+                <!-- SKILLS GRID -->
 
                 <div class="skills-grid-container">
 
 
-                    <!-- =================================================
-                         TEACH SKILLS
-                         ================================================= -->
+                    <!-- TEACH SKILLS -->
 
                     <div class="skill-section teach">
 
@@ -650,9 +639,7 @@
 
 
 
-                    <!-- =================================================
-                         LEARN SKILLS
-                         ================================================= -->
+                    <!-- LEARN SKILLS -->
 
                     <div class="skill-section learn">
 
@@ -690,9 +677,7 @@
 
 
 
-                <!-- =================================================
-                     PROFILE COMPLETION
-                     ================================================= -->
+                <!-- PROFILE COMPLETION -->
 
                 <div class="completion-box">
 
@@ -759,9 +744,12 @@
                 </h2>
 
 
+                <!-- SEE ALL -->
+
                 <button
                     class="see-btn"
-                    type="button">
+                    type="button"
+                    onclick="location.href='browse-skills.html'">
 
                     See All
 
@@ -824,9 +812,220 @@
 
 
 <!-- =============================================================
+     VIEW PROFILE MODAL
+     Used by Suggested Matches → View Profile
+============================================================= -->
+
+<div
+    id="dashboardProfileModal"
+    class="profile-modal">
+
+
+    <div class="profile-modal-content">
+
+
+        <!-- Close -->
+
+        <span
+            class="profile-close"
+            onclick="closeDashboardProfileModal()">
+
+            &times;
+
+        </span>
+
+
+
+        <!-- =================================================
+             PROFILE HEADER
+        ================================================== -->
+
+        <div class="profile-modal-header">
+
+
+            <!-- Avatar -->
+
+           <div class="profile-avatar" id="dashboardProfileInitial">
+    U
+</div>
+
+
+
+            <!-- User Information -->
+
+            <div>
+
+                <h2 id="dashboardProfileName">
+
+                    User Name
+
+                </h2>
+
+
+                <p id="dashboardProfileLocation">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    Location not added
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             ABOUT
+        ================================================== -->
+
+        <div class="profile-section">
+
+            <h3>
+
+                <i class="fa-solid fa-user"></i>
+
+                About
+
+            </h3>
+
+
+            <p id="dashboardProfileBio">
+
+                No bio available.
+
+            </p>
+
+        </div>
+
+
+
+        <!-- =================================================
+             SKILLS
+        ================================================== -->
+
+        <div class="profile-section">
+
+            <h3>
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+                Skills They Teach
+
+            </h3>
+
+
+            <div
+                id="dashboardProfileTeachSkills"
+                class="profile-skills">
+
+                <span>
+                    No skills added.
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <div class="profile-section">
+
+            <h3>
+
+                <i class="fa-solid fa-lightbulb"></i>
+
+                Wants To Learn
+
+            </h3>
+
+
+            <div
+                id="dashboardProfileLearnSkills"
+                class="profile-skills">
+
+                <span>
+                    No skills added.
+                </span>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =================================================
+             PROFILE RATING
+        ================================================== -->
+
+        <div class="profile-rating">
+
+
+            <div id="dashboardProfileStars">
+
+                ☆☆☆☆☆
+
+            </div>
+
+
+            <span id="dashboardProfileRating">
+
+                0.0
+
+            </span>
+
+
+            <span id="dashboardProfileReviewCount">
+
+                (0 reviews)
+
+            </span>
+
+        </div>
+
+
+
+        <!-- =================================================
+             REVIEWS
+        ================================================== -->
+
+        <div class="profile-section">
+
+            <h3>
+
+                <i class="fa-solid fa-star"></i>
+
+                Reviews
+
+            </h3>
+
+
+            <div id="dashboardProfileReviews">
+
+                <p class="no-reviews">
+
+                    No reviews yet.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =============================================================
      DASHBOARD JAVASCRIPT
-     ============================================================= -->
+============================================================= -->
+
 <script src="header.js"></script>
+
 <script src="dashboard.js"></script>
 
 

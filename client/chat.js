@@ -53,6 +53,7 @@ let chatData = [];
 let isLoadingMessages = false;
 let onlineUsers = new Set();
 
+
 // ======================================================
 // Start
 // ======================================================
@@ -167,37 +168,46 @@ function initializeSocket() {
 
     });
 
-socket.on("onlineUsers", (users) => {
 
-    onlineUsers = new Set(
-        users.map(id => String(id))
-    );
+    socket.on("onlineUsers", (users) => {
 
-    updateCurrentUserStatus();
+        onlineUsers = new Set(
+            users.map(id => String(id))
+        );
 
-});
+        updateCurrentUserStatus();
 
+        loadChatList();
 
-socket.on("userOnline", (userId) => {
-
-    onlineUsers.add(
-        String(userId)
-    );
-
-    updateCurrentUserStatus();
-
-});
+    });
 
 
-socket.on("userOffline", (userId) => {
+    socket.on("userOnline", (userId) => {
 
-    onlineUsers.delete(
-        String(userId)
-    );
+        onlineUsers.add(
+            String(userId)
+        );
 
-    updateCurrentUserStatus();
+        updateCurrentUserStatus();
 
-});
+        loadChatList();
+
+    });
+
+
+    socket.on("userOffline", (userId) => {
+
+        onlineUsers.delete(
+            String(userId)
+        );
+
+        updateCurrentUserStatus();
+
+        loadChatList();
+
+    });
+
+
     // ---------------------------------------------
     // Connected
     // ---------------------------------------------
@@ -255,6 +265,8 @@ socket.on("userOffline", (userId) => {
     });
 
 }
+
+
 function updateCurrentUserStatus() {
 
     if (!currentSwapId) return;
@@ -285,7 +297,10 @@ function updateCurrentUserStatus() {
         "online",
         Boolean(isOnline)
     );
+
 }
+
+
 // ======================================================
 // Join Room
 // ======================================================
@@ -471,20 +486,22 @@ async function loadChatList(autoOpenId = null) {
 
 
             const partnerId =
-    chat.partner?._id ||
-    chat.partner?.id;
+                chat.partner?._id ||
+                chat.partner?.id;
 
-const isOnline =
-    partnerId &&
-    onlineUsers.has(String(partnerId));
 
-item.innerHTML = `
+            const isOnline =
+                partnerId &&
+                onlineUsers.has(String(partnerId));
 
-    <div class="chat-avatar ${isOnline ? "online" : ""}">
 
-        ${firstLetter}
+            item.innerHTML = `
 
-    </div>
+                <div class="chat-avatar ${isOnline ? "online" : ""}">
+
+                    ${firstLetter}
+
+                </div>
 
                 <div class="chat-info">
 
@@ -547,6 +564,8 @@ item.innerHTML = `
             }, 100);
 
         }
+
+
         updateCurrentUserStatus();
 
     }
@@ -565,20 +584,6 @@ item.innerHTML = `
 
 // ======================================================
 // Get Skill Exchange
-// ======================================================
-//
-// Supports several possible backend structures:
-//
-// chat.teachSkill
-// chat.learnSkill
-//
-// chat.swap.teachSkill
-// chat.swap.learnSkill
-//
-// chat.swapData.teachSkill
-// chat.swapData.learnSkill
-//
-// chat.skillExchange
 // ======================================================
 
 function getSkillExchange(chat) {
@@ -700,7 +705,10 @@ function openChat(chat) {
         String(chat.swapId);
 
     document.getElementById("chatHeader").style.display = "flex";
+
     document.getElementById("chatInputArea").style.display = "flex";
+
+
     // ---------------------------------------------
     // Partner name
     // ---------------------------------------------
@@ -725,17 +733,18 @@ function openChat(chat) {
 
 
     // ---------------------------------------------
-    // IMPORTANT:
-    // Show exchanged skills instead of
-    // "Active Skill Partner"
+    // Skill exchange
     // ---------------------------------------------
 
- const chatSkill = document.getElementById("chatSkill");
+    const chatSkill =
+        document.getElementById("chatSkill");
 
-chatSkill.textContent =
-    getSkillExchange(chat);
 
-updateCurrentUserStatus();
+    chatSkill.textContent =
+        getSkillExchange(chat);
+
+
+    updateCurrentUserStatus();
 
 
     // ---------------------------------------------
@@ -1643,6 +1652,9 @@ function clearChat() {
 
     chatAvatar.innerHTML =
         `<i class="fa-solid fa-user"></i>`;
+
+
+    chatAvatar.classList.remove("online");
 
 
     chatStatus.textContent =

@@ -1,3 +1,4 @@
+
 const token =
     localStorage.getItem("token");
 
@@ -75,6 +76,7 @@ async function loadDashboardData() {
                 "index.html";
 
             return;
+
         }
 
 
@@ -92,10 +94,46 @@ async function loadDashboardData() {
 
 
         // ==================================================
-        // WELCOME MESSAGE
+        // DASHBOARD PROFILE INITIAL
         // ==================================================
-        // HTML uses:
-        // id="welcomeTopbar"
+        // Person icon is shown by HTML while loading.
+        // After user data loads, replace it with the
+        // user's real initial.
+        // ==================================================
+
+        const profileAvatar =
+            document.querySelector(
+                ".profile-card .profile-avatar"
+            );
+
+
+        if (profileAvatar) {
+
+            const userName =
+                (user.name || "").trim();
+
+
+            if (userName) {
+
+                const initial =
+                    userName
+                        .charAt(0)
+                        .toUpperCase();
+
+
+                profileAvatar.innerHTML = `
+                    <span class="profile-initial">
+                        ${initial}
+                    </span>
+                `;
+
+            }
+
+        }
+
+
+        // ==================================================
+        // WELCOME MESSAGE
         // ==================================================
 
         const welcomeTitle =
@@ -176,22 +214,6 @@ async function loadDashboardData() {
         // ==================================================
         // RATING & REVIEW COUNT
         // ==================================================
-        //
-        // The backend /user/profile now returns:
-        //
-        // rating
-        // totalReviews
-        //
-        // Example:
-        //
-        // {
-        //     rating: 4.5,
-        //     totalReviews: 6
-        // }
-        //
-        // No need to call /user/all here because
-        // /user/all intentionally excludes the current user.
-        // ==================================================
 
         const userRating =
             document.getElementById(
@@ -216,10 +238,6 @@ async function loadDashboardData() {
             Number(user.totalReviews) || 0;
 
 
-        // --------------------------------------------------
-        // DISPLAY RATING NUMBER
-        // --------------------------------------------------
-
         if (userRating) {
 
             userRating.textContent =
@@ -228,10 +246,6 @@ async function loadDashboardData() {
         }
 
 
-        // --------------------------------------------------
-        // DISPLAY REVIEW COUNT
-        // --------------------------------------------------
-
         if (reviewCount) {
 
             reviewCount.textContent =
@@ -239,10 +253,6 @@ async function loadDashboardData() {
 
         }
 
-
-        // --------------------------------------------------
-        // DISPLAY RATING STARS
-        // --------------------------------------------------
 
         if (ratingStars) {
 
@@ -765,6 +775,22 @@ function setupDashboardNavigation() {
 // ======================================================
 // SUGGESTED MATCHES
 // ======================================================
+// Shows users whose skills are actually compatible.
+//
+// Example:
+//
+// Current user:
+//   Can teach  -> JavaScript
+//   Wants learn -> Python
+//
+// Suggested user:
+//   Can teach  -> Python
+//   Wants learn -> JavaScript
+//
+// This is a strong two-way match.
+//
+// One-way matches are also accepted.
+// ======================================================
 
 async function loadSuggestedMatches(
     currentUser
@@ -808,7 +834,9 @@ async function loadSuggestedMatches(
 
         if (!response.ok) {
 
-            return;
+            throw new Error(
+                "Failed to load users."
+            );
 
         }
 
@@ -817,9 +845,25 @@ async function loadSuggestedMatches(
             await response.json();
 
 
-        // --------------------------------------
-        // Exclude Current User
-        // --------------------------------------
+        // ==================================================
+        // CURRENT USER SKILLS
+        // ==================================================
+
+        const myTeachSkills =
+            normalizeSkills(
+                currentUser.teachSkills
+            );
+
+
+        const myLearnSkills =
+            normalizeSkills(
+                currentUser.learnSkills
+            );
+
+
+        // ==================================================
+        // EXCLUDE CURRENT USER
+        // ==================================================
 
         const otherUsers =
             allUsers.filter(
@@ -845,175 +889,501 @@ async function loadSuggestedMatches(
         }
 
 
-        // --------------------------------------
-        // Display Maximum 3 Users
-        // --------------------------------------
+        // ==================================================
+        // CALCULATE MATCH SCORE
+        // ==================================================
+
+        const scoredUsers =
+            otherUsers.map(
+                user => {
+
+                    const theirTeachSkills =
+                        normalizeSkills(
+                            user.teachSkills
+                        );
+
+
+                    const theirLearnSkills =
+                        normalizeSkills(
+                            user.learnSkills
+                        );
+
+
+                    // --------------------------------------
+                    // What they can teach me
+                    // --------------------------------------
+
+                    const teachMatch =
+                        getCommonSkills(
+                            myLearnSkills,
+                            theirTeachSkills
+                        );
+
+
+                    // --------------------------------------
+                    // What I can teach them
+                    // --------------------------------------
+
+                    const learnMatch =
+                        getCommonSkills(
+                            myTeachSkills,
+                            theirLearnSkills
+                        );
+
+
+                    // --------------------------------------
+                    // Total score
+                    // --------------------------------------
+
+                    let score = 0;
+
+
+                    score +=
+                        teachMatch.length * 2;
+
+
+                    score +=
+                        learnMatch.length * 2;
+
+
+                    // Extra point for two-way exchange
+                    if (
+                        teachMatch.length > 0 &&
+                        learnMatch.length > 0
+                    ) {
+
+                        score += 3;
+
+                    }
+
+
+                    // Rating can slightly influence
+                    // ordering, but skill compatibility
+                    // remains the main factor.
+                    const rating =
+                        Number(user.rating) || 0;
+
+
+                    score +=
+                        rating * 0.1;
+
+
+                    return {
+
+                        user,
+
+                        score,
+
+                        teachMatch,
+
+                        learnMatch
+
+                    };
+
+                }
+            );
+
+
+        // ==================================================
+        // SORT
+        // ==================================================
+
+        scoredUsers.sort(
+            (a, b) =>
+                b.score - a.score
+        );
+
+
+        // ==================================================
+        // FIRST PRIORITY:
+        // ACTUAL SKILL MATCHES
+        // ==================================================
+
+        const matchedUsers =
+            scoredUsers.filter(
+                item =>
+                    item.teachMatch.length > 0 ||
+                    item.learnMatch.length > 0
+            );
+
+
+        // ==================================================
+        // IF MATCHES EXIST, SHOW THEM
+        // OTHERWISE SHOW OTHER USERS AS FALLBACK
+        // ==================================================
+
+        let selectedUsers;
+
+
+        if (matchedUsers.length > 0) {
+
+            selectedUsers =
+                matchedUsers.slice(0, 3);
+
+        } else {
+
+            selectedUsers =
+                scoredUsers.slice(0, 3);
+
+        }
+
+
+        // ==================================================
+        // RENDER
+        // ==================================================
 
         container.innerHTML =
             "";
 
 
-        otherUsers
-            .slice(0, 3)
-            .forEach(
-                user => {
+        selectedUsers.forEach(
+            item => {
 
-                    const initial =
-                        user.name
-                            ? user.name
-                                .charAt(0)
-                                .toUpperCase()
-                            : "?";
+                const user =
+                    item.user;
 
 
-                    const teachList =
-                        (user.teachSkills || [])
-                            .slice(0, 3)
-                            .map(
-                                skill =>
-                                    `<span class="skill-tag">
-                                        ${skill}
-                                    </span>`
-                            )
-                            .join(" ");
+                const initial =
+                    user.name &&
+                    user.name.trim()
+                        ? user.name
+                            .trim()
+                            .charAt(0)
+                            .toUpperCase()
+                        : "?";
 
 
-                    // --------------------------------------
-                    // Rating
-                    // --------------------------------------
+                const teachList =
+                    (
+                        user.teachSkills ||
+                        []
+                    )
+                        .slice(0, 3)
+                        .map(
+                            skill =>
+                                `
+                                <span class="skill-tag">
+                                    ${escapeHtml(skill)}
+                                </span>
+                                `
+                        )
+                        .join("");
 
-                    const rating =
-                        Number(
-                            user.rating
-                        ) || 0;
+
+                const rating =
+                    Number(
+                        user.rating
+                    ) || 0;
 
 
-                    const reviews =
-                        Number(
-                            user.totalReviews
-                        ) || 0;
+                const reviews =
+                    Number(
+                        user.totalReviews
+                    ) || 0;
 
 
-                    container.innerHTML += `
+                // ==================================================
+                // MATCH LABEL
+                // ==================================================
+
+                let matchLabel =
+                    "Suggested for you";
+
+
+                if (
+                    item.teachMatch.length > 0 &&
+                    item.learnMatch.length > 0
+                ) {
+
+                    matchLabel =
+                        "Great skill match";
+
+                } else if (
+                    item.teachMatch.length > 0
+                ) {
+
+                    matchLabel =
+                        "Can teach you";
+
+                } else if (
+                    item.learnMatch.length > 0
+                ) {
+
+                    matchLabel =
+                        "Can learn from you";
+
+                }
+
+
+                // ==================================================
+                // MATCH SKILLS
+                // ==================================================
+
+                let matchSkills = "";
+
+
+                if (
+                    item.teachMatch.length > 0
+                ) {
+
+                    matchSkills += `
+                        <span style="
+                            color:#60a5fa;
+                            font-size:11px;
+                            margin-right:8px;
+                        ">
+                            Learn:
+                            ${item.teachMatch
+                                .slice(0, 2)
+                                .map(
+                                    skill =>
+                                        escapeHtml(skill)
+                                )
+                                .join(", ")}
+                        </span>
+                    `;
+
+                }
+
+
+                if (
+                    item.learnMatch.length > 0
+                ) {
+
+                    matchSkills += `
+                        <span style="
+                            color:#c084fc;
+                            font-size:11px;
+                        ">
+                            Teach:
+                            ${item.learnMatch
+                                .slice(0, 2)
+                                .map(
+                                    skill =>
+                                        escapeHtml(skill)
+                                )
+                                .join(", ")}
+                        </span>
+                    `;
+
+                }
+
+
+                // ==================================================
+                // MATCH ITEM
+                // ==================================================
+
+                const matchItem =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                matchItem.id =
+                    `suggested-user-${user._id}`;
+
+
+                matchItem.style.cssText = `
+                    display:flex;
+                    align-items:center;
+                    justify-content:space-between;
+                    gap:16px;
+                    padding:16px 0;
+                    border-bottom:
+                        1px solid
+                        var(--border-color, #1f2937);
+                `;
+
+
+                matchItem.innerHTML = `
+
+                    <div style="
+                        display:flex;
+                        align-items:center;
+                        gap:12px;
+                        min-width:0;
+                    ">
+
+                        <!-- Avatar -->
 
                         <div style="
+                            width:48px;
+                            height:48px;
+                            min-width:48px;
+                            border-radius:50%;
+                            background:
+                                linear-gradient(
+                                    135deg,
+                                    #6366f1,
+                                    #3b82f6
+                                );
                             display:flex;
                             align-items:center;
-                            justify-content:space-between;
-                            padding:12px 0;
-                            border-bottom:
-                                1px solid
-                                var(--border-color, #1f2937);
+                            justify-content:center;
+                            font-weight:700;
+                            font-size:18px;
+                            color:#fff;
                         ">
 
-                            <div style="
-                                display:flex;
-                                align-items:center;
-                                gap:12px;
+                            ${initial}
+
+                        </div>
+
+
+                        <!-- User Info -->
+
+                        <div style="
+                            min-width:0;
+                        ">
+
+                            <h4 style="
+                                margin:0;
+                                font-size:15px;
+                                color:
+                                    var(--text-main,
+                                    #ffffff);
                             ">
 
-                                <div style="
-                                    width:42px;
-                                    height:42px;
-                                    border-radius:50%;
-                                    background:
-                                        linear-gradient(
-                                            135deg,
-                                            #6366f1,
-                                            #3b82f6
-                                        );
-                                    display:flex;
-                                    align-items:center;
-                                    justify-content:center;
-                                    font-weight:bold;
-                                    color:#fff;
-                                ">
-                                    ${initial}
-                                </div>
+                                ${escapeHtml(
+                                    user.name ||
+                                    "SkillHub User"
+                                )}
+
+                            </h4>
 
 
-                                <div>
+                            <!-- Match label -->
 
-                                    <h4 style="
-                                        margin:0;
-                                        font-size:15px;
-                                        color:
-                                            var(--text-main,
-                                            #ffffff);
-                                    ">
-                                        ${user.name ||
-                                            "SkillHub User"}
-                                    </h4>
+                            <div style="
+                                margin-top:3px;
+                                font-size:11px;
+                                font-weight:600;
+                                color:#60a5fa;
+                            ">
 
-
-                                    <div style="
-                                        margin-top:4px;
-                                    ">
-
-                                        ${
-                                            teachList ||
-                                            `<span style="
-                                                font-size:12px;
-                                                color:
-                                                    var(--text-muted);
-                                            ">
-                                                No skills listed
-                                            </span>`
-                                        }
-
-                                    </div>
-
-
-                                    <div style="
-                                        margin-top:5px;
-                                        font-size:12px;
-                                        color:
-                                            var(--text-muted);
-                                    ">
-
-                                        <i
-                                            class="fa-solid fa-star"
-                                            style="
-                                                color:#fbbf24;
-                                            "
-                                        ></i>
-
-                                        ${rating.toFixed(1)}
-
-                                        (${reviews} Reviews)
-
-                                    </div>
-
-                                </div>
+                                ${matchLabel}
 
                             </div>
 
 
-                            <button
-                                onclick="
-                                    window.location.href=
-                                    'browse-skills.html'
-                                "
-                                style="
-                                    padding:6px 14px;
-                                    border-radius:20px;
-                                    border:
-                                        1px solid #3b82f6;
-                                    background:transparent;
-                                    color:#60a5fa;
-                                    cursor:pointer;
-                                    font-size:13px;
-                                "
-                            >
-                                View
-                            </button>
+                            <!-- Their skills -->
+
+                            <div style="
+                                margin-top:5px;
+                                display:flex;
+                                flex-wrap:wrap;
+                                gap:5px;
+                            ">
+
+                                ${
+                                    teachList ||
+                                    `
+                                    <span style="
+                                        font-size:12px;
+                                        color:
+                                            var(--text-muted);
+                                    ">
+                                        No skills listed
+                                    </span>
+                                    `
+                                }
+
+                            </div>
+
+
+                            <!-- Matching skills -->
+
+                            <div style="
+                                margin-top:5px;
+                            ">
+
+                                ${matchSkills}
+
+                            </div>
+
+
+                            <!-- Rating -->
+
+                            <div style="
+                                margin-top:5px;
+                                font-size:12px;
+                                color:
+                                    var(--text-muted);
+                            ">
+
+                                <i
+                                    class="fa-solid fa-star"
+                                    style="
+                                        color:#fbbf24;
+                                    "
+                                ></i>
+
+                                ${rating.toFixed(1)}
+
+                                (${reviews} Reviews)
+
+                            </div>
 
                         </div>
 
-                    `;
+                    </div>
+
+
+                    <!-- View -->
+
+                    <button
+                        type="button"
+                        style="
+                            padding:7px 15px;
+                            border-radius:20px;
+                            border:
+                                1px solid #3b82f6;
+                            background:transparent;
+                            color:#60a5fa;
+                            cursor:pointer;
+                            font-size:13px;
+                            flex-shrink:0;
+                        "
+                    >
+                        View
+                    </button>
+
+                `;
+
+
+                // ==================================================
+                // VIEW BUTTON
+                // ==================================================
+
+                const viewButton =
+                    matchItem.querySelector(
+                        "button"
+                    );
+
+
+                if (viewButton) {
+
+                    viewButton.addEventListener(
+                        "click",
+                        () => {
+
+                            window.location.href =
+                                `browse-skills.html?userId=${encodeURIComponent(
+                                    user._id
+                                )}`;
+
+                        }
+                    );
 
                 }
-            );
+
+
+                container.appendChild(
+                    matchItem
+                );
+
+            }
+        );
 
 
     } catch (error) {
@@ -1023,7 +1393,108 @@ async function loadSuggestedMatches(
             error
         );
 
+
+        container.innerHTML = `
+            <p style="
+                color:var(--text-muted);
+                padding:10px;
+            ">
+                Unable to load suggested matches.
+            </p>
+        `;
+
     }
+
+}
+
+
+// ======================================================
+// NORMALIZE SKILLS
+// ======================================================
+
+function normalizeSkills(
+    skills
+) {
+
+    if (!Array.isArray(skills)) {
+
+        return [];
+
+    }
+
+
+    return skills
+        .filter(
+            skill =>
+                typeof skill === "string" &&
+                skill.trim() !== ""
+        )
+        .map(
+            skill =>
+                skill
+                    .trim()
+                    .toLowerCase()
+        );
+
+}
+
+
+// ======================================================
+// FIND COMMON SKILLS
+// ======================================================
+
+function getCommonSkills(
+    firstList,
+    secondList
+) {
+
+    const secondSet =
+        new Set(
+            secondList
+        );
+
+
+    return [
+        ...new Set(
+            firstList.filter(
+                skill =>
+                    secondSet.has(skill)
+            )
+        )
+    ];
+
+}
+
+
+// ======================================================
+// ESCAPE HTML
+// ======================================================
+
+function escapeHtml(
+    value
+) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 
 }
 
@@ -1135,7 +1606,11 @@ function renderRecentActivity(
                                     var(--text-main,
                                     #ffffff);
                             ">
-                                ${partnerName}
+
+                                ${escapeHtml(
+                                    partnerName
+                                )}
+
                             </strong>
 
                             is currently
@@ -1144,7 +1619,11 @@ function renderRecentActivity(
                                 color:#60a5fa;
                                 font-weight:600;
                             ">
-                                ${status}
+
+                                ${escapeHtml(
+                                    status
+                                )}
+
                             </span>.
 
                         </div>
@@ -1171,3 +1650,4 @@ function openRequests(
         `request.html?tab=${tab}`;
 
 }
+
