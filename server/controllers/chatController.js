@@ -43,9 +43,41 @@ exports.getChatList = async (req, res) => {
 
         });
 
+        const uniqueSwaps = new Map();
+
+        for (const swap of swaps) {
+
+            const partner =
+
+                swap.sender._id.toString() === userId
+
+                    ? swap.receiver
+
+                    : swap.sender;
+
+            if (!partner) {
+                continue;
+            }
+
+            const partnerId =
+                partner._id.toString();
+
+            if (!uniqueSwaps.has(partnerId)) {
+
+                uniqueSwaps.set(
+                    partnerId,
+                    swap
+                );
+
+            }
+
+        }
+
         const chats = await Promise.all(
 
-            swaps.map(async (swap) => {
+            Array.from(
+                uniqueSwaps.values()
+            ).map(async (swap) => {
 
                 const partner =
 
@@ -55,17 +87,18 @@ exports.getChatList = async (req, res) => {
 
                         : swap.sender;
 
-                const lastMessage = await Message.findOne({
+                const lastMessage =
+                    await Message.findOne({
 
-                    swap: swap._id
+                        swap: swap._id
 
-                })
+                    })
 
-                .sort({
+                    .sort({
 
-                    createdAt: -1
+                        createdAt: -1
 
-                });
+                    });
 
                 console.log(
                     "========== CHAT DEBUG =========="
@@ -81,17 +114,21 @@ exports.getChatList = async (req, res) => {
 
                     learnSkill: swap.learnSkill,
 
-                    lastMessage: lastMessage
+                    lastMessage:
 
-                        ? lastMessage.message
+                        lastMessage
 
-                        : "Start chatting now...",
+                            ? lastMessage.message
 
-                    lastTime: lastMessage
+                            : "Start chatting now...",
 
-                        ? lastMessage.createdAt
+                    lastTime:
 
-                        : swap.updatedAt
+                        lastMessage
+
+                            ? lastMessage.createdAt
+
+                            : swap.updatedAt
 
                 };
 
@@ -107,6 +144,11 @@ exports.getChatList = async (req, res) => {
         console.log(
             "Swaps Found:",
             swaps.length
+        );
+
+        console.log(
+            "Unique Chats:",
+            chats.length
         );
 
         console.log(
