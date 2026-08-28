@@ -27,6 +27,8 @@ function handleUnauthorized() {
 
     localStorage.removeItem("token");
 
+    localStorage.removeItem("skillhubUser");
+
     window.location.href = "index.html";
 }
 
@@ -46,10 +48,152 @@ function updateProfileAvatar(user) {
     const profileAvatar =
         document.getElementById("profileAvatar");
 
-    if (profileAvatar && initial) {
+    if (profileAvatar) {
 
-        profileAvatar.textContent =
-            initial;
+        profileAvatar.innerHTML = "";
+
+        if (initial) {
+
+            profileAvatar.textContent =
+                initial;
+
+        } else {
+
+            profileAvatar.textContent =
+                "U";
+
+        }
+
+    }
+
+}
+
+
+// ==========================================================
+// LOAD CACHED PROFILE IMMEDIATELY
+// ==========================================================
+
+function loadCachedProfile() {
+
+    try {
+
+        const cachedUser =
+            localStorage.getItem(
+                "skillhubUser"
+            );
+
+        if (!cachedUser) {
+
+            return false;
+
+        }
+
+        const user =
+            JSON.parse(cachedUser);
+
+        if (!user || typeof user !== "object") {
+
+            return false;
+
+        }
+
+        currentUser =
+            user;
+
+        updateProfileAvatar(user);
+
+        updateProfileForm(user);
+
+        updateProfileDisplay(user);
+
+        return true;
+
+    } catch (error) {
+
+        console.warn(
+            "Cached profile unavailable:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+// ==========================================================
+// UPDATE PROFILE FORM
+// ==========================================================
+
+function updateProfileForm(user) {
+
+    const editName =
+        document.getElementById("editName");
+
+    const editEmail =
+        document.getElementById("editEmail");
+
+    const editLocation =
+        document.getElementById("editLocation");
+
+    const editBio =
+        document.getElementById("editBio");
+
+
+    if (editName) {
+
+        editName.value =
+            user.name || "";
+
+    }
+
+
+    if (editEmail) {
+
+        editEmail.value =
+            user.email || "";
+
+    }
+
+
+    if (editLocation) {
+
+        editLocation.value =
+            user.location || "";
+
+    }
+
+
+    if (editBio) {
+
+        editBio.value =
+            user.bio || "";
+
+    }
+
+}
+
+
+// ==========================================================
+// CACHE USER
+// ==========================================================
+
+function cacheUser(user) {
+
+    try {
+
+        localStorage.setItem(
+            "skillhubUser",
+            JSON.stringify(user)
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to cache profile:",
+            error
+        );
 
     }
 
@@ -70,7 +214,8 @@ async function loadProfile() {
                 method: "GET",
 
                 headers: {
-                    Authorization: `Bearer ${token}`
+                    Authorization:
+                        `Bearer ${token}`
                 }
             }
         );
@@ -113,66 +258,28 @@ async function loadProfile() {
 
 
         // ==================================================
-        // UPDATE MAIN PROFILE AVATAR
+        // CACHE LATEST USER
+        // ==================================================
+
+        cacheUser(user);
+
+
+        // ==================================================
+        // UPDATE PROFILE AVATAR
         // ==================================================
 
         updateProfileAvatar(user);
 
 
         // ==================================================
-        // EDIT FORM
+        // UPDATE FORM
         // ==================================================
 
-        const editName =
-            document.getElementById("editName");
-
-
-        const editEmail =
-            document.getElementById("editEmail");
-
-
-        const editLocation =
-            document.getElementById("editLocation");
-
-
-        const editBio =
-            document.getElementById("editBio");
-
-
-        if (editName) {
-
-            editName.value =
-                user.name || "";
-
-        }
-
-
-        if (editEmail) {
-
-            editEmail.value =
-                user.email || "";
-
-        }
-
-
-        if (editLocation) {
-
-            editLocation.value =
-                user.location || "";
-
-        }
-
-
-        if (editBio) {
-
-            editBio.value =
-                user.bio || "";
-
-        }
+        updateProfileForm(user);
 
 
         // ==================================================
-        // DISPLAY PROFILE
+        // UPDATE PROFILE DISPLAY
         // ==================================================
 
         updateProfileDisplay(user);
@@ -184,7 +291,9 @@ async function loadProfile() {
 
         if (user._id) {
 
-            await loadUserReviews(user._id);
+            await loadUserReviews(
+                user._id
+            );
 
         } else {
 
@@ -203,9 +312,16 @@ async function loadProfile() {
         );
 
 
-        showProfileError(
-            "Unable to load profile. Please try again."
-        );
+        // Do not immediately replace the
+        // already visible cached profile.
+
+        if (!currentUser) {
+
+            showProfileError(
+                "Unable to load profile. Please try again."
+            );
+
+        }
 
     }
 
@@ -458,7 +574,8 @@ function renderStars(
     }
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
     const numericRating =
@@ -476,10 +593,14 @@ function renderStars(
     ) {
 
         const star =
-            document.createElement("i");
+            document.createElement(
+                "i"
+            );
 
 
-        if (i <= roundedRating) {
+        if (
+            i <= roundedRating
+        ) {
 
             star.className =
                 "fa-solid fa-star";
@@ -505,7 +626,9 @@ function renderStars(
 // LOAD USER REVIEWS
 // ==========================================================
 
-async function loadUserReviews(userId) {
+async function loadUserReviews(
+    userId
+) {
 
     const container =
         document.getElementById(
@@ -583,7 +706,8 @@ async function loadUserReviews(userId) {
 
 
             const average =
-                total / reviews.length;
+                total /
+                reviews.length;
 
 
             updateRatingDisplay(
@@ -627,7 +751,9 @@ async function loadUserReviews(userId) {
 // RENDER REVIEWS
 // ==========================================================
 
-function renderReviews(reviews) {
+function renderReviews(
+    reviews
+) {
 
     const container =
         document.getElementById(
@@ -671,140 +797,165 @@ function renderReviews(reviews) {
     }
 
 
-    container.innerHTML = "";
+    container.innerHTML =
+        "";
 
 
-    reviews.forEach(review => {
+    reviews.forEach(
+        review => {
 
-        const reviewerName =
-            review.reviewer &&
-            review.reviewer.name
-                ? review.reviewer.name
-                : "SkillHub User";
-
-
-        const initial =
-            reviewerName
-                .charAt(0)
-                .toUpperCase();
+            const reviewerName =
+                review.reviewer &&
+                review.reviewer.name
+                    ? review.reviewer.name
+                    : "SkillHub User";
 
 
-        const rating =
-            Number(review.rating) || 0;
+            const initial =
+                reviewerName
+                    .charAt(0)
+                    .toUpperCase();
 
 
-        const comment =
-            review.comment ||
-            "No comment provided.";
+            const rating =
+                Number(
+                    review.rating
+                ) || 0;
 
 
-        const date =
-            formatReviewDate(
-                review.createdAt
-            );
+            const comment =
+                review.comment ||
+                "No comment provided.";
 
 
-        const reviewItem =
-            document.createElement(
-                "div"
-            );
+            const date =
+                formatReviewDate(
+                    review.createdAt
+                );
 
 
-        reviewItem.className =
-            "review-item";
+            const reviewItem =
+                document.createElement(
+                    "div"
+                );
 
 
-        // ==================================================
-        // STARS
-        // ==================================================
-
-        let starsHTML = "";
+            reviewItem.className =
+                "review-item";
 
 
-        for (
-            let i = 1;
-            i <= 5;
-            i++
-        ) {
+            // ==================================================
+            // STARS
+            // ==================================================
 
-            if (
-                i <= Math.round(rating)
+            let starsHTML =
+                "";
+
+
+            for (
+                let i = 1;
+                i <= 5;
+                i++
             ) {
 
-                starsHTML += `
-                    <i class="fa-solid fa-star"></i>
-                `;
+                if (
+                    i <= Math.round(
+                        rating
+                    )
+                ) {
 
-            } else {
+                    starsHTML += `
+                        <i class="fa-solid fa-star"></i>
+                    `;
 
-                starsHTML += `
-                    <i class="fa-regular fa-star"></i>
+                } else {
+
+                    starsHTML += `
+                        <i class="fa-regular fa-star"></i>
+                    `;
+
+                }
+
+            }
+
+
+            // ==================================================
+            // RECOMMENDATION
+            // ==================================================
+
+            let recommendHTML =
+                "";
+
+
+            if (
+                review.recommend === true
+            ) {
+
+                recommendHTML = `
+
+                    <span class="recommend-badge">
+
+                        <i class="fa-solid fa-thumbs-up"></i>
+
+                        Recommends this user
+
+                    </span>
+
                 `;
 
             }
 
-        }
 
+            // ==================================================
+            // REVIEW HTML
+            // ==================================================
 
-        // ==================================================
-        // RECOMMENDATION
-        // ==================================================
+            reviewItem.innerHTML = `
 
-        let recommendHTML = "";
+                <div class="review-top">
 
+                    <div class="reviewer-info">
 
-        if (
-            review.recommend === true
-        ) {
-
-            recommendHTML = `
-
-                <span class="recommend-badge">
-
-                    <i class="fa-solid fa-thumbs-up"></i>
-
-                    Recommends this user
-
-                </span>
-
-            `;
-
-        }
-
-
-        // ==================================================
-        // REVIEW HTML
-        // ==================================================
-
-        reviewItem.innerHTML = `
-
-            <div class="review-top">
-
-                <div class="reviewer-info">
-
-                    <div class="reviewer-avatar">
-
-                        ${escapeHTML(initial)}
-
-                    </div>
-
-
-                    <div>
-
-                        <div class="reviewer-name">
+                        <div class="reviewer-avatar">
 
                             ${escapeHTML(
-                                reviewerName
+                                initial
                             )}
 
                         </div>
 
 
-                        <span class="review-date">
+                        <div>
 
-                            ${escapeHTML(
-                                date
-                            )}
+                            <div class="reviewer-name">
+
+                                ${escapeHTML(
+                                    reviewerName
+                                )}
+
+                            </div>
+
+
+                            <span class="review-date">
+
+                                ${escapeHTML(
+                                    date
+                                )}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="review-rating">
+
+                        ${starsHTML}
+
+                        <span>
+
+                            ${rating.toFixed(1)}
 
                         </span>
 
@@ -813,38 +964,26 @@ function renderReviews(reviews) {
                 </div>
 
 
-                <div class="review-rating">
+                <p class="review-comment">
 
-                    ${starsHTML}
+                    ${escapeHTML(
+                        comment
+                    )}
 
-                    <span>
-
-                        ${rating.toFixed(1)}
-
-                    </span>
-
-                </div>
-
-            </div>
+                </p>
 
 
-            <p class="review-comment">
+                ${recommendHTML}
 
-                ${escapeHTML(comment)}
-
-            </p>
+            `;
 
 
-            ${recommendHTML}
+            container.appendChild(
+                reviewItem
+            );
 
-        `;
-
-
-        container.appendChild(
-            reviewItem
-        );
-
-    });
+        }
+    );
 
 }
 
@@ -853,7 +992,9 @@ function renderReviews(reviews) {
 // FORMAT REVIEW DATE
 // ==========================================================
 
-function formatReviewDate(date) {
+function formatReviewDate(
+    date
+) {
 
     if (!date) {
 
@@ -893,7 +1034,9 @@ function formatReviewDate(date) {
 // ESCAPE HTML
 // ==========================================================
 
-function escapeHTML(value) {
+function escapeHTML(
+    value
+) {
 
     const div =
         document.createElement(
@@ -914,7 +1057,9 @@ function escapeHTML(value) {
 // PROFILE ERROR
 // ==========================================================
 
-function showProfileError(message) {
+function showProfileError(
+    message
+) {
 
     const container =
         document.getElementById(
@@ -937,7 +1082,9 @@ function showProfileError(message) {
 
             <div>
 
-                ${escapeHTML(message)}
+                ${escapeHTML(
+                    message
+                )}
 
             </div>
 
@@ -1069,7 +1216,9 @@ async function saveProfile() {
         // AUTHENTICATION ERROR
         // ==================================================
 
-        if (response.status === 401) {
+        if (
+            response.status === 401
+        ) {
 
             handleUnauthorized();
 
@@ -1103,10 +1252,20 @@ async function saveProfile() {
 
 
         // ==================================================
+        // IMPORTANT:
+        // UPDATE CACHE IMMEDIATELY
+        // ==================================================
+
+        cacheUser(data);
+
+
+        // ==================================================
         // UPDATE MAIN PROFILE AVATAR
         // ==================================================
 
-        updateProfileAvatar(data);
+        updateProfileAvatar(
+            data
+        );
 
 
         // ==================================================
@@ -1122,26 +1281,21 @@ async function saveProfile() {
         // UPDATE FORM
         // ==================================================
 
-        if (editName) {
-
-            editName.value =
-                data.name || "";
-
-        }
+        updateProfileForm(
+            data
+        );
 
 
-        if (editLocation) {
+        // ==================================================
+        // REFRESH OTHER PAGE DATA
+        // ==================================================
 
-            editLocation.value =
-                data.location || "";
+        if (
+            typeof window.refreshHeader ===
+            "function"
+        ) {
 
-        }
-
-
-        if (editBio) {
-
-            editBio.value =
-                data.bio || "";
+            await window.refreshHeader();
 
         }
 
@@ -1220,9 +1374,16 @@ document.addEventListener(
         }
 
 
-        // -----------------------------------------------
+        // ==================================================
+        // SHOW CACHED DATA FIRST
+        // ==================================================
+
+        loadCachedProfile();
+
+
+        // ==================================================
         // SAVE BUTTON
-        // -----------------------------------------------
+        // ==================================================
 
         const saveProfileBtn =
             document.getElementById(
@@ -1240,9 +1401,9 @@ document.addEventListener(
         }
 
 
-        // -----------------------------------------------
-        // LOAD PROFILE
-        // -----------------------------------------------
+        // ==================================================
+        // LOAD FRESH DATA IN BACKGROUND
+        // ==================================================
 
         loadProfile();
 

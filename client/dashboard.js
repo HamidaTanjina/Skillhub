@@ -25,24 +25,93 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
 
-        loadDashboardData();
-
         setupDashboardNavigation();
+
+        const cachedUser =
+            getCachedUser();
+
+        if (cachedUser) {
+
+            renderDashboardProfile(
+                cachedUser
+            );
+
+        }
+
+        loadDashboardData(
+            cachedUser
+        );
 
     }
 );
 
 
 // ======================================================
-// LOAD DASHBOARD DATA
+// GET CACHED USER
 // ======================================================
 
-async function loadDashboardData() {
+function getCachedUser() {
 
     try {
 
+        const cachedUser =
+            localStorage.getItem(
+                "skillhubUser"
+            );
+
+        if (!cachedUser) {
+
+            return null;
+
+        }
+
+        return JSON.parse(
+            cachedUser
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Unable to read cached user:",
+            error
+        );
+
+        return null;
+
+    }
+
+}
+
+
+// ======================================================
+// LOAD DASHBOARD DATA
+// ======================================================
+
+async function loadDashboardData(
+    cachedUser = null
+) {
+
+    try {
+
+        let user =
+            cachedUser;
+
+
         // ==================================================
-        // FETCH CURRENT USER PROFILE
+        // RENDER CACHED DATA IMMEDIATELY
+        // ==================================================
+
+        if (user) {
+
+            renderDashboardProfile(
+                user
+            );
+
+        }
+
+
+        // ==================================================
+        // FETCH FRESH CURRENT USER PROFILE
         // ==================================================
 
         const response =
@@ -65,7 +134,9 @@ async function loadDashboardData() {
 
         if (response.status === 401) {
 
-            localStorage.removeItem("token");
+            localStorage.removeItem(
+                "token"
+            );
 
             localStorage.removeItem(
                 "skillhubUser"
@@ -88,394 +159,38 @@ async function loadDashboardData() {
         }
 
 
-        const user =
+        user =
             await response.json();
 
 
         // ==================================================
-        // DASHBOARD PROFILE INITIAL
+        // SAVE FRESH USER DATA
         // ==================================================
 
-        const profileAvatar =
-            document.querySelector(
-                ".profile-card .profile-avatar"
+        try {
+
+            localStorage.setItem(
+                "skillhubUser",
+                JSON.stringify(user)
             );
 
-
-        if (profileAvatar) {
-
-            const userName =
-                (user.name || "").trim();
-
-
-            if (userName) {
-
-                const initial =
-                    userName
-                        .charAt(0)
-                        .toUpperCase();
-
-
-                profileAvatar.innerHTML = `
-                    <span class="profile-initial">
-                        ${initial}
-                    </span>
-                `;
-
-            }
-
-        }
-
-
-        // ==================================================
-        // WELCOME MESSAGE
-        // ==================================================
-
-        const welcomeTitle =
-            document.getElementById(
-                "welcomeTopbar"
-            );
-
-
-        if (welcomeTitle) {
-
-            welcomeTitle.textContent =
-                user.name
-                    ? `Welcome Back ${user.name}`
-                    : "Welcome Back";
-
-        }
-
-
-        // ==================================================
-        // DASHBOARD PROFILE INFORMATION
-        // ==================================================
-
-        const profileName =
-            document.getElementById(
-                "profileName"
-            );
-
-        const profileEmail =
-            document.getElementById(
-                "profileEmail"
-            );
-
-        const profileLocation =
-            document.getElementById(
-                "profileLocation"
-            );
-
-        const profileBio =
-            document.getElementById(
-                "profileBio"
-            );
-
-
-        if (profileName) {
-
-            profileName.textContent =
-                user.name || "User";
-
-        }
-
-
-        if (profileEmail) {
-
-            profileEmail.textContent =
-                user.email || "";
-
-        }
-
-
-        if (profileLocation) {
-
-            profileLocation.textContent =
-                user.location ||
-                "Add Location";
-
-        }
-
-
-        if (profileBio) {
-
-            profileBio.textContent =
-                user.bio ||
-                "Tell everyone about yourself...";
-
-        }
-
-
-        // ==================================================
-        // RATING & REVIEW COUNT
-        // ==================================================
-
-        const userRating =
-            document.getElementById(
-                "userRating"
-            );
-
-        const reviewCount =
-            document.getElementById(
-                "reviewCount"
-            );
-
-        const ratingStars =
-            document.getElementById(
-                "ratingStars"
-            );
-
-
-        const rating =
-            Number(user.rating) || 0;
-
-        const totalReviews =
-            Number(user.totalReviews) || 0;
-
-
-        if (userRating) {
-
-            userRating.textContent =
-                rating.toFixed(1);
-
-        }
-
-
-        if (reviewCount) {
-
-            reviewCount.textContent =
-                totalReviews;
-
-        }
-
-
-        if (ratingStars) {
-
-            const stars =
-                ratingStars.querySelectorAll("i");
-
-
-            stars.forEach(
-                (star, index) => {
-
-                    star.classList.remove(
-                        "fa-solid",
-                        "fa-regular"
-                    );
-
-
-                    if (
-                        index <
-                        Math.round(rating)
-                    ) {
-
-                        star.classList.add(
-                            "fa-solid"
-                        );
-
-                    } else {
-
-                        star.classList.add(
-                            "fa-regular"
-                        );
-
-                    }
-
-                }
+        } catch (storageError) {
+
+            console.warn(
+                "Unable to cache user:",
+                storageError
             );
 
         }
 
 
         // ==================================================
-        // RENDER SKILLS I CAN TEACH
+        // UPDATE DASHBOARD WITH FRESH DATA
         // ==================================================
 
-        const teachContainer =
-            document.getElementById(
-                "teachSkills"
-            );
-
-
-        if (teachContainer) {
-
-            teachContainer.innerHTML =
-                "";
-
-
-            if (
-                !user.teachSkills ||
-                user.teachSkills.length === 0
-            ) {
-
-                teachContainer.innerHTML = `
-                    <span class="skills-loading-text">
-                        No Skills Added
-                    </span>
-                `;
-
-            } else {
-
-                user.teachSkills.forEach(
-                    skill => {
-
-                        const skillElement =
-                            document.createElement(
-                                "span"
-                            );
-
-
-                        skillElement.className =
-                            "skill-tag";
-
-
-                        skillElement.textContent =
-                            skill;
-
-
-                        teachContainer.appendChild(
-                            skillElement
-                        );
-
-                    }
-                );
-
-            }
-
-        }
-
-
-        // ==================================================
-        // RENDER SKILLS I WANT TO LEARN
-        // ==================================================
-
-        const learnContainer =
-            document.getElementById(
-                "learnSkills"
-            );
-
-
-        if (learnContainer) {
-
-            learnContainer.innerHTML =
-                "";
-
-
-            if (
-                !user.learnSkills ||
-                user.learnSkills.length === 0
-            ) {
-
-                learnContainer.innerHTML = `
-                    <span class="skills-loading-text">
-                        No Skills Added
-                    </span>
-                `;
-
-            } else {
-
-                user.learnSkills.forEach(
-                    skill => {
-
-                        const skillElement =
-                            document.createElement(
-                                "span"
-                            );
-
-
-                        skillElement.className =
-                            "skill-tag";
-
-
-                        skillElement.textContent =
-                            skill;
-
-
-                        learnContainer.appendChild(
-                            skillElement
-                        );
-
-                    }
-                );
-
-            }
-
-        }
-
-
-        // ==================================================
-        // PROFILE COMPLETION
-        // ==================================================
-
-        let completion = 0;
-
-
-        if (user.name) {
-
-            completion += 20;
-
-        }
-
-
-        if (user.email) {
-
-            completion += 20;
-
-        }
-
-
-        if (user.location) {
-
-            completion += 20;
-
-        }
-
-
-        if (user.bio) {
-
-            completion += 20;
-
-        }
-
-
-        if (
-            user.teachSkills &&
-            user.learnSkills &&
-            user.teachSkills.length > 0 &&
-            user.learnSkills.length > 0
-        ) {
-
-            completion += 20;
-
-        }
-
-
-        const compText =
-            document.getElementById(
-                "profileCompletion"
-            );
-
-
-        const progBar =
-            document.getElementById(
-                "progressBar"
-            );
-
-
-        if (compText) {
-
-            compText.textContent =
-                completion + "%";
-
-        }
-
-
-        if (progBar) {
-
-            progBar.style.width =
-                completion + "%";
-
-        }
+        renderDashboardProfile(
+            user
+        );
 
 
         // ==================================================
@@ -547,10 +262,8 @@ async function loadDashboardData() {
 
 
                                 return (
-                                    status ===
-                                        "accepted" ||
-                                    status ===
-                                        "active"
+                                    status === "accepted" ||
+                                    status === "active"
                                 );
 
                             }
@@ -584,8 +297,7 @@ async function loadDashboardData() {
 
 
                                 return (
-                                    status ===
-                                    "pending"
+                                    status === "pending"
                                 );
 
                             }
@@ -619,8 +331,7 @@ async function loadDashboardData() {
 
 
                                 return (
-                                    status ===
-                                    "completed"
+                                    status === "completed"
                                 );
 
                             }
@@ -657,12 +368,428 @@ async function loadDashboardData() {
             user
         );
 
+
     } catch (error) {
 
         console.error(
             "Dashboard Load Error:",
             error
         );
+
+
+        // ==================================================
+        // FALLBACK TO CACHED USER
+        // ==================================================
+
+        if (cachedUser) {
+
+            renderDashboardProfile(
+                cachedUser
+            );
+
+        }
+
+    }
+
+}
+
+
+// ======================================================
+// RENDER DASHBOARD PROFILE
+// ======================================================
+
+function renderDashboardProfile(
+    user
+) {
+
+    if (!user) {
+
+        return;
+
+    }
+
+
+    // ==================================================
+    // DASHBOARD PROFILE INITIAL
+    // ==================================================
+
+    const profileAvatar =
+        document.querySelector(
+            ".profile-card .profile-avatar"
+        );
+
+
+    if (profileAvatar) {
+
+        const userName =
+            (user.name || "").trim();
+
+
+        const initial =
+            userName
+                ? userName
+                    .charAt(0)
+                    .toUpperCase()
+                : "U";
+
+
+        profileAvatar.innerHTML = `
+            <span class="profile-initial">
+                ${escapeHtml(initial)}
+            </span>
+        `;
+
+    }
+
+
+    // ==================================================
+    // WELCOME MESSAGE
+    // ==================================================
+
+    const welcomeTitle =
+        document.getElementById(
+            "welcomeTopbar"
+        );
+
+
+    if (welcomeTitle) {
+
+        welcomeTitle.textContent =
+            user.name
+                ? `Welcome Back ${user.name}`
+                : "Welcome Back";
+
+    }
+
+
+    // ==================================================
+    // PROFILE INFORMATION
+    // ==================================================
+
+    const profileName =
+        document.getElementById(
+            "profileName"
+        );
+
+    const profileEmail =
+        document.getElementById(
+            "profileEmail"
+        );
+
+    const profileLocation =
+        document.getElementById(
+            "profileLocation"
+        );
+
+    const profileBio =
+        document.getElementById(
+            "profileBio"
+        );
+
+
+    if (profileName) {
+
+        profileName.textContent =
+            user.name || "User";
+
+    }
+
+
+    if (profileEmail) {
+
+        profileEmail.textContent =
+            user.email || "";
+
+    }
+
+
+    if (profileLocation) {
+
+        profileLocation.textContent =
+            user.location ||
+            "Add Location";
+
+    }
+
+
+    if (profileBio) {
+
+        profileBio.textContent =
+            user.bio ||
+            "Tell everyone about yourself...";
+
+    }
+
+
+    // ==================================================
+    // RATING & REVIEW COUNT
+    // ==================================================
+
+    const userRating =
+        document.getElementById(
+            "userRating"
+        );
+
+    const reviewCount =
+        document.getElementById(
+            "reviewCount"
+        );
+
+    const ratingStars =
+        document.getElementById(
+            "ratingStars"
+        );
+
+
+    const rating =
+        Number(user.rating) || 0;
+
+    const totalReviews =
+        Number(user.totalReviews) || 0;
+
+
+    if (userRating) {
+
+        userRating.textContent =
+            rating.toFixed(1);
+
+    }
+
+
+    if (reviewCount) {
+
+        reviewCount.textContent =
+            totalReviews;
+
+    }
+
+
+    if (ratingStars) {
+
+        const stars =
+            ratingStars.querySelectorAll(
+                "i"
+            );
+
+
+        stars.forEach(
+            (star, index) => {
+
+                star.classList.remove(
+                    "fa-solid",
+                    "fa-regular"
+                );
+
+
+                if (
+                    index <
+                    Math.round(rating)
+                ) {
+
+                    star.classList.add(
+                        "fa-solid"
+                    );
+
+                } else {
+
+                    star.classList.add(
+                        "fa-regular"
+                    );
+
+                }
+
+            }
+        );
+
+    }
+
+
+    // ==================================================
+    // RENDER TEACH SKILLS
+    // ==================================================
+
+    const teachContainer =
+        document.getElementById(
+            "teachSkills"
+        );
+
+
+    if (teachContainer) {
+
+        teachContainer.innerHTML =
+            "";
+
+
+        if (
+            !user.teachSkills ||
+            user.teachSkills.length === 0
+        ) {
+
+            teachContainer.innerHTML = `
+                <span class="skills-loading-text">
+                    No Skills Added
+                </span>
+            `;
+
+        } else {
+
+            user.teachSkills.forEach(
+                skill => {
+
+                    const skillElement =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    skillElement.className =
+                        "skill-tag";
+
+
+                    skillElement.textContent =
+                        skill;
+
+
+                    teachContainer.appendChild(
+                        skillElement
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    // ==================================================
+    // RENDER LEARN SKILLS
+    // ==================================================
+
+    const learnContainer =
+        document.getElementById(
+            "learnSkills"
+        );
+
+
+    if (learnContainer) {
+
+        learnContainer.innerHTML =
+            "";
+
+
+        if (
+            !user.learnSkills ||
+            user.learnSkills.length === 0
+        ) {
+
+            learnContainer.innerHTML = `
+                <span class="skills-loading-text">
+                    No Skills Added
+                </span>
+            `;
+
+        } else {
+
+            user.learnSkills.forEach(
+                skill => {
+
+                    const skillElement =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    skillElement.className =
+                        "skill-tag";
+
+
+                    skillElement.textContent =
+                        skill;
+
+
+                    learnContainer.appendChild(
+                        skillElement
+                    );
+
+                }
+            );
+
+        }
+
+    }
+
+
+    // ==================================================
+    // PROFILE COMPLETION
+    // ==================================================
+
+    let completion = 0;
+
+
+    if (user.name) {
+
+        completion += 20;
+
+    }
+
+
+    if (user.email) {
+
+        completion += 20;
+
+    }
+
+
+    if (user.location) {
+
+        completion += 20;
+
+    }
+
+
+    if (user.bio) {
+
+        completion += 20;
+
+    }
+
+
+    if (
+        user.teachSkills &&
+        user.learnSkills &&
+        user.teachSkills.length > 0 &&
+        user.learnSkills.length > 0
+    ) {
+
+        completion += 20;
+
+    }
+
+
+    const compText =
+        document.getElementById(
+            "profileCompletion"
+        );
+
+    const progBar =
+        document.getElementById(
+            "progressBar"
+        );
+
+
+    if (compText) {
+
+        compText.textContent =
+            completion + "%";
+
+    }
+
+
+    if (progBar) {
+
+        progBar.style.width =
+            completion + "%";
 
     }
 
@@ -674,7 +801,6 @@ async function loadDashboardData() {
 // ======================================================
 
 function setupDashboardNavigation() {
-
 
     // ==================================================
     // ACTIVE SWAPS CARD
@@ -971,15 +1097,10 @@ async function loadSuggestedMatches(
 
 
                     return {
-
                         user,
-
                         score,
-
                         teachMatch,
-
                         learnMatch
-
                     };
 
                 }
@@ -997,7 +1118,6 @@ async function loadSuggestedMatches(
 
 
         // ==================================================
-        // FIRST PRIORITY:
         // ACTUAL SKILL MATCHES
         // ==================================================
 
@@ -1010,8 +1130,7 @@ async function loadSuggestedMatches(
 
 
         // ==================================================
-        // IF MATCHES EXIST, SHOW THEM
-        // OTHERWISE SHOW OTHER USERS AS FALLBACK
+        // SELECT USERS
         // ==================================================
 
         let selectedUsers;
@@ -1213,7 +1332,7 @@ async function loadSuggestedMatches(
                             color:#fff;
                         ">
 
-                            ${initial}
+                            ${escapeHtml(initial)}
 
                         </div>
 
