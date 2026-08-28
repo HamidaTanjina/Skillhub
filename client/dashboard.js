@@ -1124,7 +1124,7 @@ async function loadSuggestedMatches(
         const matchedUsers =
             scoredUsers.filter(
                 item =>
-                    item.teachMatch.length > 0 ||
+                    item.teachMatch.length > 0 &&
                     item.learnMatch.length > 0
             );
 
@@ -1133,21 +1133,21 @@ async function loadSuggestedMatches(
         // SELECT USERS
         // ==================================================
 
-        let selectedUsers;
+     const selectedUsers =
+    matchedUsers.slice(0, 3);
+    if (selectedUsers.length === 0) {
 
+    container.innerHTML = `
+        <p style="
+            color: var(--text-muted);
+            padding: 10px;
+        ">
+            No mutual skill matches found yet.
+        </p>
+    `;
 
-        if (matchedUsers.length > 0) {
-
-            selectedUsers =
-                matchedUsers.slice(0, 3);
-
-        } else {
-
-            selectedUsers =
-                scoredUsers.slice(0, 3);
-
-        }
-
+    return;
+}
 
         // ==================================================
         // RENDER
