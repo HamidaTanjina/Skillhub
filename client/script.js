@@ -949,7 +949,7 @@ if (authForm) {
                     if (response.ok) {
 
                         showToast(
-                            "🎉 Registration successful! Redirecting..."
+                            "🎉 Registration successful!"
                         );
 
 
@@ -1054,7 +1054,7 @@ if (authForm) {
                 if (response.ok) {
 
                     showToast(
-                        "✅ Login Successful! Redirecting..."
+                        "Login Successful!"
                     );
 
 
