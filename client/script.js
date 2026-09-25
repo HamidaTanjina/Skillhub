@@ -238,82 +238,48 @@ async function loadPlatformStats() {
    ========================================================= */
 
 function evaluateNavbarAndLinks() {
-
-    const scrollPos =
-        window.scrollY;
-
-
-    if (navbar) {
-
-        navbar.classList.toggle(
-            "scrolled",
-            scrollPos > 40
-        );
-
+    if (window.scrollY > 40) {
+        navbar.classList.add("scrolled");
+    } else {
+        navbar.classList.remove("scrolled");
     }
 
-
-    let currentSectionId = "";
-
+    let currentSection = null;
 
     sections.forEach(section => {
+        const sectionTop = section.offsetTop - 180;
+        const sectionBottom = sectionTop + section.offsetHeight;
 
-        const top =
-            section.offsetTop - 180;
-
-
-        if (scrollPos >= top) {
-
-            currentSectionId =
-                section.getAttribute("id");
-
+        if (
+            window.scrollY >= sectionTop &&
+            window.scrollY < sectionBottom
+        ) {
+            currentSection = section;
         }
-
     });
 
-
-    navItems.forEach(link => {
-
-        const href =
-            link.getAttribute("href");
-
-
-        const isSectionLink =
-            href &&
-            href.startsWith("#");
-
-
-        const isActive =
-            isSectionLink &&
-            currentSectionId &&
-            href ===
-                `#${currentSectionId}`;
-
-
-        link.classList.toggle(
-            "active-link",
-            !!isActive
-        );
-
+    navLinks.forEach(link => {
+        link.classList.remove("active-link");
     });
 
-}
+  
+    if (currentSection) {
+        navLinks.forEach(link => {
 
+            // JOIN is an action that opens the signup modal.
+            // It should never appear as an active section.
+            if (link.classList.contains("signup-link")) {
+                return;
+            }
 
-window.addEventListener(
-    "scroll",
-    evaluateNavbarAndLinks,
-    {
-        passive: true
+            const href = link.getAttribute("href");
+
+            if (href === `#${currentSection.id}`) {
+                link.classList.add("active-link");
+            }
+        });
     }
-);
-
-
-window.addEventListener(
-    "load",
-    evaluateNavbarAndLinks
-);
-
+}
 
 /* =========================================================
    MOBILE MENU

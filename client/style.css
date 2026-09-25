@@ -759,61 +759,66 @@ nav {
 /* ========================================================= 
    HERO HEADING 
    ========================================================= */ 
- 
-.hero h1 { 
-    position: relative; 
-    z-index: 2; 
- 
-    max-width: 620px; 
- 
-    margin-bottom: 15px; 
- 
-    padding: 
-        2px 0 5px; 
- 
-    color: 
-        var(--text-main); 
- 
-    font-size: 
-        clamp(2.35rem, 4.3vw, 3.7rem); 
- 
-    font-weight: 
-        800; 
- 
-    line-height: 
-        1.08; 
- 
-    letter-spacing: 
-        -2px; 
- 
-    overflow: 
-        visible; 
-} 
- 
-.hero h1 span { 
-    display: block; 
- 
-    padding-bottom: 4px; 
- 
-    background: 
-        linear-gradient( 
-            100deg, 
-            #8b5cf6 0%, 
-            #6366f1 38%, 
-            #60a5fa 72%, 
-            #38bdf8 100% 
-        ); 
- 
-    -webkit-background-clip: text; 
-    background-clip: text; 
- 
-    -webkit-text-fill-color: transparent; 
- 
-    overflow: 
-        visible; 
-} 
- 
- 
+ /* =========================================================
+   HERO HEADING
+   ========================================================= */
+
+.hero h1 {
+    position: relative;
+    z-index: 2;
+
+    max-width: 620px;
+
+    margin-bottom: 15px;
+
+    padding: 2px 0 5px;
+
+    color: var(--text-main);
+
+    font-size: clamp(2.35rem, 4.3vw, 3.7rem);
+
+    font-weight: 800;
+
+    line-height: 1.08;
+
+    letter-spacing: -2px;
+
+    overflow: visible;
+}
+
+
+/* Each heading line */
+.hero h1 span {
+    display: block;
+
+    padding-bottom: 4px;
+
+    overflow: visible;
+}
+
+
+/* Exchange skills. */
+.hero-title-white {
+    color: var(--text-main);
+
+    -webkit-text-fill-color: var(--text-main);
+}
+
+
+/* Grow together. */
+.hero-title-gradient {
+    background: linear-gradient(
+        90deg,
+        #38bdf8 0%,
+        #7dd3fc 45%,
+        #ffffff 100%
+    );
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+}
 /* ========================================================= 
    HERO DESCRIPTION 
    ========================================================= 
