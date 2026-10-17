@@ -700,8 +700,10 @@
 
 <!-- ========================= AUTH MODAL ========================= -->
 
-<div id="loginModal" class="modal">
 
+<!-- ========================= AUTH MODAL ========================= -->
+
+<div id="loginModal" class="modal">
     <div class="modal-box">
 
         <button
@@ -709,147 +711,118 @@
             class="close-btn"
             aria-label="Close"
             type="button"
-        >
-            &times;
-        </button>
-
+        >&times;</button>
 
         <div class="auth-header">
 
-            <div class="auth-logo">
-                <i class="fa-solid fa-graduation-cap"></i>
+            <div class="auth-brand">
+                <div class="auth-logo">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <span class="auth-brand-name">SkillHub</span>
             </div>
 
-            <h2 id="authModeText">
-                Welcome Back!
-            </h2>
+            <h2 id="authModeText">Welcome back</h2>
 
-            <p
-                id="authSubtitleText"
-                class="auth-subtitle"
-            >
-                Sign In
+            <p id="authSubtitleText" class="auth-subtitle">
+                Log in to continue your skill exchange journey.
             </p>
 
         </div>
 
+        <div id="authMessage" class="auth-message" role="status" hidden></div>
 
         <form id="authForm">
 
-            <div
-                class="input-wrapper"
-                id="nameInputWrapper"
-            >
-
-                <i class="fa-solid fa-user field-icon"></i>
-
+            <div class="input-wrapper" id="nameInputWrapper">
+                <label for="nameInput">Full name</label>
                 <input
                     id="nameInput"
                     type="text"
-                    placeholder="Name"
+                    placeholder="Enter your full name"
                     autocomplete="name"
                 >
-
             </div>
 
-
             <div class="input-wrapper">
-
-                <i class="fa-solid fa-envelope field-icon"></i>
-
+                <label for="emailInput">Email address</label>
                 <input
                     id="emailInput"
                     type="email"
-                    placeholder="Email"
+                    placeholder="you@example.com"
                     autocomplete="email"
                     required
                 >
-
             </div>
-
 
             <div class="input-wrapper">
+                <label for="passwordInput">Password</label>
 
-                <i class="fa-solid fa-lock field-icon"></i>
+                <div class="password-field">
+                    <input
+                        id="passwordInput"
+                        type="password"
+                        placeholder="Enter your password"
+                        autocomplete="current-password"
+                        required
+                    >
 
-                <input
-                    id="passwordInput"
-                    type="password"
-                    placeholder="Password"
-                    autocomplete="current-password"
-                    required
-                >
-
-                <i
-                    class="fa-solid fa-eye toggle-password"
-                    id="togglePassword"
-                ></i>
-
+                    <button
+                        class="toggle-password"
+                        id="togglePassword"
+                        type="button"
+                        aria-label="Show password"
+                    > <i class="fa-regular fa-eye" aria-hidden="true"></i></button>
+                </div>
             </div>
 
+            <div class="input-wrapper" id="confirmPasswordWrapper">
+                <label for="confirmPasswordInput">Confirm password</label>
 
-            <div
-                class="input-wrapper"
-                id="confirmPasswordWrapper"
-            >
+                <div class="password-field">
+                    <input
+                        id="confirmPasswordInput"
+                        type="password"
+                        placeholder="Enter your password again"
+                        autocomplete="new-password"
+                    >
 
-                <i class="fa-solid fa-lock field-icon"></i>
-
-                <input
-                    id="confirmPasswordInput"
-                    type="password"
-                    placeholder="Confirm password"
-                    autocomplete="new-password"
-                >
-
-                <i
-                    class="fa-solid fa-eye toggle-password"
-                    id="toggleConfirmPassword"
-                ></i>
-
+                    <button
+                        class="toggle-password"
+                        id="toggleConfirmPassword"
+                        type="button"
+                        aria-label="Show confirm password"
+                    > <i class="fa-regular fa-eye" aria-hidden="true"></i></button>
+                </div>
             </div>
 
+            <div class="auth-options" id="loginOptions">
+                <label class="remember-label" for="rememberMe">
+                    <input id="rememberMe" type="checkbox">
+                    <span>Remember me</span>
+                </label>
 
-            <a
-                href="#"
-                class="forgot"
-                id="forgotLink"
-            >
-                Forgot your password?
-            </a>
+                <a href="#" class="forgot" id="forgotLink">
+                    Forgot password?
+                </a>
+            </div>
 
-
-            <button
-                id="authSubmit"
-                class="auth-submit-btn"
-                type="submit"
-            >
-                <span class="btn-text">
-                    Sign In
-                </span>
+            <button id="authSubmit" class="auth-submit-btn" type="submit">
+                <span class="btn-text">Login</span>
             </button>
 
         </form>
 
-
         <div class="auth-footer">
-
-            <button
-                id="authSwitch"
-                class="auth-alt-btn"
-                type="button"
-            >
-                Create Account
+            <span id="authFooterText">Don't have an account?</span>
+            <button id="authSwitch" class="auth-alt-btn" type="button">
+                Create an account
             </button>
-
         </div>
 
     </div>
-
 </div>
 
-
 <div id="toast"></div>
-
 </body>
 </html>

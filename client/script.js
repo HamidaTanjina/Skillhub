@@ -1,3 +1,4 @@
+
 /* =========================================================
    SKILLHUB LANDING PAGE
    ========================================================= */
@@ -10,91 +11,41 @@ const API_BASE_URL =
    ELEMENTS
    ========================================================= */
 
-const navbar =
-    document.querySelector(".navbar");
+const navbar = document.querySelector(".navbar");
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+const mainNav = document.getElementById("mainNav");
+const navItems = document.querySelectorAll(".nav-links a");
+const sections = document.querySelectorAll("main section");
 
-const menuBtn =
-    document.getElementById("menuBtn");
+const modal = document.getElementById("loginModal");
+const closeModal = document.getElementById("closeModal");
 
-const navLinks =
-    document.getElementById("navLinks");
+const loginButtons = document.querySelectorAll(".login-btn");
+const signupButtons = document.querySelectorAll(".signup-link");
 
-const mainNav =
-    document.getElementById("mainNav");
+const authForm = document.getElementById("authForm");
+const authModeText = document.getElementById("authModeText");
+const authSubtitleText = document.getElementById("authSubtitleText");
+const authSubmit = document.getElementById("authSubmit");
+const authSwitch = document.getElementById("authSwitch");
+const authMessage = document.getElementById("authMessage");
 
-const navItems =
-    document.querySelectorAll(".nav-links a");
-
-const sections =
-    document.querySelectorAll("main section");
-
-
-const modal =
-    document.getElementById("loginModal");
-
-const closeModal =
-    document.getElementById("closeModal");
-
-const loginButtons =
-    document.querySelectorAll(".login-btn");
-
-const signupButtons =
-    document.querySelectorAll(".signup-link");
-
-
-const authForm =
-    document.getElementById("authForm");
-
-const authModeText =
-    document.getElementById("authModeText");
-
-const authSubtitleText =
-    document.getElementById("authSubtitleText");
-
-const authSubmit =
-    document.getElementById("authSubmit");
-
-const authSwitch =
-    document.getElementById("authSwitch");
-
-
-const nameInputWrapper =
-    document.getElementById("nameInputWrapper");
-
+const nameInputWrapper = document.getElementById("nameInputWrapper");
 const confirmPasswordWrapper =
-    document.getElementById(
-        "confirmPasswordWrapper"
-    );
+    document.getElementById("confirmPasswordWrapper");
 
-
-const nameInput =
-    document.getElementById("nameInput");
-
-const emailInput =
-    document.getElementById("emailInput");
-
-const passwordInput =
-    document.getElementById("passwordInput");
-
+const nameInput = document.getElementById("nameInput");
+const emailInput = document.getElementById("emailInput");
+const passwordInput = document.getElementById("passwordInput");
 const confirmPasswordInput =
-    document.getElementById(
-        "confirmPasswordInput"
-    );
+    document.getElementById("confirmPasswordInput");
 
-const forgotLink =
-    document.getElementById("forgotLink");
+const forgotLink = document.getElementById("forgotLink");
 
-
-const togglePassword =
-    document.getElementById(
-        "togglePassword"
-    );
-
+const togglePassword = document.getElementById("togglePassword");
 const toggleConfirmPassword =
-    document.getElementById(
-        "toggleConfirmPassword"
-    );
-
+    document.getElementById("toggleConfirmPassword");
 
 let authMode = "signin";
 
@@ -104,132 +55,46 @@ let authMode = "signin";
    ========================================================= */
 
 async function loadPlatformStats() {
-
-    const studentsStat =
-        document.getElementById(
-            "studentsStat"
-        );
-
-    const skillsStat =
-        document.getElementById(
-            "skillsStat"
-        );
-
-    const matchesStat =
-        document.getElementById(
-            "matchesStat"
-        );
-
+    const studentsStat = document.getElementById("studentsStat");
+    const skillsStat = document.getElementById("skillsStat");
+    const matchesStat = document.getElementById("matchesStat");
 
     try {
-
-        const response =
-            await fetch(
-                `${API_BASE_URL}/stats`
-            );
-
+        const response = await fetch(`${API_BASE_URL}/stats`);
 
         if (!response.ok) {
-
-            throw new Error(
-                "Failed to fetch statistics"
-            );
-
+            throw new Error("Failed to fetch statistics");
         }
 
+        const data = await response.json();
 
-        const data =
-            await response.json();
-
-
-        if (
-            !data.success ||
-            !data.stats
-        ) {
-
-            throw new Error(
-                "Invalid statistics response"
-            );
-
+        if (!data.success || !data.stats) {
+            throw new Error("Invalid statistics response");
         }
 
-
-        const {
-            students,
-            skills,
-            matches
-        } = data.stats;
-
-
-        const formattedStudents =
-            Number(students || 0)
-                .toLocaleString();
-
-        const formattedSkills =
-            Number(skills || 0)
-                .toLocaleString();
-
-        const formattedMatches =
-            Number(matches || 0)
-                .toLocaleString();
-
+        const { students, skills, matches } = data.stats;
 
         if (studentsStat) {
-
             studentsStat.textContent =
-                formattedStudents;
-
+                Number(students || 0).toLocaleString();
         }
-
 
         if (skillsStat) {
-
             skillsStat.textContent =
-                formattedSkills;
-
+                Number(skills || 0).toLocaleString();
         }
-
 
         if (matchesStat) {
-
             matchesStat.textContent =
-                formattedMatches;
-
+                Number(matches || 0).toLocaleString();
         }
-
     } catch (error) {
+        console.error("Statistics Error:", error);
 
-        console.error(
-            "Statistics Error:",
-            error
-        );
-
-
-        if (studentsStat) {
-
-            studentsStat.textContent =
-                "0";
-
-        }
-
-
-        if (skillsStat) {
-
-            skillsStat.textContent =
-                "0";
-
-        }
-
-
-        if (matchesStat) {
-
-            matchesStat.textContent =
-                "0";
-
-        }
-
+        if (studentsStat) studentsStat.textContent = "0";
+        if (skillsStat) skillsStat.textContent = "0";
+        if (matchesStat) matchesStat.textContent = "0";
     }
-
 }
 
 
@@ -238,17 +103,17 @@ async function loadPlatformStats() {
    ========================================================= */
 
 function evaluateNavbarAndLinks() {
-    if (window.scrollY > 40) {
-        navbar.classList.add("scrolled");
-    } else {
-        navbar.classList.remove("scrolled");
+    if (navbar) {
+        navbar.classList.toggle("scrolled", window.scrollY > 40);
     }
 
     let currentSection = null;
 
     sections.forEach(section => {
-        const sectionTop = section.offsetTop - 180;
-        const sectionBottom = sectionTop + section.offsetHeight;
+        const sectionTop =
+            section.offsetTop - 180;
+        const sectionBottom =
+            sectionTop + section.offsetHeight;
 
         if (
             window.scrollY >= sectionTop &&
@@ -258,199 +123,143 @@ function evaluateNavbarAndLinks() {
         }
     });
 
-    navLinks.forEach(link => {
-        link.classList.remove("active-link");
-    });
+    // navLinks is a container, so select its links.
+    if (navLinks) {
+        navLinks.querySelectorAll("a").forEach(link => {
+            link.classList.remove("active-link");
 
-  
-    if (currentSection) {
-        navLinks.forEach(link => {
-
-            // JOIN is an action that opens the signup modal.
-            // It should never appear as an active section.
+            // Signup is an action, not a page section.
             if (link.classList.contains("signup-link")) {
                 return;
             }
 
-            const href = link.getAttribute("href");
-
-            if (href === `#${currentSection.id}`) {
+            if (
+                currentSection &&
+                link.getAttribute("href") === `#${currentSection.id}`
+            ) {
                 link.classList.add("active-link");
             }
         });
     }
 }
 
+window.addEventListener("scroll", evaluateNavbarAndLinks);
+window.addEventListener("load", evaluateNavbarAndLinks);
+
+
 /* =========================================================
    MOBILE MENU
    ========================================================= */
 
 function closeMobileMenu() {
-
     if (mainNav) {
-
-        mainNav.classList.remove(
-            "active"
-        );
-
+        mainNav.classList.remove("active");
     }
 
-
     if (menuBtn) {
+        menuBtn.innerHTML = '<i class="fa-solid fa-bars"></i>';
+        menuBtn.setAttribute("aria-label", "Open menu");
+        menuBtn.setAttribute("aria-expanded", "false");
+    }
+}
 
-        menuBtn.innerHTML =
-            '<i class="fa-solid fa-bars"></i>';
+if (menuBtn && mainNav) {
+    menuBtn.setAttribute("aria-expanded", "false");
+
+    menuBtn.addEventListener("click", event => {
+        event.stopPropagation();
+
+        mainNav.classList.toggle("active");
+
+        const isOpen = mainNav.classList.contains("active");
+
+        menuBtn.innerHTML = isOpen
+            ? '<i class="fa-solid fa-xmark"></i>'
+            : '<i class="fa-solid fa-bars"></i>';
 
         menuBtn.setAttribute(
             "aria-label",
-            "Open menu"
+            isOpen ? "Close menu" : "Open menu"
         );
 
-    }
-
+        menuBtn.setAttribute("aria-expanded", String(isOpen));
+    });
 }
-
-
-if (menuBtn && mainNav) {
-
-    menuBtn.addEventListener(
-        "click",
-        event => {
-
-            event.stopPropagation();
-
-
-            mainNav.classList.toggle(
-                "active"
-            );
-
-
-            const isOpen =
-                mainNav.classList.contains(
-                    "active"
-                );
-
-
-            menuBtn.innerHTML =
-                isOpen
-                    ? '<i class="fa-solid fa-xmark"></i>'
-                    : '<i class="fa-solid fa-bars"></i>';
-
-
-            menuBtn.setAttribute(
-                "aria-label",
-                isOpen
-                    ? "Close menu"
-                    : "Open menu"
-            );
-
-        }
-    );
-
-}
-
-
-/* CLOSE MOBILE MENU AFTER NAVIGATION */
 
 navItems.forEach(link => {
+    link.addEventListener("click", () => {
+        closeMobileMenu();
+    });
+});
 
-    link.addEventListener(
-        "click",
-        () => {
+document.addEventListener("click", event => {
+    if (
+        mainNav &&
+        menuBtn &&
+        mainNav.classList.contains("active") &&
+        !mainNav.contains(event.target) &&
+        !menuBtn.contains(event.target)
+    ) {
+        closeMobileMenu();
+    }
+});
 
-            closeMobileMenu();
-
-        }
-    );
-
+window.addEventListener("resize", () => {
+    if (window.innerWidth > 900) {
+        closeMobileMenu();
+    }
 });
 
 
-/* CLOSE MENU WHEN CLICKING OUTSIDE */
-
-document.addEventListener(
-    "click",
-    event => {
-
-        if (
-            mainNav &&
-            menuBtn &&
-            mainNav.classList.contains(
-                "active"
-            ) &&
-            !mainNav.contains(event.target) &&
-            !menuBtn.contains(event.target)
-        ) {
-
-            closeMobileMenu();
-
-        }
-
-    }
-);
-
-
-/* CLOSE MENU WHEN SCREEN BECOMES DESKTOP */
-
-window.addEventListener(
-    "resize",
-    () => {
-
-        if (
-            window.innerWidth > 900
-        ) {
-
-            closeMobileMenu();
-
-        }
-
-    }
-);
-
-
 /* =========================================================
-   TOAST
+   TOAST FALLBACK
    ========================================================= */
 
 function showToast(message) {
-
-    const toast =
-        document.getElementById(
-            "toast"
-        );
-
+    const toast = document.getElementById("toast");
 
     if (!toast) {
+        console.warn(message);
         return;
     }
 
+    toast.textContent = message;
+    toast.classList.add("show");
 
-    toast.textContent =
-        message;
+    clearTimeout(showToast.timeout);
 
-
-    toast.classList.add(
-        "show"
-    );
-
-
-    clearTimeout(
-        showToast.timeout
-    );
+    showToast.timeout = setTimeout(() => {
+        toast.classList.remove("show");
+    }, 4000);
+}
 
 
-    showToast.timeout =
-        setTimeout(
-            () => {
+/* =========================================================
+   INLINE AUTH MESSAGE
+   ========================================================= */
 
-                toast.classList.remove(
-                    "show"
-                );
+function showAuthMessage(message, type = "error") {
+    if (!authMessage) {
+        showToast(message);
+        return;
+    }
 
-            },
-            4000
-        );
+    authMessage.textContent = message;
+    authMessage.hidden = false;
 
+    authMessage.classList.remove("success", "error");
+    authMessage.classList.add(type);
+
+    authMessage.setAttribute("role", "status");
+    authMessage.setAttribute("aria-live", "polite");
+}
+
+function clearAuthMessage() {
+    if (!authMessage) return;
+
+    authMessage.textContent = "";
+    authMessage.hidden = true;
+    authMessage.classList.remove("success", "error");
 }
 
 
@@ -459,108 +268,82 @@ function showToast(message) {
    ========================================================= */
 
 function setAuthMode(mode) {
+    authMode = mode === "signup" ? "signup" : "signin";
 
-    authMode =
-        mode;
+    clearAuthMessage();
 
-
-    const isSignup =
-        mode === "signup";
-
+    const isSignup = authMode === "signup";
 
     if (authModeText) {
-
-        authModeText.textContent =
-            isSignup
-                ? "Welcome to SkillHub!"
-                : "Welcome Back!";
-
+        authModeText.textContent = isSignup
+            ? "Create your account"
+            : "Welcome back";
     }
-
 
     if (authSubtitleText) {
-
-        authSubtitleText.textContent =
-            isSignup
-                ? "Create Account"
-                : "Sign In";
-
+        authSubtitleText.textContent = isSignup
+            ? "Join SkillHub to share your skills and learn from others."
+            : "Log in to continue your skill exchange journey.";
     }
 
-
-    const btnText =
-        authSubmit
-            ? authSubmit.querySelector(
-                ".btn-text"
-            )
-            : null;
-
+    const btnText = authSubmit
+        ? authSubmit.querySelector(".btn-text")
+        : null;
 
     if (btnText) {
-
-        btnText.textContent =
-            isSignup
-                ? "Sign Up"
-                : "Sign In";
-
+        btnText.textContent = isSignup
+            ? "Create account"
+            : "Login";
     }
-
 
     if (authSwitch) {
-
-        authSwitch.textContent =
-            isSignup
-                ? "Back to Sign In"
-                : "Create Account";
-
+        authSwitch.textContent = isSignup
+            ? "Login"
+            : "Create an account";
     }
 
+    const authFooterText =
+        document.getElementById("authFooterText");
+
+    if (authFooterText) {
+        authFooterText.textContent = isSignup
+            ? "Already have an account?"
+            : "Don't have an account?";
+    }
 
     if (nameInputWrapper) {
-
         nameInputWrapper.style.display =
-            isSignup
-                ? "block"
-                : "none";
-
+            isSignup ? "flex" : "none";
     }
-
 
     if (confirmPasswordWrapper) {
-
         confirmPasswordWrapper.style.display =
-            isSignup
-                ? "block"
-                : "none";
-
+            isSignup ? "flex" : "none";
     }
-
 
     if (nameInput) {
-
-        nameInput.required =
-            isSignup;
-
+        nameInput.required = isSignup;
     }
-
 
     if (confirmPasswordInput) {
-
-        confirmPasswordInput.required =
-            isSignup;
-
+        confirmPasswordInput.required = isSignup;
     }
-
 
     if (forgotLink) {
-
         forgotLink.style.display =
-            isSignup
-                ? "none"
-                : "block";
-
+            isSignup ? "none" : "block";
     }
 
+    const loginOptions = document.getElementById("loginOptions");
+
+    if (loginOptions) {
+        loginOptions.style.display =
+            isSignup ? "none" : "flex";
+    }
+
+    if (modal) {
+        modal.classList.toggle("register-mode", isSignup);
+    }
 }
 
 
@@ -568,29 +351,31 @@ function setAuthMode(mode) {
    OPEN AUTH MODAL
    ========================================================= */
 
-function openAuthMode(mode) {
+function openAuthMode(mode = "signin") {
+    if (!modal) {
+        console.error(
+            'Login modal element "#loginModal" was not found.'
+        );
+        return;
+    }
+
+    if (authForm) {
+        authForm.reset();
+    }
 
     setAuthMode(mode);
 
+    modal.classList.add("active");
+    document.body.style.overflow = "hidden";
 
-    if (authForm) {
+    // Put keyboard focus in the first useful field.
+    const firstField = mode === "signup" && nameInput
+        ? nameInput
+        : emailInput;
 
-        authForm.reset();
-
+    if (firstField) {
+        setTimeout(() => firstField.focus(), 0);
     }
-
-
-    if (modal) {
-
-        modal.classList.add(
-            "active"
-        );
-
-        document.body.style.overflow =
-            "hidden";
-
-    }
-
 }
 
 
@@ -599,124 +384,53 @@ function openAuthMode(mode) {
    ========================================================= */
 
 function closeAuthModal() {
+    if (!modal) return;
 
-    if (!modal) {
-        return;
-    }
+    modal.classList.remove("active");
+    document.body.style.overflow = "";
 
-
-    modal.classList.remove(
-        "active"
-    );
-
-
-    document.body.style.overflow =
-        "";
-
+    clearAuthMessage();
 }
 
 
 /* =========================================================
-   LOGIN BUTTONS
+   AUTH MODAL BUTTONS
    ========================================================= */
 
 loginButtons.forEach(button => {
-
-    button.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            openAuthMode(
-                "signin"
-            );
-
-        }
-    );
-
+    button.addEventListener("click", event => {
+        event.preventDefault();
+        openAuthMode("signin");
+    });
 });
-
-
-/* =========================================================
-   SIGNUP BUTTONS
-   ========================================================= */
 
 signupButtons.forEach(button => {
-
-    button.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            openAuthMode(
-                "signup"
-            );
-
-        }
-    );
-
+    button.addEventListener("click", event => {
+        event.preventDefault();
+        openAuthMode("signup");
+    });
 });
 
-
-/* =========================================================
-   CLOSE BUTTON
-   ========================================================= */
-
 if (closeModal) {
-
-    closeModal.addEventListener(
-        "click",
-        closeAuthModal
-    );
-
+    closeModal.addEventListener("click", closeAuthModal);
 }
 
-
-/* =========================================================
-   CLICK OUTSIDE MODAL
-   ========================================================= */
-
-window.addEventListener(
-    "click",
-    event => {
-
-        if (
-            modal &&
-            event.target === modal
-        ) {
-
-            closeAuthModal();
-
-        }
-
+// Close when clicking the backdrop, but not the modal contents.
+window.addEventListener("click", event => {
+    if (modal && event.target === modal) {
+        closeAuthModal();
     }
-);
+});
 
-
-/* =========================================================
-   ESCAPE KEY
-   ========================================================= */
-
-window.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key === "Escape" &&
-            modal &&
-            modal.classList.contains(
-                "active"
-            )
-        ) {
-
-            closeAuthModal();
-
-        }
-
+window.addEventListener("keydown", event => {
+    if (
+        event.key === "Escape" &&
+        modal &&
+        modal.classList.contains("active")
+    ) {
+        closeAuthModal();
     }
-);
+});
 
 
 /* =========================================================
@@ -724,23 +438,18 @@ window.addEventListener(
    ========================================================= */
 
 if (authSwitch) {
+    authSwitch.addEventListener("click", event => {
+        event.preventDefault();
 
-    authSwitch.addEventListener(
-        "click",
-        event => {
+        const nextMode =
+            authMode === "signin" ? "signup" : "signin";
 
-            event.preventDefault();
-
-
-            setAuthMode(
-                authMode === "signin"
-                    ? "signup"
-                    : "signin"
-            );
-
+        if (authForm) {
+            authForm.reset();
         }
-    );
 
+        setAuthMode(nextMode);
+    });
 }
 
 
@@ -748,347 +457,189 @@ if (authSwitch) {
    PASSWORD VISIBILITY
    ========================================================= */
 
-function setupPasswordToggle(
-    toggleElement,
-    inputElement
-) {
+function setupPasswordToggle(toggleElement, inputElement) {
+    if (!toggleElement || !inputElement) return;
 
-    if (
-        !toggleElement ||
-        !inputElement
-    ) {
-
-        return;
-
+    // Keep the toggle a button even if its HTML is missing type="button".
+    if (toggleElement.tagName === "BUTTON") {
+        toggleElement.type = "button";
     }
 
+    const initialIcon = toggleElement.querySelector("i");
 
-    toggleElement.addEventListener(
-        "click",
-        event => {
+    if (initialIcon) {
+        initialIcon.classList.add("fa-eye");
+        initialIcon.classList.remove("fa-eye-slash");
+    }
 
-            event.preventDefault();
+    toggleElement.setAttribute("aria-label", "Show password");
+    toggleElement.setAttribute("title", "Show password");
+    toggleElement.setAttribute("aria-pressed", "false");
 
+    toggleElement.addEventListener("click", event => {
+        event.preventDefault();
 
-            const isHidden =
-                inputElement.type ===
-                "password";
+        const isHidden = inputElement.type === "password";
 
+        inputElement.type = isHidden ? "text" : "password";
 
-            inputElement.type =
-                isHidden
-                    ? "text"
-                    : "password";
+        const eyeIcon = toggleElement.querySelector("i");
 
-
-            toggleElement.classList.toggle(
-                "fa-eye-slash",
-                isHidden
-            );
-
-
-            toggleElement.classList.toggle(
-                "fa-eye",
-                !isHidden
-            );
-
+        if (eyeIcon) {
+            eyeIcon.classList.toggle("fa-eye", !isHidden);
+            eyeIcon.classList.toggle("fa-eye-slash", isHidden);
         }
-    );
 
+        const label = isHidden ? "Hide password" : "Show password";
+
+        toggleElement.setAttribute("aria-label", label);
+        toggleElement.setAttribute("title", label);
+        toggleElement.setAttribute(
+            "aria-pressed",
+            String(isHidden)
+        );
+    });
 }
 
-
-setupPasswordToggle(
-    togglePassword,
-    passwordInput
-);
-
-
-setupPasswordToggle(
-    toggleConfirmPassword,
-    confirmPasswordInput
-);
+setupPasswordToggle(togglePassword, passwordInput);
+setupPasswordToggle(toggleConfirmPassword, confirmPasswordInput);
 
 
 /* =========================================================
-   AUTH FORM
+   AUTH FORM SUBMISSION
    ========================================================= */
 
 if (authForm) {
+    authForm.addEventListener("submit", async event => {
+        event.preventDefault();
 
-    authForm.addEventListener(
-        "submit",
-        async event => {
+        // Prevent duplicate submissions.
+        if (authSubmit && authSubmit.disabled) {
+            return;
+        }
 
-            event.preventDefault();
+        const name = nameInput
+            ? nameInput.value.trim()
+            : "";
 
+        const email = emailInput
+            ? emailInput.value.trim()
+            : "";
 
-            const name =
-                nameInput
-                    ? nameInput.value.trim()
-                    : "";
+        const password = passwordInput
+            ? passwordInput.value
+            : "";
 
+        const isSignup = authMode === "signup";
 
-            const email =
-                emailInput
-                    ? emailInput.value.trim()
-                    : "";
+        const confirmPassword = confirmPasswordInput
+            ? confirmPasswordInput.value
+            : "";
 
+        clearAuthMessage();
 
-            const password =
-                passwordInput
-                    ? passwordInput.value
-                    : "";
+        // Validate confirmation before sending the request.
+        if (isSignup && password !== confirmPassword) {
+            showAuthMessage(
+                "Passwords do not match. Please try again.",
+                "error"
+            );
 
-
-            if (authSubmit) {
-
-                authSubmit.disabled =
-                    true;
-
+            if (confirmPasswordInput) {
+                confirmPasswordInput.focus();
             }
 
+            return;
+        }
 
-            /* =========================
-               SIGN UP
-               ========================= */
+        if (authSubmit) {
+            authSubmit.disabled = true;
+            authSubmit.setAttribute("aria-busy", "true");
+        }
 
-            if (
-                authMode === "signup"
-            ) {
+        let redirectAfterSuccess = false;
 
-                const confirmPassword =
-                    confirmPasswordInput
-                        ? confirmPasswordInput.value
-                        : "";
+        try {
+            const endpoint = isSignup
+                ? `${API_BASE_URL}/auth/register`
+                : `${API_BASE_URL}/auth/login`;
 
+            const payload = isSignup
+                ? { name, email, password }
+                : { email, password };
 
-                if (
-                    password !==
-                    confirmPassword
-                ) {
+            const response = await fetch(endpoint, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            });
 
-                    showToast(
-                        "⚠️ Passwords do not match!"
-                    );
-
-
-                    if (authSubmit) {
-
-                        authSubmit.disabled =
-                            false;
-
-                    }
-
-                    return;
-
-                }
-
-
-                try {
-
-                    const response =
-                        await fetch(
-                            `${API_BASE_URL}/auth/register`,
-                            {
-                                method: "POST",
-
-                                headers: {
-                                    "Content-Type":
-                                        "application/json"
-                                },
-
-                                body:
-                                    JSON.stringify({
-                                        name,
-                                        email,
-                                        password
-                                    })
-                            }
-                        );
-
-
-                    const data =
-                        await response.json();
-
-
-                    if (response.ok) {
-
-                        showToast(
-                            "🎉 Registration successful!"
-                        );
-
-
-                        const userToken =
-                            data.token ||
-                            (
-                                data.user &&
-                                data.user.token
-                            );
-
-
-                        if (userToken) {
-
-                            localStorage.setItem(
-                                "token",
-                                userToken
-                            );
-
-                        }
-
-
-                        setTimeout(
-                            () => {
-
-                                window.location.href =
-                                    "dashboard.html";
-
-                            },
-                            1000
-                        );
-
-                    } else {
-
-                        showToast(
-                            `❌ ${
-                                data.message ||
-                                "Registration failed."
-                            }`
-                        );
-
-                    }
-
-                } catch (error) {
-
-                    console.error(
-                        "Registration error:",
-                        error
-                    );
-
-
-                    showToast(
-                        "⚡ Network error. Please try again."
-                    );
-
-                } finally {
-
-                    if (authSubmit) {
-
-                        authSubmit.disabled =
-                            false;
-
-                    }
-
-                }
-
-
-                return;
-
-            }
-
-
-            /* =========================
-               SIGN IN
-               ========================= */
+            // Handle APIs that might return a non-JSON response.
+            let data = {};
 
             try {
-
-                const response =
-                    await fetch(
-                        `${API_BASE_URL}/auth/login`,
-                        {
-                            method: "POST",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json"
-                            },
-
-                            body:
-                                JSON.stringify({
-                                    email,
-                                    password
-                                })
-                        }
-                    );
-
-
-                const data =
-                    await response.json();
-
-
-                if (response.ok) {
-
-                    showToast(
-                        "Login Successful!"
-                    );
-
-
-                    const userToken =
-                        data.token ||
-                        (
-                            data.user &&
-                            data.user.token
-                        );
-
-
-                    if (userToken) {
-
-                        localStorage.setItem(
-                            "token",
-                            userToken
-                        );
-
-                    }
-
-
-                    setTimeout(
-                        () => {
-
-                            window.location.href =
-                                "dashboard.html";
-
-                        },
-                        1000
-                    );
-
-                } else {
-
-                    showToast(
-                        `❌ ${
-                            data.message ||
-                            "Invalid credentials."
-                        }`
-                    );
-
-                }
-
-            } catch (error) {
-
-                console.error(
-                    "Login error:",
-                    error
-                );
-
-
-                showToast(
-                    "⚡ Server connection error."
-                );
-
-            } finally {
-
-                if (authSubmit) {
-
-                    authSubmit.disabled =
-                        false;
-
-                }
-
+                data = await response.json();
+            } catch {
+                data = {};
             }
 
-        }
-    );
+            if (!response.ok) {
+                showAuthMessage(
+                    data.message ||
+                        (
+                            isSignup
+                                ? "Registration failed. Please try again."
+                                : "Invalid email or password."
+                        ),
+                    "error"
+                );
 
+                return;
+            }
+
+            const userToken =
+                data.token ||
+                (data.user && data.user.token);
+
+            if (userToken) {
+                localStorage.setItem("token", userToken);
+            }
+
+            if (isSignup) {
+                showAuthMessage(
+                    "Registration successful! Redirecting to your dashboard...",
+                    "success"
+                );
+            }
+
+            // No success toast for login.
+            // Keep the submit button disabled until navigation.
+            redirectAfterSuccess = true;
+
+            setTimeout(() => {
+                window.location.href = "dashboard.html";
+            }, 1000);
+
+        } catch (error) {
+            console.error(
+                isSignup ? "Registration error:" : "Login error:",
+                error
+            );
+
+            showAuthMessage(
+                "Unable to connect to the server. Please try again.",
+                "error"
+            );
+
+        } finally {
+            if (!redirectAfterSuccess && authSubmit) {
+                authSubmit.disabled = false;
+                authSubmit.removeAttribute("aria-busy");
+            }
+        }
+    });
 }
 
 
@@ -1096,13 +647,11 @@ if (authForm) {
    INITIAL AUTH STATE
    ========================================================= */
 
-setAuthMode(
-    "signin"
-);
+setAuthMode("signin");
 
 
 /* =========================================================
-   LOAD REAL PLATFORM STATISTICS
+   LOAD PLATFORM STATISTICS
    ========================================================= */
 
 loadPlatformStats();
