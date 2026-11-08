@@ -117,7 +117,12 @@
 
             </li>
 
-
+<li onclick="location.href='sessions.html'">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>
+                    My Sessions
+                </span>
+               </li>
             <!-- Chat -->
 
             <li onclick="location.href='chat.html'">
@@ -144,17 +149,6 @@
             </li>
 
 
-            <!-- Logout -->
-
-            <li id="logoutBtn">
-
-                <i class="fa-solid fa-right-from-bracket"></i>
-
-                <span>
-                    Logout
-                </span>
-
-            </li>
 
         </ul>
 
@@ -358,294 +352,181 @@
                  PROFILE SUMMARY
             ================================================== -->
 
-            <section class="profile-summary-card card">
+<div class="profile-layout">
 
+    <!-- LEFT COLUMN -->
+    <div class="profile-main-column">
 
-                <!-- Left -->
+        <!-- PROFILE SUMMARY -->
+        <section class="profile-summary-card card">
+            <div class="profile-banner"></div>
 
+            <div class="profile-summary-body">
                 <div class="profile-summary-left">
-
-
-                    <!-- Avatar -->
-
-                    <div class="profile-icon" id="headerProfileAvatar">
-    <i class="fa-solid fa-user"></i>
-</div>
-
-
-                    <!-- User Information -->
+                    <div class="profile-icon profile-avatar"
+                         id="headerProfileAvatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
 
                     <div class="profile-summary-info">
-
-                        <h2 id="profileName">
-
-                            Loading...
-
-                        </h2>
-
-
-
-                        <p id="profileEmail">
-
-                            Loading...
-
-                        </p>
-
-
+                        <h2 id="profileName">Loading...</h2>
+                        <p id="profileEmail">Loading...</p>
 
                         <p class="location-text">
-
                             <i class="fa-solid fa-location-dot"></i>
-
-                            <span id="profileLocation">
-
-                                Add Location
-
-                            </span>
-
+                            <span id="profileLocation">Add Location</span>
                         </p>
-
                     </div>
 
+                    <button class="edit-profile-btn"
+                            type="button"
+                            onclick="document.getElementById('editName').focus()">
+                        <i class="fa-solid fa-pen"></i> Edit Profile
+                    </button>
                 </div>
 
-
-
-                <!-- Rating -->
-
-                <div class="rating-summary">
-
-                    <div
-                        class="rating-number"
-                        id="userRating">
-
-                        0.0
-
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <strong id="userRating">0.0</strong>
+                        <span class="rating-stars" id="ratingStars"></span>
+                        <small id="reviewCount">0 Reviews</small>
                     </div>
 
-
-
-                    <div
-                        class="rating-stars"
-                        id="ratingStars">
-
-                        <i class="fa-solid fa-star"></i>
-
-                        <i class="fa-solid fa-star"></i>
-
-                        <i class="fa-solid fa-star"></i>
-
-                        <i class="fa-solid fa-star"></i>
-
-                        <i class="fa-solid fa-star"></i>
-
+                    <div class="profile-stat">
+                        <strong id="profileSkillCount">0</strong>
+                        <small>Skills</small>
                     </div>
 
+                    <div class="profile-stat">
+                        <strong id="profileExperience">0</strong>
+                        <small>Years of experience</small>
+                    </div>
+                </div>
+            </div>
+        </section>
 
+        <!-- EDIT PROFILE -->
+        <section class="profile-form-card card">
+            <div class="section-heading">
+                <div>
+                    <h2><i class="fa-solid fa-user-pen"></i> Edit Profile</h2>
+                    <p>Update your personal information and matching settings.</p>
+                </div>
+            </div>
 
-                    <p>
-
-                        <span id="reviewCount">
-
-                            0
-
-                        </span>
-
-                        Reviews
-
-                    </p>
-
+            <div class="profile-form-grid">
+                <div class="form-group">
+                    <label for="editName">Full Name *</label>
+                    <input id="editName" type="text"
+                           placeholder="Enter your name">
                 </div>
 
-            </section>
+                <div class="form-group">
+                    <label for="editEmail">Email Address</label>
+                    <input id="editEmail" type="email" readonly>
+                    <small>Email cannot be changed.</small>
+                </div>
 
+                <div class="form-group">
+                    <label for="editLocation">Location</label>
+                    <input id="editLocation" type="text"
+                           placeholder="e.g. Sylhet, Bangladesh">
+                </div>
 
+                <div class="form-group">
+                    <label for="yearsExperience">Years of Experience</label>
+                    <input id="yearsExperience" type="number"
+                           min="0" max="80" step="1"
+                           placeholder="e.g. 2">
+                </div>
 
-            <!-- =================================================
-                 EDIT PROFILE
-            ================================================== -->
+                <div class="form-group bio-group">
+                    <label for="editBio">About Me</label>
+                    <textarea id="editBio" rows="4" maxlength="500"
+                              placeholder="Tell others about yourself..."></textarea>
+                </div>
+            </div>
 
-            <section class="profile-form-card card">
-
-
-                <!-- Section Heading -->
-
+            <div class="matching-settings">
                 <div class="section-heading">
-
                     <div>
-
-                        <h2>
-                            Edit Profile
-                        </h2>
-
-                        <p>
-                            Update your personal information.
-                        </p>
-
+                        <h2>Skills & Levels</h2>
+                        <p>Choose your level for each skill.</p>
                     </div>
-
-
-
-                    <i class="fa-solid fa-user-pen"></i>
-
+                    <i class="fa-solid fa-layer-group"></i>
                 </div>
 
-
-
-                <!-- Name -->
+                <div id="skillLevelsContainer" class="skill-levels-grid"></div>
 
                 <div class="form-group">
-
-                    <label for="editName">
-                        Name
-                    </label>
-
-                    <input
-                        type="text"
-                        id="editName"
-                        placeholder="Enter your name">
-
+                    <label for="availability">Availability</label>
+                    <input id="availability" type="text"
+                           placeholder="e.g. weekday evenings, weekends">
+                    <small>Separate multiple time slots with commas.</small>
                 </div>
-
-
-
-                <!-- Email -->
 
                 <div class="form-group">
+                    <label for="matchingPreferences">Matching Preferences</label>
+                    <input id="matchingPreferences" type="text"
+                           placeholder="e.g. beginner friendly, same location">
+                    <small>Separate multiple preferences with commas.</small>
+                </div>
+            </div>
 
-                    <label for="editEmail">
-                        Email
-                    </label>
+            <button type="button" id="saveProfileBtn" class="save-btn">
+                <i class="fa-solid fa-floppy-disk"></i>
+                Save Changes
+            </button>
+        </section>
+    </div>
 
-                    <input
-                        type="email"
-                        id="editEmail"
-                        readonly>
+    <!-- RIGHT COLUMN -->
+    <aside class="profile-side-column">
 
-                    <small>
-                        Email cannot be changed.
-                    </small>
+        <section class="profile-side-card card">
+            <div class="section-heading">
+                <div>
+                    <h2><i class="fa-solid fa-award"></i> My Skills</h2>
+                    <p>Your current skills and levels</p>
+                </div>
+            </div>
 
+            <div id="skillOverviewContainer"></div>
+        </section>
+
+        <section class="reviews-card card">
+            <div class="section-heading reviews-heading">
+                <div>
+                    <h2><i class="fa-solid fa-star"></i> Recent Reviews</h2>
+                    <p>Feedback from your skill-exchange partners.</p>
                 </div>
 
-
-
-                <!-- Location -->
-
-                <div class="form-group">
-
-                    <label for="editLocation">
-                        Location
-                    </label>
-
-                    <input
-                        type="text"
-                        id="editLocation"
-                        placeholder="e.g. Sylhet, Bangladesh">
-
+                <div class="review-total">
+                    <i class="fa-solid fa-star"></i>
+                    <span id="reviewSummary">0.0 · 0 Reviews</span>
                 </div>
+            </div>
 
-
-
-                <!-- Bio -->
-
-                <div class="form-group">
-
-                    <label for="editBio">
-                        Bio
-                    </label>
-
-                    <textarea
-                        id="editBio"
-                        rows="5"
-                        maxlength="500"
-                        placeholder="Tell others about yourself..."></textarea>
-
+            <div id="reviewsContainer" class="reviews-container">
+                <div class="reviews-loading">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    Loading reviews...
                 </div>
+            </div>
 
-
-
-                <!-- Save Button -->
-
-                <button
-                    type="button"
-                    id="saveProfileBtn"
-                    class="save-btn">
-
-                    <i class="fa-solid fa-floppy-disk"></i>
-
-                    Save Changes
-
-                </button>
-
-            </section>
-
-
-
-            <!-- =================================================
-                 REVIEWS
-            ================================================== -->
-
-            <section class="reviews-card card">
-
-
-                <!-- Heading -->
-
-                <div class="section-heading reviews-heading">
-
-                    <div>
-
-                        <h2>
-                            Reviews
-                        </h2>
-
-                        <p>
-                            Feedback from people you have exchanged skills with.
-                        </p>
-
-                    </div>
-
-
-
-                    <!-- Review Summary -->
-
-                    <div class="review-total">
-
-                        <i class="fa-solid fa-star"></i>
-
-                        <span id="reviewSummary">
-
-                            0.0 · 0 Reviews
-
-                        </span>
-
-                    </div>
-
+            <div class="reputation-note">
+                <i class="fa-regular fa-heart"></i>
+                <div>
+                    <strong>Keep sharing your skills!</strong>
+                    <p>Your knowledge can make a difference.</p>
                 </div>
+            </div>
+        </section>
+    </aside>
 
+</div>
+</div>
 
-
-                <!-- Reviews Container -->
-
-                <div
-                    id="reviewsContainer"
-                    class="reviews-container">
-
-                    <div class="reviews-loading">
-
-                        <i class="fa-solid fa-spinner fa-spin"></i>
-
-                        Loading reviews...
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-
-        </div>
 
     </main>
 

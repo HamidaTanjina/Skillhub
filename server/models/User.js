@@ -15,7 +15,15 @@ const UserSchema = new mongoose.Schema({
         lowercase: true,
         trim: true
     },
-
+    role: {
+    type: String,
+    enum: ["user", "reviewer", "admin"],
+    default: "user"
+},
+isBanned: {
+    type: Boolean,
+    default: false
+},
     password: {
         type: String,
         required: [true, "Password is required"]
@@ -73,6 +81,74 @@ const UserSchema = new mongoose.Schema({
         default: 0
     },
 
+    // Optional matching signals. Existing users remain valid with defaults.
+    skillLevels: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {}
+    },
+    yearsExperience: {
+        type: Number,
+        min: 0,
+        default: null
+    },
+    availability: {
+        type: [String],
+        default: []
+    },
+    matchingPreferences: {
+        type: [String],
+        default: []
+    },
+    skillVerifications: {
+        type: [{
+            skillName: {
+                type: String,
+                required: true,
+                trim: true
+            },
+
+            evidenceType: {
+                type: String,
+                enum: ["certificate", "repository"],
+                required: true
+            },
+
+            evidenceUrl: {
+                type: String,
+                required: true,
+                trim: true
+            },
+
+            status: {
+                type: String,
+                enum: ["pending", "verified", "rejected"],
+                default: "pending"
+            },
+
+            submittedAt: {
+                type: Date,
+                default: Date.now
+            },
+
+            verifiedAt: {
+                type: Date,
+                default: null
+            },
+
+            verifiedBy: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+                default: null
+            },
+
+            reviewerNote: {
+                type: String,
+                default: "",
+                trim: true
+            }
+        }],
+        default: []
+    },
     completedSwaps: {
         type: Number,
         default: 0

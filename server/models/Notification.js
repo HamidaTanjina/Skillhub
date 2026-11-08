@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const NotificationSchema = new mongoose.Schema(
@@ -20,7 +21,8 @@ const NotificationSchema = new mongoose.Schema(
                 "swap_request",
                 "swap_accepted",
                 "swap_rejected",
-                "new_message"
+                "new_message",
+                "session_reminder"
             ],
             required: true
         },

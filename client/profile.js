@@ -1,23 +1,14 @@
-// ==========================================================
-// SKILLHUB PROFILE PAGE
-// ==========================================================
 
-
-// ==========================================================
-// API
-// ==========================================================
 
 const API_BASE_URL =
     "https://skillhub-backend-cths.onrender.com/api";
-
-
 // ==========================================================
 // GLOBAL USER
 // ==========================================================
 
 let token = null;
 let currentUser = null;
-
+let skillVerifications = [];
 
 // ==========================================================
 // HANDLE UNAUTHORIZED
@@ -122,58 +113,250 @@ function loadCachedProfile() {
 }
 
 
+function renderSkillOverview(user) {
+    const container = document.getElementById("skillOverviewContainer");
+    if (!container) return;
+
+    container.replaceChildren();
+
+    const levels = user.skillLevels || {};
+    const teachingSkills = new Set(
+    (Array.isArray(user.teachSkills) ? user.teachSkills : [])
+        .map(skill => skill.trim().toLowerCase())
+);
+
+const verifiedSkills = new Set(
+    skillVerifications
+        .filter(item => item.status === "verified")
+        .map(item => item.skillName.trim().toLowerCase())
+);
+   const skills = Array.isArray(user.teachSkills)
+    ? user.teachSkills
+    : [];
+    const uniqueSkills = [
+        ...new Map(
+            skills
+                .filter(skill => typeof skill === "string" && skill.trim())
+                .map(skill => [skill.trim().toLowerCase(), skill.trim()])
+        ).values()
+    ];
+
+    const profileSkillCount = document.getElementById("profileSkillCount");
+    if (profileSkillCount) {
+        profileSkillCount.textContent = uniqueSkills.length;
+    }
+
+    const profileExperience = document.getElementById("profileExperience");
+    if (profileExperience) {
+        profileExperience.textContent = Number(user.yearsExperience) || 0;
+    }
+
+    if (!uniqueSkills.length) {
+        const message = document.createElement("p");
+        message.className = "no-reviews";
+        message.textContent = "Add teach or learn skills to see your skill overview.";
+        container.appendChild(message);
+        return;
+    }
+
+    uniqueSkills.slice(0, 8).forEach(skill => {
+        const key = skill.toLowerCase();
+        const saved = Number(levels[key]);
+        const level = Number.isInteger(saved) && saved >= 1 && saved <= 3
+            ? saved
+            : saved >= 4 ? 3 : 2;
+
+        const labels = {
+            1: "Beginner",
+            2: "Intermediate",
+            3: "Advanced"
+        };
+
+        const row = document.createElement("div");
+        row.className = "skill-overview-item";
+
+        const top = document.createElement("div");
+        top.className = "skill-overview-top";
+
+      
+const name = document.createElement("span");
+name.className = "skill-overview-name";
+name.textContent = skill;
+
+const isVerified =
+    teachingSkills.has(key) && verifiedSkills.has(key);
+
+if (isVerified) {
+    const verifiedBadge = document.createElement("span");
+
+    verifiedBadge.className = "skill-verification-badge";
+    verifiedBadge.textContent = "✓ Verified";
+    verifiedBadge.title = "This teaching skill has been verified";
+
+    verifiedBadge.style.cssText = `
+        display: inline-flex;
+        align-items: center;
+        padding: 3px 8px;
+        border-radius: 12px;
+        background: #dcfce7;
+        color: #166534;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+    `;
+
+    top.append(name, verifiedBadge);
+} else {
+    top.appendChild(name);
+}
+
+const badge = document.createElement("span");
+badge.className = `skill-level-badge ${labels[level].toLowerCase()}`;
+badge.textContent = labels[level];
+
+top.appendChild(badge);
+
+        const progress = document.createElement("div");
+        progress.className = "skill-progress";
+
+        const fill = document.createElement("div");
+        fill.className = "skill-progress-fill";
+        fill.style.width = `${level / 3 * 100}%`;
+
+        progress.appendChild(fill);
+        row.append(top, progress);
+        container.appendChild(row);
+    });
+}
+
+// ==========================================================
+// UPDATE PROFILE FORM
+// ==========================================================
+
+
+function renderSkillLevelInputs(user) {
+    const container = document.getElementById("skillLevelsContainer");
+    if (!container) return;
+
+    container.replaceChildren();
+
+    const skillLevels = user.skillLevels || {};
+
+    // Only show skills that the user can teach.
+    const teachingSkills = [
+        ...new Map(
+            (Array.isArray(user.teachSkills) ? user.teachSkills : [])
+                .filter(skill => typeof skill === "string" && skill.trim())
+                .map(skill => [skill.trim().toLowerCase(), skill.trim()])
+        ).values()
+    ];
+
+    if (teachingSkills.length === 0) {
+        const message = document.createElement("p");
+        message.textContent = "Add teaching skills first to set your skill levels.";
+        container.appendChild(message);
+        return;
+    }
+
+    teachingSkills.forEach(skill => {
+        const key = skill.toLowerCase();
+
+        const row = document.createElement("div");
+        row.className = "form-group skill-level-row";
+
+        const label = document.createElement("label");
+        label.textContent = skill;
+        label.htmlFor = `skillLevel-${key}`;
+
+        const select = document.createElement("select");
+        select.id = `skillLevel-${key}`;
+        select.dataset.skill = key;
+
+        [
+            ["1", "1 - Beginner"],
+            ["2", "2 - Intermediate"],
+            ["3", "3 - Advanced"]
+        ].forEach(([value, text]) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = text;
+            select.appendChild(option);
+        });
+
+        const savedLevel = Number(skillLevels[key]);
+
+        select.value =
+            Number.isInteger(savedLevel) && savedLevel >= 1 && savedLevel <= 3
+                ? String(savedLevel)
+                : "2";
+
+        row.append(label, select);
+        container.appendChild(row);
+    });
+}
+
+function parseCommaSeparatedValues(value) {
+    return [...new Set(
+        value
+            .split(",")
+            .map(item => item.trim().toLowerCase())
+            .filter(Boolean)
+    )];
+}
 // ==========================================================
 // UPDATE PROFILE FORM
 // ==========================================================
 
 function updateProfileForm(user) {
+    const editName = document.getElementById("editName");
+    const editEmail = document.getElementById("editEmail");
+    const editLocation = document.getElementById("editLocation");
+    const editBio = document.getElementById("editBio");
 
-    const editName =
-        document.getElementById("editName");
+    if (editName) editName.value = user.name || "";
+    if (editEmail) editEmail.value = user.email || "";
+    if (editLocation) editLocation.value = user.location || "";
+    if (editBio) editBio.value = user.bio || "";
 
-    const editEmail =
-        document.getElementById("editEmail");
+    // Render skill levels using the latest profile data
+    renderSkillLevelInputs(user);
+   
+    const experienceInput =
+        document.getElementById("yearsExperience");
 
-    const editLocation =
-        document.getElementById("editLocation");
-
-    const editBio =
-        document.getElementById("editBio");
-
-
-    if (editName) {
-
-        editName.value =
-            user.name || "";
-
+    if (experienceInput) {
+        experienceInput.value =
+            user.yearsExperience ?? "";
     }
 
+    const availabilityInput =
+        document.getElementById("availability");
 
-    if (editEmail) {
-
-        editEmail.value =
-            user.email || "";
-
+    if (availabilityInput) {
+        availabilityInput.value =
+            Array.isArray(user.availability)
+                ? user.availability.join(", ")
+                : "";
     }
 
+    const preferencesInput =
+        document.getElementById("matchingPreferences");
 
-    if (editLocation) {
-
-        editLocation.value =
-            user.location || "";
-
+    if (preferencesInput) {
+        preferencesInput.value =
+            Array.isArray(user.matchingPreferences)
+                ? user.matchingPreferences.join(", ")
+                : "";
     }
 
-
-    if (editBio) {
-
-        editBio.value =
-            user.bio || "";
-
-    }
-
+    console.log("Profile form populated:", {
+        email: user.email,
+        skillLevels: user.skillLevels,
+        yearsExperience: user.yearsExperience,
+        availability: user.availability,
+        matchingPreferences: user.matchingPreferences
+    });
 }
-
 
 // ==========================================================
 // CACHE USER
@@ -199,6 +382,43 @@ function cacheUser(user) {
 
 }
 
+
+async function loadSkillVerifications() {
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/user/skills/verification`,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        if (response.status === 401) {
+            handleUnauthorized();
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error("Failed to load skill verifications.");
+        }
+
+        const data = await response.json();
+
+        skillVerifications = Array.isArray(data.verifications)
+            ? data.verifications
+            : [];
+
+        // Refresh the skill overview with the latest statuses.
+        if (currentUser) {
+            renderSkillOverview(currentUser);
+        }
+
+    } catch (error) {
+        console.error("Skill verification loading error:", error);
+    }
+}
 
 // ==========================================================
 // LOAD PROFILE
@@ -465,6 +685,7 @@ function updateProfileDisplay(user) {
         user.rating || 0,
         user.totalReviews || 0
     );
+    renderSkillOverview(user);
 
 }
 
@@ -1142,6 +1363,26 @@ async function saveProfile() {
             ? editBio.value.trim()
             : "";
 
+const yearsExperienceInput = document.getElementById("yearsExperience");
+const availabilityInput = document.getElementById("availability");
+const preferencesInput = document.getElementById("matchingPreferences");
+
+const yearsExperience = Number(yearsExperienceInput?.value ?? 0);
+
+const skillLevels = {};
+document.querySelectorAll("#skillLevelsContainer select[data-skill]")
+    .forEach(select => {
+        skillLevels[select.dataset.skill] = Number(select.value);
+    });
+
+const availability = parseCommaSeparatedValues(
+    availabilityInput?.value || ""
+);
+
+const matchingPreferences = parseCommaSeparatedValues(
+    preferencesInput?.value || ""
+);
+
 
     // ======================================================
     // VALIDATION
@@ -1165,6 +1406,16 @@ async function saveProfile() {
 
     }
 
+
+if (
+    !Number.isInteger(yearsExperience) ||
+    yearsExperience < 0 ||
+    yearsExperience > 80
+) {
+    alert("Years of experience must be a whole number between 0 and 80.");
+    yearsExperienceInput?.focus();
+    return;
+}
 
     try {
 
@@ -1201,12 +1452,15 @@ async function saveProfile() {
 
                     },
 
-                    body:
-                        JSON.stringify({
-                            name,
-                            location,
-                            bio
-                        })
+                   body: JSON.stringify({
+    name,
+    location,
+    bio,
+    skillLevels,
+    yearsExperience,
+    availability,
+    matchingPreferences
+})
 
                 }
             );
@@ -1405,7 +1659,7 @@ document.addEventListener(
         // LOAD FRESH DATA IN BACKGROUND
         // ==================================================
 
-        loadProfile();
-
+       loadProfile();
+loadSkillVerifications();
     }
 );

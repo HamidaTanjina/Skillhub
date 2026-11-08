@@ -117,8 +117,12 @@
                 </span>
 
             </li>
-
-
+  <li onclick="location.href='sessions.html'">
+                    <i class="fa-solid fa-calendar-days"></i>
+                    <span>
+                    My Sessions
+                </span>
+               </li>
             <!-- Chat -->
 
             <li onclick="location.href='chat.html'">
@@ -145,17 +149,7 @@
             </li>
 
 
-            <!-- Logout -->
-
-            <li id="logoutBtn">
-
-                <i class="fa-solid fa-right-from-bracket"></i>
-
-                <span>
-                    Logout
-                </span>
-
-            </li>
+           
 
         </ul>
 
@@ -419,14 +413,11 @@
              DYNAMIC REQUEST CONTAINER
         ========================================================== -->
 
-        <section id="requestContainer">
+       
+<section id="requestContainer"></section>
 
-            <!--
-                Requests will be generated dynamically
-                by request.js
-            -->
 
-        </section>
+
 
 
 
@@ -506,6 +497,43 @@
 
 
 
+       
+<!-- Category-specific ratings for weighted matching -->
+<div class="review-category-ratings" style="display:grid;gap:12px;margin:12px 0;">
+
+    <label for="reviewClarity">
+        Clarity
+        <select id="reviewClarity" name="clarity" required>
+            <option value="">Select a rating</option>
+            <option value="1">1 - Needs Improvement</option>
+            <option value="2">2 - Good</option>
+            <option value="3">3 - Excellent</option>
+        </select>
+    </label>
+
+    <label for="reviewExpertise">
+        Expertise
+        <select id="reviewExpertise" name="expertise" required>
+            <option value="">Select a rating</option>
+            <option value="1">1 - Needs Improvement</option>
+            <option value="2">2 - Good</option>
+            <option value="3">3 - Excellent</option>
+        </select>
+    </label>
+
+    <label for="reviewPunctuality">
+        Punctuality
+        <select id="reviewPunctuality" name="punctuality" required>
+            <option value="">Select a rating</option>
+            <option value="1">1 - Needs Improvement</option>
+            <option value="2">2 - Good</option>
+            <option value="3">3 - Excellent</option>
+        </select>
+    </label>
+
+</div>
+
+
         <!-- =====================================================
              REVIEW COMMENT
         ====================================================== -->
@@ -573,6 +601,109 @@
 
 </div>
 
+
+<!-- SCHEDULE SESSION MODAL -->
+<div id="scheduleSessionModal" class="schedule-modal" style="display: none;">
+    <div class="schedule-modal-overlay" onclick="closeScheduleSessionModal()"></div>
+
+    <section
+        class="schedule-modal-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="scheduleSessionTitle"
+    >
+        <div class="schedule-modal-header">
+            <div class="schedule-modal-icon">
+                <i class="fa-regular fa-calendar-plus"></i>
+            </div>
+
+            <button
+                type="button"
+                class="schedule-modal-close"
+                onclick="closeScheduleSessionModal()"
+                aria-label="Close schedule form"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div>
+                <h2 id="scheduleSessionTitle">Schedule a Session</h2>
+                <p>Plan your next skill exchange with your partner.</p>
+            </div>
+        </div>
+
+        <form id="scheduleSessionForm">
+            <div class="schedule-form-body">
+                <div class="schedule-field">
+                    <label for="sessionTitle">Session title <span>*</span></label>
+                    <input
+                        type="text"
+                        id="sessionTitle"
+                        name="title"
+                        maxlength="100"
+                        placeholder="e.g. JavaScript learning session"
+                        required
+                    >
+                </div>
+
+                <div class="schedule-field">
+                    <label for="sessionDescription">Description <span class="optional">(Optional)</span></label>
+                    <textarea
+                        id="sessionDescription"
+                        name="description"
+                        rows="3"
+                        maxlength="1000"
+                        placeholder="What would you like to learn or practise?"
+                    ></textarea>
+                </div>
+
+                <div class="schedule-datetime-grid">
+                    <div class="schedule-field">
+                        <label for="sessionStart">Start date and time <span>*</span></label>
+                        <input
+                            type="datetime-local"
+                            id="sessionStart"
+                            name="startTime"
+                            required
+                        >
+                    </div>
+
+                    <div class="schedule-field">
+                        <label for="sessionEnd">End date and time <span>*</span></label>
+                        <input
+                            type="datetime-local"
+                            id="sessionEnd"
+                            name="endTime"
+                            required
+                        >
+                    </div>
+                </div>
+
+                <p class="schedule-form-hint">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Sessions must start in the future and last no longer than 8 hours.
+                </p>
+
+                <p id="scheduleSessionError" class="schedule-form-error" role="alert"></p>
+            </div>
+
+            <div class="schedule-modal-actions">
+                <button
+                    type="button"
+                    class="schedule-cancel-btn"
+                    onclick="closeScheduleSessionModal()"
+                >
+                    Cancel
+                </button>
+
+                <button type="submit" id="submitScheduleSession" class="schedule-submit-btn">
+                    <i class="fa-regular fa-calendar-check"></i>
+                    Schedule Session
+                </button>
+            </div>
+        </form>
+    </section>
+</div>
 
 
 <!-- =============================================================

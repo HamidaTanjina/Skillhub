@@ -759,145 +759,50 @@ if (learnInputEl) {
 // Save Skills
 // ======================================================
 
-const saveSkillsBtn =
-    document.getElementById(
-        "saveSkillsBtn"
-    );
-
+const saveSkillsBtn = document.getElementById("saveSkillsBtn");
 
 if (saveSkillsBtn) {
+    saveSkillsBtn.addEventListener("click", async () => {
+        try {
+            saveSkillsBtn.disabled = true;
+            saveSkillsBtn.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Saving...
+            `;
 
-    saveSkillsBtn.addEventListener(
-        "click",
-        async () => {
+            const response = await fetch(`${API_BASE_URL}/user/skills`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    teachSkills,
+                    learnSkills
+                })
+            });
 
-            const category =
-                document.getElementById(
-                    "teachCategory"
-                )?.value || "";
+            const data = await response.json().catch(() => ({}));
 
-
-            const learnCategory =
-                document.getElementById(
-                    "learnCategory"
-                )?.value || "";
-
-
-            if (
-                !category ||
-                !learnCategory
-            ) {
-
-                alert(
-                    "Please select both categories."
+            if (!response.ok) {
+                throw new Error(
+                    data.message || "Failed to save skills."
                 );
-
-                return;
-
             }
 
+            alert("Skills updated successfully!");
+            window.location.href = "dashboard.html";
 
-            try {
+        } catch (error) {
+            console.error("Save error:", error);
+            alert(error.message || "Unable to save skills.");
 
-                saveSkillsBtn.disabled =
-                    true;
-
-
-                saveSkillsBtn.innerHTML = `
-
-                    <i class="fa-solid fa-spinner fa-spin"></i>
-
-                    Saving...
-
-                `;
-
-
-                const response =
-                    await fetch(
-                        `${API_BASE_URL}/user/skills`,
-                        {
-                            method: "PUT",
-
-                            headers: {
-                                "Content-Type":
-                                    "application/json",
-
-                                Authorization:
-                                    `Bearer ${token}`
-                            },
-
-                            body: JSON.stringify({
-
-                                category,
-
-                                learnCategory,
-
-                                teachSkills,
-
-                                learnSkills
-
-                            })
-
-                        }
-                    );
-
-
-                if (!response.ok) {
-
-                    const errData =
-                        await response.json();
-
-
-                    throw new Error(
-                        errData.message ||
-                        "Failed to save skills."
-                    );
-
-                }
-
-
-                alert(
-                    "Skills updated successfully!"
-                );
-
-
-                window.location.href =
-                    "dashboard.html";
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "Save error:",
-                    error
-                );
-
-
-                alert(
-                    error.message ||
-                    "Unable to save skills."
-                );
-
-            }
-
-            finally {
-
-                saveSkillsBtn.disabled =
-                    false;
-
-
-                saveSkillsBtn.innerHTML = `
-
-                    <i class="fa-solid fa-floppy-disk"></i>
-
-                    Save Skills
-
-                `;
-
-            }
-
+        } finally {
+            saveSkillsBtn.disabled = false;
+            saveSkillsBtn.innerHTML = `
+                <i class="fa-solid fa-floppy-disk"></i>
+                Save Skills
+            `;
         }
-    );
-
+    });
 }

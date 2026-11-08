@@ -1,0 +1,191 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Sessions | SkillHub</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="theme.css">
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="sessions.css">
+
+    <script src="theme.js" defer></script>
+</head>
+<body>
+<div class="dashboard">
+
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>SkillHub</span>
+        </div>
+
+        <ul>
+            <li onclick="location.href='dashboard.html'">
+                <i class="fa-solid fa-house"></i><span>Dashboard</span>
+            </li>
+            <li onclick="location.href='browse-skills.html'">
+                <i class="fa-solid fa-book-open"></i><span>Browse Skills</span>
+            </li>
+            <li onclick="location.href='request.html'">
+                <i class="fa-solid fa-handshake"></i><span>Requests</span>
+            </li>
+            <li onclick="location.href='chat.html'">
+                <i class="fa-solid fa-comments"></i><span>Chat</span>
+            </li>
+            <li class="active" aria-current="page">
+                <i class="fa-solid fa-calendar-days"></i><span>My Sessions</span>
+            </li>
+            <li onclick="location.href='profile.html'">
+                <i class="fa-solid fa-user"></i><span>Profile</span>
+            </li>
+        </ul>
+    </aside>
+
+    <main class="main sessions-main">
+        <section class="sessions-page">
+
+            <div class="sessions-page-heading">
+                <div class="heading-copy">
+                    <span class="sessions-eyebrow">SKILLHUB WORKSPACE</span>
+                    <h1>My Sessions</h1>
+                    <p>Manage your skill exchange meetings and learning schedule.</p>
+                </div>
+
+                <div class="sessions-heading-actions">
+                    <button type="button" id="themeToggle"
+                        class="sessions-icon-btn" aria-label="Toggle theme"
+                        title="Toggle theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+
+                    <button type="button" id="refreshSessionsBtn"
+                        class="refresh-sessions-btn">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+            </div>
+
+            <section class="sessions-summary" aria-label="Session summary">
+                <article class="summary-card">
+                    <div class="summary-icon upcoming-icon">
+                        <i class="fa-regular fa-calendar-check"></i>
+                    </div>
+                    <div class="summary-info">
+                        <p>Upcoming sessions</p>
+                        <h2 id="upcomingCount">0</h2>
+                    </div>
+                </article>
+
+                <article class="summary-card">
+                    <div class="summary-icon past-icon">
+                        <i class="fa-solid fa-check-double"></i>
+                    </div>
+                    <div class="summary-info">
+                        <p>Past sessions</p>
+                        <h2 id="pastCount">0</h2>
+                    </div>
+                </article>
+
+                <article class="summary-card">
+                    <div class="summary-icon cancelled-icon">
+                        <i class="fa-regular fa-calendar-xmark"></i>
+                    </div>
+                    <div class="summary-info">
+                        <p>Cancelled sessions</p>
+                        <h2 id="cancelledCount">0</h2>
+                    </div>
+                </article>
+            </section>
+
+            <section class="sessions-content">
+                <div class="sessions-section-heading">
+                    <div>
+                        <h2>Session schedule</h2>
+                        <p>View session times, partners, and booking status.</p>
+                    </div>
+                    <span id="sessionResultCount" class="session-result-count">
+                        0 sessions
+                    </span>
+                </div>
+
+                <div class="sessions-tabs" role="tablist" aria-label="Filter sessions">
+                    <button type="button" class="session-tab active"
+                        data-filter="upcoming" role="tab" aria-selected="true">
+                        <i class="fa-regular fa-calendar"></i>
+                        Upcoming
+                    </button>
+
+                    <button type="button" class="session-tab"
+                        data-filter="past" role="tab" aria-selected="false">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        Past
+                    </button>
+
+                    <button type="button" class="session-tab"
+                        data-filter="cancelled" role="tab" aria-selected="false">
+                        <i class="fa-solid fa-ban"></i>
+                        Cancelled
+                    </button>
+                </div>
+
+                <div id="sessionsContainer" aria-live="polite">
+                    <div class="sessions-empty">
+                        <i class="fa-regular fa-calendar"></i>
+                        <p>Loading your sessions...</p>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="sessions-footer">
+                <span><i class="fa-solid fa-graduation-cap"></i> SkillHub</span>
+                <span>Learn together. Grow together.</span>
+            </footer>
+        </section>
+    </main>
+</div>
+
+<script>
+    // Standalone logout handler (header.js is no longer needed here).
+    (() => {
+        const logoutButton = document.getElementById("logoutBtn");
+
+        async function logout() {
+            if (!confirm("Are you sure you want to logout?")) return;
+
+            const token = localStorage.getItem("token");
+
+            try {
+                if (token) {
+                    await fetch("http://localhost:5000/api/auth/logout", {
+                        method: "POST",
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                }
+            } catch (error) {
+                console.warn("Logout request failed:", error);
+            }
+
+            localStorage.removeItem("token");
+            localStorage.removeItem("skillhubUser");
+            window.location.href = "index.html";
+        }
+
+        if (logoutButton) {
+            logoutButton.addEventListener("click", logout);
+            logoutButton.addEventListener("keydown", event => {
+                if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    logout();
+                }
+            });
+        }
+    })();
+</script>
+
+<script src="sessions.js"></script>
+</body>
+</html>

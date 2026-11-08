@@ -55,25 +55,46 @@ exports.registerUser = async (req, res) => {
     }
 };
 
+
+
 exports.loginUser = async (req, res) => {
     try {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return res.status(400).json({ message: "Email and password are required." });
+            return res.status(400).json({
+                message: "Email and password are required."
+            });
         }
 
-        const user = await User.findOne({ email: email.toLowerCase().trim() });
+        const user = await User.findOne({
+            email: email.toLowerCase().trim()
+        });
+
         if (!user) {
-            return res.status(400).json({ message: "User not found" });
+            return res.status(400).json({
+                message: "User not found"
+            });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
+
         if (!isMatch) {
-            return res.status(400).json({ message: "Wrong password" });
+            return res.status(400).json({
+                message: "Wrong password"
+            });
         }
 
-        await User.findByIdAndUpdate(user._id, { $set: { isOnline: true } });
+        // Reject banned accounts before updating their online status.
+        if (user.isBanned) {
+            return res.status(403).json({
+                message: "Your account has been suspended. Please contact support."
+            });
+        }
+
+        await User.findByIdAndUpdate(user._id, {
+            $set: { isOnline: true }
+        });
 
         const token = jwt.sign(
             { id: user._id },
@@ -81,7 +102,7 @@ exports.loginUser = async (req, res) => {
             { expiresIn: "7d" }
         );
 
-        res.json({
+        return res.json({
             message: "Login Successful",
             token,
             user: {
@@ -93,7 +114,10 @@ exports.loginUser = async (req, res) => {
 
     } catch (error) {
         console.error("Login Error:", error);
-        res.status(500).json({ message: error.message });
+
+        return res.status(500).json({
+            message: error.message
+        });
     }
 };
 

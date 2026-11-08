@@ -2,8 +2,7 @@ const token =
     localStorage.getItem("token");
 
 const API_BASE_URL =
-    "https://skillhub-backend-cths.onrender.com/api";
-
+   "https://skillhub-backend-cths.onrender.com/api";
 
 // ======================================================
 // AUTHENTICATION
@@ -347,7 +346,11 @@ async function loadDashboardData(
                 renderRecentActivity(
                     swaps
                 );
+// --------------------------------------
+// Learning Progress
+// --------------------------------------
 
+await loadLearningProgress(swaps);
             }
 
         } catch (error) {
@@ -957,7 +960,7 @@ async function loadSuggestedMatches(
 
         const response =
             await fetch(
-                `${API_BASE_URL}/user/all`,
+                `${API_BASE_URL}/user/recommendations`,
                 {
                     method: "GET",
 
@@ -985,169 +988,15 @@ async function loadSuggestedMatches(
         }
 
 
-        const allUsers =
-            await response.json();
+        const selectedUsers = await response.json();
 
-
-        // ==================================================
-        // CURRENT USER SKILLS
-        // ==================================================
-
-        const myTeachSkills =
-            normalizeSkills(
-                currentUser.teachSkills
-            );
-
-
-        const myLearnSkills =
-            normalizeSkills(
-                currentUser.learnSkills
-            );
-
-
-        // ==================================================
-        // EXCLUDE CURRENT USER
-        // ==================================================
-
-        const otherUsers =
-            allUsers.filter(
-                user =>
-                    String(user._id) !==
-                    String(currentUser._id)
-            );
-
-
-        if (otherUsers.length === 0) {
-
+        if (!selectedUsers.length) {
             container.innerHTML = `
-                <p style="
-                    color: var(--text-muted);
-                    padding: 10px;
-                ">
-                    No matches found yet.
-                </p>
-            `;
-
+                <p style="color: var(--text-muted); padding: 10px;">
+                    No mutual skill matches found yet.
+                </p>`;
             return;
-
         }
-
-
-        // ==================================================
-        // CALCULATE MATCH SCORE
-        // ==================================================
-
-        const scoredUsers =
-            otherUsers.map(
-                user => {
-
-                    const theirTeachSkills =
-                        normalizeSkills(
-                            user.teachSkills
-                        );
-
-
-                    const theirLearnSkills =
-                        normalizeSkills(
-                            user.learnSkills
-                        );
-
-
-                    const teachMatch =
-                        getCommonSkills(
-                            myLearnSkills,
-                            theirTeachSkills
-                        );
-
-
-                    const learnMatch =
-                        getCommonSkills(
-                            myTeachSkills,
-                            theirLearnSkills
-                        );
-
-
-                    let score = 0;
-
-
-                    score +=
-                        teachMatch.length * 2;
-
-
-                    score +=
-                        learnMatch.length * 2;
-
-
-                    if (
-                        teachMatch.length > 0 &&
-                        learnMatch.length > 0
-                    ) {
-
-                        score += 3;
-
-                    }
-
-
-                    const rating =
-                        Number(user.rating) || 0;
-
-
-                    score +=
-                        rating * 0.1;
-
-
-                    return {
-                        user,
-                        score,
-                        teachMatch,
-                        learnMatch
-                    };
-
-                }
-            );
-
-
-        // ==================================================
-        // SORT
-        // ==================================================
-
-        scoredUsers.sort(
-            (a, b) =>
-                b.score - a.score
-        );
-
-
-        // ==================================================
-        // ACTUAL SKILL MATCHES
-        // ==================================================
-
-        const matchedUsers =
-            scoredUsers.filter(
-                item =>
-                    item.teachMatch.length > 0 &&
-                    item.learnMatch.length > 0
-            );
-
-
-        // ==================================================
-        // SELECT USERS
-        // ==================================================
-
-     const selectedUsers =
-    matchedUsers.slice(0, 3);
-    if (selectedUsers.length === 0) {
-
-    container.innerHTML = `
-        <p style="
-            color: var(--text-muted);
-            padding: 10px;
-        ">
-            No mutual skill matches found yet.
-        </p>
-    `;
-
-    return;
-}
 
         // ==================================================
         // RENDER
@@ -1364,7 +1213,7 @@ async function loadSuggestedMatches(
                                 color:#60a5fa;
                             ">
 
-                                ${matchLabel}
+                                ${matchLabel} · ${Number(item.score || 0).toFixed(0)}% match
 
                             </div>
 
@@ -1740,4 +1589,398 @@ function openRequests(
     window.location.href =
         `request.html?tab=${tab}`;
 
+}
+
+/* ======================================================
+   LEARNING PROGRESS — DASHBOARD
+====================================================== */
+
+async function loadLearningProgress(swaps) {
+    const container = document.getElementById(
+        "learningProgressContainer"
+    );
+
+    if (!container) return;
+
+    const acceptedSwaps = (Array.isArray(swaps) ? swaps : [])
+        .filter(swap =>
+            String(swap.status || "").trim().toLowerCase() === "accepted"
+        );
+
+    if (!acceptedSwaps.length) {
+        container.innerHTML = `
+            <p class="learning-progress-empty">
+                No accepted skill exchanges yet. Accept a request
+                to start tracking your learning goals.
+            </p>`;
+        return;
+    }
+
+    container.innerHTML = `
+        <p class="learning-progress-empty">
+            Loading your learning progress...
+        </p>`;
+
+    const results = await Promise.allSettled(
+        acceptedSwaps.map(async swap => {
+            const response = await fetch(
+                `${API_BASE_URL}/swaps/${encodeURIComponent(swap._id)}/progress`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(`Could not load progress for swap ${swap._id}`);
+            }
+
+            const data = await response.json();
+
+            return {
+                swap,
+                progress: data.progress || data
+            };
+        })
+    );
+
+    const cards = results
+        .filter(result => result.status === "fulfilled")
+        .map(result => result.value);
+
+    if (!cards.length) {
+        container.innerHTML = `
+            <p class="learning-progress-empty">
+                Progress could not be loaded. Please refresh and try again.
+            </p>`;
+        return;
+    }
+
+    container.innerHTML = cards.map(({ swap, progress }) => {
+        const currentUser = getCachedUser() || {};
+        const currentUserId = String(
+            currentUser._id || currentUser.id || ""
+        );
+
+        const senderId = String(
+            swap.sender?._id || swap.sender || ""
+        );
+
+        const receiverId = String(
+            swap.receiver?._id || swap.receiver || ""
+        );
+
+        const partner =
+            senderId === currentUserId
+                ? swap.receiver
+                : swap.sender;
+
+        const partnerName =
+            typeof partner === "object"
+                ? partner?.name || "SkillHub partner"
+                : "SkillHub partner";
+
+        const goals = Array.isArray(progress.goals)
+            ? progress.goals
+            : [];
+
+        const logs = Array.isArray(progress.sessionLogs)
+            ? progress.sessionLogs
+            : [];
+
+        const percentage = Math.max(
+            0,
+            Math.min(100, Number(progress.progressPercentage) || 0)
+        );
+
+        const completedGoals = goals.filter(goal => goal.completed).length;
+        const completedLogs = logs.filter(log => log.completed).length;
+
+        return `
+            <article class="learning-progress-item"
+                     data-progress-swap="${escapeHtml(swap._id)}">
+
+                <div class="learning-progress-heading">
+                    <div>
+                        <h3>${escapeHtml(swap.teachSkill || "Skill exchange")}
+                            ↔ ${escapeHtml(swap.learnSkill || "Learning")}</h3>
+                        <p>Learning with ${escapeHtml(partnerName)}</p>
+                    </div>
+
+                    <strong>${percentage}%</strong>
+                </div>
+
+                <div class="learning-progress-track">
+                    <div class="learning-progress-fill"
+                         style="width:${percentage}%"></div>
+                </div>
+
+                <p class="learning-progress-summary">
+                    Goals completed: ${completedGoals}/${goals.length}
+                    <span>·</span>
+                    Sessions completed: ${completedLogs}/${logs.length}
+                </p>
+
+                <div class="learning-progress-subsection">
+                    <h4>Learning goals</h4>
+
+                    ${goals.length ? goals.map(goal => `
+                        <label class="learning-progress-goal">
+                            <input type="checkbox"
+                                   data-goal-toggle="${escapeHtml(goal._id)}"
+                                   ${goal.completed ? "checked" : ""}>
+                            <span>${escapeHtml(goal.title)}</span>
+                        </label>
+                        ${goal.description ? `
+                            <p class="learning-progress-note">
+                                ${escapeHtml(goal.description)}
+                            </p>` : ""}
+                    `).join("") : `
+                        <p class="learning-progress-empty">
+                            No goals added yet.
+                        </p>`}
+
+                    <form data-goal-form="${escapeHtml(swap._id)}"
+                          class="learning-progress-form">
+                        <input name="title"
+                               type="text"
+                               maxlength="150"
+                               placeholder="New learning goal"
+                               required>
+                        <input name="description"
+                               type="text"
+                               maxlength="500"
+                               placeholder="Description (optional)">
+                        <button type="submit">Add goal</button>
+                    </form>
+                </div>
+
+                <div class="learning-progress-subsection">
+                    <h4>Session log</h4>
+
+                    ${logs.length ? logs.map(log => `
+                        <div class="learning-progress-log">
+                            <label>
+                                <input type="checkbox"
+                                       data-log-toggle="${escapeHtml(log._id)}"
+                                       ${log.completed ? "checked" : ""}>
+                                <strong>${escapeHtml(log.title)}</strong>
+                            </label>
+                            ${log.notes ? `
+                                <p class="learning-progress-note">
+                                    ${escapeHtml(log.notes)}
+                                </p>` : ""}
+                        </div>
+                    `).join("") : `
+                        <p class="learning-progress-empty">
+                            No practice sessions logged yet.
+                        </p>`}
+
+                    <form data-log-form="${escapeHtml(swap._id)}"
+                          class="learning-progress-form">
+                        <input name="title"
+                               type="text"
+                               maxlength="150"
+                               placeholder="Session title"
+                               required>
+                        <input name="notes"
+                               type="text"
+                               maxlength="1000"
+                               placeholder="What did you practise?">
+                        <button type="submit">Add log</button>
+                    </form>
+                </div>
+            </article>`;
+    }).join("");
+
+    // Show errors for individual swaps without hiding working cards.
+    const failedCount = results.filter(
+        result => result.status === "rejected"
+    ).length;
+
+    if (failedCount) {
+        container.insertAdjacentHTML(
+            "beforeend",
+            `<p class="learning-progress-empty">
+                Progress could not be loaded for ${failedCount}
+                exchange(s). Check the browser console for details.
+            </p>`
+        );
+    }
+
+    setupLearningProgressActions();
+}
+
+
+/* ======================================================
+   LEARNING PROGRESS — FORM AND CHECKBOX ACTIONS
+====================================================== */
+
+function setupLearningProgressActions() {
+    const container = document.getElementById(
+        "learningProgressContainer"
+    );
+
+    if (!container || container.dataset.actionsReady === "true") {
+        return;
+    }
+
+    container.dataset.actionsReady = "true";
+
+    container.addEventListener("submit", async event => {
+        const form = event.target.closest(
+            "[data-goal-form], [data-log-form]"
+        );
+
+        if (!form) return;
+
+        event.preventDefault();
+
+        const swapId =
+            form.dataset.goalForm || form.dataset.logForm;
+
+        const isGoal = form.hasAttribute("data-goal-form");
+        const submitButton = form.querySelector(
+            'button[type="submit"]'
+        );
+
+        const formData = new FormData(form);
+
+        const body = isGoal
+            ? {
+                title: String(formData.get("title") || "").trim(),
+                description: String(formData.get("description") || "").trim()
+            }
+            : {
+                title: String(formData.get("title") || "").trim(),
+                notes: String(formData.get("notes") || "").trim(),
+                completed: false
+            };
+
+        if (!body.title) return;
+
+        if (submitButton) submitButton.disabled = true;
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/swaps/${encodeURIComponent(swapId)}/progress/${isGoal ? "goals" : "session-logs"}`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify(body)
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || data.error || "Unable to save."
+                );
+            }
+
+            await refreshLearningProgressCard(swapId);
+        } catch (error) {
+            alert(error.message || "Unable to save your changes.");
+        } finally {
+            if (submitButton) submitButton.disabled = false;
+        }
+    });
+
+    container.addEventListener("change", async event => {
+        const checkbox = event.target;
+
+        const goalId = checkbox.dataset.goalToggle;
+        const logId = checkbox.dataset.logToggle;
+
+        if (!goalId && !logId) return;
+
+        const card = checkbox.closest("[data-progress-swap]");
+        if (!card) return;
+
+        const swapId = card.dataset.progressSwap;
+        const isGoal = Boolean(goalId);
+        const itemId = goalId || logId;
+        const completed = checkbox.checked;
+
+        checkbox.disabled = true;
+
+        try {
+            const response = await fetch(
+                `${API_BASE_URL}/swaps/${encodeURIComponent(swapId)}/progress/${isGoal ? "goals" : "session-logs"}/${encodeURIComponent(itemId)}`,
+                {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ completed })
+                }
+            );
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(
+                    data.message || data.error || "Unable to update."
+                );
+            }
+
+            await refreshLearningProgressCard(swapId);
+        } catch (error) {
+            checkbox.checked = !completed;
+            alert(error.message || "Unable to update progress.");
+        } finally {
+            checkbox.disabled = false;
+        }
+    });
+}
+
+
+/* ======================================================
+   REFRESH AFTER A GOAL OR LOG CHANGE
+====================================================== */
+
+async function refreshLearningProgressCard(swapId) {
+    const response = await fetch(
+        `${API_BASE_URL}/swaps/${encodeURIComponent(swapId)}/progress`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error("Saved, but progress could not be refreshed.");
+    }
+
+    const updatedProgress = await response.json();
+    const container = document.getElementById(
+        "learningProgressContainer"
+    );
+
+    if (!container) return;
+
+    // Reload accepted swaps and render the latest saved values.
+    const swapsResponse = await fetch(
+        `${API_BASE_URL}/swaps/my-requests`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        }
+    );
+
+    if (!swapsResponse.ok) {
+        throw new Error("Could not reload your skill exchanges.");
+    }
+
+    const swaps = await swapsResponse.json();
+
+    await loadLearningProgress(swaps);
 }

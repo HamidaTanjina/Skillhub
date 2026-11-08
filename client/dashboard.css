@@ -1,7 +1,7 @@
-
-
 /* ==========================================================================
+
    1. REUSABLE DASHBOARD CARD
+
    ========================================================================== */
 
 .card {
@@ -13,15 +13,23 @@
     border-radius: 18px;
 
     transition:
+
         transform 0.3s ease,
+
         border-color 0.3s ease,
+
         box-shadow 0.3s ease,
+
         background-color 0.3s ease;
+
 }
 
 .profile-modal {
+
     display: none;
+
 }
+
 .card:hover {
 
     transform: translateY(-4px);
@@ -29,13 +37,17 @@
     border-color: var(--accent-blue);
 
     box-shadow:
+
         0 20px 45px rgba(0, 0, 0, 0.18),
+
         0 8px 20px rgba(59, 130, 246, 0.10);
+
 }
 
-
 /* ==========================================================================
+
    2. DASHBOARD BUTTON
+
    ========================================================================== */
 
 .btn {
@@ -57,10 +69,15 @@
     border-radius: 12px;
 
     background:
+
         linear-gradient(
+
             135deg,
+
             var(--accent-purple),
+
             var(--accent-blue)
+
         );
 
     color: #ffffff;
@@ -70,9 +87,13 @@
     font-weight: 600;
 
     transition:
+
         transform 0.25s ease,
+
         box-shadow 0.25s ease,
+
         opacity 0.25s ease;
+
 }
 
 .btn:hover {
@@ -80,12 +101,15 @@
     transform: translateY(-2px);
 
     box-shadow:
+
         0 12px 25px rgba(59, 130, 246, 0.28);
+
 }
 
 .btn:active {
 
     transform: translateY(0);
+
 }
 
 .btn:disabled {
@@ -97,31 +121,37 @@
     transform: none;
 
     box-shadow: none;
+
 }
 
-
 /* ==========================================================================
+
    3. WELCOME SECTION
+
    ========================================================================== */
 
 .welcome {
 
     margin-bottom: 32px;
+
 }
 
 .welcome h1 {
 
     font-size:
+
         clamp(2rem, 2vw, 2.4rem);
 
     margin-bottom: 8px;
 
     color:
+
         var(--text-main);
 
     font-weight: 700;
 
     line-height: 1.2;
+
 }
 
 .welcome p {
@@ -129,16 +159,19 @@
     max-width: 700px;
 
     color:
+
         var(--text-muted);
 
     font-size: 15px;
 
     line-height: 1.7;
+
 }
 
-
 /* ==========================================================================
+
    4. OVERVIEW SECTION
+
    ========================================================================== */
 
 .overview {
@@ -146,1789 +179,2411 @@
     display: grid;
 
     grid-template-columns:
+
         repeat(auto-fit, minmax(260px, 1fr));
 
     gap: 22px;
 
     margin-bottom: 34px;
+
 }
 
-
 /* ==========================================================================
+
    5. OVERVIEW CARD
+
    ========================================================================== */
 
 .overview-card {
 
     background:
+
         var(--bg-card);
 
     border:
+
         1px solid var(--border-color);
 
     border-radius:
+
         18px;
 
     padding:
+
         26px;
 
     display:
+
         flex;
 
     justify-content:
+
         space-between;
 
     align-items:
+
         center;
 
     gap:
+
         20px;
 
     cursor:
+
         pointer;
 
     transition:
+
         transform 0.3s ease,
+
         border-color 0.3s ease,
+
         box-shadow 0.3s ease,
+
         background-color 0.3s ease;
+
 }
 
 .overview-card:hover {
 
     transform:
+
         translateY(-6px);
 
     border-color:
+
         var(--accent-blue);
 
     box-shadow:
+
         0 20px 45px rgba(0, 0, 0, 0.18),
+
         0 8px 20px rgba(59, 130, 246, 0.10);
+
 }
 
 .overview-card h2 {
 
     font-size:
+
         36px;
 
     font-weight:
+
         700;
 
     margin-bottom:
+
         6px;
 
     color:
+
         var(--text-main);
+
 }
 
 .overview-card p {
 
     color:
+
         var(--text-muted);
 
     font-size:
+
         14px;
+
 }
 
 .overview-card i {
 
     width:
+
         64px;
 
     height:
+
         64px;
 
     display:
+
         flex;
 
     justify-content:
+
         center;
 
     align-items:
+
         center;
 
     border-radius:
+
         18px;
 
     color:
+
         #ffffff;
 
     font-size:
+
         26px;
 
     flex-shrink:
+
         0;
 
     transition:
+
         transform 0.3s ease,
+
         filter 0.3s ease;
+
 }
 
 .overview-card:hover i {
 
     transform:
+
         rotate(8deg) scale(1.08);
 
     filter:
+
         brightness(1.08);
+
 }
 
-
 /* ==========================================================================
+
    6. OVERVIEW CARD COLORS
+
    ========================================================================== */
 
 .blue i {
 
     background:
+
         linear-gradient(
+
             135deg,
+
             #2563eb,
+
             #60a5fa
+
         );
+
 }
 
 .orange i {
 
     background:
+
         linear-gradient(
+
             135deg,
+
             #f59e0b,
+
             #fb923c
+
         );
+
 }
 
 .green i {
 
     background:
+
         linear-gradient(
+
             135deg,
+
             #10b981,
+
             #34d399
+
         );
+
 }
 
-
 /* ==========================================================================
+
    7. DASHBOARD GRID
+
    ========================================================================== */
 
 .dashboard-grid {
 
     display:
+
         grid;
 
     grid-template-columns:
+
         340px minmax(0, 1fr);
 
     gap:
+
         24px;
 
     align-items:
+
         start;
+
 }
 
-
 /* ==========================================================================
+
    8. PROFILE CARD
+
    ========================================================================== */
 
 .profile-card {
 
     background:
+
         var(--bg-card);
 
     border:
+
         1px solid var(--border-color);
 
     border-radius:
+
         18px;
 
     padding:
+
         34px;
 
     text-align:
+
         center;
 
     transition:
+
         transform 0.3s ease,
+
         border-color 0.3s ease,
+
         box-shadow 0.3s ease,
+
         background-color 0.3s ease;
+
 }
 
 .profile-card:hover {
 
     border-color:
+
         rgba(59, 130, 246, 0.55);
 
     box-shadow:
+
         0 20px 45px rgba(0, 0, 0, 0.15);
+
 }
 
-
 /* ==========================================================================
+
    9. PROFILE AVATAR
+
    ========================================================================== */
 
 .profile-avatar {
 
     width:
+
         120px;
 
     height:
+
         120px;
 
     margin:
+
         0 auto 20px;
 
     border-radius:
+
         50%;
 
     background:
+
         linear-gradient(
+
             135deg,
+
             var(--accent-purple),
+
             var(--accent-blue)
+
         );
 
     display:
+
         flex;
 
     justify-content:
+
         center;
 
     align-items:
+
         center;
 
     box-shadow:
+
         0 15px 35px rgba(59, 130, 246, 0.25);
 
     position:
+
         relative;
+
 }
 
 .profile-avatar::after {
 
     content:
+
         "";
 
     position:
+
         absolute;
 
     inset:
+
         -4px;
 
     border-radius:
+
         50%;
 
     border:
+
         1px solid rgba(96, 165, 250, 0.25);
 
     pointer-events:
+
         none;
+
 }
 
 .profile-avatar i {
 
     font-size:
+
         62px;
 
     color:
+
         #ffffff;
+
 }
+
 /* Dashboard Profile Initial */
 
 #profileInitial {
 
     font-size:
+
         52px;
 
     font-weight:
+
         700;
 
     color:
+
         #ffffff;
 
     line-height:
+
         1;
 
     text-transform:
+
         uppercase;
 
     user-select:
+
         none;
+
 }
 
 /* ==========================================================================
+
    10. PROFILE CARD TITLE
+
    ========================================================================== */
 
 .profile-card h2 {
 
     font-size:
+
         26px;
 
     margin-bottom:
+
         16px;
 
     color:
+
         var(--text-main);
+
 }
 
-
 /* ==========================================================================
+
    11. PROFILE RATING
+
    ========================================================================== */
 
 .profile-rating {
 
     display:
+
         flex;
 
     justify-content:
+
         center;
 
     align-items:
+
         center;
 
     gap:
+
         6px;
 
     margin-bottom:
+
         24px;
+
 }
 
 .profile-rating i {
 
     color:
+
         #fbbf24;
+
 }
 
 .profile-rating span {
 
     font-weight:
+
         700;
 
     color:
+
         var(--text-main);
+
 }
 
 .profile-rating small {
 
     color:
+
         var(--text-muted);
+
 }
 
-
 /* ==========================================================================
+
    12. PROFILE INFORMATION
+
    ========================================================================== */
 
 .profile-email,
+
 .profile-location {
 
     display:
+
         flex;
 
     justify-content:
+
         center;
 
     align-items:
+
         center;
 
     gap:
+
         8px;
 
     margin-bottom:
+
         12px;
 
     color:
+
         var(--text-muted);
 
     font-size:
+
         14px;
+
 }
 
 .profile-email i,
+
 .profile-location i {
 
     color:
+
         var(--accent-blue);
+
 }
 
 .bio-text {
 
     margin:
+
         24px 0;
 
     color:
+
         var(--text-muted);
 
     line-height:
+
         1.8;
 
     font-size:
+
         14px;
+
 }
 
-
 /* ==========================================================================
+
    13. EDIT BUTTON
+
    ========================================================================== */
 
 .edit-btn {
 
     width:
+
         100%;
 
     margin-top:
+
         10px;
 
     display:
+
         inline-flex;
 
     justify-content:
+
         center;
 
     align-items:
+
         center;
 
     gap:
+
         8px;
 
     border:
+
         none;
 
     cursor:
+
         pointer;
 
     padding:
+
         12px 22px;
 
     border-radius:
+
         12px;
 
     background:
+
         linear-gradient(
+
             135deg,
+
             var(--accent-purple),
+
             var(--accent-blue)
+
         );
 
     color:
+
         #ffffff;
 
     font-size:
+
         15px;
 
     font-weight:
+
         600;
 
     transition:
+
         transform 0.25s ease,
+
         box-shadow 0.25s ease;
+
 }
 
 .edit-btn:hover {
 
     transform:
+
         translateY(-2px);
 
     box-shadow:
+
         0 12px 25px rgba(59, 130, 246, 0.28);
+
 }
 
 .edit-btn:active {
 
     transform:
+
         translateY(0);
+
 }
 
-
 /* ==========================================================================
+
    14. CARD HEADER
+
    ========================================================================== */
 
 .card-header {
 
     display:
+
         flex;
 
     justify-content:
+
         space-between;
 
     align-items:
+
         center;
 
     gap:
+
         16px;
 
     margin-bottom:
+
         24px;
+
 }
 
 .card-header h2 {
 
     font-size:
+
         22px;
 
     font-weight:
+
         700;
 
     color:
+
         var(--text-main);
+
 }
 
-
 /* ==========================================================================
+
    15. SKILLS CARD
+
    ========================================================================== */
 
 .skills-card {
 
     background:
+
         var(--bg-card);
 
     border:
+
         1px solid var(--border-color);
 
     border-radius:
+
         18px;
 
     padding:
+
         32px;
+
 }
 
-
 /* ==========================================================================
+
    16. SKILLS GRID
+
    ========================================================================== */
 
 .skills-grid-container {
 
     display:
+
         grid;
 
     grid-template-columns:
+
         repeat(auto-fit, minmax(250px, 1fr));
 
     gap:
+
         20px;
 
     margin-bottom:
+
         30px;
+
 }
 
-
 /* ==========================================================================
+
    17. SKILL SECTION
+
    ========================================================================== */
 
 .skill-section {
 
     background:
+
         var(--bg-inner);
 
     border:
+
         1px solid var(--border-color);
 
     border-radius:
+
         16px;
 
     padding:
+
         20px;
 
     transition:
+
         border-color 0.3s ease,
+
         background-color 0.3s ease;
+
 }
 
 .skill-section:hover {
 
     border-color:
+
         var(--accent-blue);
+
 }
 
 .skill-section-header {
 
     display:
+
         flex;
 
     justify-content:
+
         space-between;
 
     align-items:
+
         center;
 
     margin-bottom:
+
         18px;
+
 }
 
 .skill-section h4 {
 
     font-size:
+
         13px;
 
     text-transform:
+
         uppercase;
 
     letter-spacing:
+
         1px;
 
     color:
+
         var(--text-main);
+
 }
 
 .skill-section.teach h4,
+
 .skill-section.teach i {
 
     color:
+
         var(--accent-purple);
+
 }
 
 .skill-section.learn h4,
+
 .skill-section.learn i {
 
     color:
+
         #ec4899;
+
 }
 
-
 /* ==========================================================================
+
    18. SKILL TAGS
+
    ========================================================================== */
 
 .skills-list-wrapper {
 
     display:
+
         flex;
 
     flex-wrap:
+
         wrap;
 
     gap:
+
         10px;
+
 }
 
 .skill-tag {
 
     display:
+
         inline-flex;
 
     align-items:
+
         center;
 
     padding:
+
         8px 15px;
 
     border-radius:
+
         999px;
 
     background:
+
         rgba(59, 130, 246, 0.12);
 
     border:
+
         1px solid rgba(59, 130, 246, 0.18);
 
     color:
+
         var(--text-main);
 
     font-size:
+
         13px;
 
     font-weight:
+
         600;
 
     transition:
+
         background-color 0.25s ease,
+
         border-color 0.25s ease,
+
         transform 0.25s ease,
+
         color 0.25s ease;
+
 }
 
 .skill-tag:hover {
 
     background:
+
         var(--accent-blue);
 
     border-color:
+
         var(--accent-blue);
 
     color:
+
         #ffffff;
 
     transform:
+
         translateY(-2px);
+
 }
 
 .skills-loading-text {
 
     color:
+
         var(--text-muted);
 
     font-size:
+
         14px;
+
 }
 
-
 /* ==========================================================================
+
    19. ADD BUTTON
+
    ========================================================================== */
 
 .add-btn {
 
     display:
+
         inline-flex;
 
     justify-content:
+
         center;
 
     align-items:
+
         center;
 
     gap:
+
         8px;
 
     padding:
+
         11px 20px;
 
     border:
+
         none;
 
     border-radius:
+
         12px;
 
     background:
+
         linear-gradient(
+
             135deg,
+
             var(--secondary),
+
             var(--primary)
+
         );
 
     color:
+
         #ffffff;
 
     font-size:
+
         14px;
 
     font-weight:
+
         600;
 
     cursor:
+
         pointer;
 
     box-shadow:
+
         0 8px 18px rgba(59, 130, 246, .20);
 
     transition:
+
         transform .25s ease,
+
         box-shadow .25s ease,
+
         filter .25s ease;
+
 }
 
 .add-btn:hover {
 
     transform:
+
         translateY(-2px);
 
     box-shadow:
+
         0 12px 25px rgba(59, 130, 246, .30);
 
     filter:
+
         brightness(1.08);
+
 }
 
 .add-btn:active {
 
     transform:
+
         translateY(0);
 
     box-shadow:
+
         0 6px 14px rgba(59, 130, 246, .20);
+
 }
 
-
 /* ==========================================================================
+
    20. PROFILE COMPLETION
+
    ========================================================================== */
 
 .completion-box {
 
     margin-top:
+
         28px;
 
     padding-top:
+
         24px;
 
     border-top:
+
         1px solid var(--border-color);
+
 }
 
 .completion-header {
 
     display:
+
         flex;
 
     justify-content:
+
         space-between;
 
     align-items:
+
         center;
 
     gap:
+
         15px;
 
     margin-bottom:
+
         12px;
 
     font-size:
+
         14px;
 
     font-weight:
+
         600;
 
     color:
+
         var(--text-main);
+
 }
 
 .progress {
 
     width:
+
         100%;
 
     height:
+
         10px;
 
     border-radius:
+
         999px;
 
     overflow:
+
         hidden;
 
     background:
+
         var(--bg-inner);
+
 }
 
 .progress-bar {
 
     width:
+
         0%;
 
     height:
+
         100%;
 
     background:
+
         linear-gradient(
+
             90deg,
+
             var(--accent-purple),
+
             var(--accent-blue)
+
         );
 
     border-radius:
+
         inherit;
 
     transition:
+
         width 0.6s ease;
+
 }
 
 .completion-text {
 
     margin-top:
+
         12px;
 
     color:
+
         var(--text-muted);
 
     font-size:
+
         13px;
 
     line-height:
+
         1.7;
+
 }
 
-
 /* ==========================================================================
+
    21. MATCHES CARD
+
    ========================================================================== */
 
 .matches-card {
 
     background:
+
         var(--bg-card);
 
     border:
+
         1px solid var(--border-color);
 
     border-radius:
+
         18px;
 
     padding:
+
         32px;
 
     margin-top:
+
         28px;
+
 }
 
-
 /* ==========================================================================
+
    22. SEE BUTTON
+
    ========================================================================== */
 
 .see-btn {
 
     padding:
+
         11px 18px;
 
     display:
+
         inline-flex;
 
     justify-content:
+
         center;
 
     align-items:
+
         center;
 
     gap:
+
         8px;
 
     border:
+
         none;
 
     cursor:
+
         pointer;
 
     border-radius:
+
         12px;
 
     background:
+
         linear-gradient(
+
             135deg,
+
             var(--accent-purple),
+
             var(--accent-blue)
+
         );
 
     color:
+
         #ffffff;
 
     font-size:
+
         15px;
 
     font-weight:
+
         600;
 
     transition:
+
         transform 0.25s ease,
+
         box-shadow 0.25s ease;
+
 }
 
 .see-btn:hover {
 
     transform:
+
         translateY(-2px);
 
     box-shadow:
+
         0 12px 25px rgba(59, 130, 246, 0.28);
+
 }
 
-
 /* ==========================================================================
+
    23. MATCH CONTAINER
+
    ========================================================================== */
 
 #matchesContainer {
 
     display:
+
         flex;
 
     flex-direction:
+
         column;
 
     gap:
+
         18px;
 
     margin-top:
+
         22px;
+
 }
 
-
 /* ==========================================================================
+
    24. MATCH ITEM
+
    ========================================================================== */
 
 .match-item {
 
     display:
+
         flex;
 
     justify-content:
+
         space-between;
 
     align-items:
+
         center;
 
     gap:
+
         20px;
 
     padding:
+
         18px;
 
     border-radius:
+
         16px;
 
     background:
+
         var(--bg-inner);
 
     border:
+
         1px solid var(--border-color);
 
     transition:
+
         transform 0.25s ease,
+
         border-color 0.25s ease,
+
         box-shadow 0.25s ease,
+
         background-color 0.25s ease;
+
 }
 
 .match-item:hover {
 
     transform:
+
         translateY(-3px);
 
     border-color:
+
         var(--accent-blue);
 
     box-shadow:
+
         0 10px 25px rgba(0, 0, 0, 0.12);
+
 }
 
-
 /* ==========================================================================
+
    25. MATCH PROFILE
+
    ========================================================================== */
 
 .match-profile {
 
     display:
+
         flex;
 
     align-items:
+
         center;
 
     gap:
+
         16px;
 
     min-width:
+
         0;
+
 }
 
 .match-avatar {
 
     width:
+
         58px;
 
     height:
+
         58px;
 
     border-radius:
+
         50%;
 
     background:
+
         linear-gradient(
+
             135deg,
+
             var(--accent-purple),
+
             var(--accent-blue)
+
         );
 
     display:
+
         flex;
 
     justify-content:
+
         center;
 
     align-items:
+
         center;
 
     color:
+
         #ffffff;
 
     font-size:
+
         24px;
 
     flex-shrink:
+
         0;
 
     transition:
+
         transform 0.3s ease,
+
         filter 0.3s ease;
+
 }
 
 .match-item:hover .match-avatar {
 
     transform:
+
         scale(1.08);
 
     filter:
+
         brightness(1.12);
+
 }
 
 .match-info {
 
     min-width:
+
         0;
+
 }
 
 .match-info h3 {
 
     font-size:
+
         17px;
 
     margin-bottom:
+
         4px;
 
     color:
+
         var(--text-main);
+
 }
 
 .match-info p {
 
     color:
+
         var(--text-muted);
 
     font-size:
+
         13px;
+
 }
 
 .match-skills {
 
     display:
+
         flex;
 
     flex-wrap:
+
         wrap;
 
     gap:
+
         8px;
 
     margin-top:
+
         10px;
+
 }
 
 .match-skills span {
 
     padding:
+
         6px 12px;
 
     border-radius:
+
         999px;
 
     background:
+
         rgba(59, 130, 246, 0.12);
 
     border:
+
         1px solid rgba(59, 130, 246, 0.15);
 
     font-size:
+
         12px;
 
     color:
+
         var(--text-main);
+
 }
 
-
 /* ==========================================================================
+
    26. MATCH BUTTON
+
    ========================================================================== */
 
 .match-btn {
 
     min-width:
+
         120px;
 
     flex-shrink:
+
         0;
+
 }
 
-
 /* ==========================================================================
+
    27. ACTIVITY CARD
+
    ========================================================================== */
 
 .activity-card {
 
     background:
+
         var(--bg-card);
 
     border:
+
         1px solid var(--border-color);
 
     border-radius:
+
         18px;
 
     padding:
+
         32px;
 
     margin-top:
+
         28px;
+
 }
 
-
 /* ==========================================================================
+
    28. ACTIVITY CONTAINER
+
    ========================================================================== */
 
 #activityContainer {
 
     display:
+
         flex;
 
     flex-direction:
+
         column;
 
     gap:
+
         16px;
 
     margin-top:
+
         20px;
+
 }
 
-
 /* ==========================================================================
+
    29. ACTIVITY ITEM
+
    ========================================================================== */
 
 .activity-item {
 
     display:
+
         flex;
 
     align-items:
+
         flex-start;
 
     gap:
+
         16px;
 
     padding:
+
         18px;
 
     border-radius:
+
         16px;
 
     background:
+
         var(--bg-inner);
 
     border:
+
         1px solid var(--border-color);
 
     transition:
+
         transform 0.25s ease,
+
         border-color 0.25s ease,
+
         background-color 0.25s ease;
+
 }
 
 .activity-item:hover {
 
     transform:
+
         translateX(5px);
 
     border-color:
+
         var(--accent-blue);
+
 }
 
-
 /* ==========================================================================
+
    30. ACTIVITY ICON
+
    ========================================================================== */
 
 .activity-item i {
 
     width:
+
         44px;
 
     height:
+
         44px;
 
     border-radius:
+
         50%;
 
     background:
+
         rgba(59, 130, 246, 0.12);
 
     color:
+
         var(--accent-blue);
 
     display:
+
         flex;
 
     justify-content:
+
         center;
 
     align-items:
+
         center;
 
     flex-shrink:
+
         0;
 
     font-size:
+
         18px;
 
     transition:
+
         transform 0.3s ease,
+
         filter 0.3s ease;
+
 }
 
 .activity-item:hover i {
 
     transform:
+
         scale(1.08);
 
     filter:
+
         brightness(1.15);
+
 }
 
 .activity-content {
 
     flex:
+
         1;
 
     min-width:
+
         0;
+
 }
 
 .activity-content h4 {
 
     font-size:
+
         15px;
 
     margin-bottom:
+
         4px;
 
     color:
+
         var(--text-main);
+
 }
 
 .activity-content p {
 
     font-size:
+
         13px;
 
     color:
+
         var(--text-muted);
 
     line-height:
+
         1.6;
+
 }
 
 .activity-time {
 
     margin-top:
+
         8px;
 
     display:
+
         inline-block;
 
     font-size:
+
         12px;
 
     color:
+
         var(--accent-blue);
+
 }
 
-
 /* ==========================================================================
+
    31. RATINGS & REVIEWS
+
    ========================================================================== */
 
 .reviews-card {
 
     background:
+
         var(--bg-card);
 
     border:
+
         1px solid var(--border-color);
 
     border-radius:
+
         18px;
 
     padding:
+
         32px;
 
     margin-top:
+
         28px;
+
 }
 
-
 /* ==========================================================================
+
    32. OVERALL RATING
+
    ========================================================================== */
 
 .overall-rating {
 
     display:
+
         flex;
 
     align-items:
+
         center;
 
     gap:
+
         6px;
 
     color:
+
         var(--text-main);
 
     font-size:
+
         15px;
+
 }
 
 .overall-rating i {
 
     color:
+
         #fbbf24;
+
 }
 
 .overall-rating span {
 
     font-weight:
+
         700;
+
 }
 
 .overall-rating small {
 
     color:
+
         var(--text-muted);
+
 }
 
-
 /* ==========================================================================
+
    33. REVIEWS CONTAINER
+
    ========================================================================== */
 
 #reviewsContainer {
 
     display:
+
         flex;
 
     flex-direction:
+
         column;
 
     gap:
+
         16px;
+
 }
 
-
 /* ==========================================================================
+
    34. SINGLE REVIEW
+
    ========================================================================== */
 
 .review-item {
 
     display:
+
         flex;
 
     gap:
+
         16px;
 
     padding:
+
         20px;
 
     border-radius:
+
         16px;
 
     background:
+
         var(--bg-inner);
 
     border:
+
         1px solid var(--border-color);
 
     transition:
+
         transform .25s ease,
+
         border-color .25s ease,
+
         box-shadow .25s ease,
+
         background-color .25s ease;
+
 }
 
 .review-item:hover {
 
     transform:
+
         translateY(-2px);
 
     border-color:
+
         var(--accent-blue);
 
     box-shadow:
+
         0 10px 25px rgba(0, 0, 0, .10);
+
 }
 
-
 /* ==========================================================================
+
    35. REVIEWER AVATAR
+
    ========================================================================== */
 
 .review-avatar {
 
     width:
+
         48px;
 
     height:
+
         48px;
 
     min-width:
+
         48px;
 
     border-radius:
+
         50%;
 
     display:
+
         flex;
 
     justify-content:
+
         center;
 
     align-items:
+
         center;
 
     background:
+
         linear-gradient(
+
             135deg,
+
             var(--accent-purple),
+
             var(--accent-blue)
+
         );
 
     color:
+
         #ffffff;
 
     font-size:
+
         18px;
 
     font-weight:
+
         700;
+
 }
 
-
 /* ==========================================================================
+
    36. REVIEW CONTENT
+
    ========================================================================== */
 
 .review-content {
 
     flex:
+
         1;
 
     min-width:
+
         0;
+
 }
 
 .review-top {
 
     display:
+
         flex;
 
     justify-content:
+
         space-between;
 
     align-items:
+
         center;
 
     gap:
+
         12px;
 
     margin-bottom:
+
         6px;
+
 }
 
 .review-name {
 
     margin:
+
         0;
 
     color:
+
         var(--text-main);
 
     font-size:
+
         15px;
 
     font-weight:
+
         700;
+
 }
 
-
 /* ==========================================================================
+
    37. REVIEW STARS
+
    ========================================================================== */
 
 .review-stars {
 
     display:
+
         flex;
 
     gap:
+
         2px;
+
 }
 
 .review-stars i {
 
     color:
+
         #fbbf24;
 
     font-size:
+
         13px;
+
 }
 
 .review-stars i.empty {
 
     color:
+
         var(--text-muted);
+
 }
 
-
 /* ==========================================================================
+
    38. REVIEW TEXT
+
    ========================================================================== */
 
 .review-text {
 
     margin:
+
         6px 0 0;
 
     color:
+
         var(--text-muted);
 
     font-size:
+
         14px;
 
     line-height:
+
         1.7;
+
 }
 
-
 /* ==========================================================================
+
    39. REVIEW DATE
+
    ========================================================================== */
 
 .review-date {
 
     display:
+
         block;
 
     margin-top:
+
         8px;
 
     color:
+
         var(--text-muted);
 
     font-size:
+
         11px;
 
     opacity:
+
         .8;
+
 }
 
-
 /* ==========================================================================
+
    40. EMPTY REVIEWS
+
    ========================================================================== */
 
 .reviews-empty {
 
     display:
+
         flex;
 
     flex-direction:
+
         column;
 
     justify-content:
+
         center;
 
     align-items:
+
         center;
 
     text-align:
+
         center;
 
     padding:
+
         45px 20px;
 
     color:
+
         var(--text-muted);
+
 }
 
 .reviews-empty i {
 
     font-size:
+
         40px;
 
     color:
+
         #fbbf24;
 
     margin-bottom:
+
         12px;
+
 }
 
 .reviews-empty p {
 
     margin:
+
         0 0 5px;
 
     color:
+
         var(--text-main);
 
     font-size:
+
         16px;
 
     font-weight:
+
         600;
+
 }
 
 .reviews-empty span {
 
     font-size:
+
         13px;
+
 }
 
-
 /* ==========================================================================
+
    41. LOADING SKELETON
+
    ========================================================================== */
 
 .skeleton {
 
     position:
+
         relative;
 
     overflow:
+
         hidden;
 
     border-radius:
+
         12px;
 
     background:
+
         var(--bg-inner);
+
 }
 
 .skeleton::before {
 
     content:
+
         "";
 
     position:
+
         absolute;
 
     inset:
+
         0;
 
     background:
+
         linear-gradient(
+
             90deg,
+
             transparent,
+
             rgba(255, 255, 255, 0.08),
+
             transparent
+
         );
 
     transform:
+
         translateX(-100%);
 
     animation:
+
         skeleton-loading 1.4s infinite;
+
 }
 
 @keyframes skeleton-loading {
@@ -1936,19 +2591,25 @@
     100% {
 
         transform:
+
             translateX(100%);
+
     }
+
 }
 
-
 /* ==========================================================================
+
    42. FADE IN
+
    ========================================================================== */
 
 .fade-in {
 
     animation:
+
         dashboardFadeIn 0.6s ease;
+
 }
 
 @keyframes dashboardFadeIn {
@@ -1956,58 +2617,77 @@
     from {
 
         opacity:
+
             0;
 
         transform:
+
             translateY(12px);
+
     }
 
     to {
 
         opacity:
+
             1;
 
         transform:
+
             translateY(0);
+
     }
+
 }
 
-
 /* ==========================================================================
+
    43. FLOAT
+
    ========================================================================== */
 
 .float {
 
     animation:
+
         dashboardFloat 3s ease-in-out infinite;
+
 }
 
 @keyframes dashboardFloat {
 
     0%,
+
     100% {
 
         transform:
+
             translateY(0);
+
     }
 
     50% {
 
         transform:
+
             translateY(-6px);
+
     }
+
 }
 
-
 /* ==========================================================================
+
    44. PULSE
+
    ========================================================================== */
 
 .pulse {
 
     animation:
+
         dashboardPulse 2s infinite;
+
 }
 
 @keyframes dashboardPulse {
@@ -2015,43 +2695,59 @@
     0% {
 
         box-shadow:
+
             0 0 0 0 rgba(59, 130, 246, 0.4);
+
     }
 
     70% {
 
         box-shadow:
+
             0 0 0 12px rgba(59, 130, 246, 0);
+
     }
 
     100% {
 
         box-shadow:
+
             0 0 0 0 rgba(59, 130, 246, 0);
+
     }
+
 }
 
-
 /* ==========================================================================
+
    45. FOCUS ACCESSIBILITY
+
    ========================================================================== */
 
 button:focus-visible,
+
 a:focus-visible,
+
 input:focus-visible,
+
 textarea:focus-visible,
+
 select:focus-visible {
 
     outline:
+
         3px solid rgba(59, 130, 246, 0.35);
 
     outline-offset:
+
         3px;
+
 }
 
-
 /* ==========================================================================
+
    46. RESPONSIVE - 1200px
+
    ========================================================================== */
 
 @media (max-width: 1200px) {
@@ -2059,13 +2755,17 @@ select:focus-visible {
     .dashboard-grid {
 
         grid-template-columns:
+
             300px minmax(0, 1fr);
+
     }
+
 }
 
-
 /* ==========================================================================
+
    47. RESPONSIVE - 1024px
+
    ========================================================================== */
 
 @media (max-width: 1024px) {
@@ -2073,19 +2773,25 @@ select:focus-visible {
     .dashboard-grid {
 
         grid-template-columns:
+
             1fr;
+
     }
 
     .profile-card {
 
         max-width:
+
             600px;
+
     }
+
 }
 
-
 /* ==========================================================================
+
    48. RESPONSIVE - 900px
+
    ========================================================================== */
 
 @media (max-width: 900px) {
@@ -2093,13 +2799,17 @@ select:focus-visible {
     .overview {
 
         grid-template-columns:
+
             repeat(2, minmax(0, 1fr));
+
     }
+
 }
 
-
 /* ==========================================================================
+
    49. RESPONSIVE - 768px
+
    ========================================================================== */
 
 @media (max-width: 768px) {
@@ -2107,47 +2817,65 @@ select:focus-visible {
     .overview {
 
         grid-template-columns:
+
             1fr;
+
     }
 
     .skills-grid-container {
 
         grid-template-columns:
+
             1fr;
+
     }
 
     .welcome h1 {
 
         font-size:
+
             30px;
+
     }
 
     .profile-card,
+
     .skills-card,
+
     .matches-card,
+
     .activity-card,
+
     .reviews-card {
 
         padding:
+
             24px;
+
     }
 
     .overview-card {
 
         padding:
+
             22px;
+
     }
 
     .card-header {
 
         flex-wrap:
+
             wrap;
+
     }
+
 }
 
-
 /* ==========================================================================
+
    50. RESPONSIVE - 600px
+
    ========================================================================== */
 
 @media (max-width: 600px) {
@@ -2155,117 +2883,157 @@ select:focus-visible {
     .overview-card {
 
         flex-direction:
+
             column-reverse;
 
         align-items:
+
             flex-start;
 
         gap:
+
             18px;
+
     }
 
     .overview-card h2 {
 
         font-size:
+
             30px;
+
     }
 
     .overview-card i {
 
         width:
+
             56px;
 
         height:
+
             56px;
 
         font-size:
+
             22px;
+
     }
 
     .profile {
 
         gap:
+
             8px;
+
     }
 
     .profile-avatar {
 
         width:
+
             90px;
 
         height:
+
             90px;
+
     }
 
     .profile-avatar i {
 
         font-size:
+
             46px;
+
     }
 
     .card-header {
 
         flex-direction:
+
             column;
 
         align-items:
+
             flex-start;
 
         gap:
+
             16px;
+
     }
 
     .btn,
+
     .see-btn,
+
     .edit-btn {
 
         width:
+
             100%;
+
     }
 
     .match-item {
 
         flex-direction:
+
             column;
 
         align-items:
+
             flex-start;
+
     }
 
     .match-btn {
 
         width:
+
             100%;
+
     }
 
     .review-top {
 
         flex-direction:
+
             column;
 
         align-items:
+
             flex-start;
 
         gap:
+
             5px;
+
     }
 
     .review-item {
 
         padding:
+
             16px;
+
     }
 
     .reviews-card {
 
         padding:
+
             24px;
+
     }
+
 }
 
-
 /* ==========================================================================
+
    51. RESPONSIVE - 420px
+
    ========================================================================== */
 
 @media (max-width: 420px) {
@@ -2273,70 +3041,2005 @@ select:focus-visible {
     .welcome h1 {
 
         font-size:
+
             24px;
+
     }
 
     .welcome p {
 
         font-size:
+
             14px;
+
     }
 
     .overview-card h2 {
 
         font-size:
+
             26px;
+
     }
 
     .skill-tag {
 
         font-size:
+
             12px;
 
         padding:
+
             6px 12px;
+
     }
 
     .profile-card,
+
     .skills-card,
+
     .matches-card,
+
     .activity-card,
+
     .reviews-card {
 
         padding:
+
             20px;
+
     }
+
 }
 
-
 /* ==========================================================================
+
    52. REDUCED MOTION
+
    ========================================================================== */
 
 @media (prefers-reduced-motion: reduce) {
 
     .card,
+
+    .overview-card,
+
+    .profile-card,
+
+    .skill-section,
+
+    .match-item,
+
+    .activity-item,
+
+    .review-item,
+
+    .btn,
+
+    .edit-btn,
+
+    .add-btn,
+
+    .see-btn {
+
+        transition:
+
+            none !important;
+
+    }
+
+    .skeleton::before,
+
+    .fade-in,
+
+    .float,
+
+    .pulse {
+
+        animation:
+
+            none !important;
+
+    }
+
+}
+
+/* ======================================================================
+
+   SKILLHUB DASHBOARD — PROFESSIONAL UI POLISH
+
+   Appended overrides: preserves existing selectors and theme integration.
+
+   ====================================================================== */
+
+:root {
+
+    --dash-radius: 16px;
+
+    --dash-radius-sm: 11px;
+
+    --dash-shadow: 0 8px 28px rgba(15, 23, 42, 0.055);
+
+    --dash-shadow-hover: 0 14px 34px rgba(15, 23, 42, 0.09);
+
+}
+
+.dashboard {
+
+    min-height: 100vh;
+
+    background: var(--bg-main, #f4f7fb);
+
+    color: var(--text-main, #172033);
+
+}
+
+.main {
+
+    min-width: 0;
+
+    padding: clamp(20px, 2.4vw, 36px);
+
+}
+
+.topbar {
+
+    min-height: 76px;
+
+    margin-bottom: 28px;
+
+    padding: 0 0 22px;
+
+    border-bottom: 1px solid var(--border-color, #e5eaf2);
+
+    gap: 20px;
+
+}
+
+.page-title h1 {
+
+    margin: 0 0 7px;
+
+    font-size: clamp(24px, 2vw, 30px);
+
+    font-weight: 750;
+
+    letter-spacing: -0.045em;
+
+    line-height: 1.2;
+
+}
+
+.page-title p {
+
+    margin: 0;
+
+    font-size: 14px;
+
+    line-height: 1.6;
+
+    color: var(--text-muted, #667085);
+
+}
+
+.topbar-actions,
+
+.top-icons {
+
+    gap: 14px;
+
+}
+
+#themeToggle,
+
+.notification-btn {
+
+    transition: background-color .2s ease, color .2s ease, transform .2s ease;
+
+}
+
+#themeToggle:hover,
+
+.notification-btn:hover {
+
+    transform: translateY(-1px);
+
+}
+
+.overview {
+
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+
+    gap: 18px;
+
+    margin-bottom: 24px;
+
+}
+
+.overview-card,
+
+.profile-card,
+
+.skills-card,
+
+.matches-card,
+
+.activity-card,
+
+.learning-progress-card {
+
+    border: 1px solid var(--border-color, #e4e9f1);
+
+    border-radius: var(--dash-radius);
+
+    background: var(--bg-card, #fff);
+
+    box-shadow: var(--dash-shadow);
+
+}
+
+.overview-card {
+
+    min-height: 136px;
+
+    padding: 23px 24px;
+
+}
+
+.overview-card:hover,
+
+.profile-card:hover,
+
+.card:hover {
+
+    transform: translateY(-2px);
+
+    box-shadow: var(--dash-shadow-hover);
+
+}
+
+.overview-card h2 {
+
+    margin: 0 0 8px;
+
+    font-size: clamp(28px, 2.5vw, 34px);
+
+    line-height: 1;
+
+    letter-spacing: -0.04em;
+
+}
+
+.overview-card p {
+
+    margin: 0;
+
+    font-size: 13px;
+
+    font-weight: 550;
+
+}
+
+.overview-card i {
+
+    width: 48px;
+
+    height: 48px;
+
+    border-radius: 14px;
+
+    font-size: 20px;
+
+}
+
+.dashboard-grid {
+
+    grid-template-columns: minmax(260px, .82fr) minmax(0, 1.8fr);
+
+    gap: 20px;
+
+    margin-bottom: 22px;
+
+}
+
+.profile-card {
+
+    padding: 28px 24px;
+
+}
+
+.profile-avatar {
+
+    width: 88px;
+
+    height: 88px;
+
+    margin-bottom: 16px;
+
+    box-shadow: 0 8px 20px rgba(59, 130, 246, .16);
+
+}
+
+.profile-avatar i {
+
+    font-size: 44px;
+
+}
+
+#profileInitial {
+
+    font-size: 38px;
+
+}
+
+.profile-card h2 {
+
+    margin: 0 0 12px;
+
+    font-size: 21px;
+
+    letter-spacing: -.025em;
+
+}
+
+.profile-rating {
+
+    margin-bottom: 20px;
+
+    flex-wrap: wrap;
+
+}
+
+.profile-email,
+
+.profile-location {
+
+    justify-content: flex-start;
+
+    text-align: left;
+
+    overflow-wrap: anywhere;
+
+    font-size: 13px;
+
+}
+
+.bio-text {
+
+    margin: 18px 0;
+
+    text-align: left;
+
+    line-height: 1.7;
+
+}
+
+.edit-btn,
+
+.add-btn,
+
+.see-btn {
+
+    border-radius: 10px;
+
+    font-weight: 650;
+
+    transition: background .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+
+}
+
+.edit-btn {
+
+    padding: 11px 16px;
+
+    font-size: 14px;
+
+}
+
+.skills-card {
+
+    min-width: 0;
+
+    padding: 26px;
+
+}
+
+.card-header {
+
+    margin-bottom: 20px;
+
+}
+
+.card-header h2 {
+
+    margin: 0;
+
+    font-size: 19px;
+
+    letter-spacing: -.025em;
+
+}
+
+.skills-grid-container {
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 14px;
+
+    margin-bottom: 22px;
+
+}
+
+.skill-section {
+
+    min-width: 0;
+
+    padding: 17px;
+
+    border-radius: 12px;
+
+}
+
+.skill-section-header {
+
+    margin-bottom: 14px;
+
+}
+
+.skill-section h4 {
+
+    font-size: 11px;
+
+    letter-spacing: .075em;
+
+}
+
+.skills-list-wrapper {
+
+    gap: 7px;
+
+}
+
+.skill-tag {
+
+    padding: 6px 10px;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+
+    font-weight: 550;
+
+}
+
+.completion-box {
+
+    padding-top: 18px;
+
+    border-top: 1px solid var(--border-color, #e5eaf2);
+
+}
+
+.completion-header {
+
+    margin-bottom: 10px;
+
+    font-size: 13px;
+
+    font-weight: 650;
+
+}
+
+.progress {
+
+    height: 8px;
+
+    overflow: hidden;
+
+    border-radius: 999px;
+
+}
+
+.progress-bar {
+
+    border-radius: inherit;
+
+    transition: width .35s ease;
+
+}
+
+.completion-text {
+
+    margin-top: 10px;
+
+    font-size: 12px;
+
+    line-height: 1.6;
+
+}
+
+.matches-card,
+
+.activity-card,
+
+.learning-progress-card {
+
+    margin-top: 20px;
+
+    padding: 25px 26px;
+
+}
+
+.matches-card .card-header,
+
+.activity-card .card-header {
+
+    margin-bottom: 10px;
+
+}
+
+.see-btn,
+
+.add-btn {
+
+    padding: 9px 13px;
+
+    border: 1px solid var(--border-color, #dfe5ee);
+
+    background: transparent;
+
+    color: var(--text-main, #172033);
+
+    font-size: 12px;
+
+}
+
+.see-btn:hover,
+
+.add-btn:hover {
+
+    border-color: var(--accent-blue, #3b82f6);
+
+    background: rgba(59, 130, 246, .07);
+
+}
+
+/* Progress panel added for Upgrade 4 */
+
+.learning-progress-card {
+
+    margin-top: 20px;
+
+    padding: 25px 26px;
+
+}
+
+.learning-progress-card > .card-header {
+
+    align-items: flex-start;
+
+    margin-bottom: 14px;
+
+}
+
+.learning-progress-card > .card-header p {
+
+    margin: 7px 0 0;
+
+    color: var(--text-muted, #667085);
+
+    font-size: 13px;
+
+    line-height: 1.6;
+
+}
+
+.learning-progress-item {
+
+    padding: 20px 0;
+
+    border-top: 1px solid var(--border-color, #e5eaf2);
+
+}
+
+.learning-progress-heading h3 {
+
+    font-size: 15px;
+
+    letter-spacing: -.015em;
+
+}
+
+.learning-progress-track {
+
+    height: 8px;
+
+    background: var(--bg-inner, #edf1f7);
+
+}
+
+.learning-progress-fill {
+
+    background: linear-gradient(90deg, #3b82f6, #7c3aed);
+
+}
+
+.learning-progress-form input {
+
+    border-color: var(--border-color, #dfe5ee);
+
+    border-radius: 9px;
+
+}
+
+.learning-progress-form input:focus {
+
+    outline: 3px solid rgba(59, 130, 246, .14);
+
+    border-color: var(--accent-blue, #3b82f6);
+
+}
+
+button:focus-visible,
+
+.profile-dropdown-item:focus-visible,
+
+.dashboard .overview-card:focus-visible {
+
+    outline: 3px solid rgba(59, 130, 246, .35);
+
+    outline-offset: 3px;
+
+}
+
+/* Keep modal behavior intact while giving it a cleaner surface. */
+
+.profile-modal-content {
+
+    border-radius: 18px;
+
+    box-shadow: 0 24px 70px rgba(0, 0, 0, .22);
+
+}
+
+@media (max-width: 1200px) {
+
+    .dashboard-grid {
+
+        grid-template-columns: minmax(240px, .75fr) minmax(0, 1.5fr);
+
+    }
+
+    .overview-card {
+
+        padding: 21px;
+
+    }
+
+}
+
+@media (max-width: 900px) {
+
+    .main {
+
+        padding: 22px;
+
+    }
+
+    .overview {
+
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+
+        gap: 12px;
+
+    }
+
+    .overview-card {
+
+        min-height: 120px;
+
+        padding: 17px;
+
+        gap: 10px;
+
+    }
+
+    .overview-card i {
+
+        width: 40px;
+
+        height: 40px;
+
+        font-size: 17px;
+
+    }
+
+    .dashboard-grid {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .profile-card {
+
+        display: grid;
+
+        grid-template-columns: 76px minmax(0, 1fr);
+
+        column-gap: 18px;
+
+        text-align: left;
+
+        align-items: center;
+
+    }
+
+    .profile-card .profile-avatar {
+
+        grid-row: span 3;
+
+        width: 72px;
+
+        height: 72px;
+
+        margin: 0;
+
+    }
+
+    .profile-card .profile-avatar i {
+
+        font-size: 36px;
+
+    }
+
+    .profile-card #profileInitial {
+
+        font-size: 32px;
+
+    }
+
+    .profile-card h2,
+
+    .profile-card .profile-rating,
+
+    .profile-card .profile-email,
+
+    .profile-card .profile-location,
+
+    .profile-card .bio-text,
+
+    .profile-card .edit-btn {
+
+        grid-column: 1 / -1;
+
+    }
+
+    .profile-card .profile-rating {
+
+        justify-content: flex-start;
+
+        margin-top: 10px;
+
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .main {
+
+        padding: 16px;
+
+    }
+
+    .topbar {
+
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        padding-bottom: 17px;
+
+        margin-bottom: 20px;
+
+    }
+
+    .topbar-actions {
+
+        width: 100%;
+
+        justify-content: space-between;
+
+    }
+
+    .overview {
+
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+
+        margin-bottom: 18px;
+
+    }
+
+    .overview-card {
+
+        min-height: auto;
+
+        padding: 17px 18px;
+
+    }
+
+    .overview-card h2 {
+
+        font-size: 27px;
+
+    }
+
+    .skills-card,
+
+    .matches-card,
+
+    .activity-card,
+
+    .learning-progress-card {
+
+        padding: 18px;
+
+        border-radius: 13px;
+
+    }
+
+    .skills-grid-container {
+
+        grid-template-columns: 1fr;
+
+    }
+
+    .card-header {
+
+        align-items: flex-start;
+
+    }
+
+    .learning-progress-card > .card-header {
+
+        flex-direction: column;
+
+    }
+
+    .learning-progress-form {
+
+        grid-template-columns: 1fr;
+
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .overview-card,
+
+    .profile-card,
+
+    .skill-section,
+
+    .learning-progress-fill,
+
+    .edit-btn,
+
+    .see-btn,
+
+    .add-btn {
+
+        transition: none !important;
+
+    }
+
+}
+
+
+/* ==========================================================================
+   FINAL DASHBOARD REFINEMENTS
+   Reference-aligned spacing, light surfaces, and responsive behavior.
+   Keeps existing HTML hooks, theme variables, and JavaScript behavior.
+   ========================================================================== */
+
+.dashboard {
+    background: var(--bg-main, #f5f7fc);
+}
+
+.main {
+    width: 100%;
+    max-width: 1800px;
+    margin-inline: auto;
+}
+
+.overview-card {
+    position: relative;
+    min-width: 0;
+    box-shadow: 0 3px 12px rgba(31, 48, 86, 0.035);
+}
+
+.overview-card > div {
+    min-width: 0;
+}
+
+.overview-card p {
+    line-height: 1.45;
+}
+
+.dashboard-grid {
+    align-items: stretch;
+}
+
+.profile-card,
+.skills-card,
+.matches-card,
+.activity-card,
+.learning-progress-card {
+    min-width: 0;
+    box-shadow: 0 3px 14px rgba(31, 48, 86, 0.035);
+}
+
+.profile-card {
+    overflow: hidden;
+}
+
+.profile-email span,
+.profile-location span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.skills-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.skills-grid-container {
+    align-items: stretch;
+}
+
+.skill-section {
+    background: var(--bg-inner, #f7f8ff);
+}
+
+.completion-header span:last-child {
+    font-variant-numeric: tabular-nums;
+}
+
+.learning-progress-card .card-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.learning-progress-card .card-header h2 i {
+    color: var(--accent-blue, #3b82f6);
+}
+
+#learningProgressContainer,
+#matchesContainer,
+#activityContainer {
+    min-width: 0;
+}
+
+.match-item,
+.activity-item,
+.learning-progress-item {
+    overflow-wrap: anywhere;
+}
+
+.match-btn {
+    white-space: nowrap;
+}
+
+.profile-modal {
+    z-index: 1000;
+}
+
+.profile-modal-content {
+    max-width: min(680px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+}
+
+button,
+.profile-dropdown-item,
+.sidebar li {
+    -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 1400px) {
+    .overview {
+        gap: 18px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: minmax(270px, 0.78fr) minmax(0, 1.9fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 900px) {
+    .overview {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .dashboard-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .profile-card {
+        max-width: none;
+    }
+}
+
+@media (max-width: 680px) {
+    .overview {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .overview-card {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .profile-card {
+        display: block;
+        text-align: center;
+    }
+
+    .profile-card .profile-avatar {
+        margin: 0 auto 16px;
+    }
+
+    .profile-card .profile-rating,
+    .profile-card .profile-email,
+    .profile-card .profile-location {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .profile-card .bio-text {
+        text-align: center;
+    }
+
+    .skills-grid-container {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .match-item {
+        align-items: stretch;
+    }
+
+    .match-btn {
+        width: 100%;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
     .overview-card,
     .profile-card,
     .skill-section,
     .match-item,
     .activity-item,
-    .review-item,
     .btn,
     .edit-btn,
     .add-btn,
     .see-btn {
+        animation: none !important;
+        transition: none !important;
+    }
+}
 
-        transition:
-            none !important;
+/* ======================================================================
+   SCREENSHOT-MATCH OVERRIDES — SkillHub dashboard
+   Keeps the existing theme, HTML IDs, and JavaScript hooks intact.
+   ====================================================================== */
+
+.dashboard {
+    min-height: 100vh;
+    background: var(--bg-main, #f5f7fc);
+}
+
+.main {
+    min-width: 0;
+    padding: 24px 22px 28px;
+}
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 18px;
+    padding: 0 0 0;
+    border: 0;
+    min-height: 54px;
+}
+
+.page-title h1 {
+    margin: 0 0 4px;
+    font-size: clamp(23px, 2vw, 27px);
+    line-height: 1.2;
+    letter-spacing: -.035em;
+    font-weight: 750;
+}
+
+.page-title p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.overview {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    margin: 0 0 14px;
+}
+
+.overview-card {
+    min-width: 0;
+    min-height: 96px;
+    padding: 17px 20px;
+    gap: 14px;
+    border-radius: 13px;
+    box-shadow: 0 2px 8px rgba(31, 48, 86, .035);
+}
+
+.overview-card h2 {
+    margin: 0 0 5px;
+    font-size: 26px;
+    line-height: 1.1;
+}
+
+.overview-card p {
+    margin: 0;
+    font-size: 12px;
+}
+
+.overview-card i {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    border-radius: 12px;
+    font-size: 19px;
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: minmax(245px, .78fr) minmax(0, 2fr);
+    align-items: stretch;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.profile-card,
+.skills-card,
+.learning-progress-card,
+.matches-card,
+.activity-card {
+    min-width: 0;
+    border: 1px solid var(--border-color, #e6eaf2);
+    border-radius: 13px;
+    background: var(--bg-card, #fff);
+    box-shadow: 0 2px 9px rgba(31, 48, 86, .035);
+}
+
+.profile-card {
+    padding: 17px 16px 15px;
+    text-align: center;
+}
+
+.profile-card .profile-avatar {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 11px;
+    box-shadow: 0 5px 14px rgba(59, 130, 246, .16);
+}
+
+.profile-card .profile-avatar i {
+    font-size: 35px;
+}
+
+.profile-card #profileInitial {
+    font-size: 31px;
+}
+
+.profile-card h2 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    line-height: 1.3;
+}
+
+.profile-card .profile-rating {
+    justify-content: center;
+    gap: 5px;
+    margin-bottom: 13px;
+    font-size: 11px;
+}
+
+.profile-card .rating-stars i {
+    font-size: 12px;
+}
+
+.profile-card .profile-email,
+.profile-card .profile-location {
+    justify-content: flex-start;
+    margin: 0 0 8px;
+    font-size: 11px;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.profile-card .bio-text {
+    margin: 10px 0 13px;
+    font-size: 11px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+.edit-btn {
+    width: 100%;
+    margin-top: 2px;
+    padding: 9px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.skills-card {
+    padding: 17px 19px 15px;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 13px;
+}
+
+.card-header h2 {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.35;
+    letter-spacing: -.02em;
+}
+
+.skills-grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 11px;
+    margin-bottom: 16px;
+}
+
+.skill-section {
+    min-width: 0;
+    padding: 13px;
+    border-radius: 11px;
+}
+
+.skill-section-header {
+    margin-bottom: 10px;
+}
+
+.skill-section h4 {
+    margin: 0;
+    font-size: 10px;
+    letter-spacing: .055em;
+}
+
+.skills-list-wrapper {
+    gap: 6px;
+}
+
+.skill-tag {
+    padding: 5px 8px;
+    border-radius: 7px;
+    font-size: 10px;
+    font-weight: 550;
+}
+
+.completion-box {
+    margin-top: 0;
+    padding-top: 13px;
+}
+
+.completion-header {
+    margin-bottom: 8px;
+    font-size: 11px;
+}
+
+.progress {
+    height: 7px;
+}
+
+.completion-text {
+    margin-top: 7px;
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+.learning-progress-card,
+.matches-card,
+.activity-card {
+    margin-top: 14px;
+    padding: 17px 19px;
+}
+
+.learning-progress-card > .card-header {
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.learning-progress-card > .card-header h2 i {
+    margin-right: 6px;
+    color: var(--accent-blue, #3b82f6);
+}
+
+.learning-progress-card > .card-header p {
+    margin: 4px 0 0;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.see-btn,
+.add-btn {
+    flex-shrink: 0;
+    padding: 7px 10px;
+    border: 1px solid var(--border-color, #dfe5ee);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text-main, #172033);
+    font-size: 10px;
+    font-weight: 600;
+    box-shadow: none;
+}
+
+.see-btn:hover,
+.add-btn:hover {
+    border-color: var(--accent-blue, #3b82f6);
+    background: rgba(59, 130, 246, .06);
+    transform: translateY(-1px);
+    box-shadow: none;
+}
+
+/* Dynamic learning-progress content can use these columns when present. */
+#learningProgressContainer {
+    min-width: 0;
+}
+
+#learningProgressContainer:has(.learning-progress-item) {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.learning-progress-item {
+    min-width: 0;
+    padding: 12px 10px;
+    border: 1px solid var(--border-color, #e6eaf2);
+    border-radius: 10px;
+    background: var(--bg-card, #fff);
+}
+
+.learning-progress-heading h3 {
+    margin: 0 0 7px;
+    font-size: 12px;
+}
+
+.learning-progress-track {
+    height: 6px;
+    overflow: hidden;
+    border-radius: 999px;
+}
+
+.learning-progress-fill {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #7c3aed, #3b82f6);
+}
+
+/* Suggested matches: compact, equal-width cards like the reference. */
+#matchesContainer {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+#matchesContainer > p {
+    grid-column: 1 / -1;
+}
+
+.match-item {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 12px;
+    border-radius: 11px;
+    background: var(--bg-card, #fff);
+}
+
+.match-profile {
+    align-items: flex-start;
+    gap: 9px;
+}
+
+.match-avatar {
+    width: 34px;
+    height: 34px;
+    flex: 0 0 34px;
+    font-size: 15px;
+}
+
+.match-info h3 {
+    margin: 0 0 3px;
+    font-size: 12px;
+}
+
+.match-info p {
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.match-skills {
+    gap: 5px;
+    margin-top: 6px;
+}
+
+.match-skills span {
+    padding: 4px 6px;
+    font-size: 9px;
+}
+
+.match-btn {
+    width: 100%;
+    min-width: 0;
+    margin-top: auto;
+    padding: 7px 8px;
+    border: 1px solid var(--border-color, #dfe5ee);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--accent-blue, #3b82f6);
+    font-size: 10px;
+}
+
+.match-btn:hover {
+    background: rgba(59, 130, 246, .06);
+}
+
+/* Recent activity uses a compact multi-column layout when the items allow it. */
+#activityContainer {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+#activityContainer > p {
+    grid-column: 1 / -1;
+}
+
+.activity-item {
+    min-width: 0;
+    gap: 9px;
+    padding: 10px;
+    border-radius: 10px;
+    background: var(--bg-card, #fff);
+}
+
+.activity-item:hover {
+    transform: translateY(-1px);
+}
+
+.activity-item i {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 30px;
+    font-size: 12px;
+}
+
+.activity-content h4 {
+    margin: 0 0 3px;
+    font-size: 11px;
+}
+
+.activity-content p {
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.activity-time {
+    margin-top: 5px;
+    font-size: 9px;
+}
+
+/* Notifications and profile modal keep their existing JS-driven behavior. */
+.profile-modal-content {
+    max-width: 680px;
+    border-radius: 16px;
+}
+
+@media (max-width: 1100px) {
+    .dashboard-grid {
+        grid-template-columns: minmax(220px, .8fr) minmax(0, 1.7fr);
     }
 
-    .skeleton::before,
-    .fade-in,
-    .float,
-    .pulse {
+    #matchesContainer {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
-        animation:
-            none !important;
+    #activityContainer,
+    #learningProgressContainer:has(.learning-progress-item) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 850px) {
+    .main {
+        padding: 18px;
+    }
+
+    .dashboard-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .profile-card {
+        display: block;
+        text-align: center;
+    }
+
+    .profile-card .profile-avatar {
+        margin: 0 auto 11px;
+    }
+
+    .profile-card .profile-email,
+    .profile-card .profile-location {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .profile-card .bio-text {
+        text-align: center;
+    }
+}
+
+@media (max-width: 620px) {
+    .main {
+        padding: 14px;
+    }
+
+    .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .topbar-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .overview {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .skills-grid-container,
+    #matchesContainer,
+    #activityContainer,
+    #learningProgressContainer:has(.learning-progress-item) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .overview-card {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .skills-card,
+    .learning-progress-card,
+    .matches-card,
+    .activity-card {
+        padding: 15px;
+    }
+
+    .card-header {
+        align-items: flex-start;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .overview-card,
+    .profile-card,
+    .skill-section,
+    .match-item,
+    .activity-item,
+    .btn,
+    .edit-btn,
+    .add-btn,
+    .see-btn {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* ============================================================
+   SKILLHUB DASHBOARD — REFERENCE-MATCHING SECTION OVERRIDES
+   Appended intentionally so theme.css and sidebar.css stay untouched.
+   ============================================================ */
+.learning-progress-card,
+.matches-card,
+.activity-card {
+    background: var(--bg-card, #fff);
+    border: 1px solid var(--border-color, #e7eaf2);
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(25, 42, 70, .045);
+    padding: 24px;
+    margin-top: 24px;
+}
+.learning-progress-card > .card-header,
+.matches-card > .card-header,
+.activity-card > .card-header {
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    margin-bottom:18px;
+}
+.learning-progress-card > .card-header h2,
+.matches-card > .card-header h2,
+.activity-card > .card-header h2 {
+    margin:0;
+    font-size:18px;
+    font-weight:750;
+    letter-spacing:-.02em;
+}
+#learningProgressContainer:has(.learning-progress-item) {
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    gap:16px;
+}
+.learning-progress-item {
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:16px;
+    min-width:0;
+    padding:18px;
+    border:1px solid var(--border-color,#e7eaf2);
+    border-radius:15px;
+    background:var(--bg-card,#fff);
+}
+.learning-progress-heading,
+.learning-progress-track,
+.learning-progress-summary { grid-column:1/-1; }
+.learning-progress-heading {
+    display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+}
+.learning-progress-heading h3 { margin:0 0 5px; font-size:16px; font-weight:750; }
+.learning-progress-heading p { margin:0; font-size:12px; color:var(--text-muted,#6b7280); }
+.learning-progress-heading > strong {
+    color:#4f46e5; background:#eef2ff; padding:6px 10px; border-radius:10px; font-size:13px;
+}
+.learning-progress-track { height:8px; background:#edf0f7; border-radius:99px; overflow:hidden; }
+.learning-progress-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#6366f1,#3b82f6); }
+.learning-progress-summary { margin:0; font-size:11px; color:var(--text-muted,#6b7280); }
+.learning-progress-subsection {
+    min-width:0; padding:14px; border:1px solid var(--border-color,#e7eaf2);
+    border-radius:12px; background:var(--bg-subtle,#fafbff);
+}
+.learning-progress-subsection h4 { margin:0 0 12px; font-size:13px; font-weight:750; }
+.learning-progress-goal,
+.learning-progress-log { display:flex; align-items:flex-start; gap:8px; padding:8px 0; border-bottom:1px solid var(--border-color,#e9edf5); font-size:12px; line-height:1.45; }
+.learning-progress-goal:last-of-type,
+.learning-progress-log:last-of-type { border-bottom:0; }
+.learning-progress-goal input,
+.learning-progress-log input { accent-color:#16a34a; margin-top:2px; flex:0 0 auto; }
+.learning-progress-note { margin:3px 0 7px 23px; font-size:11px; color:var(--text-muted,#6b7280); }
+.learning-progress-form { display:grid; gap:7px; margin-top:12px; }
+.learning-progress-form input { width:100%; min-width:0; box-sizing:border-box; padding:9px 10px; border:1px solid var(--border-color,#dfe4ee); border-radius:8px; background:var(--bg-card,#fff); color:var(--text-main,#20283a); font-size:12px; }
+.learning-progress-form button { justify-self:start; border:0; border-radius:8px; padding:8px 12px; color:#fff; background:linear-gradient(135deg,#6366f1,#3b82f6); font-size:12px; font-weight:650; cursor:pointer; }
+.learning-progress-form button:disabled { opacity:.55; cursor:wait; }
+.learning-progress-empty { margin:0; padding:12px 0; color:var(--text-muted,#6b7280); font-size:13px; }
+#matchesContainer {
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:14px !important;
+    margin-top:18px !important;
+}
+#matchesContainer > div[id^="suggested-user-"] {
+    display:flex !important; flex-direction:column !important; align-items:stretch !important;
+    justify-content:flex-start !important; gap:12px !important; min-width:0;
+    padding:16px !important; border:1px solid var(--border-color,#e7eaf2) !important;
+    border-radius:14px; background:var(--bg-card,#fff);
+    box-shadow:0 4px 14px rgba(25,42,70,.035);
+}
+#matchesContainer > div[id^="suggested-user-"] > div:first-child { align-items:flex-start !important; gap:10px !important; }
+#matchesContainer > div[id^="suggested-user-"] > div:first-child > div:first-child { width:42px !important; height:42px !important; min-width:42px !important; font-size:15px !important; }
+#matchesContainer > div[id^="suggested-user-"] h4 { font-size:13px !important; line-height:1.35; overflow-wrap:anywhere; }
+#matchesContainer > div[id^="suggested-user-"] button { align-self:stretch; padding:9px 12px !important; border-radius:9px !important; background:#eef2ff !important; border:1px solid #dbe3ff !important; color:#4f46e5 !important; font-weight:650; }
+#activityContainer {
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:12px !important;
+    margin-top:16px !important;
+    align-items:start;
+}
+#activityContainer > div {
+    align-items:flex-start !important; gap:10px !important; min-width:0;
+    padding:14px !important; border:1px solid var(--border-color,#e7eaf2) !important;
+    border-radius:12px; background:var(--bg-subtle,#fafbff);
+}
+#activityContainer > div > i { display:grid; place-items:center; width:30px; height:30px; flex:0 0 30px; border-radius:9px; background:#eef2ff; }
+#activityContainer > div > div { min-width:0; font-size:12px !important; line-height:1.5; overflow-wrap:anywhere; }
+@media (max-width:1100px) {
+    #matchesContainer { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    #activityContainer { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .learning-progress-item { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .learning-progress-subsection:last-of-type { grid-column:1/-1; }
+}
+@media (max-width:700px) {
+    .learning-progress-card,.matches-card,.activity-card { padding:15px; }
+    .learning-progress-item { grid-template-columns:minmax(0,1fr); padding:12px; }
+    .learning-progress-subsection:last-of-type { grid-column:auto; }
+    #matchesContainer,#activityContainer { grid-template-columns:minmax(0,1fr); }
+}
+
+/* =====================================================================
+   DASHBOARD ICON POLISH + CENTERED PROFILE DETAILS
+   Added as overrides so existing dashboard content and JS stay unchanged.
+   ===================================================================== */
+
+/* Keep dashboard icons consistently visible and aligned. */
+.dashboard .overview-card i,
+.dashboard .section-title i,
+.dashboard .card-header i,
+.dashboard .profile-card .profile-email i,
+.dashboard .profile-card .profile-location i,
+.dashboard .profile-card .bio-text i,
+.dashboard .sidebar a i,
+.dashboard .top-icons i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    line-height: 1;
+}
+
+/* Center the profile identity and the email, location, and bio lines. */
+.profile-card {
+    text-align: center;
+}
+
+.profile-card .profile-avatar {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile-card h2,
+.profile-card .profile-rating,
+.profile-card .profile-email,
+.profile-card .profile-location,
+.profile-card .bio-text {
+    text-align: center !important;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.profile-card .profile-email,
+.profile-card .profile-location {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    overflow-wrap: anywhere;
+}
+
+.profile-card .profile-email i,
+.profile-card .profile-location i {
+    width: 18px;
+    min-width: 18px;
+    color: var(--accent-blue, #3b82f6);
+}
+
+.profile-card .bio-text {
+    display: block;
+    width: 100%;
+    line-height: 1.55;
+    overflow-wrap: anywhere;
+}
+
+/* Make overview icons and section-heading icons stand out like the reference. */
+.overview-card i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-header > i,
+.section-heading > i,
+.learning-progress-card .card-header i {
+    color: var(--accent-blue, #3b82f6);
+}
+
+/* Icon tiles for activity items and match cards remain aligned on narrow screens. */
+#activityContainer > div > i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+@media (max-width: 700px) {
+    .profile-card .profile-email,
+    .profile-card .profile-location,
+    .profile-card .bio-text {
+        text-align: center !important;
+        justify-content: center;
+    }
+}
+
+/* ==========================================================
+   SKILLHUB DASHBOARD — DARK / LIGHT THEME FIX
+   Keep this section at the VERY BOTTOM of dashboard.css
+   ========================================================== */
+
+/* Default dark theme */
+.dashboard {
+    background: var(--bg-main);
+    color: var(--text-main);
+}
+
+.dashboard .overview-card,
+.dashboard .profile-card,
+.dashboard .skills-card,
+.dashboard .learning-progress-card,
+.dashboard .matches-card,
+.dashboard .activity-card,
+.dashboard .reviews-card,
+.dashboard .card {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+.dashboard .skill-section,
+.dashboard .match-item,
+.dashboard .activity-item,
+.dashboard .review-item,
+.dashboard .learning-progress-subsection,
+.dashboard .learning-progress-item {
+    background: var(--bg-inner);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+.dashboard h1,
+.dashboard h2,
+.dashboard h3,
+.dashboard h4,
+.dashboard .match-info h3,
+.dashboard .activity-content h4,
+.dashboard .review-name {
+    color: var(--text-main);
+}
+
+.dashboard p,
+.dashboard small,
+.dashboard .match-info p,
+.dashboard .activity-content p,
+.dashboard .review-text,
+.dashboard .completion-text {
+    color: var(--text-muted);
+}
+
+/* Inputs */
+.dashboard input,
+.dashboard textarea,
+.dashboard select {
+    background: var(--bg-input);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+.dashboard input::placeholder,
+.dashboard textarea::placeholder {
+    color: var(--text-muted);
+}
+
+/* Progress sections */
+.dashboard .learning-progress-track,
+.dashboard .progress {
+    background: var(--bg-inner);
+}
+
+.dashboard .learning-progress-heading > strong {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--accent-blue);
+}
+
+/* Buttons */
+.dashboard .see-btn,
+.dashboard .add-btn,
+.dashboard .match-btn {
+    background: var(--bg-inner);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+.dashboard .see-btn:hover,
+.dashboard .add-btn:hover,
+.dashboard .match-btn:hover {
+    background: rgba(59, 130, 246, 0.12);
+    border-color: var(--accent-blue);
+    color: var(--accent-blue);
+}
+
+/* Light theme */
+body.light-theme .dashboard {
+    background: var(--bg-main);
+    color: var(--text-main);
+}
+
+body.light-theme .dashboard .overview-card,
+body.light-theme .dashboard .profile-card,
+body.light-theme .dashboard .skills-card,
+body.light-theme .dashboard .learning-progress-card,
+body.light-theme .dashboard .matches-card,
+body.light-theme .dashboard .activity-card,
+body.light-theme .dashboard .reviews-card,
+body.light-theme .dashboard .card {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+body.light-theme .dashboard .skill-section,
+body.light-theme .dashboard .match-item,
+body.light-theme .dashboard .activity-item,
+body.light-theme .dashboard .review-item,
+body.light-theme .dashboard .learning-progress-subsection,
+body.light-theme .dashboard .learning-progress-item {
+    background: var(--bg-inner);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+body.light-theme .dashboard .see-btn,
+body.light-theme .dashboard .add-btn,
+body.light-theme .dashboard .match-btn {
+    background: var(--bg-inner);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+body.light-theme .dashboard input,
+body.light-theme .dashboard textarea,
+body.light-theme .dashboard select {
+    background: var(--bg-input);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+/* Modal */
+.profile-modal-content {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .dashboard * {
+        scroll-behavior: auto !important;
     }
 }

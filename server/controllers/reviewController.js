@@ -14,7 +14,8 @@ exports.submitReview = async (req, res) => {
             swapId,
             rating,
             comment,
-            recommend
+            recommend,
+            categoryRatings = {}
         } = req.body;
 
         const userId = req.user.id;
@@ -111,6 +112,18 @@ exports.submitReview = async (req, res) => {
 
         }
 
+        const normalizedCategoryRatings = {};
+        for (const key of ["clarity", "expertise", "punctuality"]) {
+            const value = categoryRatings[key];
+            if (value !== undefined && value !== null && value !== "") {
+                const numericValue = Number(value);
+                if (!Number.isFinite(numericValue) || numericValue < 1 || numericValue > 5) {
+                    return res.status(400).json({ message: `${key} rating must be between 1 and 5.` });
+                }
+                normalizedCategoryRatings[key] = numericValue;
+            }
+        }
+
         // --------------------------------------
         // Prevent duplicate review
         // --------------------------------------
@@ -153,7 +166,9 @@ exports.submitReview = async (req, res) => {
 
             comment: comment.trim(),
 
-            recommend: Boolean(recommend)
+            recommend: Boolean(recommend),
+
+            categoryRatings: normalizedCategoryRatings
 
         });
 

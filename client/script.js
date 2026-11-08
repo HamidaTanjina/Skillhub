@@ -614,13 +614,58 @@ if (authForm) {
                 );
             }
 
-            // No success toast for login.
-            // Keep the submit button disabled until navigation.
-            redirectAfterSuccess = true;
+          // Decide where to redirect after successful login.
+const loggedInUser = data.user || data.profile || {};
+let userRole = String(
+    loggedInUser.role || data.role || ""
+).toLowerCase();
 
-            setTimeout(() => {
-                window.location.href = "dashboard.html";
-            }, 1000);
+// If the login response does not include the role,
+// request the authenticated user's profile.
+if (!userRole && userToken) {
+    try {
+        const profileResponse = await fetch(
+            `${API_BASE_URL}/user/profile`,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${userToken}`
+                }
+            }
+        );
+
+        if (profileResponse.ok) {
+            const profileData = await profileResponse.json();
+
+            const profile =
+                profileData.user ||
+                profileData.profile ||
+                profileData;
+
+            userRole = String(
+                profile.role || profile.userRole || ""
+            ).toLowerCase();
+
+            // Keep the profile available for other pages.
+            localStorage.setItem(
+                "skillhubUser",
+                JSON.stringify(profile)
+            );
+        }
+    } catch (error) {
+        console.error("Unable to retrieve user role:", error);
+    }
+}
+
+redirectAfterSuccess = true;
+
+setTimeout(() => {
+    if (userRole === "admin") {
+        window.location.href = "admin.html";
+    } else {
+        window.location.href = "dashboard.html";
+    }
+}, 1000);
 
         } catch (error) {
             console.error(

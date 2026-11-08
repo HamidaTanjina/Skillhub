@@ -27,6 +27,12 @@ const reviewSchema = new mongoose.Schema(
         max: 5
     },
 
+    categoryRatings: {
+        clarity: { type: Number, min: 1, max: 5, default: null },
+        expertise: { type: Number, min: 1, max: 5, default: null },
+        punctuality: { type: Number, min: 1, max: 5, default: null }
+    },
+
     comment: {
         type: String,
         required: true,

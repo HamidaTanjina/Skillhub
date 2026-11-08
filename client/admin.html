@@ -1,0 +1,1338 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkillHub Admin Dashboard</title>
+
+<style>
+:root {
+    --bg: #f4f7fb;
+    --card: #ffffff;
+    --ink: #172033;
+    --muted: #718096;
+    --line: #e5e9f2;
+    --primary: #3b82f6;
+    --purple: #7c3aed;
+    --nav: #141c2e;
+    --green: #16845b;
+    --red: #c2414b;
+    --amber: #a16207;
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 14px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+button:disabled { opacity: .65; cursor: not-allowed; }
+
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: 255px;
+    background: var(--nav);
+    color: #f8fafc;
+    padding: 25px 16px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(148,163,184,.12);
+    z-index: 10;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 0 8px 35px;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+}
+
+.mark {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: linear-gradient(135deg,var(--primary),var(--purple));
+    color: white;
+    font-size: 22px;
+    box-shadow: 0 4px 12px #3b82f638;
+}
+
+.brand small {
+    display: block;
+    margin-top: 4px;
+    color: #94a3b8;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+}
+
+.label {
+    padding: 0 12px 12px;
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+}
+
+.nav { display: grid; gap: 6px; }
+
+.nav button {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    min-height: 45px;
+    padding: 11px 13px;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    background: transparent;
+    color: #b8c3d6;
+    text-align: left;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background .2s, color .2s;
+}
+
+.nav button:hover {
+    background: #3b82f61a;
+    color: white;
+}
+
+.nav button.active {
+    background: linear-gradient(100deg,#3b82f632,#7c3aed29);
+    color: white;
+    border-color: #60a5fa30;
+    box-shadow: inset 3px 0 0 var(--primary);
+}
+
+.nav-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+.nav-icon svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.sidefoot {
+    margin-top: auto;
+    padding: 17px 10px 5px;
+    border-top: 1px solid #94a3b824;
+    color: #94a3b8;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.sidefoot strong { color: #e2e8f0; }
+
+.logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 11px;
+    width: 100%;
+    margin-top: 15px;
+    padding: 11px 12px;
+    border: 1px solid #f871712b;
+    border-radius: 10px;
+    background: #ef444410;
+    color: #fca5a5;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background .2s, color .2s;
+}
+
+.logout-btn:hover {
+    background: #ef444425;
+    color: #fff;
+}
+
+.logout-btn svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.main { margin-left: 255px; }
+
+.top {
+    height: 74px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 0 32px;
+    background: var(--card);
+    border-bottom: 1px solid var(--line);
+}
+
+.top small { color: var(--muted); }
+h1 { margin: 1px 0; font-size: 19px; }
+
+.avatar {
+    width: 39px;
+    height: 39px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #e4e7ff;
+    color: #4338ca;
+    font-weight: 800;
+}
+
+.content {
+    max-width: 1500px;
+    margin: auto;
+    padding: 28px 32px;
+}
+
+.welcome {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.welcome h2 {
+    margin: 0 0 5px;
+    font-size: 25px;
+    letter-spacing: -.7px;
+}
+
+.welcome p { margin: 0; color: var(--muted); }
+
+.btn {
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: white;
+    color: #344054;
+    font-weight: 700;
+}
+
+.primary {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.primary:hover { background: #2563eb; }
+
+.danger {
+    color: var(--red);
+    background: #fff0f0;
+    border-color: #ffd6d8;
+}
+
+.success {
+    color: var(--green);
+    background: #e9f8f0;
+    border-color: #c8eed9;
+}
+
+.sm { padding: 6px 9px; font-size: 11px; }
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4,minmax(0,1fr));
+    gap: 15px;
+    margin-bottom: 22px;
+}
+
+.card, .panel {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    box-shadow: 0 8px 25px #17203308;
+}
+
+.card { padding: 19px; }
+
+.statlabel {
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.value {
+    margin-top: 8px;
+    font-size: 30px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.sub { color: var(--muted); font-size: 11px; }
+
+.panel { overflow: hidden; margin-bottom: 22px; }
+
+.panelhead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--line);
+}
+
+h3 { margin: 0; font-size: 15px; }
+
+.panelhead p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.tools { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.search, select {
+    max-width: 100%;
+    padding: 9px 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    outline: none;
+    background: white;
+    color: var(--ink);
+}
+
+.search { min-width: 210px; }
+
+.search:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px #3b82f61a;
+}
+
+.tablewrap { overflow: auto; }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    white-space: nowrap;
+}
+
+th {
+    padding: 13px 18px;
+    background: #fafbfe;
+    color: #7b8497;
+    text-align: left;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+}
+
+td {
+    padding: 13px 18px;
+    border-top: 1px solid #eef1f6;
+    color: #344054;
+    font-size: 12px;
+}
+
+tbody tr:hover { background: #fbfcff; }
+
+.person {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.initial {
+    width: 33px;
+    height: 33px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: #eef2ff;
+    color: #4f46e5;
+    font-weight: 800;
+}
+
+.person strong { display: block; color: #202a3c; }
+.person small { display: block; color: var(--muted); font-size: 11px; }
+
+.badge {
+    display: inline-block;
+    padding: 4px 9px;
+    border-radius: 20px;
+    background: #f0f2f6;
+    color: #596579;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.pending { background: #fff7df; color: var(--amber); }
+.accepted { background: #eef2ff; color: #4338ca; }
+.completed { background: #e9f8f0; color: var(--green); }
+.rejected, .banned { background: #fff0f0; color: var(--red); }
+.confirmation { background: #eaf7ff; color: #0369a1; }
+
+.rowactions { display: flex; align-items: center; gap: 7px; }
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 20px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.section { display: none; }
+.section.active { display: block; }
+
+.notice {
+    display: none;
+    padding: 12px 15px;
+    margin-bottom: 17px;
+    border-radius: 9px;
+}
+
+.notice.show { display: block; }
+.notice.error { background: #fff0f0; color: #a62935; }
+.notice.ok { background: #e9f8f0; color: #116644; }
+
+.empty { padding: 32px; text-align: center; color: var(--muted); }
+
+.breakdown { padding: 7px 20px 18px; }
+.barrow { margin: 14px 0; }
+
+.barlabel {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    color: #596579;
+    font-size: 12px;
+}
+
+.track {
+    height: 7px;
+    overflow: hidden;
+    border-radius: 9px;
+    background: #edf0f6;
+}
+
+.fill {
+    height: 100%;
+    width: 0;
+    border-radius: 9px;
+    background: linear-gradient(90deg,#3b82f6,#7c3aed);
+}
+
+.twocol {
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
+    gap: 17px;
+}
+
+.summary { padding: 5px 20px 15px; }
+
+.quick {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 13px 0;
+    border-bottom: 1px solid #eef1f6;
+    color: #596579;
+}
+
+.quick:last-child { border: 0; }
+
+@media(max-width:1100px) {
+    .stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
+    .twocol { grid-template-columns: 1fr; }
+}
+
+@media(max-width:800px) {
+    .content { padding: 22px 18px; }
+    .top { padding: 0 18px; }
+    .panelhead { align-items: flex-start; flex-direction: column; }
+    .tools { width: 100%; }
+    .search { flex: 1; min-width: 0; }
+}
+
+@media(max-width:700px) {
+    .sidebar { width: 66px; padding: 20px 8px; }
+    .brand { padding: 0 5px 30px; }
+    .brandtext, .label, .navtext, .sidefoot { display: none; }
+    .nav button { justify-content: center; padding: 12px 4px; }
+    .logout-btn { justify-content: center; padding: 11px 4px; }
+    .logout-text { display: none; }
+    .main { margin-left: 66px; }
+    .top { padding: 0 12px; }
+    .content { padding: 18px 10px; }
+    .welcome { align-items: flex-start; flex-direction: column; }
+    .stats { gap: 9px; }
+    .card { padding: 13px; }
+    .value { font-size: 25px; }
+    .top h1 { font-size: 16px; }
+    .footer { flex-direction: column; }
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="brand">
+        <span class="mark">S</span>
+        <span class="brandtext">
+            SkillHub
+            <small>ADMIN CONSOLE</small>
+        </span>
+    </div>
+
+    <div class="label">Workspace</div>
+
+    <nav class="nav">
+        <button class="active" data-page="overview">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="3" y="3" width="7" height="7" rx="1.5"/>
+                    <rect x="14" y="3" width="7" height="7" rx="1.5"/>
+                    <rect x="3" y="14" width="7" height="7" rx="1.5"/>
+                    <rect x="14" y="14" width="7" height="7" rx="1.5"/>
+                </svg>
+            </span>
+            <span class="navtext">Overview</span>
+        </button>
+
+        <button data-page="users">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="9" cy="8" r="4"/>
+                    <path d="M3 21v-2a6 6 0 0 1 12 0v2"/>
+                    <path d="M16 4.5a4 4 0 0 1 0 7.5"/>
+                    <path d="M18 15a5 5 0 0 1 3 4.5V21"/>
+                </svg>
+            </span>
+            <span class="navtext">Users</span>
+        </button>
+
+        <button data-page="swaps">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M16 3l4 4-4 4"/>
+                    <path d="M4 7h16"/>
+                    <path d="M8 21l-4-4 4-4"/>
+                    <path d="M20 17H4"/>
+                </svg>
+            </span>
+            <span class="navtext">Swap requests</span>
+        </button>
+    </nav>
+
+    <div class="sidefoot">
+        <strong>SkillHub Admin</strong><br>
+        Platform management
+    </div>
+
+    <button type="button" id="logoutBtn" class="logout-btn">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M10 17l5-5-5-5"/>
+            <path d="M15 12H3"/>
+            <path d="M12 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6"/>
+        </svg>
+        <span class="logout-text">Logout</span>
+    </button>
+</aside>
+
+<main class="main">
+    <header class="top">
+        <div>
+            <small>SkillHub / Administration</small>
+            <h1 id="pageTitle">Overview</h1>
+        </div>
+        <div class="avatar" title="Administrator">A</div>
+    </header>
+
+    <div class="content">
+        <div class="welcome">
+            <div>
+                <h2 id="welcomeTitle">Platform overview</h2>
+                <p id="welcomeText">
+                    Monitor members, manage swap requests, and keep SkillHub running smoothly.
+                </p>
+            </div>
+            <button class="btn primary" id="refresh">↻ Refresh data</button>
+        </div>
+
+        <div id="notice" class="notice" role="status" aria-live="polite"></div>
+
+        <section id="overview" class="section active">
+            <div class="stats">
+                <div class="card">
+                    <div class="statlabel">TOTAL MEMBERS</div>
+                    <div class="value" id="totalUsers">—</div>
+                    <div class="sub">Registered accounts</div>
+                </div>
+
+                <div class="card">
+                    <div class="statlabel">SWAP REQUESTS</div>
+                    <div class="value" id="totalSwaps">—</div>
+                    <div class="sub">All recorded requests</div>
+                </div>
+
+                <div class="card">
+                    <div class="statlabel">PENDING REQUESTS</div>
+                    <div class="value" id="pendingSwaps">—</div>
+                    <div class="sub">Waiting for a response</div>
+                </div>
+
+                <div class="card">
+                    <div class="statlabel">COMPLETED SWAPS</div>
+                    <div class="value" id="completedSwaps">—</div>
+                    <div class="sub">Marked as completed</div>
+                </div>
+            </div>
+
+            <div class="twocol">
+                <div class="panel">
+                    <div class="panelhead">
+                        <div>
+                            <h3>Swap request breakdown</h3>
+                            <p>Current status of all requests</p>
+                        </div>
+                        <button class="btn sm" data-goto="swaps">Manage swaps →</button>
+                    </div>
+                    <div class="breakdown" id="breakdown"></div>
+                </div>
+
+                <div class="panel">
+                    <div class="panelhead">
+                        <div>
+                            <h3>Account summary</h3>
+                            <p>Member account overview</p>
+                        </div>
+                        <button class="btn sm" data-goto="users">Manage users →</button>
+                    </div>
+                    <div class="summary">
+                        <div class="quick">
+                            Total members <strong id="quickUsers">—</strong>
+                        </div>
+                        <div class="quick">
+                            Suspended accounts <strong id="bannedUsers">—</strong>
+                        </div>
+                        <div class="quick">
+                            Pending skill verifications <strong id="pendingVerifications">—</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="users" class="section">
+            <div class="panel">
+                <div class="panelhead">
+                    <div>
+                        <h3>Member management</h3>
+                        <p>Search members and suspend or restore access.</p>
+                    </div>
+
+                    <div class="tools">
+                        <input id="userSearch" class="search"
+                               placeholder="Search name or email..."
+                               aria-label="Search members">
+
+                        <select id="userFilter" aria-label="Filter members">
+                            <option value="all">All accounts</option>
+                            <option value="active">Active</option>
+                            <option value="banned">Suspended</option>
+                            <option value="admin">Admins</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tablewrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Member</th>
+                                <th>Role</th>
+                                <th>Joined</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersBody">
+                            <tr><td colspan="5" class="empty">Loading members...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="footer">
+                    <span id="usersCount">Loading...</span>
+                    <span>Password data is never displayed.</span>
+                </div>
+            </div>
+        </section>
+
+        <section id="swaps" class="section">
+            <div class="panel">
+                <div class="panelhead">
+                    <div>
+                        <h3>Swap request moderation</h3>
+                        <p>Review requests and update status when necessary.</p>
+                    </div>
+
+                    <div class="tools">
+                        <input id="swapSearch" class="search"
+                               placeholder="Search skills or members..."
+                               aria-label="Search swap requests">
+
+                        <select id="swapFilter" aria-label="Filter swap status">
+                            <option value="all">All statuses</option>
+                            <option>Pending</option>
+                            <option>Accepted</option>
+                            <option>Pending Confirmation</option>
+                            <option>Completed</option>
+                            <option>Rejected</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tablewrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Participants</th>
+                                <th>Skill exchange</th>
+                                <th>Created</th>
+                                <th>Status</th>
+                                <th>Update status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="swapsBody">
+                            <tr><td colspan="5" class="empty">Loading swap requests...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="footer">
+                    <span id="swapsCount">Loading...</span>
+                    <span>Only valid statuses can be selected.</span>
+                </div>
+            </div>
+        </section>
+    </div>
+</main>
+
+<script>
+(() => {
+    'use strict';
+
+    // =========================================
+    // CONFIGURATION
+    // =========================================
+
+    const API = 'http://localhost:5000/api';
+
+    // Change this if your login page has another filename/path.
+    // If index.html contains your login modal, keep this as index.html.
+    const LOGIN_PAGE = './index.html';
+
+    const STATUSES = [
+        'Pending',
+        'Accepted',
+        'Pending Confirmation',
+        'Completed',
+        'Rejected'
+    ];
+
+    let users = [];
+    let swaps = [];
+    let noticeTimer = null;
+
+    const $ = id => document.getElementById(id);
+
+    // =========================================
+    // AUTHENTICATION
+    // =========================================
+
+    function getToken() {
+        return localStorage.getItem('token');
+    }
+
+    function clearSession() {
+        // These are the existing SkillHub authentication keys.
+        localStorage.removeItem('token');
+        localStorage.removeItem('skillhubUser');
+
+        // Clear matching tab-scoped session keys if used.
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('skillhubUser');
+    }
+
+    function logout() {
+        const confirmed = window.confirm(
+            'Are you sure you want to log out of SkillHub Admin?'
+        );
+
+        if (!confirmed) return;
+
+        clearSession();
+
+        // Replace the dashboard in browser history.
+        window.location.replace(LOGIN_PAGE);
+    }
+
+    $('logoutBtn').addEventListener('click', logout);
+
+    // Do not load protected data if no login token exists.
+    if (!getToken()) {
+        window.location.replace(LOGIN_PAGE);
+        return;
+    }
+
+    // =========================================
+    // GENERAL HELPERS
+    // =========================================
+
+    function notice(message, error = false) {
+        const n = $('notice');
+        n.textContent = message;
+        n.className = 'notice show ' + (error ? 'error' : 'ok');
+
+        clearTimeout(noticeTimer);
+        noticeTimer = setTimeout(() => {
+            n.className = 'notice';
+        }, 5000);
+    }
+
+    function esc(value) {
+        return String(value ?? '').replace(/[&<>"']/g, char => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        })[char]);
+    }
+
+    function initials(value) {
+        return String(value || 'U')
+            .trim()
+            .split(/\s+/)
+            .slice(0, 2)
+            .map(part => part[0] || '')
+            .join('')
+            .toUpperCase();
+    }
+
+    function date(value) {
+        if (!value) return '—';
+
+        const d = new Date(value);
+
+        return isNaN(d.getTime())
+            ? '—'
+            : d.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+    }
+
+    function badge(status) {
+        const classes = {
+            Pending: 'pending',
+            Accepted: 'accepted',
+            Completed: 'completed',
+            Rejected: 'rejected',
+            'Pending Confirmation': 'confirmation',
+            admin: 'accepted',
+            user: ''
+        };
+
+        const className = classes[status] || '';
+
+        return `<span class="badge ${className}">${esc(status || 'Unknown')}</span>`;
+    }
+
+    // =========================================
+    // API HELPER
+    // =========================================
+
+    async function api(path, options = {}) {
+        const token = getToken();
+
+        if (!token) {
+            clearSession();
+            window.location.replace(LOGIN_PAGE);
+            throw new Error('Your session has expired. Please sign in again.');
+        }
+
+        let response;
+
+        try {
+            response = await fetch(API + path, {
+                ...options,
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: 'Bearer ' + token,
+                    ...(options.headers || {})
+                }
+            });
+        } catch (error) {
+            throw new Error(
+                'Cannot connect to the SkillHub backend. Make sure the server is running.'
+            );
+        }
+
+        let data = {};
+
+        try {
+            data = await response.json();
+        } catch {
+            // Handle non-JSON error responses below.
+        }
+
+        if (response.status === 401) {
+            clearSession();
+            window.location.replace(LOGIN_PAGE);
+            throw new Error('Your session has expired. Please sign in again.');
+        }
+
+        if (response.status === 403) {
+            throw new Error(
+                data.message || 'Access denied. An administrator account is required.'
+            );
+        }
+
+        if (!response.ok || data.success === false) {
+            throw new Error(
+                data.message || `Request failed (${response.status})`
+            );
+        }
+
+        return data;
+    }
+
+    // =========================================
+    // OVERVIEW STATS
+    // =========================================
+
+    async function loadStats() {
+        const data = await api('/admin/stats');
+        const stats = data.stats || {};
+
+        $('totalUsers').textContent = stats.totalUsers ?? 0;
+        $('totalSwaps').textContent = stats.totalSwaps ?? 0;
+        $('pendingSwaps').textContent = stats.pendingSwaps ?? 0;
+        $('completedSwaps').textContent = stats.completedSwaps ?? 0;
+
+        $('quickUsers').textContent = stats.totalUsers ?? 0;
+        $('bannedUsers').textContent = stats.bannedUsers ?? 0;
+        $('pendingVerifications').textContent =
+            stats.pendingVerifications ?? 0;
+
+        const total = Number(stats.totalSwaps || 0);
+
+        const items = [
+            ['Pending', stats.pendingSwaps || 0],
+            ['Accepted', stats.acceptedSwaps || 0],
+            ['Completed', stats.completedSwaps || 0],
+            ['Rejected', stats.rejectedSwaps || 0]
+        ];
+
+        $('breakdown').innerHTML = items.map(([name, count]) => {
+            const percentage = total
+                ? Math.min(100, Number(count) / total * 100)
+                : 0;
+
+            return `
+                <div class="barrow">
+                    <div class="barlabel">
+                        <span>${esc(name)}</span>
+                        <strong>${Number(count)}</strong>
+                    </div>
+                    <div class="track">
+                        <div class="fill" style="width:${percentage}%"></div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // =========================================
+    // LOAD USERS
+    // =========================================
+
+    async function loadUsers() {
+        const data = await api('/admin/users');
+        users = Array.isArray(data.users) ? data.users : [];
+        renderUsers();
+    }
+
+    function renderUsers() {
+        const query = $('userSearch').value.trim().toLowerCase();
+        const filter = $('userFilter').value;
+
+        const list = users.filter(user => {
+            const text = `${user.name || ''} ${user.email || ''}`.toLowerCase();
+
+            const matchesSearch = text.includes(query);
+
+            const matchesFilter =
+                filter === 'all' ||
+                (filter === 'active' && !user.isBanned) ||
+                (filter === 'banned' && user.isBanned) ||
+                (filter === 'admin' && user.role === 'admin');
+
+            return matchesSearch && matchesFilter;
+        });
+
+        $('usersCount').textContent =
+            `${list.length} of ${users.length} members`;
+
+        if (!list.length) {
+            $('usersBody').innerHTML =
+                '<tr><td colspan="5" class="empty">No members found.</td></tr>';
+            return;
+        }
+
+        $('usersBody').innerHTML = list.map(user => {
+            let action = '<span class="sub">Protected admin</span>';
+
+            if (user.role !== 'admin') {
+                action = user.isBanned
+                    ? `<button class="btn success sm"
+                        data-user-action="unban"
+                        data-id="${esc(user._id)}">Restore access</button>`
+                    : `<button class="btn danger sm"
+                        data-user-action="ban"
+                        data-id="${esc(user._id)}">Suspend</button>`;
+            }
+
+            return `
+                <tr>
+                    <td>
+                        <div class="person">
+                            <span class="initial">${esc(initials(user.name))}</span>
+                            <div>
+                                <strong>${esc(user.name || 'Unnamed member')}</strong>
+                                <small>${esc(user.email || 'No email')}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${badge(user.role || 'user')}</td>
+                    <td>${esc(date(user.createdAt))}</td>
+                    <td>
+                        ${user.isBanned
+                            ? '<span class="badge banned">Suspended</span>'
+                            : '<span class="badge completed">Active</span>'}
+                    </td>
+                    <td>${action}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // =========================================
+    // LOAD SWAP REQUESTS
+    // =========================================
+
+    async function loadSwaps() {
+        const data = await api('/admin/swaps');
+        swaps = Array.isArray(data.swaps) ? data.swaps : [];
+        renderSwaps();
+    }
+
+    function renderSwaps() {
+        const query = $('swapSearch').value.trim().toLowerCase();
+        const filter = $('swapFilter').value;
+
+        const list = swaps.filter(swap => {
+            const text = [
+                swap.sender?.name,
+                swap.sender?.email,
+                swap.receiver?.name,
+                swap.receiver?.email,
+                swap.teachSkill,
+                swap.learnSkill
+            ].join(' ').toLowerCase();
+
+            return text.includes(query) &&
+                (filter === 'all' || swap.status === filter);
+        });
+
+        $('swapsCount').textContent =
+            `${list.length} of ${swaps.length} swap requests`;
+
+        if (!list.length) {
+            $('swapsBody').innerHTML =
+                '<tr><td colspan="5" class="empty">No swap requests found.</td></tr>';
+            return;
+        }
+
+        $('swapsBody').innerHTML = list.map(swap => `
+            <tr>
+                <td>
+                    <div class="person">
+                        <span class="initial">${esc(initials(swap.sender?.name))}</span>
+                        <div>
+                            <strong>
+                                ${esc(swap.sender?.name || 'Unknown')}
+                                → ${esc(swap.receiver?.name || 'Unknown')}
+                            </strong>
+                            <small>${esc(swap.sender?.email || '')}</small>
+                            <small>${esc(swap.receiver?.email || '')}</small>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <strong>${esc(swap.teachSkill || '—')}</strong>
+                    <small style="display:block;color:#718096">
+                        Learns: ${esc(swap.learnSkill || '—')}
+                    </small>
+                </td>
+                <td>${esc(date(swap.createdAt))}</td>
+                <td>${badge(swap.status)}</td>
+                <td>
+                    <div class="rowactions">
+                        <select data-select="${esc(swap._id)}"
+                                aria-label="Choose new swap status">
+                            ${STATUSES.map(status => `
+                                <option value="${esc(status)}"
+                                    ${status === swap.status ? 'selected' : ''}>
+                                    ${esc(status)}
+                                </option>
+                            `).join('')}
+                        </select>
+                        <button class="btn primary sm"
+                                data-save="${esc(swap._id)}">Save</button>
+                    </div>
+                </td>
+            </tr>
+        `).join('');
+    }
+
+    // =========================================
+    // REFRESH DASHBOARD
+    // =========================================
+
+    async function refresh() {
+        const button = $('refresh');
+
+        button.disabled = true;
+        button.textContent = 'Loading...';
+
+        try {
+            const results = await Promise.allSettled([
+                loadStats(),
+                loadUsers(),
+                loadSwaps()
+            ]);
+
+            const failures = results.filter(result => result.status === 'rejected');
+
+            if (failures.length) {
+                throw new Error(
+                    failures.map(result => result.reason?.message || 'Request failed')
+                        .join(' | ')
+                );
+            }
+
+            notice('Dashboard data refreshed successfully.');
+        } catch (error) {
+            notice(error.message, true);
+        } finally {
+            button.disabled = false;
+            button.textContent = '↻ Refresh data';
+        }
+    }
+
+    // =========================================
+    // NAVIGATION
+    // =========================================
+
+    function go(page) {
+        const titles = {
+            overview: [
+                'Overview',
+                'Platform overview',
+                'Monitor members, manage swap requests, and keep SkillHub running smoothly.'
+            ],
+            users: [
+                'Member management',
+                'Manage members',
+                'Review accounts and suspend or restore access when needed.'
+            ],
+            swaps: [
+                'Swap request moderation',
+                'Manage swap requests',
+                'Review swap activity and update request statuses.'
+            ]
+        };
+
+        if (!titles[page]) return;
+
+        document.querySelectorAll('[data-page]').forEach(button => {
+            button.classList.toggle('active', button.dataset.page === page);
+        });
+
+        document.querySelectorAll('.section').forEach(section => {
+            section.classList.toggle('active', section.id === page);
+        });
+
+        $('pageTitle').textContent = titles[page][0];
+        $('welcomeTitle').textContent = titles[page][1];
+        $('welcomeText').textContent = titles[page][2];
+    }
+
+    document.querySelectorAll('[data-page]').forEach(button => {
+        button.addEventListener('click', () => go(button.dataset.page));
+    });
+
+    document.querySelectorAll('[data-goto]').forEach(button => {
+        button.addEventListener('click', () => go(button.dataset.goto));
+    });
+
+    $('refresh').addEventListener('click', refresh);
+
+    $('userSearch').addEventListener('input', renderUsers);
+    $('userFilter').addEventListener('change', renderUsers);
+    $('swapSearch').addEventListener('input', renderSwaps);
+    $('swapFilter').addEventListener('change', renderSwaps);
+
+    // =========================================
+    // SUSPEND / RESTORE MEMBER
+    // =========================================
+
+    $('usersBody').addEventListener('click', async event => {
+        const button = event.target.closest('[data-user-action]');
+        if (!button || button.disabled) return;
+
+        const user = users.find(
+            item => String(item._id) === button.dataset.id
+        );
+
+        if (!user) return;
+
+        const action = button.dataset.userAction;
+
+        const description = action === 'ban'
+            ? `suspend ${user.name || user.email}`
+            : `restore access for ${user.name || user.email}`;
+
+        if (!window.confirm(`Are you sure you want to ${description}?`)) {
+            return;
+        }
+
+        button.disabled = true;
+
+        try {
+            await api(
+                `/admin/users/${encodeURIComponent(user._id)}/${action}`,
+                { method: 'PATCH' }
+            );
+
+            notice(
+                action === 'ban'
+                    ? 'Member suspended successfully.'
+                    : 'Member access restored successfully.'
+            );
+
+            await Promise.all([loadUsers(), loadStats()]);
+        } catch (error) {
+            notice(error.message, true);
+        } finally {
+            button.disabled = false;
+        }
+    });
+
+    // =========================================
+    // UPDATE SWAP STATUS
+    // =========================================
+
+    $('swapsBody').addEventListener('click', async event => {
+        const button = event.target.closest('[data-save]');
+        if (!button || button.disabled) return;
+
+        const id = button.dataset.save;
+        const swap = swaps.find(item => String(item._id) === id);
+
+        const select = Array.from(
+            $('swapsBody').querySelectorAll('[data-select]')
+        ).find(element => element.dataset.select === id);
+
+        if (!select || !swap) return;
+
+        const newStatus = select.value;
+
+        if (!STATUSES.includes(newStatus)) {
+            notice('Invalid swap status selected.', true);
+            return;
+        }
+
+        if (swap.status === newStatus) {
+            notice('This swap already has that status.', true);
+            return;
+        }
+
+        if (!window.confirm(`Change swap status to "${newStatus}"?`)) {
+            return;
+        }
+
+        button.disabled = true;
+
+        try {
+            await api(
+                `/admin/swaps/${encodeURIComponent(id)}/status`,
+                {
+                    method: 'PATCH',
+                    body: JSON.stringify({ status: newStatus })
+                }
+            );
+
+            notice('Swap status updated successfully.');
+
+            await Promise.all([loadSwaps(), loadStats()]);
+        } catch (error) {
+            notice(error.message, true);
+        } finally {
+            button.disabled = false;
+        }
+    });
+
+    // =========================================
+    // START
+    // =========================================
+
+    refresh();
+})();
+</script>
+
+</body>
+</html>

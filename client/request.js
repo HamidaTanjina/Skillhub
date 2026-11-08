@@ -1,46 +1,15 @@
-// ======================================================
-// SkillHub - Request Management
-// ======================================================
-// Compatible with:
-// - header.js
-// - theme.css
-// - sidebar.css
-//
-// Handles:
-// - Fetch requests
-// - Sent / Received / Accepted / Completed tabs
-// - Accept request
-// - Reject request
-// - Chat
-// - Complete swap
-// - Submit review
-//
-// header.js handles:
-// - Authentication redirect
-// - Header username
-// - Header profile picture
-// - Notifications
-// - Notification badge
-// - Profile dropdown
-// - Logout
-// ======================================================
-
 
 // ======================================================
 // API
 // ======================================================
 
 const API_BASE_URL =
-    "https://skillhub-backend-cths.onrender.com/api";
-
+   "https://skillhub-backend-cths.onrender.com/api";
 
 // ======================================================
 // AUTHENTICATION
 // ======================================================
 
-// Keep token for request-specific API calls.
-// header.js is responsible for the main authentication
-// and redirect behavior.
 
 const token =
     localStorage.getItem("token");
@@ -117,9 +86,7 @@ function getAuthHeaders(
 // ======================================================
 // HANDLE UNAUTHORIZED REQUEST
 // ======================================================
-// header.js normally handles authentication.
-// This is only a fallback if a request API returns 401.
-// ======================================================
+
 
 function handleRequestUnauthorized() {
 
@@ -677,36 +644,21 @@ function renderRequests(
                     "accepted";
 
 
-                buttons = `
+             
+buttons = `
+  <button class="chat-btn" onclick="openChat('${escapeAttribute(request.id)}')">
+    <i class="fa-solid fa-comments"></i> Chat
+  </button>
 
-                    <button
-                        class="chat-btn"
-                        onclick="openChat(
-                            '${escapeAttribute(request.id)}'
-                        )"
-                    >
+  <button class="schedule-session-btn" onclick="openScheduleSession('${escapeAttribute(request.id)}')">
+    <i class="fa-solid fa-calendar-plus"></i> Schedule Session
+  </button>
 
-                        <i class="fa-solid fa-comments"></i>
+  <button class="complete-btn" onclick="openReview('${escapeAttribute(request.id)}')">
+    <i class="fa-solid fa-circle-check"></i> Complete Swap
+  </button>
+`;
 
-                        Chat
-
-                    </button>
-
-
-                    <button
-                        class="complete-btn"
-                        onclick="openReview(
-                            '${escapeAttribute(request.id)}'
-                        )"
-                    >
-
-                        <i class="fa-solid fa-circle-check"></i>
-
-                        Complete Swap
-
-                    </button>
-
-                `;
 
             }
 
@@ -1653,7 +1605,13 @@ async function submitReview() {
                                 comment,
 
                             recommend:
-                                recommend
+                                recommend,
+
+                            categoryRatings: {
+                                clarity: document.getElementById("reviewClarity")?.value || null,
+                                expertise: document.getElementById("reviewExpertise")?.value || null,
+                                punctuality: document.getElementById("reviewPunctuality")?.value || null
+                            }
 
                         })
 
@@ -1958,3 +1916,259 @@ document.addEventListener(
 
     }
 );
+
+// ======================================================
+// SCHEDULE SESSION MODAL
+// ======================================================
+
+let currentScheduleSwapId = null;
+
+
+// ======================================================
+// OPEN MODAL
+// ======================================================
+
+function openScheduleSession(swapId) {
+    if (!swapId) {
+        alert("Invalid swap.");
+        return;
+    }
+
+    const modal = document.getElementById("scheduleSessionModal");
+    const form = document.getElementById("scheduleSessionForm");
+    const errorBox = document.getElementById("scheduleSessionError");
+    const submitButton = document.getElementById("submitScheduleSession");
+
+    if (!modal || !form) {
+        console.error("Schedule session modal was not found in request.html.");
+        alert("The scheduling form could not be opened. Please check request.html.");
+        return;
+    }
+
+    currentScheduleSwapId = swapId;
+
+    form.reset();
+
+    if (errorBox) {
+        errorBox.textContent = "";
+        errorBox.classList.remove("visible");
+    }
+
+    if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.innerHTML =
+            '<i class="fa-regular fa-calendar-check"></i> Schedule Session';
+    }
+
+    // Set the earliest selectable start time to now.
+    const now = new Date();
+    now.setSeconds(0, 0);
+
+    const localDateTime = date => {
+        const offset = date.getTimezoneOffset() * 60000;
+        return new Date(date.getTime() - offset)
+            .toISOString()
+            .slice(0, 16);
+    };
+
+    const startInput = document.getElementById("sessionStart");
+    const endInput = document.getElementById("sessionEnd");
+
+    if (startInput) {
+        startInput.min = localDateTime(now);
+    }
+
+    if (endInput) {
+        endInput.min = localDateTime(now);
+    }
+
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
+
+    document.getElementById("sessionTitle")?.focus();
+}
+
+
+// ======================================================
+// CLOSE MODAL
+// ======================================================
+
+function closeScheduleSessionModal() {
+    const modal = document.getElementById("scheduleSessionModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+    document.body.style.overflow = "";
+
+    currentScheduleSwapId = null;
+}
+
+
+// ======================================================
+// SHOW VALIDATION ERROR
+// ======================================================
+
+function showScheduleSessionError(message) {
+    const errorBox = document.getElementById("scheduleSessionError");
+
+    if (!errorBox) {
+        alert(message);
+        return;
+    }
+
+    errorBox.textContent = message;
+    errorBox.classList.add("visible");
+}
+
+
+// ======================================================
+// SUBMIT SESSION FORM
+// ======================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("scheduleSessionForm");
+
+    if (!form) return;
+
+    form.addEventListener("submit", async event => {
+        event.preventDefault();
+
+        if (!currentScheduleSwapId) {
+            showScheduleSessionError("Invalid swap. Please close the form and try again.");
+            return;
+        }
+
+        const title = document.getElementById("sessionTitle").value.trim();
+        const description = document.getElementById("sessionDescription").value.trim();
+        const startInput = document.getElementById("sessionStart").value;
+        const endInput = document.getElementById("sessionEnd").value;
+
+        if (!title) {
+            showScheduleSessionError("Please enter a session title.");
+            document.getElementById("sessionTitle").focus();
+            return;
+        }
+
+        if (!startInput || !endInput) {
+            showScheduleSessionError("Please select both the start and end date and time.");
+            return;
+        }
+
+        const startTime = new Date(startInput);
+        const endTime = new Date(endInput);
+        const now = new Date();
+
+        if (
+            Number.isNaN(startTime.getTime()) ||
+            Number.isNaN(endTime.getTime())
+        ) {
+            showScheduleSessionError("Please enter valid dates and times.");
+            return;
+        }
+
+        if (startTime <= now) {
+            showScheduleSessionError("The session must start in the future.");
+            return;
+        }
+
+        if (endTime <= startTime) {
+            showScheduleSessionError("The end time must be after the start time.");
+            return;
+        }
+
+        if (endTime - startTime > 8 * 60 * 60 * 1000) {
+            showScheduleSessionError("A session cannot be longer than 8 hours.");
+            return;
+        }
+
+        await createSwapSession(currentScheduleSwapId, {
+            title,
+            description,
+            startTime: startTime.toISOString(),
+            endTime: endTime.toISOString()
+        });
+    });
+});
+
+
+// ======================================================
+// CREATE SESSION API
+// ======================================================
+
+async function createSwapSession(swapId, sessionData) {
+    const submitButton = document.getElementById("submitScheduleSession");
+    const errorBox = document.getElementById("scheduleSessionError");
+
+    try {
+        if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.innerHTML =
+                '<i class="fa-solid fa-spinner fa-spin"></i> Scheduling...';
+        }
+
+        if (errorBox) {
+            errorBox.textContent = "";
+            errorBox.classList.remove("visible");
+        }
+
+        const response = await fetch(
+            `${API_BASE_URL}/swaps/${encodeURIComponent(swapId)}/sessions`,
+            {
+                method: "POST",
+                headers: getAuthHeaders(true),
+                body: JSON.stringify(sessionData)
+            }
+        );
+
+        const result = await response.json();
+
+        if (response.status === 401) {
+            handleRequestUnauthorized();
+            return;
+        }
+
+        if (!response.ok) {
+            showScheduleSessionError(
+                result.message ||
+                result.error ||
+                "Could not schedule the session. Please try another time."
+            );
+            return;
+        }
+
+        closeScheduleSessionModal();
+
+        alert("Session scheduled successfully!");
+
+    } catch (error) {
+        console.error("Schedule session error:", error);
+
+        showScheduleSessionError(
+            "Could not connect to the server. Please make sure the backend is running."
+        );
+
+    } finally {
+        if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.innerHTML =
+                '<i class="fa-regular fa-calendar-check"></i> Schedule Session';
+        }
+    }
+}
+
+
+// ======================================================
+// CLOSE SCHEDULING MODAL WITH ESCAPE
+// ======================================================
+
+document.addEventListener("keydown", event => {
+    if (event.key !== "Escape") return;
+
+    const modal = document.getElementById("scheduleSessionModal");
+
+    if (modal && modal.style.display === "flex") {
+        closeScheduleSessionModal();
+    }
+});
