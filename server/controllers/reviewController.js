@@ -117,8 +117,8 @@ exports.submitReview = async (req, res) => {
             const value = categoryRatings[key];
             if (value !== undefined && value !== null && value !== "") {
                 const numericValue = Number(value);
-                if (!Number.isFinite(numericValue) || numericValue < 1 || numericValue > 5) {
-                    return res.status(400).json({ message: `${key} rating must be between 1 and 5.` });
+                if (!Number.isFinite(numericValue) || numericValue < 1 || numericValue >3) {
+                    return res.status(400).json({ message: `${key} rating must be between 1 and 3.` });
                 }
                 normalizedCategoryRatings[key] = numericValue;
             }

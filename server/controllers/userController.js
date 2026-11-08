@@ -304,9 +304,9 @@ exports.getAllUsers = async (req, res) => {
 // Weighted partner recommendations. Scores are calculated on the server so
 // the browser cannot alter ranking logic. Missing optional signals are neutral.
 
+
 exports.getRecommendations = async (req, res) => {
     try {
-        console.log("TEST: NEW CODE IS RUNNING");
         const currentUser = await User.findById(req.user.id)
             .select("-password")
             .lean();
@@ -315,62 +315,17 @@ exports.getRecommendations = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
-       const candidates = await User.aggregate([
-    {
-        $match: {
-            _id: { $ne: currentUser._id },
-            isBanned: { $ne: true },
-            role: "user"
-        }
-    },
-    {
-        $project: {
-            password: 0
-        }
-    }
-]);
-
-        const ids = candidates.map(user => user._id);
-
-        const stats = await Review.aggregate([
-            { $match: { reviewFor: { $in: ids } } },
-            {
-                $group: {
-                    _id: "$reviewFor",
-                    rating: { $avg: "$rating" },
-                    totalReviews: { $sum: 1 },
-                    clarity: { $avg: "$categoryRatings.clarity" },
-                    expertise: { $avg: "$categoryRatings.expertise" },
-                    punctuality: { $avg: "$categoryRatings.punctuality" }
-                }
-            }
-        ]);
-
-        const statsMap = new Map(
-            stats.map(stat => [String(stat._id), stat])
-        );
-
+        // Normalize the current user's values.
         const norm = value =>
             String(value ?? "").trim().toLowerCase();
 
-        const skills = list =>
-            new Set(
+        const normalizeList = list =>
+            [...new Set(
                 (Array.isArray(list) ? list : [])
                     .map(norm)
                     .filter(Boolean)
-            );
+            )];
 
-        const overlap = (a, b) =>
-            [...a].filter(value => b.has(value));
-
-        const jaccard = (a, b) => {
-            const union = new Set([...a, ...b]);
-            return union.size
-                ? overlap(a, b).length / union.size
-                : 0;
-        };
-
-        // Normalize skill-level keys, e.g. HTML and html.
         const normalizeLevels = levels =>
             Object.fromEntries(
                 Object.entries(
@@ -378,175 +333,621 @@ exports.getRecommendations = async (req, res) => {
                 ).map(([key, value]) => [norm(key), value])
             );
 
-        const myTeach = skills(currentUser.teachSkills);
-        const myLearn = skills(currentUser.learnSkills);
-        const myAvailability = skills(currentUser.availability);
-        const myPreferences = skills(currentUser.matchingPreferences);
+        const myTeach = normalizeList(currentUser.teachSkills);
+        const myLearn = normalizeList(currentUser.learnSkills);
+        const myAvailability = normalizeList(currentUser.availability);
+        const myPreferences = normalizeList(currentUser.matchingPreferences);
         const myLevels = normalizeLevels(currentUser.skillLevels);
 
-        const results = candidates.map(user => {
-            const teach = skills(user.teachSkills);
-            const learn = skills(user.learnSkills);
+        const myExperience = currentUser.yearsExperience;
 
-            const teachMatch = overlap(myLearn, teach);
-            const learnMatch = overlap(myTeach, learn);
-
-            const mutualScore =
-                (jaccard(myLearn, teach) + jaccard(myTeach, learn)) / 2;
-
-            const userLevels = normalizeLevels(user.skillLevels);
-
-            const matchedLevels = [...new Set([
-                ...teachMatch,
-                ...learnMatch
-            ])].map(skill => {
-                const mine = Number(myLevels[skill]);
-                const theirs = Number(userLevels[skill]);
-
-                if (
-                    myLevels[skill] == null ||
-                    userLevels[skill] == null ||
-                    !Number.isFinite(mine) ||
-                    !Number.isFinite(theirs)
-                ) {
-                    return null;
+        // Calculate Jaccard similarity inside MongoDB.
+        const jaccardExpr = (left, right) => ({
+            $let: {
+                vars: {
+                    intersection: {
+                        $size: { $setIntersection: [left, right] }
+                    },
+                    union: {
+                        $size: { $setUnion: [left, right] }
+                    }
+                },
+                in: {
+                    $cond: [
+                        { $gt: ["$$union", 0] },
+                        { $divide: ["$$intersection", "$$union"] },
+                        0
+                    ]
                 }
+            }
+        });
 
-               return 1 - Math.min(Math.abs(mine - theirs) / 2, 1);
-            }).filter(value => value !== null);
+        const pipeline = [
+            // 1. Find eligible users.
+            {
+                $match: {
+                    _id: { $ne: currentUser._id },
+                    isBanned: { $ne: true },
+                    role: "user"
+                }
+            },
+            {
+                $project: {
+                    password: 0
+                }
+            },
 
-            const levelScore = matchedLevels.length
-                ? matchedLevels.reduce((sum, value) => sum + value, 0)
-                    / matchedLevels.length
-                : 0.5;
+            // 2. Normalize candidate skill arrays.
+            {
+                $set: {
+                    _teachSkills: {
+                        $setUnion: [{
+                            $map: {
+                                input: { $ifNull: ["$teachSkills", []] },
+                                as: "s",
+                                in: {
+                                    $toLower: {
+                                        $trim: {
+                                            input: { $toString: "$$s" }
+                                        }
+                                    }
+                                }
+                            }
+                        }, []]
+                    },
+                    _learnSkills: {
+                        $setUnion: [{
+                            $map: {
+                                input: { $ifNull: ["$learnSkills", []] },
+                                as: "s",
+                                in: {
+                                    $toLower: {
+                                        $trim: {
+                                            input: { $toString: "$$s" }
+                                        }
+                                    }
+                                }
+                            }
+                        }, []]
+                    },
+                    _availability: {
+                        $setUnion: [{
+                            $map: {
+                                input: { $ifNull: ["$availability", []] },
+                                as: "s",
+                                in: {
+                                    $toLower: {
+                                        $trim: { input: "$$s" }
+                                    }
+                                }
+                            }
+                        }, []]
+                    },
+                    _preferences: {
+                        $setUnion: [{
+                            $map: {
+                                input: {
+                                    $ifNull: ["$matchingPreferences", []]
+                                },
+                                as: "s",
+                                in: {
+                                    $toLower: {
+                                        $trim: { input: "$$s" }
+                                    }
+                                }
+                            }
+                        }, []]
+                    }
+                }
+            },
 
-            // Missing experience is neutral, not zero.
-            // Compare experience compatibility between both users.
-const myExperience = Number(currentUser.yearsExperience);
-const theirExperience = Number(user.yearsExperience);
+            // 3. Find mutual skill matches.
+            {
+                $set: {
+                    _teachMatch: {
+                        $setIntersection: [
+                            { $literal: myLearn },
+                            "$_teachSkills"
+                        ]
+                    },
+                    _learnMatch: {
+                        $setIntersection: [
+                            { $literal: myTeach },
+                            "$_learnSkills"
+                        ]
+                    }
+                }
+            },
 
-const hasMyExperience =
-    currentUser.yearsExperience != null &&
-    Number.isFinite(myExperience);
+            // Only keep users who can exchange skills both ways.
+            {
+                $match: {
+                    "_teachMatch.0": { $exists: true },
+                    "_learnMatch.0": { $exists: true }
+                }
+            },
 
-const hasTheirExperience =
-    user.yearsExperience != null &&
-    Number.isFinite(theirExperience);
+            // 4. Calculate mutual skill similarity.
+            {
+                $set: {
+                    _mutualScore: {
+                        $avg: [
+                            jaccardExpr(
+                                { $literal: myLearn },
+                                "$_teachSkills"
+                            ),
+                            jaccardExpr(
+                                { $literal: myTeach },
+                                "$_learnSkills"
+                            )
+                        ]
+                    },
+                    _matchedSkills: {
+                        $setUnion: ["$_teachMatch", "$_learnMatch"]
+                    }
+                }
+            },
 
-const experienceScore =
-    hasMyExperience && hasTheirExperience
-        ? 1 - Math.min(
-            Math.abs(myExperience - theirExperience) / 10,
-            1
-        )
-        : 0.5;
-          
-            // No reviews means neutral. An actual rating of zero stays zero.
-           // Normalize ratings to a 0–1 scale.
-          const stat = statsMap.get(String(user._id)) || {};
+            // 5. Compare skill levels.
+            {
+                $set: {
+                    _levelScores: {
+                        $map: {
+                            input: "$_matchedSkills",
+                            as: "skill",
+                            in: {
+                                $let: {
+                                    vars: {
+                                        mine: {
+                                            $convert: {
+                                                input: {
+                                                    $arrayElemAt: [{
+                                                        $map: {
+                                                            input: {
+                                                                $filter: {
+                                                                    input: {
+                                                                        $objectToArray: {
+                                                                            $literal: myLevels
+                                                                        }
+                                                                    },
+                                                                    as: "entry",
+                                                                    cond: {
+                                                                        $eq: [
+                                                                            "$$entry.k",
+                                                                            "$$skill"
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            },
+                                                            as: "entry",
+                                                            in: "$$entry.v"
+                                                        }
+                                                    }, 0]
+                                                },
+                                                to: "double",
+                                                onError: null,
+                                                onNull: null
+                                            }
+                                        },
+                                        theirs: {
+                                            $convert: {
+                                                input: {
+                                                    $arrayElemAt: [{
+                                                        $map: {
+                                                            input: {
+                                                                $filter: {
+                                                                    input: {
+                                                                        $objectToArray: {
+                                                                            $ifNull: [
+                                                                                "$skillLevels",
+                                                                                {}
+                                                                            ]
+                                                                        }
+                                                                    },
+                                                                    as: "entry",
+                                                                    cond: {
+                                                                        $eq: [
+                                                                            { $toLower: "$$entry.k" },
+                                                                            "$$skill"
+                                                                        ]
+                                                                    }
+                                                                }
+                                                            },
+                                                            as: "entry",
+                                                            in: "$$entry.v"
+                                                        }
+                                                    }, 0]
+                                                },
+                                                to: "double",
+                                                onError: null,
+                                                onNull: null
+                                            }
+                                        }
+                                    },
+                                    in: {
+                                        $cond: [
+                                            {
+                                                $and: [
+                                                    { $ne: ["$$mine", null] },
+                                                    { $ne: ["$$theirs", null] }
+                                                ]
+                                            },
+                                            {
+                                                $subtract: [
+                                                    1,
+                                                    {
+                                                        $min: [
+                                                            {
+                                                                $divide: [
+                                                                    {
+                                                                        $abs: {
+                                                                            $subtract: [
+                                                                                "$$mine",
+                                                                                "$$theirs"
+                                                                            ]
+                                                                        }
+                                                                    },
+                                                                    2
+                                                                ]
+                                                            },
+                                                            1
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            null
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $set: {
+                    _validLevelScores: {
+                        $filter: {
+                            input: "$_levelScores",
+                            as: "value",
+                            cond: { $ne: ["$$value", null] }
+                        }
+                    }
+                }
+            },
+            {
+                $set: {
+                    _levelScore: {
+                        $cond: [
+                            { $gt: [{ $size: "$_validLevelScores" }, 0] },
+                            { $avg: "$_validLevelScores" },
+                            0.5
+                        ]
+                    }
+                }
+            },
 
-const overallRatingScore = stat.rating == null
-    ? null
-    : Math.min(Math.max(Number(stat.rating) / 5, 0), 1);
+            // 6. Compare years of experience.
+            {
+                $set: {
+                    _experienceScore: {
+                        $cond: [
+                            {
+                                $and: [
+                                    { $ne: [{ $literal: myExperience ?? null }, null] },
+                                    { $ne: [{ $ifNull: ["$yearsExperience", null] }, null] }
+                                ]
+                            },
+                            {
+                                $subtract: [
+                                    1,
+                                    {
+                                        $min: [
+                                            {
+                                                $divide: [
+                                                    {
+                                                        $abs: {
+                                                            $subtract: [
+                                                                { $literal: myExperience ?? 0 },
+                                                                "$yearsExperience"
+                                                            ]
+                                                        }
+                                                    },
+                                                    10
+                                                ]
+                                            },
+                                            1
+                                        ]
+                                    }
+                                ]
+                            },
+                            0.5
+                        ]
+                    }
+                }
+            },
 
-const categoryValues = [
-    stat.clarity,
-    stat.expertise,
-    stat.punctuality
-]
-    .filter(value =>
-        value != null && Number.isFinite(Number(value))
-    )
-    .map(value =>
-        Math.min(Math.max(Number(value) / 5, 0), 1)
-    );
-
-const categoryRatingScore = categoryValues.length
-    ? categoryValues.reduce((sum, value) => sum + value, 0)
-        / categoryValues.length
-    : null;
-
-// Combine overall and category ratings when both are available.
-let ratingScore;
-
-if (
-    overallRatingScore !== null &&
-    categoryRatingScore !== null
-) {
-    ratingScore =
-        0.4 * overallRatingScore +
-        0.6 * categoryRatingScore;
-} else if (overallRatingScore !== null) {
-    ratingScore = overallRatingScore;
-} else if (categoryRatingScore !== null) {
-    ratingScore = categoryRatingScore;
-} else {
-    // No rating data: remain neutral.
-    ratingScore = 0.5;
+            // 7. Aggregate overall and category ratings.
+            {
+                $lookup: {
+                    from: Review.collection.name,
+                    let: { candidateId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $eq: ["$reviewFor", "$$candidateId"]
+                                }
+                            }
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                rating: { $avg: "$rating" },
+                                totalReviews: { $sum: 1 },
+                                clarity: { $avg: "$categoryRatings.clarity" },
+                                expertise: { $avg: "$categoryRatings.expertise" },
+                                punctuality: { $avg: "$categoryRatings.punctuality" }
+                            }
+                        }
+                    ],
+                    as: "_reviewStats"
+                }
+            },
+            {
+                $set: {
+                    _reviewStats: {
+                        $ifNull: [
+                            { $arrayElemAt: ["$_reviewStats", 0] },
+                            {
+                                rating: null,
+                                totalReviews: 0,
+                                clarity: null,
+                                expertise: null,
+                                punctuality: null
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                $set: {
+                    _categoryValues: {
+                        $filter: {
+                            input: [
+                                "$_reviewStats.clarity",
+                                "$_reviewStats.expertise",
+                                "$_reviewStats.punctuality"
+                            ],
+                            as: "value",
+                            cond: { $ne: ["$$value", null] }
+                        }
+                    }
+                }
+            },
+            {
+                $set: {
+                    _overallRatingScore: {
+                        $cond: [
+                            { $ne: ["$_reviewStats.rating", null] },
+                            { $divide: ["$_reviewStats.rating", 5] },
+                            null
+                        ]
+                    },
+                   _categoryRatingScore: {
+    $cond: [
+        { $gt: [{ $size: "$_categoryValues" }, 0] },
+        {
+            $divide: [
+                { $avg: "$_categoryValues" },
+                3
+            ]
+        },
+        null
+    ]
 }
+                }
+            },
+            {
+                $set: {
+                    _ratingScore: {
+                        $switch: {
+                            branches: [
+                                {
+                                    case: {
+                                        $and: [
+                                            { $ne: ["$_overallRatingScore", null] },
+                                            { $ne: ["$_categoryRatingScore", null] }
+                                        ]
+                                    },
+                                    then: {
+                                        $add: [
+                                            { $multiply: [0.4, "$_overallRatingScore"] },
+                                            { $multiply: [0.6, "$_categoryRatingScore"] }
+                                        ]
+                                    }
+                                },
+                                {
+                                    case: { $ne: ["$_overallRatingScore", null] },
+                                    then: "$_overallRatingScore"
+                                },
+                                {
+                                    case: { $ne: ["$_categoryRatingScore", null] },
+                                    then: "$_categoryRatingScore"
+                                }
+                            ],
+                            default: 0.5
+                        }
+                    }
+                }
+            },
 
-            const availability = skills(user.availability);
-            const availabilityScore =
-                myAvailability.size && availability.size
-                    ? jaccard(myAvailability, availability)
-                    : 0.5;
+            // 8. Availability and preference similarity.
+            {
+                $set: {
+                    _availabilityScore: {
+                        $cond: [
+                            {
+                                $and: [
+                                    { $gt: [{ $size: { $literal: myAvailability } }, 0] },
+                                    { $gt: [{ $size: "$_availability" }, 0] }
+                                ]
+                            },
+                            jaccardExpr(
+                                { $literal: myAvailability },
+                                "$_availability"
+                            ),
+                            0.5
+                        ]
+                    },
+                    _preferenceScore: {
+                        $cond: [
+                            {
+                                $and: [
+                                    { $gt: [{ $size: { $literal: myPreferences } }, 0] },
+                                    { $gt: [{ $size: "$_preferences" }, 0] }
+                                ]
+                            },
+                            jaccardExpr(
+                                { $literal: myPreferences },
+                                "$_preferences"
+                            ),
+                            0.5
+                        ]
+                    }
+                }
+            },
 
-            const preferences = skills(user.matchingPreferences);
-            const preferenceScore =
-                myPreferences.size && preferences.size
-                    ? jaccard(myPreferences, preferences)
-                    : 0.5;
+            // 9. Calculate weighted scores inside MongoDB.
+            {
+                $set: {
+                    scoreBreakdown: {
+                        mutualSkills: {
+                            $round: [{ $multiply: [50, "$_mutualScore"] }, 2]
+                        },
+                        skillLevel: {
+                            $round: [{ $multiply: [15, "$_levelScore"] }, 2]
+                        },
+                        experience: {
+                            $round: [{ $multiply: [10, "$_experienceScore"] }, 2]
+                        },
+                        rating: {
+                            $round: [{ $multiply: [10, "$_ratingScore"] }, 2]
+                        },
+                        availability: {
+                            $round: [{ $multiply: [7.5, "$_availabilityScore"] }, 2]
+                        },
+                        preferences: {
+                            $round: [{ $multiply: [7.5, "$_preferenceScore"] }, 2]
+                        }
+                    }
+                }
+            },
+            {
+                $set: {
+                    score: {
+                        $round: [
+                            {
+                                $add: [
+                                    "$scoreBreakdown.mutualSkills",
+                                    "$scoreBreakdown.skillLevel",
+                                    "$scoreBreakdown.experience",
+                                    "$scoreBreakdown.rating",
+                                    "$scoreBreakdown.availability",
+                                    "$scoreBreakdown.preferences"
+                                ]
+                            },
+                            1
+                        ]
+                    },
+                    teachMatch: "$_teachMatch",
+                    learnMatch: "$_learnMatch",
+                    rating: {
+                        $round: [{ $ifNull: ["$_reviewStats.rating", 0] }, 1]
+                    },
+                    totalReviews: "$_reviewStats.totalReviews",
+                    categoryRatings: {
+                        clarity: {
+                            $round: ["$_reviewStats.clarity", 1]
+                        },
+                        expertise: {
+                            $round: ["$_reviewStats.expertise", 1]
+                        },
+                        punctuality: {
+                            $round: ["$_reviewStats.punctuality", 1]
+                        }
+                    }
+                }
+            },
 
-          const scoreBreakdown = {
-    mutualSkills: Number((50 * mutualScore).toFixed(2)),
-    skillLevel: Number((15 * levelScore).toFixed(2)),
-    experience: Number((10 * experienceScore).toFixed(2)),
-    rating: Number((10 * ratingScore).toFixed(2)),
-    availability: Number((7.5 * availabilityScore).toFixed(2)),
-    preferences: Number((7.5 * preferenceScore).toFixed(2))
-};
+            // 10. Remove internal calculation fields.
+            {
+                $unset: [
+                    "_teachSkills",
+                    "_learnSkills",
+                    "_availability",
+                    "_preferences",
+                    "_teachMatch",
+                    "_learnMatch",
+                    "_matchedSkills",
+                    "_levelScores",
+                    "_validLevelScores",
+                    "_levelScore",
+                    "_mutualScore",
+                    "_experienceScore",
+                    "_reviewStats",
+                    "_categoryValues",
+                    "_overallRatingScore",
+                    "_categoryRatingScore",
+                    "_ratingScore",
+                    "_availabilityScore",
+                    "_preferenceScore"
+                ]
+            },
 
-const score = Object.values(scoreBreakdown)
-    .reduce((sum, value) => sum + value, 0);
+            // 11. Return the same response structure as before.
+            {
+                $set: {
+                    user: "$$ROOT"
+                }
+            },
+            {
+                $unset: [
+                    "user.score",
+                    "user.scoreBreakdown",
+                    "user.teachMatch",
+                    "user.learnMatch"
+                ]
+            },
+            {
+                $project: {
+                    _id: 0,
+                    user: 1,
+                    score: 1,
+                    scoreBreakdown: 1,
+                    teachMatch: 1,
+                    learnMatch: 1
+                }
+            },
 
-           return {
-    user: {
-        ...user,
-        rating: stat.rating == null
-            ? 0
-            : Number(stat.rating.toFixed(1)),
-        totalReviews: stat.totalReviews || 0,
-        categoryRatings: {
-            clarity: stat.clarity == null
-                ? null : Number(stat.clarity.toFixed(1)),
-            expertise: stat.expertise == null
-                ? null : Number(stat.expertise.toFixed(1)),
-            punctuality: stat.punctuality == null
-                ? null : Number(stat.punctuality.toFixed(1))
-        }
-    },
+            // 12. Return the top three recommendations.
+            {
+                $sort: { score: -1 }
+            },
+            {
+                $limit: 3
+            }
+        ];
 
-    score: Number(score.toFixed(1)),
-
-    scoreBreakdown,
-
-    teachMatch,
-    learnMatch
-};
-        })
-        // Keep only candidates who can exchange skills in both directions.
-        .filter(item =>
-            item.teachMatch.length > 0 &&
-            item.learnMatch.length > 0
-        )
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 3);
+        const results = await User.aggregate(pipeline);
 
         return res.json(results);
+
     } catch (error) {
         console.error("Get Recommendations Error:", error);
         return res.status(500).json({
-            message: "Unable to generate recommendations."
+            message: "Unable to generate recommendations.",
+            error: error.message
         });
     }
 };
