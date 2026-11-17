@@ -29,6 +29,39 @@ exports.getSkillQuiz = async (req, res) => {
             });
         }
 
+const existingUserSkill = await UserSkill.findOne({
+    user: user._id,
+    skillKey,
+    skillType: "teach"
+});
+
+const alreadyVerified =
+    user.skillVerifications.some(
+        item =>
+            item.skillName.trim().toLowerCase() === skillKey &&
+            item.status === "verified"
+    ) ||
+    existingUserSkill?.verificationStatus === "verified";
+
+if (alreadyVerified) {
+    return res.status(409).json({
+        message: "This skill is already verified. You do not need to take the quiz again."
+    });
+}
+
+const alreadyPending =
+    user.skillVerifications.some(
+        item =>
+            item.skillName.trim().toLowerCase() === skillKey &&
+            item.status === "pending"
+    ) ||
+    existingUserSkill?.verificationStatus === "pending";
+
+if (alreadyPending) {
+    return res.status(409).json({
+        message: "This skill already has a pending verification. Please wait for the admin review."
+    });
+}
         const questions = skillQuizzes[skillKey];
 
         if (!questions || questions.length === 0) {
