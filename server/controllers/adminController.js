@@ -378,3 +378,168 @@ exports.reviewSkillVerification = async (req, res) => {
         });
     }
 };
+
+// GET /api/admin/verifications/verified
+// Return all currently verified teaching skills.
+exports.getVerifiedVerifications = async (req, res) => {
+    try {
+        const users = await User.find({
+            "skillVerifications.status": "verified"
+        })
+            .select("name email skillVerifications")
+            .lean();
+
+        const verifications = [];
+
+        users.forEach(user => {
+            (user.skillVerifications || []).forEach(item => {
+                if (item.status === "verified") {
+                    verifications.push({
+                        verificationId: String(item._id),
+                        userId: String(user._id),
+
+                        user: {
+                            _id: user._id,
+                            name: user.name,
+                            email: user.email
+                        },
+
+                        skillName: item.skillName,
+                        evidenceType: item.evidenceType,
+                        evidenceUrl: item.evidenceUrl,
+                        status: item.status,
+                        submittedAt: item.submittedAt,
+                        verifiedAt: item.verifiedAt,
+                        verifiedBy: item.verifiedBy
+                            ? String(item.verifiedBy)
+                            : null
+                    });
+                }
+            });
+        });
+
+        verifications.sort((a, b) =>
+            new Date(b.verifiedAt || 0) -
+            new Date(a.verifiedAt || 0)
+        );
+
+        return res.status(200).json({
+            success: true,
+            count: verifications.length,
+            verifications
+        });
+
+    } catch (error) {
+        console.error("Admin get verified skills error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to retrieve verified skills."
+        });
+    }
+};
+
+
+// PATCH /api/admin/verifications/:userId/:verificationId/revoke
+// Revoke an existing skill verification.
+exports.revokeSkillVerification = async (req, res) => {
+    try {
+        const { userId, verificationId } = req.params;
+        const { revocationNote = "" } = req.body;
+
+        if (
+            typeof revocationNote !== "string" ||
+            revocationNote.length > 500
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "Revocation note must be text with at most 500 characters."
+            });
+        }
+
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User account not found."
+            });
+        }
+
+        const verification = user.skillVerifications.id(verificationId);
+
+        if (!verification) {
+            return res.status(404).json({
+                success: false,
+                message: "Skill verification record not found."
+            });
+        }
+
+        if (verification.status !== "verified") {
+            return res.status(409).json({
+                success: false,
+                message: "Only verified skills can be revoked."
+            });
+        }
+
+        const revokedAt = new Date();
+        const normalizedSkill = verification.skillName
+            .trim()
+            .toLowerCase();
+
+        const note = revocationNote.trim();
+
+        // Update the embedded User verification record.
+        verification.status = "unverified";
+        verification.revokedBy = req.user._id;
+        verification.revokedAt = revokedAt;
+        verification.revocationNote = note;
+
+        // Keep verifiedBy and verifiedAt as historical approval details.
+        await user.save();
+
+        // Synchronize the canonical UserSkill record.
+        const updatedSkill = await UserSkill.findOneAndUpdate(
+            {
+                user: user._id,
+                skillKey: normalizedSkill,
+                skillType: "teach"
+            },
+            {
+                $set: {
+                    verificationStatus: "unverified",
+                    revokedBy: req.user._id,
+                    revokedAt,
+                    revocationNote: note
+                }
+            },
+            {
+                new: true,
+                runValidators: true
+            }
+        );
+
+        if (!updatedSkill) {
+            console.error(
+                "UserSkill record missing during revocation:",
+                user._id,
+                normalizedSkill
+            );
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: `Verification for ${verification.skillName} has been revoked.`,
+            verification
+        });
+
+    } catch (error) {
+        console.error("Admin revoke verification error:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "Failed to revoke skill verification."
+        });
+    }
+};
+

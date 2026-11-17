@@ -21,9 +21,19 @@ router.get(
     adminController.getPendingVerifications
 );
 
+router.get(
+    "/verifications/verified",
+    adminController.getVerifiedVerifications
+);
+
 router.patch(
     "/verifications/:userId/:verificationId",
     adminController.reviewSkillVerification
+);
+
+router.patch(
+    "/verifications/:userId/:verificationId/revoke",
+    adminController.revokeSkillVerification
 );
 
 router.get("/stats", adminController.getAdminStats);

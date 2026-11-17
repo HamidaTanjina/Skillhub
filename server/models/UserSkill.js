@@ -62,7 +62,23 @@ const UserSkillSchema = new mongoose.Schema({
         type: String,
         default: "",
         trim: true
-    }
+    },
+    revokedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    default: null
+},
+
+revokedAt: {
+    type: Date,
+    default: null
+},
+
+revocationNote: {
+    type: String,
+    default: "",
+    trim: true
+}
 }, {
     timestamps: true
 });
