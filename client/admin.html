@@ -6,8 +6,32 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SkillHub Admin Dashboard</title>
 
+<!-- Same Font Awesome version and brand icon used by SkillHub -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <style>
 :root {
+    --bg: #111827;
+    --card: #1f2937;
+    --ink: #f1f5f9;
+    --muted: #9ca3af;
+    --line: #374151;
+    --primary: #3b82f6;
+    --purple: #7c3aed;
+    --nav: #141c2e;
+    --green: #34d399;
+    --red: #f87171;
+    --amber: #fbbf24;
+    --table-head: #273449;
+    --table-hover: #263449;
+    --input-bg: #273449;
+    --input-text: #f1f5f9;
+    --soft-text: #cbd5e1;
+    --shadow: 0 8px 25px rgba(0,0,0,.15);
+}
+
+body.light-theme {
     --bg: #f4f7fb;
     --card: #ffffff;
     --ink: #172033;
@@ -15,10 +39,15 @@
     --line: #e5e9f2;
     --primary: #3b82f6;
     --purple: #7c3aed;
-    --nav: #141c2e;
     --green: #16845b;
     --red: #c2414b;
     --amber: #a16207;
+    --table-head: #fafbfe;
+    --table-hover: #fbfcff;
+    --input-bg: #ffffff;
+    --input-text: #172033;
+    --soft-text: #344054;
+    --shadow: 0 8px 25px rgba(23,32,51,.04);
 }
 
 * { box-sizing: border-box; }
@@ -28,6 +57,7 @@ body {
     background: var(--bg);
     color: var(--ink);
     font: 14px/1.5 Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+    transition: background .2s, color .2s;
 }
 
 button, input, select { font: inherit; }
@@ -66,7 +96,7 @@ button:disabled { opacity: .65; cursor: not-allowed; }
     border-radius: 12px;
     background: linear-gradient(135deg,var(--primary),var(--purple));
     color: white;
-    font-size: 22px;
+    font-size: 21px;
     box-shadow: 0 4px 12px #3b82f638;
 }
 
@@ -184,7 +214,7 @@ button:disabled { opacity: .65; cursor: not-allowed; }
 .main { margin-left: 255px; }
 
 .top {
-    height: 74px;
+    min-height: 74px;
     position: sticky;
     top: 0;
     z-index: 5;
@@ -192,13 +222,37 @@ button:disabled { opacity: .65; cursor: not-allowed; }
     align-items: center;
     justify-content: space-between;
     gap: 12px;
-    padding: 0 32px;
+    padding: 12px 32px;
     background: var(--card);
     border-bottom: 1px solid var(--line);
 }
 
 .top small { color: var(--muted); }
 h1 { margin: 1px 0; font-size: 19px; }
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.theme-toggle-btn {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--input-bg);
+    color: var(--ink);
+    font-size: 16px;
+    transition: .2s;
+}
+
+.theme-toggle-btn:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+}
 
 .avatar {
     width: 39px;
@@ -237,8 +291,8 @@ h1 { margin: 1px 0; font-size: 19px; }
     padding: 8px 12px;
     border: 1px solid var(--line);
     border-radius: 8px;
-    background: white;
-    color: #344054;
+    background: var(--input-bg);
+    color: var(--ink);
     font-weight: 700;
 }
 
@@ -252,14 +306,14 @@ h1 { margin: 1px 0; font-size: 19px; }
 
 .danger {
     color: var(--red);
-    background: #fff0f0;
-    border-color: #ffd6d8;
+    background: rgba(239,68,68,.10);
+    border-color: rgba(239,68,68,.25);
 }
 
 .success {
     color: var(--green);
-    background: #e9f8f0;
-    border-color: #c8eed9;
+    background: rgba(16,185,129,.10);
+    border-color: rgba(16,185,129,.25);
 }
 
 .sm { padding: 6px 9px; font-size: 11px; }
@@ -275,7 +329,7 @@ h1 { margin: 1px 0; font-size: 19px; }
     background: var(--card);
     border: 1px solid var(--line);
     border-radius: 14px;
-    box-shadow: 0 8px 25px #17203308;
+    box-shadow: var(--shadow);
 }
 
 .card { padding: 19px; }
@@ -322,8 +376,8 @@ h3 { margin: 0; font-size: 15px; }
     border: 1px solid var(--line);
     border-radius: 8px;
     outline: none;
-    background: white;
-    color: var(--ink);
+    background: var(--input-bg);
+    color: var(--input-text);
 }
 
 .search { min-width: 210px; }
@@ -343,8 +397,8 @@ table {
 
 th {
     padding: 13px 18px;
-    background: #fafbfe;
-    color: #7b8497;
+    background: var(--table-head);
+    color: var(--muted);
     text-align: left;
     font-size: 10px;
     text-transform: uppercase;
@@ -353,12 +407,12 @@ th {
 
 td {
     padding: 13px 18px;
-    border-top: 1px solid #eef1f6;
-    color: #344054;
+    border-top: 1px solid var(--line);
+    color: var(--soft-text);
     font-size: 12px;
 }
 
-tbody tr:hover { background: #fbfcff; }
+tbody tr:hover { background: var(--table-hover); }
 
 .person {
     display: flex;
@@ -378,24 +432,24 @@ tbody tr:hover { background: #fbfcff; }
     font-weight: 800;
 }
 
-.person strong { display: block; color: #202a3c; }
+.person strong { display: block; color: var(--ink); }
 .person small { display: block; color: var(--muted); font-size: 11px; }
 
 .badge {
     display: inline-block;
     padding: 4px 9px;
     border-radius: 20px;
-    background: #f0f2f6;
-    color: #596579;
+    background: rgba(148,163,184,.15);
+    color: var(--muted);
     font-size: 10px;
     font-weight: 800;
 }
 
-.pending { background: #fff7df; color: var(--amber); }
-.accepted { background: #eef2ff; color: #4338ca; }
-.completed { background: #e9f8f0; color: var(--green); }
-.rejected, .banned { background: #fff0f0; color: var(--red); }
-.confirmation { background: #eaf7ff; color: #0369a1; }
+.pending { background: rgba(245,158,11,.14); color: var(--amber); }
+.accepted { background: rgba(99,102,241,.14); color: #818cf8; }
+.completed { background: rgba(16,185,129,.14); color: var(--green); }
+.rejected, .banned { background: rgba(239,68,68,.12); color: var(--red); }
+.confirmation { background: rgba(14,165,233,.12); color: #38bdf8; }
 
 .rowactions { display: flex; align-items: center; gap: 7px; }
 
@@ -420,8 +474,8 @@ tbody tr:hover { background: #fbfcff; }
 }
 
 .notice.show { display: block; }
-.notice.error { background: #fff0f0; color: #a62935; }
-.notice.ok { background: #e9f8f0; color: #116644; }
+.notice.error { background: rgba(239,68,68,.12); color: var(--red); }
+.notice.ok { background: rgba(16,185,129,.12); color: var(--green); }
 
 .empty { padding: 32px; text-align: center; color: var(--muted); }
 
@@ -432,7 +486,7 @@ tbody tr:hover { background: #fbfcff; }
     display: flex;
     justify-content: space-between;
     margin-bottom: 6px;
-    color: #596579;
+    color: var(--soft-text);
     font-size: 12px;
 }
 
@@ -440,7 +494,7 @@ tbody tr:hover { background: #fbfcff; }
     height: 7px;
     overflow: hidden;
     border-radius: 9px;
-    background: #edf0f6;
+    background: rgba(148,163,184,.18);
 }
 
 .fill {
@@ -461,13 +515,26 @@ tbody tr:hover { background: #fbfcff; }
 .quick {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 12px;
     padding: 13px 0;
-    border-bottom: 1px solid #eef1f6;
-    color: #596579;
+    border-bottom: 1px solid var(--line);
+    color: var(--soft-text);
 }
 
 .quick:last-child { border: 0; }
+
+.quick strong { color: var(--ink); }
+
+.quick button { white-space: nowrap; }
+
+.evidence-link {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.evidence-link:hover { text-decoration: underline; }
 
 @media(max-width:1100px) {
     .stats { grid-template-columns: repeat(2,minmax(0,1fr)); }
@@ -476,7 +543,7 @@ tbody tr:hover { background: #fbfcff; }
 
 @media(max-width:800px) {
     .content { padding: 22px 18px; }
-    .top { padding: 0 18px; }
+    .top { padding: 12px 18px; }
     .panelhead { align-items: flex-start; flex-direction: column; }
     .tools { width: 100%; }
     .search { flex: 1; min-width: 0; }
@@ -490,7 +557,7 @@ tbody tr:hover { background: #fbfcff; }
     .logout-btn { justify-content: center; padding: 11px 4px; }
     .logout-text { display: none; }
     .main { margin-left: 66px; }
-    .top { padding: 0 12px; }
+    .top { padding: 12px; }
     .content { padding: 18px 10px; }
     .welcome { align-items: flex-start; flex-direction: column; }
     .stats { gap: 9px; }
@@ -498,15 +565,21 @@ tbody tr:hover { background: #fbfcff; }
     .value { font-size: 25px; }
     .top h1 { font-size: 16px; }
     .footer { flex-direction: column; }
+    .top-actions { gap: 8px; }
 }
 </style>
+
+<!-- Reuse the existing shared SkillHub theme controller -->
+<script src="./theme.js" defer></script>
 </head>
 
 <body>
 
 <aside class="sidebar">
     <div class="brand">
-        <span class="mark">S</span>
+        <span class="mark">
+            <i class="fa-solid fa-graduation-cap" aria-hidden="true"></i>
+        </span>
         <span class="brandtext">
             SkillHub
             <small>ADMIN CONSOLE</small>
@@ -551,6 +624,16 @@ tbody tr:hover { background: #fbfcff; }
             </span>
             <span class="navtext">Swap requests</span>
         </button>
+
+        <button data-page="verifications">
+            <span class="nav-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 12l2 2 4-4"/>
+                    <path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4z"/>
+                </svg>
+            </span>
+            <span class="navtext">Skill verifications</span>
+        </button>
     </nav>
 
     <div class="sidefoot">
@@ -574,22 +657,34 @@ tbody tr:hover { background: #fbfcff; }
             <small>SkillHub / Administration</small>
             <h1 id="pageTitle">Overview</h1>
         </div>
-        <div class="avatar" title="Administrator">A</div>
+
+        <div class="top-actions">
+            <!-- theme.js uses this exact ID and class -->
+            <button type="button"
+                    id="themeToggle"
+                    class="theme-toggle-btn"
+                    aria-label="Toggle light and dark theme"
+                    title="Toggle theme">
+                <i class="fa-solid fa-moon" aria-hidden="true"></i>
+            </button>
+
+            <div class="avatar" title="Administrator">A</div>
+        </div>
     </header>
 
     <div class="content">
         <div class="welcome">
-            <div>
-                <h2 id="welcomeTitle">Platform overview</h2>
-                <p id="welcomeText">
-                    Monitor members, manage swap requests, and keep SkillHub running smoothly.
-                </p>
-            </div>
-            <button class="btn primary" id="refresh">↻ Refresh data</button>
-        </div>
+    <div></div>
+
+    <button class="btn primary" id="refresh" type="button">
+        <i class="fa-solid fa-rotate" aria-hidden="true"></i>
+        Refresh data
+    </button>
+</div>
 
         <div id="notice" class="notice" role="status" aria-live="polite"></div>
 
+        <!-- OVERVIEW -->
         <section id="overview" class="section active">
             <div class="stats">
                 <div class="card">
@@ -624,7 +719,9 @@ tbody tr:hover { background: #fbfcff; }
                             <h3>Swap request breakdown</h3>
                             <p>Current status of all requests</p>
                         </div>
-                        <button class="btn sm" data-goto="swaps">Manage swaps →</button>
+                        <button class="btn sm" data-goto="swaps" type="button">
+                            Manage swaps →
+                        </button>
                     </div>
                     <div class="breakdown" id="breakdown"></div>
                 </div>
@@ -635,8 +732,11 @@ tbody tr:hover { background: #fbfcff; }
                             <h3>Account summary</h3>
                             <p>Member account overview</p>
                         </div>
-                        <button class="btn sm" data-goto="users">Manage users →</button>
+                        <button class="btn sm" data-goto="users" type="button">
+                            Manage users →
+                        </button>
                     </div>
+
                     <div class="summary">
                         <div class="quick">
                             Total members <strong id="quickUsers">—</strong>
@@ -645,13 +745,21 @@ tbody tr:hover { background: #fbfcff; }
                             Suspended accounts <strong id="bannedUsers">—</strong>
                         </div>
                         <div class="quick">
-                            Pending skill verifications <strong id="pendingVerifications">—</strong>
+                            Pending skill verifications
+                            <strong id="pendingVerifications">—</strong>
+                        </div>
+                        <div class="quick">
+                            <span>Review submissions</span>
+                            <button class="btn sm" data-goto="verifications" type="button">
+                                Review →
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <!-- USERS -->
         <section id="users" class="section">
             <div class="panel">
                 <div class="panelhead">
@@ -698,6 +806,7 @@ tbody tr:hover { background: #fbfcff; }
             </div>
         </section>
 
+        <!-- SWAPS -->
         <section id="swaps" class="section">
             <div class="panel">
                 <div class="panelhead">
@@ -745,6 +854,58 @@ tbody tr:hover { background: #fbfcff; }
                 </div>
             </div>
         </section>
+
+        <!-- SKILL VERIFICATIONS -->
+        <section id="verifications" class="section">
+            <div class="panel">
+                <div class="panelhead">
+                    <div>
+                        <h3>Skill verification review</h3>
+                        <p>Review submitted evidence and approve or reject teaching skills.</p>
+                    </div>
+
+                    <div class="tools">
+                        <input id="verificationSearch" class="search"
+                               placeholder="Search member or skill..."
+                               aria-label="Search verifications">
+
+                        <select id="verificationFilter"
+                                aria-label="Filter verification type">
+                            <option value="all">All evidence types</option>
+                            <option value="certificate">Certificate</option>
+                            <option value="repository">Repository</option>
+                            <option value="quiz">Quiz</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tablewrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Member</th>
+                                <th>Skill</th>
+                                <th>Evidence</th>
+                                <th>Submitted</th>
+                                <th>Review decision</th>
+                            </tr>
+                        </thead>
+                        <tbody id="verificationsBody">
+                            <tr>
+                                <td colspan="5" class="empty">
+                                    Loading pending verifications...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="footer">
+                    <span id="verificationsCount">Loading...</span>
+                    <span>Only pending submissions are displayed.</span>
+                </div>
+            </div>
+        </section>
     </div>
 </main>
 
@@ -756,10 +917,7 @@ tbody tr:hover { background: #fbfcff; }
     // CONFIGURATION
     // =========================================
 
-    const API = 'http://localhost:5000/api';
-
-    // Change this if your login page has another filename/path.
-    // If index.html contains your login modal, keep this as index.html.
+   const API = 'https://skillhub-backend-cths.onrender.com/api';
     const LOGIN_PAGE = './index.html';
 
     const STATUSES = [
@@ -772,6 +930,7 @@ tbody tr:hover { background: #fbfcff; }
 
     let users = [];
     let swaps = [];
+    let verifications = [];
     let noticeTimer = null;
 
     const $ = id => document.getElementById(id);
@@ -785,11 +944,9 @@ tbody tr:hover { background: #fbfcff; }
     }
 
     function clearSession() {
-        // These are the existing SkillHub authentication keys.
         localStorage.removeItem('token');
         localStorage.removeItem('skillhubUser');
 
-        // Clear matching tab-scoped session keys if used.
         sessionStorage.removeItem('token');
         sessionStorage.removeItem('skillhubUser');
     }
@@ -802,14 +959,11 @@ tbody tr:hover { background: #fbfcff; }
         if (!confirmed) return;
 
         clearSession();
-
-        // Replace the dashboard in browser history.
         window.location.replace(LOGIN_PAGE);
     }
 
     $('logoutBtn').addEventListener('click', logout);
 
-    // Do not load protected data if no login token exists.
     if (!getToken()) {
         window.location.replace(LOGIN_PAGE);
         return;
@@ -821,10 +975,12 @@ tbody tr:hover { background: #fbfcff; }
 
     function notice(message, error = false) {
         const n = $('notice');
+
         n.textContent = message;
         n.className = 'notice show ' + (error ? 'error' : 'ok');
 
         clearTimeout(noticeTimer);
+
         noticeTimer = setTimeout(() => {
             n.className = 'notice';
         }, 5000);
@@ -872,7 +1028,10 @@ tbody tr:hover { background: #fbfcff; }
             Rejected: 'rejected',
             'Pending Confirmation': 'confirmation',
             admin: 'accepted',
-            user: ''
+            user: '',
+            certificate: 'accepted',
+            repository: 'confirmation',
+            quiz: 'completed'
         };
 
         const className = classes[status] || '';
@@ -915,7 +1074,7 @@ tbody tr:hover { background: #fbfcff; }
         try {
             data = await response.json();
         } catch {
-            // Handle non-JSON error responses below.
+            // Handle non-JSON responses below.
         }
 
         if (response.status === 401) {
@@ -954,6 +1113,7 @@ tbody tr:hover { background: #fbfcff; }
 
         $('quickUsers').textContent = stats.totalUsers ?? 0;
         $('bannedUsers').textContent = stats.bannedUsers ?? 0;
+
         $('pendingVerifications').textContent =
             stats.pendingVerifications ?? 0;
 
@@ -991,7 +1151,9 @@ tbody tr:hover { background: #fbfcff; }
 
     async function loadUsers() {
         const data = await api('/admin/users');
+
         users = Array.isArray(data.users) ? data.users : [];
+
         renderUsers();
     }
 
@@ -1000,7 +1162,8 @@ tbody tr:hover { background: #fbfcff; }
         const filter = $('userFilter').value;
 
         const list = users.filter(user => {
-            const text = `${user.name || ''} ${user.email || ''}`.toLowerCase();
+            const text =
+                `${user.name || ''} ${user.email || ''}`.toLowerCase();
 
             const matchesSearch = text.includes(query);
 
@@ -1065,7 +1228,9 @@ tbody tr:hover { background: #fbfcff; }
 
     async function loadSwaps() {
         const data = await api('/admin/swaps');
+
         swaps = Array.isArray(data.swaps) ? data.swaps : [];
+
         renderSwaps();
     }
 
@@ -1113,7 +1278,7 @@ tbody tr:hover { background: #fbfcff; }
                 </td>
                 <td>
                     <strong>${esc(swap.teachSkill || '—')}</strong>
-                    <small style="display:block;color:#718096">
+                    <small style="display:block;color:var(--muted)">
                         Learns: ${esc(swap.learnSkill || '—')}
                     </small>
                 </td>
@@ -1139,6 +1304,123 @@ tbody tr:hover { background: #fbfcff; }
     }
 
     // =========================================
+    // LOAD PENDING SKILL VERIFICATIONS
+    // =========================================
+
+    async function loadVerifications() {
+        const data = await api('/admin/verifications');
+
+        verifications = Array.isArray(data.verifications)
+            ? data.verifications
+            : [];
+
+        renderVerifications();
+    }
+
+    function safeEvidenceUrl(value) {
+        if (!value) return '';
+
+        try {
+            const url = new URL(value);
+
+            if (!['http:', 'https:'].includes(url.protocol)) {
+                return '';
+            }
+
+            return url.href;
+        } catch {
+            return '';
+        }
+    }
+
+    function renderVerifications() {
+        const query = $('verificationSearch').value.trim().toLowerCase();
+        const filter = $('verificationFilter').value;
+
+        const list = verifications.filter(item => {
+            const text = [
+                item.user?.name,
+                item.user?.email,
+                item.skillName
+            ].join(' ').toLowerCase();
+
+            return text.includes(query) &&
+                (filter === 'all' || item.evidenceType === filter);
+        });
+
+        $('verificationsCount').textContent =
+            `${list.length} of ${verifications.length} pending submissions`;
+
+        if (!list.length) {
+            $('verificationsBody').innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty">
+                        No pending skill verifications found.
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        $('verificationsBody').innerHTML = list.map(item => {
+            const evidenceUrl = safeEvidenceUrl(item.evidenceUrl);
+
+            const evidence = evidenceUrl
+                ? `<a class="evidence-link"
+                      href="${esc(evidenceUrl)}"
+                      target="_blank"
+                      rel="noopener noreferrer">
+                      <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                      View evidence
+                   </a>`
+                : '<span class="sub">No valid evidence link</span>';
+
+            return `
+                <tr>
+                    <td>
+                        <div class="person">
+                            <span class="initial">
+                                ${esc(initials(item.user?.name))}
+                            </span>
+                            <div>
+                                <strong>${esc(item.user?.name || 'Unknown member')}</strong>
+                                <small>${esc(item.user?.email || '')}</small>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <strong>${esc(item.skillName || 'Unknown skill')}</strong>
+                        <small style="display:block;color:var(--muted)">
+                            Teaching skill
+                        </small>
+                    </td>
+                    <td>
+                        ${badge(item.evidenceType)}
+                        <div style="margin-top:7px">${evidence}</div>
+                    </td>
+                    <td>${esc(date(item.submittedAt))}</td>
+                    <td>
+                        <div class="rowactions">
+                            <button class="btn success sm"
+                                data-verification-action="verified"
+                                data-user-id="${esc(item.userId)}"
+                                data-verification-id="${esc(item.verificationId)}">
+                                Approve
+                            </button>
+                            <button class="btn danger sm"
+                                data-verification-action="rejected"
+                                data-user-id="${esc(item.userId)}"
+                                data-verification-id="${esc(item.verificationId)}">
+                                Reject
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // =========================================
     // REFRESH DASHBOARD
     // =========================================
 
@@ -1146,21 +1428,25 @@ tbody tr:hover { background: #fbfcff; }
         const button = $('refresh');
 
         button.disabled = true;
-        button.textContent = 'Loading...';
+        button.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Loading...';
 
         try {
             const results = await Promise.allSettled([
                 loadStats(),
                 loadUsers(),
-                loadSwaps()
+                loadSwaps(),
+                loadVerifications()
             ]);
 
-            const failures = results.filter(result => result.status === 'rejected');
+            const failures = results.filter(
+                result => result.status === 'rejected'
+            );
 
             if (failures.length) {
                 throw new Error(
-                    failures.map(result => result.reason?.message || 'Request failed')
-                        .join(' | ')
+                    failures.map(result =>
+                        result.reason?.message || 'Request failed'
+                    ).join(' | ')
                 );
             }
 
@@ -1169,7 +1455,8 @@ tbody tr:hover { background: #fbfcff; }
             notice(error.message, true);
         } finally {
             button.disabled = false;
-            button.textContent = '↻ Refresh data';
+            button.innerHTML =
+                '<i class="fa-solid fa-rotate"></i> Refresh data';
         }
     }
 
@@ -1193,13 +1480,21 @@ tbody tr:hover { background: #fbfcff; }
                 'Swap request moderation',
                 'Manage swap requests',
                 'Review swap activity and update request statuses.'
+            ],
+            verifications: [
+                'Skill verifications',
+                'Review skill verifications',
+                'Review submitted evidence and manage teaching skill verification requests.'
             ]
         };
 
         if (!titles[page]) return;
 
         document.querySelectorAll('[data-page]').forEach(button => {
-            button.classList.toggle('active', button.dataset.page === page);
+            button.classList.toggle(
+                'active',
+                button.dataset.page === page
+            );
         });
 
         document.querySelectorAll('.section').forEach(section => {
@@ -1207,8 +1502,7 @@ tbody tr:hover { background: #fbfcff; }
         });
 
         $('pageTitle').textContent = titles[page][0];
-        $('welcomeTitle').textContent = titles[page][1];
-        $('welcomeText').textContent = titles[page][2];
+    
     }
 
     document.querySelectorAll('[data-page]').forEach(button => {
@@ -1223,8 +1517,12 @@ tbody tr:hover { background: #fbfcff; }
 
     $('userSearch').addEventListener('input', renderUsers);
     $('userFilter').addEventListener('change', renderUsers);
+
     $('swapSearch').addEventListener('input', renderSwaps);
     $('swapFilter').addEventListener('change', renderSwaps);
+
+    $('verificationSearch').addEventListener('input', renderVerifications);
+    $('verificationFilter').addEventListener('change', renderVerifications);
 
     // =========================================
     // SUSPEND / RESTORE MEMBER
@@ -1232,6 +1530,7 @@ tbody tr:hover { background: #fbfcff; }
 
     $('usersBody').addEventListener('click', async event => {
         const button = event.target.closest('[data-user-action]');
+
         if (!button || button.disabled) return;
 
         const user = users.find(
@@ -1278,10 +1577,14 @@ tbody tr:hover { background: #fbfcff; }
 
     $('swapsBody').addEventListener('click', async event => {
         const button = event.target.closest('[data-save]');
+
         if (!button || button.disabled) return;
 
         const id = button.dataset.save;
-        const swap = swaps.find(item => String(item._id) === id);
+
+        const swap = swaps.find(
+            item => String(item._id) === id
+        );
 
         const select = Array.from(
             $('swapsBody').querySelectorAll('[data-select]')
@@ -1327,10 +1630,82 @@ tbody tr:hover { background: #fbfcff; }
     });
 
     // =========================================
+    // REVIEW SKILL VERIFICATIONS
+    // =========================================
+
+    $('verificationsBody').addEventListener('click', async event => {
+        const button = event.target.closest('[data-verification-action]');
+
+        if (!button || button.disabled) return;
+
+        const status = button.dataset.verificationAction;
+        const userId = button.dataset.userId;
+        const verificationId = button.dataset.verificationId;
+
+        const verification = verifications.find(item =>
+            String(item.userId) === userId &&
+            String(item.verificationId) === verificationId
+        );
+
+        if (!verification) {
+            notice('Verification submission not found. Refresh the page.', true);
+            return;
+        }
+
+        const actionText = status === 'verified' ? 'approve' : 'reject';
+
+        const confirmed = window.confirm(
+            `Are you sure you want to ${actionText} ${verification.skillName} for ${verification.user?.name || 'this member'}?`
+        );
+
+        if (!confirmed) return;
+
+        const reviewerNote = window.prompt(
+            'Enter an optional reviewer note (maximum 500 characters):',
+            ''
+        );
+
+        if (reviewerNote === null) return;
+
+        if (reviewerNote.length > 500) {
+            notice('Reviewer note cannot exceed 500 characters.', true);
+            return;
+        }
+
+        button.disabled = true;
+
+        try {
+            const data = await api(
+                `/admin/verifications/${encodeURIComponent(userId)}/${encodeURIComponent(verificationId)}`,
+                {
+                    method: 'PATCH',
+                    body: JSON.stringify({
+                        status,
+                        reviewerNote
+                    })
+                }
+            );
+
+            notice(data.message || 'Verification reviewed successfully.');
+
+            await Promise.all([
+                loadVerifications(),
+                loadStats()
+            ]);
+
+        } catch (error) {
+            notice(error.message, true);
+        } finally {
+            button.disabled = false;
+        }
+    });
+
+    // =========================================
     // START
     // =========================================
 
     refresh();
+
 })();
 </script>
 
