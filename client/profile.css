@@ -793,4 +793,74 @@
     color: #991b1b;
 }
 
+/* ==================================================
+   DARK THEME - SKILL VERIFICATION AND QUIZ
+================================================== */
+
+.skill-verification-form,
+.skill-quiz-section {
+    background: var(--bg-card);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+.skill-verification-form h3,
+.skill-quiz-section h3,
+.skill-verification-form label,
+.skill-quiz-section label,
+.quiz-question h4 {
+    color: var(--text-main);
+}
+
+.skill-verification-form > p,
+.skill-quiz-section > p {
+    color: var(--text-main);
+    opacity: 0.8;
+}
+
+/* Input fields and dropdowns */
+.skill-verification-form input,
+.skill-verification-form select,
+.skill-quiz-section select {
+    background: var(--bg-primary);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+/* Verification records */
+#skillVerificationList .skill-verification-item {
+    background: var(--bg-primary);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+/* Quiz questions */
+.quiz-question {
+    background: var(--bg-primary);
+    color: var(--text-main);
+    border-color: var(--border-color);
+}
+
+/* Quiz options */
+.quiz-option {
+    background: var(--bg-primary);
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+}
+
+.quiz-option:hover {
+    background: rgba(59, 130, 246, 0.12);
+}
+
+/* Quiz result text */
+.quiz-result {
+    color: var(--text-main);
+}
+
+/* Ensure dynamically generated quiz content follows the theme */
+#quizContainer,
+#quizResult {
+    color: var(--text-main);
+}
+
 
