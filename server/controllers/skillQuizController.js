@@ -106,11 +106,11 @@ exports.submitSkillQuiz = async (req, res) => {
         }
 
         const validAnswers = answers.every(
-            answer =>
-                Number.isInteger(answer) &&
-                answer >= 0 &&
-                answer < questions.length
-        );
+    (answer, index) =>
+        Number.isInteger(answer) &&
+        answer >= 0 &&
+        answer < questions[index].options.length
+);
 
         if (!validAnswers) {
             return res.status(400).json({

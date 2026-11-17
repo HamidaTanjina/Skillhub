@@ -1023,21 +1023,42 @@ async function loadSuggestedMatches(
                         : "?";
 
 
-                const teachList =
-                    (
-                        user.teachSkills ||
-                        []
-                    )
-                        .slice(0, 3)
-                        .map(
-                            skill =>
-                                `
-                                <span class="skill-tag">
-                                    ${escapeHtml(skill)}
-                                </span>
-                                `
-                        )
-                        .join("");
+                const verifiedSkills = new Set(
+    (user.verifiedTeachSkills || [])
+        .map(skill => String(skill).trim().toLowerCase())
+);
+
+const teachList =
+    (
+        user.teachSkills ||
+        []
+    )
+        .slice(0, 3)
+        .map(skill => {
+            const isVerified = verifiedSkills.has(
+                String(skill).trim().toLowerCase()
+            );
+
+            return `
+                <span class="skill-tag">
+                    ${escapeHtml(skill)}
+                    ${
+                        isVerified
+                            ? `<span
+                                title="Verified teaching skill"
+                                style="
+                                    color:#22c55e;
+                                    font-size:11px;
+                                    font-weight:700;
+                                    margin-left:4px;
+                                "
+                              >✓ Verified</span>`
+                            : ""
+                    }
+                </span>
+            `;
+        })
+        .join("");
 
 
                 const rating =

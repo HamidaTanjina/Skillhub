@@ -312,26 +312,31 @@ users.forEach(user => {
         });
 
         // Add rating information to every user
-        const usersWithRatings = users.map(user => {
+       const usersWithRatings = users.map(user => {
 
-            const stats =
-                statsMap[user._id.toString()] || {
-                    rating: 0,
-                    totalReviews: 0
-                };
+    const {
+        skillVerifications,
+        ...publicUser
+    } = user;
 
-            return {
-                ...user,
+    const stats =
+        statsMap[user._id.toString()] || {
+            rating: 0,
+            totalReviews: 0
+        };
 
-                rating: stats.rating,
+    return {
+        ...publicUser,
 
-               totalReviews: stats.totalReviews,
+        rating: stats.rating,
 
-verifiedTeachSkills:
-    verifiedSkillsMap[user._id.toString()] || []
-            };
+        totalReviews: stats.totalReviews,
 
-        });
+        verifiedTeachSkills:
+            verifiedSkillsMap[user._id.toString()] || []
+    };
+
+});
 
         res.json(usersWithRatings);
 
@@ -1031,15 +1036,21 @@ const oldVerifiedSkills = (result.user.skillVerifications || [])
         }
     });
 });
-const resultsWithVerification = results.map(result => ({
-    ...result,
-    user: {
-        ...result.user,
-        verifiedTeachSkills:
-            verifiedSkillsMap[result.user._id.toString()] || []
-    }
-}));
+const resultsWithVerification = results.map(result => {
+    const {
+        skillVerifications,
+        ...publicUser
+    } = result.user;
 
+    return {
+        ...result,
+        user: {
+            ...publicUser,
+            verifiedTeachSkills:
+                verifiedSkillsMap[result.user._id.toString()] || []
+        }
+    };
+});
 return res.json(resultsWithVerification);
 
     } catch (error) {

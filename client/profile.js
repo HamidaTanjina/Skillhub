@@ -581,16 +581,29 @@ function populateQuizSkills() {
 
     const placeholder = document.createElement("option");
     placeholder.value = "";
-    placeholder.textContent = "Select a skill";
+    placeholder.textContent = "Select a teaching skill";
     select.appendChild(placeholder);
 
     const skills = [
-        ...new Set(
-            (currentUser.teachSkills || [])
-                .filter(skill => typeof skill === "string" && skill.trim())
-                .map(skill => skill.trim())
-        )
+        ...new Map(
+            (Array.isArray(currentUser.teachSkills)
+                ? currentUser.teachSkills
+                : []
+            )
+                .filter(skill =>
+                    typeof skill === "string" && skill.trim()
+                )
+                .map(skill => [
+                    skill.trim().toLowerCase(),
+                    skill.trim()
+                ])
+        ).values()
     ];
+
+    if (!skills.length) {
+        placeholder.textContent = "No teaching skills available";
+        return;
+    }
 
     skills.forEach(skill => {
         const option = document.createElement("option");

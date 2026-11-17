@@ -370,39 +370,46 @@ function renderUsers(users) {
                         .toUpperCase()
                     : "?";
 
-            const teachSkills =
-                Array.isArray(
-                    user.teachSkills
-                ) &&
-                user.teachSkills.length > 0
+          const verifiedSkills = new Set(
+    (user.verifiedTeachSkills || [])
+        .map(skill => String(skill).trim().toLowerCase())
+);
 
-                    ? user.teachSkills
-                        .map(
-                            skill => `
+const teachSkills =
+    Array.isArray(user.teachSkills) &&
+    user.teachSkills.length > 0
 
-                                <span class="teach-tag">
+        ? user.teachSkills
+            .map(skill => {
+                const isVerified = verifiedSkills.has(
+                    String(skill).trim().toLowerCase()
+                );
 
-                                    <i class="fa-solid fa-code"></i>
+                return `
+                    <span class="teach-tag">
+                        <i class="fa-solid fa-code"></i>
+                        ${escapeHTML(getSkillName(skill))}
 
-                                    ${escapeHTML(
-                                        getSkillName(skill)
-                                    )}
+                        ${
+                            isVerified
+                                ? `<span style="
+                                    color:#22c55e;
+                                    font-size:11px;
+                                    font-weight:700;
+                                    margin-left:4px;
+                                ">✓ Verified</span>`
+                                : ""
+                        }
+                    </span>
+                `;
+            })
+            .join("")
 
-                                </span>
-
-                            `
-                        )
-                        .join("")
-
-                    : `
-
-                        <span class="teach-tag">
-
-                            No Skills
-
-                        </span>
-
-                    `;
+        : `
+            <span class="teach-tag">
+                No Skills
+            </span>
+        `;
 
             const learnSkills =
                 Array.isArray(
