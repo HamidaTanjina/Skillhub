@@ -16,6 +16,15 @@ router.patch("/users/:userId/unban", adminController.unbanUser);
 
 router.get("/swaps", adminController.getAllSwaps);
 router.patch("/swaps/:swapId/status", adminController.updateSwapStatus);
+router.get(
+    "/verifications",
+    adminController.getPendingVerifications
+);
+
+router.patch(
+    "/verifications/:userId/:verificationId",
+    adminController.reviewSkillVerification
+);
 
 router.get("/stats", adminController.getAdminStats);
 
