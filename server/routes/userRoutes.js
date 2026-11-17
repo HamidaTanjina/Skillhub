@@ -11,7 +11,10 @@ const {
     getMySkillVerifications,
     reviewSkillVerification
 } = require("../controllers/userController");
-
+const {
+    getSkillQuiz,
+    submitSkillQuiz
+} = require("../controllers/skillQuizController");
 const protect = require("../middleware/authMiddleware");
 const reviewerOnly = require("../middleware/reviewerMiddleware");
 
@@ -36,5 +39,17 @@ router.patch(
     protect,
     reviewerOnly,
     reviewSkillVerification
+);
+// Skill assessment quiz
+router.get(
+    "/skills/quiz/:skillName",
+    protect,
+    getSkillQuiz
+);
+
+router.post(
+    "/skills/quiz/:skillName/submit",
+    protect,
+    submitSkillQuiz
 );
 module.exports = router;

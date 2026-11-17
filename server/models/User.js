@@ -99,62 +99,59 @@ isBanned: {
         type: [String],
         default: []
     },
-    skillVerifications: {
-        type: [{
-            skillName: {
-                type: String,
-                required: true,
-                trim: true
-            },
+  
+skillVerifications: {
+    type: [{
+        skillName: {
+            type: String,
+            required: true,
+            trim: true
+        },
 
-            evidenceType: {
-                type: String,
-                enum: ["certificate", "repository"],
-                required: true
-            },
+        evidenceType: {
+            type: String,
+            enum: ["certificate", "repository", "quiz"],
+            required: true
+        },
 
-            evidenceUrl: {
-                type: String,
-                required: true,
-                trim: true
-            },
+        evidenceUrl: {
+            type: String,
+            default: "",
+            trim: true
+        },
 
-            status: {
-                type: String,
-                enum: ["pending", "verified", "rejected"],
-                default: "pending"
-            },
+        status: {
+            type: String,
+            enum: ["pending", "verified", "rejected", "unverified"],
+            default: "pending"
+        },
 
-            submittedAt: {
-                type: Date,
-                default: Date.now
-            },
+        submittedAt: {
+            type: Date,
+            default: Date.now
+        },
 
-            verifiedAt: {
-                type: Date,
-                default: null
-            },
+        verifiedAt: {
+            type: Date,
+            default: null
+        },
 
-            verifiedBy: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User",
-                default: null
-            },
+        verifiedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: null
+        },
 
-            reviewerNote: {
-                type: String,
-                default: "",
-                trim: true
-            }
-        }],
-        default: []
-    },
-    completedSwaps: {
-        type: Number,
-        default: 0
-    }
+        reviewerNote: {
+            type: String,
+            default: "",
+            trim: true
+        }
+    }],
+    default: []
+}
+},{
 
-}, {
     timestamps: true
 });
 

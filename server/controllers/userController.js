@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Review = require("../models/Review");
+const UserSkill = require("../models/UserSkill");
 exports.getProfile = async (req, res) => {
     try {
 
@@ -235,7 +236,48 @@ exports.getAllUsers = async (req, res) => {
 
         // Get rating information for all users
         const userIds = users.map(user => user._id);
+// Get verified teaching skills for all users.
+const verifiedSkillDocs = await UserSkill.find({
+    user: { $in: userIds },
+    skillType: "teach",
+    verificationStatus: "verified"
+})
+.select("user skillName")
+.lean();
 
+const verifiedSkillsMap = {};
+
+verifiedSkillDocs.forEach(skill => {
+    const userId = skill.user.toString();
+
+    if (!verifiedSkillsMap[userId]) {
+        verifiedSkillsMap[userId] = [];
+    }
+
+    verifiedSkillsMap[userId].push(skill.skillName);
+});
+
+// Also include older verified records stored inside User.
+users.forEach(user => {
+    const userId = user._id.toString();
+
+    if (!verifiedSkillsMap[userId]) {
+        verifiedSkillsMap[userId] = [];
+    }
+
+    const oldVerifiedSkills = (user.skillVerifications || [])
+        .filter(item => item.status === "verified");
+
+    oldVerifiedSkills.forEach(item => {
+        const exists = verifiedSkillsMap[userId].some(
+            skill => skill.toLowerCase() === item.skillName.toLowerCase()
+        );
+
+        if (!exists) {
+            verifiedSkillsMap[userId].push(item.skillName);
+        }
+    });
+});
         const reviewStats = await Review.aggregate([
             {
                 $match: {
@@ -283,7 +325,10 @@ exports.getAllUsers = async (req, res) => {
 
                 rating: stats.rating,
 
-                totalReviews: stats.totalReviews
+               totalReviews: stats.totalReviews,
+
+verifiedTeachSkills:
+    verifiedSkillsMap[user._id.toString()] || []
             };
 
         });
@@ -939,9 +984,63 @@ exports.getRecommendations = async (req, res) => {
             }
         ];
 
-        const results = await User.aggregate(pipeline);
+       const results = await User.aggregate(pipeline);
 
-        return res.json(results);
+// Get verified teaching skills for recommended users.
+const recommendedUserIds = results.map(
+    result => result.user._id
+);
+
+const verifiedSkillDocs = await UserSkill.find({
+    user: { $in: recommendedUserIds },
+    skillType: "teach",
+    verificationStatus: "verified"
+})
+.select("user skillName")
+.lean();
+
+const verifiedSkillsMap = {};
+
+verifiedSkillDocs.forEach(skill => {
+    const userId = skill.user.toString();
+
+    if (!verifiedSkillsMap[userId]) {
+        verifiedSkillsMap[userId] = [];
+    }
+
+    verifiedSkillsMap[userId].push(skill.skillName);
+});
+// Also include older verified records stored inside User.
+results.forEach(result => {
+    const userId = result.user._id.toString();
+
+    if (!verifiedSkillsMap[userId]) {
+        verifiedSkillsMap[userId] = [];
+    }
+
+const oldVerifiedSkills = (result.user.skillVerifications || [])
+        .filter(item => item.status === "verified");
+
+    oldVerifiedSkills.forEach(item => {
+        const exists = verifiedSkillsMap[userId].some(
+            skill => skill.toLowerCase() === item.skillName.toLowerCase()
+        );
+
+        if (!exists) {
+            verifiedSkillsMap[userId].push(item.skillName);
+        }
+    });
+});
+const resultsWithVerification = results.map(result => ({
+    ...result,
+    user: {
+        ...result.user,
+        verifiedTeachSkills:
+            verifiedSkillsMap[result.user._id.toString()] || []
+    }
+}));
+
+return res.json(resultsWithVerification);
 
     } catch (error) {
         console.error("Get Recommendations Error:", error);
@@ -956,7 +1055,6 @@ exports.getRecommendations = async (req, res) => {
    SKILL VERIFICATION
 ========================================= */
 
-// Submit evidence for a skill
 exports.submitSkillVerification = async (req, res) => {
     try {
         const { skillName, evidenceType, evidenceUrl } = req.body;
@@ -973,7 +1071,10 @@ exports.submitSkillVerification = async (req, res) => {
             });
         }
 
-        if (!evidenceUrl || !/^https?:\/\/\S+$/i.test(evidenceUrl.trim())) {
+        if (
+            !evidenceUrl ||
+            !/^https?:\/\/\S+$/i.test(evidenceUrl.trim())
+        ) {
             return res.status(400).json({
                 message: "Please provide a valid HTTP or HTTPS evidence URL."
             });
@@ -988,9 +1089,10 @@ exports.submitSkillVerification = async (req, res) => {
         }
 
         const normalizedSkill = skillName.trim();
+        const skillKey = normalizedSkill.toLowerCase();
 
         const teachesSkill = (user.teachSkills || []).some(
-            skill => skill.toLowerCase() === normalizedSkill.toLowerCase()
+            skill => skill.toLowerCase() === skillKey
         );
 
         if (!teachesSkill) {
@@ -1001,7 +1103,7 @@ exports.submitSkillVerification = async (req, res) => {
 
         const alreadyPending = user.skillVerifications.some(
             item =>
-                item.skillName.toLowerCase() === normalizedSkill.toLowerCase() &&
+                item.skillName.toLowerCase() === skillKey &&
                 item.status === "pending"
         );
 
@@ -1020,9 +1122,41 @@ exports.submitSkillVerification = async (req, res) => {
 
         await user.save();
 
-        const submitted = user.skillVerifications[
-            user.skillVerifications.length - 1
-        ];
+        // Synchronize the new UserSkill collection.
+        await UserSkill.findOneAndUpdate(
+            {
+                user: user._id,
+                skillKey,
+                skillType: "teach"
+            },
+            {
+                $set: {
+                    skillName: normalizedSkill,
+                    verificationStatus: "pending",
+                    verificationMethod: evidenceType,
+                    evidenceUrl: evidenceUrl.trim(),
+                    submittedAt: new Date(),
+                    verifiedAt: null,
+                    verifiedBy: null,
+                    quizScore: null,
+                    quizTotal: null,
+                    reviewerNote: ""
+                },
+                $setOnInsert: {
+                    user: user._id,
+                    skillKey,
+                    skillType: "teach"
+                }
+            },
+            {
+                upsert: true,
+                new: true,
+                runValidators: true
+            }
+        );
+
+        const submitted =
+            user.skillVerifications[user.skillVerifications.length - 1];
 
         return res.status(201).json({
             message: "Skill evidence submitted for review.",
@@ -1031,11 +1165,13 @@ exports.submitSkillVerification = async (req, res) => {
 
     } catch (error) {
         console.error("Submit Skill Verification Error:", error);
+
         return res.status(500).json({
             message: "Could not submit skill evidence."
         });
     }
 };
+
 
 
 // View your own skill verification submissions
@@ -1108,13 +1244,47 @@ exports.reviewSkillVerification = async (req, res) => {
             });
         }
 
+        const reviewedAt = new Date();
+
         verification.status = status;
         verification.reviewerNote = reviewerNote.trim();
         verification.verifiedAt =
-            status === "verified" ? new Date() : null;
+            status === "verified" ? reviewedAt : null;
         verification.verifiedBy = req.reviewer._id;
 
         await user.save();
+
+        // Synchronize reviewer decision with UserSkill.
+        await UserSkill.findOneAndUpdate(
+            {
+                user: user._id,
+                skillKey: verification.skillName.toLowerCase(),
+                skillType: "teach"
+            },
+            {
+                $set: {
+                    skillName: verification.skillName,
+                    verificationStatus: status,
+                    verificationMethod: verification.evidenceType,
+                    evidenceUrl: verification.evidenceUrl,
+                    verifiedBy: req.reviewer._id,
+                    verifiedAt:
+                        status === "verified" ? reviewedAt : null,
+                    submittedAt: verification.submittedAt,
+                    reviewerNote: reviewerNote.trim()
+                },
+                $setOnInsert: {
+                    user: user._id,
+                    skillKey: verification.skillName.toLowerCase(),
+                    skillType: "teach"
+                }
+            },
+            {
+                upsert: true,
+                new: true,
+                runValidators: true
+            }
+        );
 
         return res.json({
             message: `Skill evidence ${status} successfully.`,
@@ -1129,4 +1299,3 @@ exports.reviewSkillVerification = async (req, res) => {
         });
     }
 };
-

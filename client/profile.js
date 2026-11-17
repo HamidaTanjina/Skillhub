@@ -412,11 +412,367 @@ async function loadSkillVerifications() {
 
         // Refresh the skill overview with the latest statuses.
         if (currentUser) {
-            renderSkillOverview(currentUser);
-        }
+    renderSkillOverview(currentUser);
+}
+
+renderSkillVerificationList();
+populateVerificationSkills();
 
     } catch (error) {
         console.error("Skill verification loading error:", error);
+    }
+}
+
+// ==========================================================
+// SKILL VERIFICATION FORM
+// ==========================================================
+
+function populateVerificationSkills() {
+    const select = document.getElementById("verificationSkill");
+    if (!select || !currentUser) return;
+
+    select.replaceChildren();
+
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Select a skill";
+    select.appendChild(placeholder);
+
+    const skills = [
+        ...new Set(
+            (currentUser.teachSkills || [])
+                .filter(skill => typeof skill === "string" && skill.trim())
+                .map(skill => skill.trim())
+        )
+    ];
+
+    skills.forEach(skill => {
+        const option = document.createElement("option");
+        option.value = skill;
+        option.textContent = skill;
+        select.appendChild(option);
+    });
+}
+
+function renderSkillVerificationList() {
+    const container = document.getElementById("skillVerificationList");
+    if (!container) return;
+
+    container.replaceChildren();
+
+    if (!skillVerifications.length) {
+        container.textContent = "No verification submissions yet.";
+        return;
+    }
+
+    skillVerifications.forEach(item => {
+        const row = document.createElement("div");
+        row.className = "skill-verification-item";
+
+        const name = document.createElement("strong");
+        name.textContent = item.skillName;
+
+        const status = document.createElement("span");
+        status.textContent =
+            item.status.charAt(0).toUpperCase() + item.status.slice(1);
+
+        status.className = `verification-status ${item.status}`;
+
+        const method = document.createElement("p");
+        method.textContent = `Evidence: ${item.evidenceType}`;
+
+        row.append(name, status, method);
+
+        if (item.reviewerNote) {
+            const note = document.createElement("p");
+            note.textContent = `Reviewer note: ${item.reviewerNote}`;
+            row.appendChild(note);
+        }
+
+        container.appendChild(row);
+    });
+}
+
+async function submitSkillVerification() {
+    const skillName = document.getElementById("verificationSkill").value;
+    const evidenceType = document.getElementById("verificationType").value;
+    const evidenceUrl = document.getElementById("verificationUrl").value.trim();
+    const message = document.getElementById("verificationMessage");
+    const button = document.getElementById("submitVerificationBtn");
+
+    message.textContent = "";
+
+    if (!skillName || !evidenceUrl) {
+        message.textContent = "Please select a skill and enter an evidence URL.";
+        return;
+    }
+
+    try {
+        new URL(evidenceUrl);
+
+        if (!["http:", "https:"].includes(new URL(evidenceUrl).protocol)) {
+            throw new Error("Invalid URL");
+        }
+    } catch {
+        message.textContent = "Please enter a valid HTTP or HTTPS URL.";
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Submitting...";
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/user/skills/verification`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    skillName,
+                    evidenceType,
+                    evidenceUrl
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (response.status === 401) {
+            handleUnauthorized();
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(data.message || "Submission failed.");
+        }
+
+        message.textContent = "Evidence submitted successfully! Status: Pending.";
+
+        document.getElementById("verificationUrl").value = "";
+
+        await loadSkillVerifications();
+
+    } catch (error) {
+        message.textContent = error.message;
+    } finally {
+        button.disabled = false;
+        button.textContent = "Submit for Verification";
+    }
+}
+
+// ==========================================================
+// SKILL ASSESSMENT QUIZ
+// ==========================================================
+
+let currentQuizQuestions = [];
+let currentQuizSkill = "";
+
+
+// Populate quiz skill dropdown
+function populateQuizSkills() {
+    const select = document.getElementById("quizSkillSelect");
+
+    if (!select || !currentUser) return;
+
+    select.replaceChildren();
+
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Select a skill";
+    select.appendChild(placeholder);
+
+    const skills = [
+        ...new Set(
+            (currentUser.teachSkills || [])
+                .filter(skill => typeof skill === "string" && skill.trim())
+                .map(skill => skill.trim())
+        )
+    ];
+
+    skills.forEach(skill => {
+        const option = document.createElement("option");
+        option.value = skill;
+        option.textContent = skill;
+        select.appendChild(option);
+    });
+}
+
+
+// Start quiz
+async function startSkillQuiz() {
+    const select = document.getElementById("quizSkillSelect");
+    const container = document.getElementById("quizContainer");
+    const result = document.getElementById("quizResult");
+    const button = document.getElementById("startQuizBtn");
+
+    const skillName = select.value;
+
+    container.replaceChildren();
+    result.textContent = "";
+
+    if (!skillName) {
+        result.textContent = "Please select a teaching skill.";
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Loading Quiz...";
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/user/skills/quiz/${encodeURIComponent(skillName)}`,
+            {
+                method: "GET",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (response.status === 401) {
+            handleUnauthorized();
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(data.message || "Could not load quiz.");
+        }
+
+        currentQuizSkill = skillName;
+        currentQuizQuestions = data.questions;
+
+        renderSkillQuiz();
+
+    } catch (error) {
+        result.textContent = error.message;
+    } finally {
+        button.disabled = false;
+        button.textContent = "Start Quiz";
+    }
+}
+
+
+// Display quiz questions
+function renderSkillQuiz() {
+    const container = document.getElementById("quizContainer");
+
+    container.replaceChildren();
+
+    const heading = document.createElement("h4");
+    heading.textContent = `${currentQuizSkill} Assessment`;
+
+    container.appendChild(heading);
+
+    currentQuizQuestions.forEach((question, index) => {
+        const questionBox = document.createElement("div");
+        questionBox.className = "quiz-question";
+
+        const title = document.createElement("h4");
+        title.textContent = `${index + 1}. ${question.question}`;
+
+        questionBox.appendChild(title);
+
+        question.options.forEach((option, optionIndex) => {
+            const label = document.createElement("label");
+            label.className = "quiz-option";
+
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = `quiz-question-${index}`;
+            radio.value = optionIndex;
+
+            const text = document.createElement("span");
+            text.textContent = option;
+
+            label.append(radio, text);
+            questionBox.appendChild(label);
+        });
+
+        container.appendChild(questionBox);
+    });
+
+    const submitButton = document.createElement("button");
+    submitButton.type = "button";
+    submitButton.className = "save-btn";
+    submitButton.id = "submitSkillQuizBtn";
+    submitButton.textContent = "Submit Quiz";
+
+    submitButton.addEventListener("click", submitSkillQuiz);
+
+    container.appendChild(submitButton);
+}
+
+
+// Submit quiz answers
+async function submitSkillQuiz() {
+    const result = document.getElementById("quizResult");
+    const button = document.getElementById("submitSkillQuizBtn");
+
+    const answers = [];
+
+    for (let index = 0; index < currentQuizQuestions.length; index++) {
+        const selected = document.querySelector(
+            `input[name="quiz-question-${index}"]:checked`
+        );
+
+        if (!selected) {
+            result.textContent = `Please answer question ${index + 1}.`;
+            return;
+        }
+
+        answers.push(Number(selected.value));
+    }
+
+    button.disabled = true;
+    button.textContent = "Submitting...";
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/user/skills/quiz/${encodeURIComponent(currentQuizSkill)}/submit`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`
+                },
+                body: JSON.stringify({ answers })
+            }
+        );
+
+        const data = await response.json();
+
+        if (response.status === 401) {
+            handleUnauthorized();
+            return;
+        }
+
+        if (!response.ok) {
+            throw new Error(data.message || "Quiz submission failed.");
+        }
+
+        const quizResult = data.result;
+
+        result.textContent =
+            `${data.message} Score: ${quizResult.correctAnswers}/${quizResult.totalQuestions} (${quizResult.percentage}%). Status: ${quizResult.status}.`;
+
+        result.className = quizResult.passed
+            ? "quiz-result success"
+            : "quiz-result failure";
+
+        button.textContent = "Quiz Submitted";
+
+        // Refresh verification information.
+        await loadSkillVerifications();
+
+    } catch (error) {
+        result.textContent = error.message;
+        button.disabled = false;
+        button.textContent = "Submit Quiz";
     }
 }
 
@@ -476,7 +832,8 @@ async function loadProfile() {
         currentUser =
             user;
 
-
+// Populate skill quiz dropdown
+populateQuizSkills();
         // ==================================================
         // CACHE LATEST USER
         // ==================================================
@@ -1654,7 +2011,25 @@ document.addEventListener(
 
         }
 
+const submitVerificationBtn = document.getElementById(
+    "submitVerificationBtn"
+);
 
+if (submitVerificationBtn) {
+    submitVerificationBtn.addEventListener(
+        "click",
+        submitSkillVerification
+    );
+}
+// Connect Skill Quiz button
+const startQuizBtn = document.getElementById("startQuizBtn");
+
+if (startQuizBtn) {
+    startQuizBtn.addEventListener(
+        "click",
+        startSkillQuiz
+    );
+}
         // ==================================================
         // LOAD FRESH DATA IN BACKGROUND
         // ==================================================

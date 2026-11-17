@@ -492,6 +492,84 @@
             </div>
 
             <div id="skillOverviewContainer"></div>
+
+<div class="skill-verification-form">
+    <h3>Verify Your Skills</h3>
+    <p>Submit a certificate or repository link to verify a teaching skill.</p>
+
+    <div class="form-group">
+        <label for="verificationSkill">Select Teaching Skill</label>
+        <select id="verificationSkill">
+            <option value="">Select a skill</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="verificationType">Evidence Type</label>
+        <select id="verificationType">
+            <option value="certificate">Certificate</option>
+            <option value="repository">GitHub Repository</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="verificationUrl">Evidence URL</label>
+        <input
+            type="url"
+            id="verificationUrl"
+            placeholder="https://github.com/username/project"
+            required
+        >
+    </div>
+
+    <button type="button" id="submitVerificationBtn" class="save-btn">
+        Submit for Verification
+    </button>
+
+    <p id="verificationMessage"></p>
+</div>
+
+<div id="skillVerificationList"></div>
+
+<!-- ==================================================
+     SKILL ASSESSMENT QUIZ
+================================================== -->
+
+<div class="skill-quiz-section">
+
+    <h3>
+        <i class="fa-solid fa-graduation-cap"></i>
+        Skill Assessment Quiz
+    </h3>
+
+    <p>
+        Take a short quiz to demonstrate your teaching skills.
+        Score at least 70% to get verified.
+    </p>
+
+    <div class="form-group">
+        <label for="quizSkillSelect">Select Teaching Skill</label>
+
+        <select id="quizSkillSelect">
+            <option value="">Select a skill</option>
+        </select>
+    </div>
+
+    <button
+        type="button"
+        id="startQuizBtn"
+        class="save-btn">
+        Start Quiz
+    </button>
+
+    <div id="quizContainer"></div>
+
+    <div id="quizResult"></div>
+
+</div>
+
+
+
         </section>
 
         <section class="reviews-card card">

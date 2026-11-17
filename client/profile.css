@@ -601,3 +601,196 @@
         animation: none !important;
     }
 }
+
+/* ==================================================
+   SKILL VERIFICATION FORM
+================================================== */
+
+.skill-verification-form {
+    margin-top: 20px;
+    padding: 18px;
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 12px;
+    background: var(--card-bg, #ffffff);
+}
+
+.skill-verification-form h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+}
+
+.skill-verification-form > p {
+    margin: 0 0 18px;
+    color: var(--text-secondary, #6b7280);
+    font-size: 13px;
+}
+
+.skill-verification-form .form-group {
+    margin-bottom: 15px;
+}
+
+.skill-verification-form label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 600;
+}
+
+.skill-verification-form input,
+.skill-verification-form select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+#verificationMessage {
+    margin-top: 12px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+#submitVerificationBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+#skillVerificationList {
+    margin-top: 18px;
+    display: grid;
+    gap: 12px;
+}
+
+.skill-verification-item {
+    padding: 14px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.skill-verification-item p {
+    width: 100%;
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+.verification-status {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.verification-status.pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.verification-status.verified {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.verification-status.rejected {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* ==================================================
+   SKILL ASSESSMENT QUIZ
+================================================== */
+
+.skill-quiz-section {
+    margin-top: 22px;
+    padding: 18px;
+    border: 1px solid var(--border-color, #e5e7eb);
+    border-radius: 12px;
+    background: var(--card-bg, #ffffff);
+}
+
+.skill-quiz-section h3 {
+    margin: 0 0 8px;
+    font-size: 18px;
+}
+
+.skill-quiz-section > p {
+    margin: 0 0 18px;
+    color: var(--text-secondary, #6b7280);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.skill-quiz-section .form-group {
+    margin-bottom: 15px;
+}
+
+.skill-quiz-section select {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.quiz-question {
+    margin-top: 18px;
+    padding: 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.quiz-question h4 {
+    margin: 0 0 14px;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.quiz-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 7px;
+    background: var(--bg-secondary, #f9fafb);
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.quiz-option input {
+    cursor: pointer;
+    accent-color: #3b82f6;
+}
+
+.quiz-option:hover {
+    background: #eff6ff;
+}
+
+#submitSkillQuizBtn {
+    margin-top: 18px;
+}
+
+.quiz-result {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+.quiz-result.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.quiz-result.failure {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+
